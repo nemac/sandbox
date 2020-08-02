@@ -25,3 +25,5 @@ edit 'package.json'
 - add ```  "predeploy": "npm run build",
   "deploy": "gh-pages -d build"``` to the "scripts" section
 
+
+Note, only one app can be deployed at a time.  Deploying will erase what is currently deployed.
