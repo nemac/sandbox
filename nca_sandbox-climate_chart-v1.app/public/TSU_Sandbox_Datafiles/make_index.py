@@ -48,12 +48,9 @@ def main():
         'state' : [],
     }
     for fn in fnames:
-        print(fn)
         parts = fn.split('_')
         for ft in data.keys():
-            print(ft)
             if fn.startswith(ft):
-                print("\tfound")
                 parts[0] = parts[0].replace(ft,'')
                 data[ft].append({
                     "name": fn,
@@ -66,6 +63,7 @@ def main():
 
     with open('index.json', 'w+') as fd:
         #fd.write(Template(JSON_TEMPLATE).render(names=fnames))
+        fd.write("console.log('NCA: loaded index.json');\n nca_data_index = ")
         fd.write(json.dumps(data))
 
 

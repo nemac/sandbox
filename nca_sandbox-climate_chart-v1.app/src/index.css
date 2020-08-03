@@ -11,3 +11,52 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.button {
+    
+}
+
+.sandbox_controls {
+    border: 3px solid rgb(228, 228, 228);
+    background-color: rgb(251, 252, 254);
+    border-radius: 7px;
+    width: 80%;
+    height: 500px;
+    overflow: auto;
+    text-align: left;
+    padding: 10px;
+}
+
+.sandbox_header {
+}
+.sandbox_header span {
+    display: inline-block;
+    margin-top: 2px;
+    color: 	rgb(105, 105, 105);
+    font-weight: bold;
+    font-size: 20px;
+    vertical-align: text-top;
+}
+.sandbox_selectors {
+    /*background-color: blue;*/
+    vertical-align: top;
+}
+.sandbox_selectors select {
+    background-color: rgb(228, 228, 228);
+    padding: 5px;
+    width: 300px;
+    border-radius: 7px;
+    margin-right: 10px;
+}
+
+.no_select {
+    font-style: italic;
+    font-weight: bold;
+    font-color: gray;
+}
+
+.sandbox_slider {
+    margin-top: 7px;
+    background-color: blue;
+    border-top: 2px solid rgb(228, 228, 228);
+}
