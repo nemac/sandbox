@@ -1,6 +1,6 @@
 {
   "name": "nca_sandbox-climate_chart-v1.app",
-  "homepage" : "http://briandrawert.github.io/sandbox",
+  "homepage": "http://briandrawert.github.io/sandbox",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -8,6 +8,7 @@
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "react": "^16.13.1",
+    "react-compound-slider": "^2.5.0",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1"
   },
