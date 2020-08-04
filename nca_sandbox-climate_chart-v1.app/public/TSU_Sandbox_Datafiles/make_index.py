@@ -63,7 +63,6 @@ def main():
 
     with open('index.json', 'w+') as fd:
         #fd.write(Template(JSON_TEMPLATE).render(names=fnames))
-        fd.write("console.log('NCA: loaded index.json');\n nca_data_index = ")
         fd.write(json.dumps(data))
 
 

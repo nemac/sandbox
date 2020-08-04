@@ -1,6 +1,6 @@
 // https://codesandbox.io/s/zl8nrlp9x?file=/src/index.tsx:0-2480
 import * as React from 'react';
-import { render } from 'react-dom';
+//import { render } from 'react-dom';
 import { Slider, Rail, Handles, Tracks, Ticks } from 'react-compound-slider';
 import { Handle, Track, Tick } from './DoubleSliderComponents'; // example render components
 

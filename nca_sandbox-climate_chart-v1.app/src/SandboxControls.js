@@ -3,29 +3,34 @@ import React from 'react';
 import chart_icon from './Sandbox_chart_icon.png'
 import './App.css';
 import DoubleSlider from './DoubleSlider.js'
+const axios = require('axios');
+
 
 class SandboxControls extends React.Component {
     constructor(props) {
         super(props)
         console.log("SandboxControls object instantated.");
         this.name = "SandBoxControls"
+        this.nca_data_index = {};
+        this.selected_loc = "";
+        this.selected_var = "";
     }
 
     render(){
         return (
             <div className="sandbox_controls">
                 <div className="sandbox_header" >
-                    <img height="30" src={chart_icon} />
+                    <img height="30" src={chart_icon} alt="NCA icon" />
                     <span>NCA Sandbox - Climate Chart</span>
                 </div>
                 <div className="sandbox_selectors">
-                    <select className="loc_region_select" onClick={()=> this.locationSelectChanged()}>
+                    <select id="loc_region_select" className="loc_region_select" onClick={()=> this.locationSelectChanged()}>
                         <option className="no_select" value="">Location/Region</option>
                         <option value="national">National</option>
                         <option value="regions">Regional</option>
                         <option value="state">State</option>
                     </select>
-                    <select disabled className="loc_region_select" onClick={()=> this.variableSelectChanged()}>
+                    <select id="var_select" disabled  onClick={()=> this.variableSelectChanged()}>
                         <option className="no_select" value="">Climate variable</option>
                     </select>
                 </div>
@@ -45,12 +50,88 @@ class SandboxControls extends React.Component {
         );
     }
 
+    //
+    loadNCAdata(loc_value){
+        
+        axios.get("./TSU_Sandbox_Datafiles/index.json")
+          .then( (response)=>{
+            // handle success
+            console.log('SanboxControls.loadNCADdata() response='+response);
+            console.log(response);
+            //
+            //this.nca_data = JSON.parse(response);
+            this.nca_data_index = response.data;
+
+            // finally call function to process data
+            this.populateVariableSelect(loc_value);
+          })
+          .catch((error)=>{
+            // handle error
+            console.log('SanboxControls.loadNCADdata() error='+error);
+          })
+          //.then(function () {
+            // always executed
+          //});
+
+
+    }
+
+    // Gets called when 'Location/Region' selector is changed
     locationSelectChanged(){
         console.log('SanboxControls.locationSelectChanged()');
+        let region_select =  document.getElementById("loc_region_select");
+        let var_select =  document.getElementById("var_select");
+        console.log('region_select.value = ' + region_select.value);
+        var_select.disabled = true;
+        // clear it out
+        this.clearVariableSelect();
+        // populate from data
+        if( Object.keys(this.nca_data_index).length > 0){
+            // data already loaded, proceed synchronously
+            this.populateVariableSelect(region_select.value);
+        }else{
+            // load data, then call 'this.populateVariableSelect' asynchronously
+            this.loadNCAdata(region_select.value);
+            
+        }
     }
+
+    // Put all the optios in the 'Climate Varible' selector, based on the 'Location/Region'
+    // selector
+    populateVariableSelect(loc_value){
+        console.log('SanboxControls.populateVariableSelect('+loc_value+')');
+        let var_select =  document.getElementById("var_select");
+        let data_subset = this.nca_data_index[loc_value];
+        if(!data_subset){ return;} // check for empty value
+        for(let i=0; i<data_subset.length; i++){
+            let el = document.createElement("option");
+            el.textContent = data_subset[i].type;
+            el.value = data_subset[i].type;
+            var_select.appendChild(el);
+        }
+
+        // enable selector
+        var_select.disabled = false;
+        // save the selection
+        this.selected_loc = loc_value;
+    }
+
+    // remove all but the first option from the 'Climate Varible' selector
+    clearVariableSelect(){
+        console.log('SanboxControls.clearVariableSelect()');
+        let var_select =  document.getElementById("var_select");
+        for(let i=var_select.length-1; i>=1; i--){
+            var_select.remove(i);
+        }
+    }
+
+
+
     variableSelectChanged(){
         console.log('SanboxControls.variableSelectChanged()');
     }
+
+
 
 }
 

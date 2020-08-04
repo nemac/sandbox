@@ -1,6 +1,6 @@
 import React from 'react';
 //import logo from './logo.svg';
-import chart_icon from './Sandbox_chart_icon.png'
+//import chart_icon from './Sandbox_chart_icon.png'
 import './App.css';
 import SandboxControls from './SandboxControls.js'
 
