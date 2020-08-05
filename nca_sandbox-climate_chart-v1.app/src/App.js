@@ -3,6 +3,7 @@ import React from 'react';
 //import chart_icon from './Sandbox_chart_icon.png'
 import './App.css';
 import SandboxControls from './SandboxControls.js'
+//import PlotRegion from './PlotRegion.js'
 
 
 function App() {

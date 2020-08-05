@@ -3,6 +3,7 @@ import React from 'react';
 import chart_icon from './Sandbox_chart_icon.png'
 import './App.css';
 import DoubleSlider from './DoubleSlider.js'
+import PlotRegion from './PlotRegion.js'
 const axios = require('axios');
 
 
@@ -24,14 +25,16 @@ class SandboxControls extends React.Component {
                     <span>NCA Sandbox - Climate Chart</span>
                 </div>
                 <div className="sandbox_selectors">
-                    <select id="loc_region_select" className="loc_region_select" onClick={()=> this.locationSelectChanged()}>
+                    <select id="loc_region_select" onChange={()=>this.locationSelectChanged()}>
                         <option className="no_select" value="">Location/Region</option>
                         <option value="national">National</option>
                         <option value="regions">Regional</option>
                         <option value="state">State</option>
                     </select>
-                    <select id="var_select" disabled  onClick={()=> this.variableSelectChanged()}>
+                    <select id="var_select" disabled onChange={()=>this.variableSelectChanged()}>
                         <option className="no_select" value="">Climate variable</option>
+                    </select>
+                    <select style={{width: "170px"}} id="loc_sub_select" disabled onChange={()=>this.locationSubSelectChanged()}>
                     </select>
                 </div>
                 
@@ -46,11 +49,16 @@ class SandboxControls extends React.Component {
                         <div className="sandbox_slider_right_bottom" id="end_year">2018</div>
                     </div>
                 </div>
+                <PlotRegion />
+
             </div>
         );
     }
 
-    //
+    // This function loads the 'index.json' file into 'this.nca_data_index'
+    // Then it calls "this.populateVariableSelect()"
+    // This is only called when the 'Location/Region' selector is changed
+    // and the json data has not been loaded yet
     loadNCAdata(loc_value){
         
         axios.get("./TSU_Sandbox_Datafiles/index.json")
@@ -96,6 +104,11 @@ class SandboxControls extends React.Component {
         }
     }
 
+    // Get called with the 3rd selector is changed
+    locationSubSelectChanged(){
+        console.log('SanboxControls.locationSubSelectChanged()');
+    }
+
     // Put all the optios in the 'Climate Varible' selector, based on the 'Location/Region'
     // selector
     populateVariableSelect(loc_value){
@@ -129,6 +142,27 @@ class SandboxControls extends React.Component {
 
     variableSelectChanged(){
         console.log('SanboxControls.variableSelectChanged()');
+        let region_select =  document.getElementById("loc_region_select");
+        let var_select =  document.getElementById("var_select");
+        let region_sub_select =  document.getElementById("loc_sub_select");
+
+        if(var_select.value === ""){ return; } // shortcircuit if empty
+
+        if(region_select.value !== "national"){
+            alert("Currently only 'National' is supported");
+            return
+        }
+
+
+        let plotly_div = document.getElementById("plotly-div"); 
+        let el = document.createElement("img");
+        el.width = "750";
+        el.height = "400";
+        el.src = "./nc-state-rain-3inch-plot.png"
+
+        plotly_div.appendChild(el)
+
+
     }
 
 
