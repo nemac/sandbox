@@ -20,8 +20,8 @@ code {
     border: 3px solid rgb(228, 228, 228);
     background-color: rgb(251, 252, 254);
     border-radius: 7px;
-    width: 700px;
-    height: 500px;
+    width: 725px;
+    height: 620px;
     overflow: auto;
     text-align: left;
     padding: 10px;
@@ -111,7 +111,7 @@ code {
 .plot_region {
     border: 1px solid rgb(105, 105, 105);
     border-radius: 7px;
-    height: 300px;
+    height: 450px;
     padding: 3px;
     text-align: center;
 }
