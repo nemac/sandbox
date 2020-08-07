@@ -24,28 +24,34 @@ layout: {width: 650, height: 300, title: 'A Test Plot'}
 */
 
 class PlotRegion extends React.Component {
-  render() {
-    return (
-    <div id="plot_region" className="plot_region">
-      <Plot
-        /*data={[
-          {
-            x: [1, 2, 3],
-            y: [2, 6, 3],
-            type: 'scatter',
-            mode: 'lines+markers',
-            marker: {color: 'red'},
-          },
-          {type: 'bar', x: [1, 2, 3], y: [2, 5, 3]},
-        ]}*/
-        data={plot_data.data}
+    constructor(props) {
+        super(props);
         /*
-        layout={ {width: 650, height: 300, title: 'A Test Plot'} }*/
-        layout={plot_data.layout}
-      />
-      </div>
-    );
-  }
+        this.state = { 
+            data:   props.plotly_data, 
+            layout: props.plotly_layout, 
+            frames: props.plotly_frames, 
+            config: props.plotly_config 
+         };
+        */
+    }
+    render() {
+        console.log("Rendering PlotRegion this.state.data=")
+        console.log(this.props.plotly_data)
+
+        return (
+          <div  className="plot_region">
+            <Plot
+                data={this.props.plotly_data}
+                layout={this.props.plotly_layout}
+                frames={this.props.plotly_frames}
+                config={this.props.plotly_config}
+                onInitialized={(figure) => this.setState(figure)}
+                onUpdate={(figure) => this.setState(figure)}
+            />
+          </div>
+        );
+    }
 }
 
 export default PlotRegion;

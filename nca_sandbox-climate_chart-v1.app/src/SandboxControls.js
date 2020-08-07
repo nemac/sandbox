@@ -4,6 +4,9 @@ import chart_icon from './Sandbox_chart_icon.png'
 import './App.css';
 import DoubleSlider from './DoubleSlider.js'
 import PlotRegion from './PlotRegion.js'
+import * as plot_data from './testPlotData.js';
+
+
 const axios = require('axios');
 
 
@@ -15,9 +18,14 @@ class SandboxControls extends React.Component {
         this.nca_data_index = {};
         this.selected_loc = "";
         this.selected_var = "";
+        this.state = {
+            data: [], layout: {}, frames: [], config: {}
+        }
     }
 
     render(){
+        console.log("Rendering SandboxControls this.state.data=")
+        console.log(this.state.data)
         return (
             <div className="sandbox_controls">
                 <div className="sandbox_header" >
@@ -49,7 +57,12 @@ class SandboxControls extends React.Component {
                         <div className="sandbox_slider_right_bottom" id="end_year">2018</div>
                     </div>
                 </div>
-                <PlotRegion />
+                <PlotRegion
+                    plotly_data={this.state.data} 
+                    plotly_layout={this.state.layout} 
+                    plotly_frames={this.state.frames} 
+                    plotly_config={this.state.config} 
+                />
 
             </div>
         );
@@ -153,14 +166,12 @@ class SandboxControls extends React.Component {
             return
         }
 
-
-        let plotly_div = document.getElementById("plotly-div"); 
-        let el = document.createElement("img");
-        el.width = "750";
-        el.height = "400";
-        el.src = "./nc-state-rain-3inch-plot.png"
-
-        plotly_div.appendChild(el)
+        console.log("setState(data) = ");
+        console.log(plot_data.data);
+        this.setState({
+            data: plot_data.data, 
+            layout: plot_data.layout
+        });
 
 
     }
