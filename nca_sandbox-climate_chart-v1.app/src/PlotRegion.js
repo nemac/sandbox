@@ -38,6 +38,7 @@ class PlotRegion extends React.Component {
                 layout={this.props.plotly_layout}
                 frames={this.props.plotly_frames}
                 config={this.props.plotly_config}
+                revision={this.props.plotly_revision}
                 onInitialized={(figure) => this.setState(figure)}
                 onUpdate={(figure) => this.setState(figure)}
             />

@@ -55,6 +55,7 @@ code {
     font-style: italic;
     font-weight: bold;
     font-color: gray;
+    text-transform: capitalize;
 }
 
 .sandbox_slider {
