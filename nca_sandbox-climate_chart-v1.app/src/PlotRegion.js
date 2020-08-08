@@ -3,7 +3,7 @@ import Plot from 'react-plotly.js';
 
 //const plot_data = require('./testPlotData');
 //import {plot_data} from './testPlotData.js'
-import * as plot_data from './testPlotData.js';
+//import * as plot_data from './testPlotData.js';
 
 
 /*
@@ -24,9 +24,6 @@ layout: {width: 650, height: 300, title: 'A Test Plot'}
 */
 
 class PlotRegion extends React.Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         console.log("Rendering PlotRegion this.state.plotly_data=")
         console.log(this.props.plotly_data)

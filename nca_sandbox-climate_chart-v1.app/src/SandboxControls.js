@@ -4,7 +4,12 @@ import chart_icon from './Sandbox_chart_icon.png'
 import './App.css';
 import DoubleSlider from './DoubleSlider.js'
 import PlotRegion from './PlotRegion.js'
-import * as plot_data from './testPlotData.js';
+//import * as plot_data from './testPlotData.js';
+
+import GeneratePlotData from './GeneratePlotData.js'
+
+const plot_data = new GeneratePlotData();
+
 
 const list_of_regions = [ "Northeast","Southeast","Midwest","Northern Great Plains",
     "Northwest","Southwest","Southern Great Plains","Alaska","Hawaii","Puerto Rico" ];
@@ -269,10 +274,15 @@ class SandboxControls extends React.Component {
     updatePlotData(){
         console.log("setState(data) = ");
         console.log(plot_data.data);
+
+        plot_data.setXRange(this.state.slider_min_value, this.state.slider_max_value);
+
         this.setState((state)=>({
             plotly_revision: state.plotly_revision+1,
-            plotly_data: plot_data.data, 
-            plotly_layout: plot_data.layout
+            //plotly_data: plot_data.data, 
+            //plotly_layout: plot_data.layout
+            plotly_data: plot_data.getData(), 
+            plotly_layout: plot_data.getLayout()
         }));
     }
 
