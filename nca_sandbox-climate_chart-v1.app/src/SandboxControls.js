@@ -35,8 +35,42 @@ class SandboxControls extends React.Component {
             var_select_disabled : true,
             loc_sub_select_options : [],
             loc_sub_select_disabled : true,
+            slider_min_value: 1900,
+            slider_max_value: 2018,
         }
+        this.sliderChanged = this.sliderChanged.bind(this);
 
+    }
+
+    sliderChanged(values){
+        console.log('SanboxControls.sliderChanged()');
+        if(values.length && values.length === 2){
+            console.log('slider_min_value='+values[0]+' slider_max_value='+values[1]);
+            this.setState({
+                slider_min_value: values[0],
+                slider_max_value: values[1],
+            });
+
+            let region_select =  document.getElementById("loc_region_select");
+            let var_select =  document.getElementById("var_select");
+            let region_sub_select =  document.getElementById("loc_sub_select");
+            if(region_select.value === "national"){
+                if(var_select && var_select.value !== ""){
+                    this.updatePlotData();
+                }
+            }else if(region_select.value === "region" || region_select.value === "state"){
+                if(var_select && var_select.value !== "" &&
+                   region_sub_select && region_sub_select.value !== ""){
+                    this.updatePlotData();
+                }
+            }
+
+
+
+
+
+        }
+                
     }
 
     render(){
@@ -75,12 +109,16 @@ class SandboxControls extends React.Component {
                 <div className="sandbox_slider">
                     <div className="sandbox_slider_center">
                         <div className="sandbox_slider_left_top"> Start Year/Period </div>
-                        <div className="sandbox_slider_left_bottom" id="start_year">1950</div>
+                        <div className="sandbox_slider_left_bottom" id="start_year">{this.state.slider_min_value}</div>
 
-                        <DoubleSlider />
+                        <DoubleSlider
+                            sliderChanged={this.sliderChanged}
+                            min_value={this.state.slider_min_value}
+                            max_value={this.state.slider_max_value}
+                        />
 
                         <div className="sandbox_slider_right_top"> End Year/Period </div>
-                        <div className="sandbox_slider_right_bottom" id="end_year">2018</div>
+                        <div className="sandbox_slider_right_bottom" id="end_year">{this.state.slider_max_value}</div>
                     </div>
                 </div>
                 <PlotRegion
@@ -225,16 +263,6 @@ class SandboxControls extends React.Component {
             });
         }
         
-    }
-
-    // remove all but the first option from the 'Climate Varible' selector
-    clearVariableSelect(){
-        //TODO: fix
-        console.log('SanboxControls.clearVariableSelect()');
-        let var_select =  document.getElementById("var_select");
-        for(let i=var_select.length-1; i>=1; i--){
-            var_select.remove(i);
-        }
     }
 
 

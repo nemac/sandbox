@@ -19,18 +19,21 @@ const railStyle: React.CSSProperties = {
   backgroundColor: 'rgb(155,155,155)'
 };
 
-const domain: number[] = [100, 500];
+const domain: number[] = [1900, 2018];
 
 class DoubleSlider extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      values: [150, 300]
+      values: [props.min_value, props.max_value]
     };
   } 
 
   onChange = (values: number[]) => {
-    this.setState({ values });
+    console.log("DoubleSlider.onChange(): values=");
+    console.log(values);
+    this.props.sliderChanged(values);
+    //this.setState({ values });
   };
 
   render() {
