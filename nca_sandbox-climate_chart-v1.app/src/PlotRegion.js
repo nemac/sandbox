@@ -26,17 +26,9 @@ layout: {width: 650, height: 300, title: 'A Test Plot'}
 class PlotRegion extends React.Component {
     constructor(props) {
         super(props);
-        /*
-        this.state = { 
-            data:   props.plotly_data, 
-            layout: props.plotly_layout, 
-            frames: props.plotly_frames, 
-            config: props.plotly_config 
-         };
-        */
     }
     render() {
-        console.log("Rendering PlotRegion this.state.data=")
+        console.log("Rendering PlotRegion this.state.plotly_data=")
         console.log(this.props.plotly_data)
 
         return (

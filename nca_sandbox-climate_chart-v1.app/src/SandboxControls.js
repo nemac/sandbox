@@ -6,6 +6,16 @@ import DoubleSlider from './DoubleSlider.js'
 import PlotRegion from './PlotRegion.js'
 import * as plot_data from './testPlotData.js';
 
+const list_of_regions = [ "Northeast","Southeast","Midwest","Northern Great Plains",
+    "Northwest","Southwest","Southern Great Plains","Alaska","Hawaii","Puerto Rico" ];
+const list_of_states = [ "AL",",AZ",",AR",",CA",",CO",",CT",",DE",",FL",",GA",",ID",
+    ",IL",",IN",",IA",",KS",",KY",",LA",",ME",",MD",",MA",",MI",",MN",",MS",",MO",
+    ",MT",",NE",",NV",",NH",",NJ",",NM",",NY",",NC",",ND",",OH",",OK",",OR",",PA",
+    ",RI",",SC",",SD",",TN",",TX",",UT",",VT",",VA",",WA",",WV",",WI",",WY",",AK",
+    ",HI",",PR",",VI"];
+
+
+
 
 const axios = require('axios');
 
@@ -19,13 +29,18 @@ class SandboxControls extends React.Component {
         this.selected_loc = "";
         this.selected_var = "";
         this.state = {
-            data: [], layout: {}, frames: [], config: {}
+            plotly_data: [], plotly_layout: {}, plotly_frames: [], plotly_config: {},
+            var_select_options : [],
+            var_select_disabled : true,
+            loc_sub_select_options : [],
+            loc_sub_select_disabled : true,
         }
+
     }
 
     render(){
-        console.log("Rendering SandboxControls this.state.data=")
-        console.log(this.state.data)
+        console.log("Rendering SandboxControls this.state=")
+        console.log(this.state)
         return (
             <div className="sandbox_controls">
                 <div className="sandbox_header" >
@@ -39,10 +54,12 @@ class SandboxControls extends React.Component {
                         <option value="regions">Regional</option>
                         <option value="state">State</option>
                     </select>
-                    <select id="var_select" disabled onChange={()=>this.variableSelectChanged()}>
-                        <option className="no_select" value="">Climate variable</option>
+                    <select id="var_select" disabled={this.state.var_select_disabled} onChange={()=>this.variableSelectChanged()}>
+                        <option className="no_select" value="">Climate variable</option>;
+                        {this.state.var_select_options}
                     </select>
-                    <select style={{width: "170px"}} id="loc_sub_select" disabled onChange={()=>this.locationSubSelectChanged()}>
+                    <select style={{width: "170px"}} id="loc_sub_select" disabled={this.state.loc_sub_select_disabled} onChange={()=>this.locationSubSelectChanged()}>
+                        {this.state.loc_sub_select_options}
                     </select>
                 </div>
                 
@@ -58,10 +75,10 @@ class SandboxControls extends React.Component {
                     </div>
                 </div>
                 <PlotRegion
-                    plotly_data={this.state.data} 
-                    plotly_layout={this.state.layout} 
-                    plotly_frames={this.state.frames} 
-                    plotly_config={this.state.config} 
+                    plotly_data={this.state.plotly_data} 
+                    plotly_layout={this.state.plotly_layout} 
+                    plotly_frames={this.state.plotly_frames} 
+                    plotly_config={this.state.plotly_config} 
                 />
 
             </div>
@@ -105,7 +122,7 @@ class SandboxControls extends React.Component {
         console.log('region_select.value = ' + region_select.value);
         var_select.disabled = true;
         // clear it out
-        this.clearVariableSelect();
+        this.resetSelectsAndPlot();
         // populate from data
         if( Object.keys(this.nca_data_index).length > 0){
             // data already loaded, proceed synchronously
@@ -113,7 +130,28 @@ class SandboxControls extends React.Component {
         }else{
             // load data, then call 'this.populateVariableSelect' asynchronously
             this.loadNCAdata(region_select.value);
-            
+        }
+        console.log("region_select.value="+region_select.value)
+        if(region_select.value === "regions"){
+            let region_options = list_of_regions.map((item,index)=>
+                <option key={"region_select_options"+index} value={item}>{item}</option>
+                );
+            console.log('region_options');
+            console.log(region_options);
+            this.setState({
+                    loc_sub_select_options : region_options,
+                    loc_sub_select_disabled : false,
+            });
+        }else if(region_select.value === "state"){
+            let state_options = list_of_states.map((item,index)=>
+                <option key={"region_select_options"+index} value={item}>{item}</option>
+                );
+            console.log('state_options');
+            console.log(state_options);
+            this.setState({
+                    loc_sub_select_options : state_options,
+                    loc_sub_select_disabled : false,
+            });
         }
     }
 
@@ -126,6 +164,7 @@ class SandboxControls extends React.Component {
     // selector
     populateVariableSelect(loc_value){
         console.log('SanboxControls.populateVariableSelect('+loc_value+')');
+        /*
         let var_select =  document.getElementById("var_select");
         let data_subset = this.nca_data_index[loc_value];
         if(!data_subset){ return;} // check for empty value
@@ -135,15 +174,33 @@ class SandboxControls extends React.Component {
             el.value = data_subset[i].type;
             var_select.appendChild(el);
         }
-
         // enable selector
         var_select.disabled = false;
+        */
         // save the selection
         this.selected_loc = loc_value;
+        let data_subset = this.nca_data_index[loc_value];
+        console.log('data_subset=');
+        console.log(data_subset);
+        if(data_subset){
+            this.setState({
+                var_select_options: data_subset.map((item,index)=>
+                    <option key={"var_select_option"+index} value={item.type}>{item.type}</option>
+                ),
+                var_select_disabled: false
+            });
+        }else{
+            this.setState({
+                var_select_options: [],
+                var_select_disabled: true
+            });
+        }
+        
     }
 
     // remove all but the first option from the 'Climate Varible' selector
     clearVariableSelect(){
+        //TODO: fix
         console.log('SanboxControls.clearVariableSelect()');
         let var_select =  document.getElementById("var_select");
         for(let i=var_select.length-1; i>=1; i--){
@@ -152,6 +209,25 @@ class SandboxControls extends React.Component {
     }
 
 
+    updatePlotData(){
+        console.log("setState(data) = ");
+        console.log(plot_data.data);
+        this.setState({
+            plotly_data: plot_data.data, 
+            plotly_layout: plot_data.layout
+        });
+    }
+
+    resetSelectsAndPlot(){
+//                var_select_options : [],
+//                var_select_disabled : true,
+        this.setState({
+                plotly_data: [],
+                plotly_layout: {},
+                loc_sub_select_options : [],
+                loc_sub_select_disabled : true,
+        });
+    }
 
     variableSelectChanged(){
         console.log('SanboxControls.variableSelectChanged()');
@@ -159,19 +235,28 @@ class SandboxControls extends React.Component {
         let var_select =  document.getElementById("var_select");
         let region_sub_select =  document.getElementById("loc_sub_select");
 
-        if(var_select.value === ""){ return; } // shortcircuit if empty
+        if(region_select.value === "national"){
+            this.updatePlotData();
+        }else if(region_select.value === "regional"){
+            let region_options = list_of_regions.map((item,index)=>
+                <option key={"region_select_options"+index} value={item}>{item}</option>
+                );
+            this.setState({
+                    loc_sub_select_options : region_options,
+                    loc_sub_select_disabled : false,
+            });
+        }else if(region_select.value === "state"){
+            let region_options = list_of_states.map((item,index)=>
+                <option key={"region_select_options"+index} value={item}>{item}</option>
+                );
+            this.setState({
+                    loc_sub_select_options : region_options,
+                    loc_sub_select_disabled : false,
+            });
 
-        if(region_select.value !== "national"){
-            alert("Currently only 'National' is supported");
-            return
+        }else{
+            this.resetSelectsAndPlot();
         }
-
-        console.log("setState(data) = ");
-        console.log(plot_data.data);
-        this.setState({
-            data: plot_data.data, 
-            layout: plot_data.layout
-        });
 
 
     }
