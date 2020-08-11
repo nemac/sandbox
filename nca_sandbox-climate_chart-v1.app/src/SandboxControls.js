@@ -8,7 +8,7 @@ import PlotRegion from './PlotRegion.js'
 
 import GeneratePlotData from './GeneratePlotData.js'
 
-const plot_data = new GeneratePlotData();
+//const plot_data = new GeneratePlotData();
 
 
 const list_of_regions = [ "Northeast","Southeast","Midwest","Northern Great Plains",
@@ -42,6 +42,15 @@ class SandboxControls extends React.Component {
             loc_sub_select_disabled : true,
             slider_min_value: 1900,
             slider_max_value: 2018,
+            cached_data: {
+                           xvals: [],
+                           yvals: {},
+                           region: "",
+                           varible: "",
+                           region_sub: "",
+                           _loaded: false
+                         }
+
         }
         this.sliderChanged = this.sliderChanged.bind(this);
 
@@ -257,7 +266,7 @@ class SandboxControls extends React.Component {
         if(data_subset){
             this.setState({
                 var_select_options: data_subset.map((item,index)=>
-                    <option key={"var_select_option"+index} value={item.type}>{item.type}</option>
+                    <option key={"var_select_option"+index} value={item.name}>{item.type}</option>
                 ),
                 var_select_disabled: false
             });
@@ -270,20 +279,77 @@ class SandboxControls extends React.Component {
         
     }
 
+    parseNCAFile(data, type, region){
+        let xval = [];
+        let yvals = [];
+        return [xval, yvals];
+    }
 
     updatePlotData(){
-        console.log("setState(data) = ");
-        console.log(plot_data.data);
+        let region_select =  document.getElementById("loc_region_select");
+        let var_select =  document.getElementById("var_select");
+        let region_sub_select =  document.getElementById("loc_sub_select");
+        if(region_select.value === ""){
+            return;
+        }
+        console.log('SanboxControls.updatePlotData()');
+        console.log('region_select='+region_select.value);
+        console.log('var_select='+var_select.value);
+        console.log('region_sub_select='+region_sub_select.value);
 
-        plot_data.setXRange(this.state.slider_min_value, this.state.slider_max_value);
 
-        this.setState((state)=>({
-            plotly_revision: state.plotly_revision+1,
-            //plotly_data: plot_data.data, 
-            //plotly_layout: plot_data.layout
-            plotly_data: plot_data.getData(), 
-            plotly_layout: plot_data.getLayout()
-        }));
+        if( this.state.cached_data._loaded && 
+            (region_select.value === this.state.cached_data.region) &&
+            (var_select.value === this.state.cached_data.varible) &&
+            (region_sub_select.value === this.state.cached_data.region_sub) ){
+            // use cached data
+            console.log('Using Cached data');
+            let plot_data = new GeneratePlotData(this.state.cached_data.xvals,
+                                                 this.state.cached_data.yvals);
+            plot_data.setXRange(this.state.slider_min_value, this.state.slider_max_value);
+
+            this.setState((state)=>({
+                plotly_revision: state.plotly_revision+1,
+                plotly_data: plot_data.getData(), 
+                plotly_layout: plot_data.getLayout()
+            }));
+        }else{
+            // fetch .txt data from the server, parse, add to cache
+            //let filename = "./TSU_Sandbox_Datafiles/national1inch_1900_2018_Sandbox.txt"
+            let filename = "./TSU_Sandbox_Datafiles/"+var_select.value;
+            console.log('fetching file from server. filename='+filename);
+            axios.get(filename)
+                .then( (response)=>{
+                        console.log('SanboxControls.updatePlotData() response=');
+                        console.log(response);
+                        let xy_values = this.parseNCAFile(response.data, region_select.value,
+                                                                region_sub_select.value); 
+                        let xvals = xy_values[0];
+                        let yvals = xy_values[1];
+
+                        let plot_data = new GeneratePlotData(xvals, yvals);
+                        plot_data.setXRange(this.state.slider_min_value, this.state.slider_max_value);
+
+                        this.setState((state)=>({
+                            cached_data: {
+                                _loaded: true,
+                                xvals: xvals,
+                                yvals: yvals,
+                                region: region_select.value,
+                                varible: var_select.value,
+                                region_sub: region_sub_select.value
+                            },
+                            plotly_revision: state.plotly_revision+1,
+                            plotly_data: plot_data.getData(), 
+                            plotly_layout: plot_data.getLayout()
+                        }));
+
+                    })
+                .catch( (error)=>{
+                        console.log('SanboxControls.updatePlotData() error='+error)
+                    })
+
+        }
     }
 
 
