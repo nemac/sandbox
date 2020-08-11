@@ -280,9 +280,44 @@ class SandboxControls extends React.Component {
     }
 
     parseNCAFile(data, type, region){
-        let xval = [];
+        let xvals = [];
         let yvals = [];
-        return [xval, yvals];
+        let lines = data.split(/\r?\n/);
+        let headers = lines[0].split(',');
+        console.log('headers='+headers);
+        for(let h=0;h<headers.length;h++){
+            headers[h] = headers[h].trim();
+        }
+        let col_index = undefined;
+        if(type === "national"){
+            col_index = 1;
+        }else if(type === "region" || type === "state"){
+            for(let h=1;h<headers.length;h+=2){
+                if(headers[h] === region){
+                    col_index = h;
+                    break;
+                }
+            }
+        }
+        console.log('region='+region);
+        console.log('col_index='+col_index);
+
+        for(let i=1;i<lines.length;i++){
+            console.log('lines['+i+']='+lines[i]);
+            let elements = lines[i].split(',');
+            console.log('elements.length='+elements.length);
+            if(elements.length <= 1){
+                break;
+            }
+            let xval = parseInt(elements[0]);
+            let yval = parseFloat(elements[col_index]);
+            console.log('xval='+xval+' yval='+yval);
+            xvals.push(xval);
+            yvals.push(yval);
+        }
+
+
+        return [xvals, yvals];
     }
 
     updatePlotData(){
