@@ -30,13 +30,19 @@ code {
 }
 
 .sandbox_header {
+    vertical-align: text-top;
+    padding-left: 0px;
 }
 .sandbox_header span {
+    position: absolute;
+    top: 10px;
     display: inline-block;
     margin-top: 2px;
+    margin-left: 5px;
+    margin-bottom: 5px;
     color: 	rgb(105, 105, 105);
     font-weight: bold;
-    font-size: 20px;
+    font-size: 24px;
     vertical-align: text-top;
 }
 .sandbox_selectors {

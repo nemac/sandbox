@@ -17,12 +17,15 @@ To create an app, and set it up for github deploy:
 Ref: https://github.com/gitname/react-gh-pages
 ```
 $ npx create-react-app nca_sandbox-climate_chart-v2.app
-$ cd nca_sandbox-climate_chart-v1.app
+$ cd nca_sandbox-climate_chart-v2.app
 $ npm install gh-pages --save-dev
 $ npm install react-plotly.js plotly.js
 $ npm install axios
 $ npm install @material-ui/core
 $ npm install react-bootstrap bootstrap
+$ npm i --save @fortawesome/fontawesome-svg-core
+$ npm install --save @fortawesome/free-solid-svg-icons
+$ npm install --save @fortawesome/react-fontawesome
 
 ```
 edit 'package.json'

@@ -1,10 +1,17 @@
 import React from 'react';
-import chart_icon from './Sandbox_chart_icon.png'
+//import chart_icon from './Sandbox_chart_icon.png'
 import './App.css';
 import DoubleSlider from './DoubleSlider.js'
 import PlotRegion from './PlotRegion.js'
-
 import GeneratePlotData from './GeneratePlotData.js'
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faChartLine } from '@fortawesome/free-solid-svg-icons';
+library.add(faChartLine);
+
+
+
 
 
 const list_of_regions = [ "Northeast","Southeast","Midwest","Northern Great Plains",
@@ -90,7 +97,10 @@ class SandboxControls extends React.Component {
         return (
             <div className="sandbox_controls">
                 <div className="sandbox_header" >
-                    <img height="30" src={chart_icon} alt="NCA icon" />
+                    <FontAwesomeIcon icon={["fas", "chart-line"]}
+                        color="#666666"
+                        size="2x"
+                    />
                     <span>NCA Sandbox - Climate Chart</span>
                 </div>
                 <div className="sandbox_selectors">
