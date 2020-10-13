@@ -5,6 +5,9 @@ import DoubleSlider from './DoubleSlider.js'
 import PlotRegion from './PlotRegion.js'
 import GeneratePlotData from './GeneratePlotData.js'
 
+import Checkbox from '@material-ui/core/Checkbox';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faChartLine } from '@fortawesome/free-solid-svg-icons';
@@ -45,6 +48,7 @@ class SandboxControls extends React.Component {
             loc_sub_select_disabled : true,
             slider_min_value: 1900,
             slider_max_value: 2018,
+            RobustDatasetCheckboxChecked: false,
             cached_data: {
                            xvals: [],
                            yvals: {},
@@ -56,6 +60,7 @@ class SandboxControls extends React.Component {
 
         }
         this.sliderChanged = this.sliderChanged.bind(this);
+        this.RobustDatasetCheckboxChanged = this.RobustDatasetCheckboxChanged.bind(this);
 
     }
 
@@ -110,14 +115,27 @@ class SandboxControls extends React.Component {
                         <option value="region">Regional</option>
                         <option value="state">State</option>
                     </select>
-                    <select id="var_select" disabled={this.state.var_select_disabled} onChange={()=>this.variableSelectChanged()}>
-                        <option className="no_select" value="">Climate variable</option>;
-                        {this.state.var_select_options}
-                    </select>
                     <select style={{width: "170px"}} id="loc_sub_select" disabled={this.state.loc_sub_select_disabled} onChange={()=>this.locationSubSelectChanged()}>
                         <option className="no_select" value="">{ region_select_value }</option>
                         {this.state.loc_sub_select_options}
                     </select>
+                    <select id="var_select" disabled={this.state.var_select_disabled} onChange={()=>this.variableSelectChanged()}>
+                        <option className="no_select" value="">Climate variable</option>;
+                        {this.state.var_select_options}
+                    </select>
+                    <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={this.state.RobustDatasetCheckboxChecked}
+                            onChange={this.RobustDatasetCheckboxChanged}
+                            color="primary"
+                          />
+                        }
+                        label='Use Robust Dataset'
+                    />
+
+
+
                 </div>
                 
                 <div className="sandbox_slider_outerbox">
@@ -137,7 +155,7 @@ class SandboxControls extends React.Component {
                         <div className="sandbox_slider_right_bottom" id="end_year">{this.state.slider_max_value}</div>
                     </div>
                 </div>
-                <div  className="plot_region">
+                <div className="plot_region">
                     <PlotRegion
                         plotly_data={this.state.plotly_data} 
                         plotly_layout={this.state.plotly_layout} 
@@ -149,6 +167,13 @@ class SandboxControls extends React.Component {
 
             </div>
         );
+    }
+
+    RobustDatasetCheckboxChanged(){
+        console.log("RobustDatasetCheckboxChanged() this.state.RobustDatasetCheckboxChecked="+this.state.RobustDatasetCheckboxChecked);
+        this.setState((state)=>({
+            RobustDatasetCheckboxChecked : ! state.RobustDatasetCheckboxChecked
+        }));
     }
 
     // This function loads the 'index.json' file into 'this.nca_data_index'
