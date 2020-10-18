@@ -1,5 +1,4 @@
 import React from 'react';
-//import chart_icon from './Sandbox_chart_icon.png'
 import './App.css';
 import DoubleSlider from './DoubleSlider.js'
 import PlotRegion from './PlotRegion.js'
@@ -14,9 +13,6 @@ import { faChartLine } from '@fortawesome/free-solid-svg-icons';
 library.add(faChartLine);
 
 
-
-
-
 const list_of_regions = [ "Northeast","Southeast","Midwest","Northern Great Plains",
     "Northwest","Southwest","Southern Great Plains","Alaska","Hawaii","Puerto Rico" ];
 const list_of_states = [ "AL","AZ","AR","CA","CO","CT","DE","FL","GA","ID",
@@ -25,9 +21,6 @@ const list_of_states = [ "AL","AZ","AR","CA","CO","CT","DE","FL","GA","ID",
     "RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY","AK",
     "HI","PR","VI"];
 
-
-
-
 const axios = require('axios');
 
 
@@ -35,17 +28,31 @@ class SandboxControls extends React.Component {
     constructor(props) {
         super(props)
         console.log("SandboxControls object instantated.");
-        this.name = "SandBoxControls"
+
+
+        this.loadNCAdata();
+
+
+        this.name = "SandBoxControls";
+        let w = window.innerWidth - 48;
+        let h = window.innerHeight - 210;
         this.nca_data_index = {};
-        this.selected_loc = "";
         this.selected_var = "";
+        this.plotly_data = [];
+        this.plotly_layout = {};
+        this.plotly_frames = [];
+        this.plotly_config = {}; 
+        this.plotly_revision = 0;
+        this.region_sub_select_options  = [];
+        this.region_sub_select_disabled  = true;
+        this.var_select_options  = [];
+        this.var_select_disabled = true;
         this.state = {
-            plotly_data: [], plotly_layout: {}, plotly_frames: [], plotly_config: {}, 
-            plotly_revision: 0,
-            var_select_options : [],
-            var_select_disabled : true,
-            loc_sub_select_options : [],
-            loc_sub_select_disabled : true,
+            plotly_width : w,
+            plotly_height : h,
+            region_select_value: undefined,
+            region_sub_select_value: undefined,
+            var_select_value: undefined,
             slider_min_value: 1900,
             slider_max_value: 2018,
             RobustDatasetCheckboxChecked: false,
@@ -61,44 +68,28 @@ class SandboxControls extends React.Component {
         }
         this.sliderChanged = this.sliderChanged.bind(this);
         this.RobustDatasetCheckboxChanged = this.RobustDatasetCheckboxChanged.bind(this);
-
+        this.PlotRegionResize = this.PlotRegionResize.bind(this);
     }
 
-    sliderChanged(values){
-        console.log('SanboxControls.sliderChanged(values='+values+')');
-        if(values.length && values.length === 2){
-            console.log('slider_min_value='+values[0]+' slider_max_value='+values[1]);
-            this.setState({
-                slider_min_value: values[0],
-                slider_max_value: values[1],
-            });
 
-            let region_select =  document.getElementById("loc_region_select");
-            let var_select =  document.getElementById("var_select");
-            let region_sub_select =  document.getElementById("loc_sub_select");
-            if(region_select.value === "national"){
-                if(var_select && var_select.value !== ""){
-                    this.updatePlotData();
-                }
-            }else if(region_select.value === "region" || region_select.value === "state"){
-                if(var_select && var_select.value !== "" &&
-                   region_sub_select && region_sub_select.value !== ""){
-                    this.updatePlotData();
-                }
-            }
-        }
-    }
 
     render(){
         console.log("Rendering SandboxControls this.state=")
         console.log(this.state)
-        let region_select =  document.getElementById("loc_region_select");
+        let region_select =  document.getElementById("region_select");
         let region_select_value = " -- ";
         if(region_select && region_select.value !== "" && region_select.value !== "national"){
             //region_select_value = region_select.value;
             // capitalize
             region_select_value = region_select.value.charAt(0).toUpperCase() + region_select.value.slice(1);
         }
+
+        // update from state
+        this.populateSubSelect();
+        this.populateVariableSelect();
+        this.updatePlotData();
+
+
         return (
             <div className="sandbox_controls">
                 <div className="sandbox_header" >
@@ -109,21 +100,23 @@ class SandboxControls extends React.Component {
                     <span>NCA Sandbox - Climate Chart</span>
                 </div>
                 <div className="sandbox_selectors">
-                    <select id="loc_region_select" onChange={()=>this.locationSelectChanged()}>
+                    <select id="region_select" value={this.loc_select_value} onChange={()=>this.regionSelectChanged()}>
                         <option className="no_select" value="">Location/Region</option>
                         <option value="national">National</option>
                         <option value="region">Regional</option>
                         <option value="state">State</option>
                     </select>
-                    <select style={{width: "170px"}} id="loc_sub_select" disabled={this.state.loc_sub_select_disabled} onChange={()=>this.locationSubSelectChanged()}>
+                    <select style={{width: "170px"}} id="region_sub_select" value={this.state.region_sub_select_value} disabled={this.region_sub_select_disabled} onChange={()=>this.regionSubSelectChanged()}>
                         <option className="no_select" value="">{ region_select_value }</option>
-                        {this.state.loc_sub_select_options}
+                        {this.region_sub_select_options}
                     </select>
-                    <select id="var_select" disabled={this.state.var_select_disabled} onChange={()=>this.variableSelectChanged()}>
-                        <option className="no_select" value="">Climate variable</option>;
-                        {this.state.var_select_options}
+                    <select id="var_select" value={this.state.var_select_value} disabled={this.var_select_disabled} onChange={()=>this.variableSelectChanged()}>
+                        <option className="no_select" value="">Climate variable</option>
+                        {this.var_select_options}
                     </select>
                     <FormControlLabel
+                        className="RobustCheckbox"
+                        style={{marginLeft: "0px"}}
                         control={
                           <Checkbox
                             checked={this.state.RobustDatasetCheckboxChecked}
@@ -155,25 +148,114 @@ class SandboxControls extends React.Component {
                         <div className="sandbox_slider_right_bottom" id="end_year">{this.state.slider_max_value}</div>
                     </div>
                 </div>
-                <div className="plot_region">
-                    <PlotRegion
-                        plotly_data={this.state.plotly_data} 
-                        plotly_layout={this.state.plotly_layout} 
-                        plotly_frames={this.state.plotly_frames} 
-                        plotly_config={this.state.plotly_config} 
-                        plotly_revision={this.state.plotly_revision}
-                    />
-                </div>
+                <PlotRegion
+                    plotly_data={this.plotly_data} 
+                    plotly_layout={this.plotly_layout} 
+                    plotly_width={this.state.plotly_width} 
+                    plotly_height={this.state.plotly_height} 
+                    plotly_frames={this.plotly_frames} 
+                    plotly_config={this.plotly_config} 
+                    plotly_revision={this.plotly_revision}
+                    handleResize={this.PlotRegionResize}
+                />
 
             </div>
         );
     }
 
-    RobustDatasetCheckboxChanged(){
-        console.log("RobustDatasetCheckboxChanged() this.state.RobustDatasetCheckboxChecked="+this.state.RobustDatasetCheckboxChecked);
-        this.setState((state)=>({
-            RobustDatasetCheckboxChecked : ! state.RobustDatasetCheckboxChecked
-        }));
+
+    populateSubSelect(){      
+
+        if(this.state.region_select_value === "region"){
+            let region_options = list_of_regions.map((item,index)=>
+                <option key={"region_select_options"+index} value={item}>{item}</option>
+                );
+            console.log('region_options');
+            console.log(region_options);
+            this.region_sub_select_options = region_options;
+            this.region_sub_select_disabled = false;
+        }else if(this.state.region_select_value === "state"){
+            let state_options = list_of_states.map((item,index)=>
+                <option key={"region_select_options"+index} value={item}>{item}</option>
+                );
+            console.log('state_options');
+            console.log(state_options);
+            this.region_sub_select_options = state_options;
+            this.region_sub_select_disabled = false;
+        }else{
+            this.region_sub_select_options = [];
+            this.region_sub_select_disabled = true;
+        }
+    }
+
+
+    // Put all the options in the 'Climate Varible' selector, based on the 'Location/Region'
+    // selector
+    populateVariableSelect(){
+        let robustData = this.state.RobustDatasetCheckboxChecked;
+        console.log('SanboxControls.populateVariableSelect()');
+        let loc_value = this.state.region_select_value;
+        if(loc_value === "region"){ loc_value="regions";} //TODO: fix
+        console.log('loc_value='+loc_value);
+
+        // If we change the dataset, try to keep the same option name selected,
+        // but need to change the value to the value from the corresponding dataset
+        // i.e. "1 inch" in the 1900 set, to "1 inch" in the 1950 set.
+        let var_select =  document.getElementById("var_select");
+        let var_selected_text = undefined;
+        if(var_select){
+            console.log('var_select.value='+var_select.value);
+            if(this.var_select_value !== ""){
+                var_selected_text = var_select[var_select.selectedIndex].innerHTML;
+            }
+            console.log('var_selected_text='+var_selected_text);
+        } 
+
+        console.log('nca_data_index=');
+        console.log(this.nca_data_index);
+        let data_subset = this.nca_data_index[loc_value];
+        console.log('data_subset=');
+        console.log(data_subset);
+        let var_select_value = undefined;
+        if(data_subset){
+            // filter out by "Use Robust Dataset"
+            let var_select_options = [];
+            for(let i=0;i<data_subset.length;i++){
+
+                let opt = <option key={"var_select_option"+i} value={data_subset[i].name}>{data_subset[i].type}</option>
+
+                if( data_subset[i].start === 1950 && robustData ){
+                    var_select_options.push(opt);
+                }else if(data_subset[i].start === 1900 && !robustData ){
+                    var_select_options.push(opt);
+                }else{
+                    console.log("Excluding "+i+" start="+data_subset[i].start);
+                    continue;
+                }
+                if(var_selected_text !== undefined && var_selected_text == data_subset[i].type){
+                    var_select_value = data_subset[i].name;
+                    console.log("Found var_select_value="+var_select_value+" var_selected_text="+var_selected_text+" this.state.var_select_value="+this.state.var_select_value+"  i="+i);
+
+                }
+
+            }
+            console.log("var_select_options=");
+            console.log(var_select_options);
+            this.var_select_options= var_select_options;
+            this.var_select_disabled= false;
+            // if we changed from 1900 to 1950 (robust) dataset, we need up update var_select_value.
+            // Node, calling setState here can cause an infinite loop.
+            if( this.state.var_select_value !=  var_select_value){
+                console.log("Updating var_select_value="+var_select_value+"  this.state.var_select_value="+this.state.var_select_value);
+                this.setState({
+                    var_select_value: var_select_value,
+                });
+            }
+        }else{
+            this.var_select_options= [];
+            this.var_select_disabled= true;
+        }
+        
     }
 
     // This function loads the 'index.json' file into 'this.nca_data_index'
@@ -188,124 +270,14 @@ class SandboxControls extends React.Component {
             console.log('SanboxControls.loadNCADdata() response='+response);
             console.log(response);
             //
-            //this.nca_data = JSON.parse(response);
             this.nca_data_index = response.data;
 
-            // finally call function to process data
-            this.populateVariableSelect();
           })
           .catch((error)=>{
             // handle error
             console.log('SanboxControls.loadNCADdata() error='+error);
           })
-          //.then(function () {
-            // always executed
-          //});
 
-
-    }
-
-    // Gets called when 'Location/Region' selector is changed
-    locationSelectChanged(){
-        console.log('SanboxControls.locationSelectChanged()');
-        let region_select =  document.getElementById("loc_region_select");
-        let var_select =  document.getElementById("var_select");
-        console.log('region_select.value = ' + region_select.value);
-        // clear it out
-        // populate from data
-        if( Object.keys(this.nca_data_index).length > 0){
-            // data already loaded, proceed synchronously
-            this.populateVariableSelect();
-        }else{
-            // load data, then call 'this.populateVariableSelect' asynchronously
-            this.loadNCAdata();
-        }
-        console.log("region_select.value="+region_select.value)
-        if(region_select.value === ""){
-            this.setState((state)=>({
-                    plotly_data: [],
-                    plotly_layout: {},
-                    plotly_revision: state.plotly_revision+1,
-                    var_select_options : [],
-                    var_select_disabled : true,
-                    loc_sub_select_options : [],
-                    loc_sub_select_disabled : true,
-            }));
-        }else if(region_select.value === "national"){
-            if(var_select && var_select.value !== ""){
-                this.updatePlotData();
-                this.setState((state)=>({
-                        loc_sub_select_options : [],
-                        loc_sub_select_disabled : true,
-                }));
-            }else{
-                // no value, clear plot
-                this.setState((state)=>({
-                        plotly_data: [],
-                        plotly_layout: {},
-                        plotly_revision: state.plotly_revision+1,
-                        loc_sub_select_options : [],
-                        loc_sub_select_disabled : true,
-                }));
-            }
-        }else if(region_select.value === "region"){
-            let region_options = list_of_regions.map((item,index)=>
-                <option key={"region_select_options"+index} value={item}>{item}</option>
-                );
-            console.log('region_options');
-            console.log(region_options);
-            this.setState((state)=>({
-                    plotly_data: [],
-                    plotly_layout: {},
-                    plotly_revision: state.plotly_revision+1,
-                    loc_sub_select_options : region_options,
-                    loc_sub_select_disabled : false,
-            }));
-        }else if(region_select.value === "state"){
-            let state_options = list_of_states.map((item,index)=>
-                <option key={"region_select_options"+index} value={item}>{item}</option>
-                );
-            console.log('state_options');
-            console.log(state_options);
-            this.setState((state)=>({
-                    plotly_data: [],
-                    plotly_layout: {},
-                    plotly_revision: state.plotly_revision+1,
-                    loc_sub_select_options : state_options,
-                    loc_sub_select_disabled : false,
-            }));
-        }
-    }
-
-
-    // Put all the optios in the 'Climate Varible' selector, based on the 'Location/Region'
-    // selector
-    populateVariableSelect(){
-        console.log('SanboxControls.populateVariableSelect()');
-        let region_select =  document.getElementById("loc_region_select");
-        let loc_value = region_select.value;
-        if(loc_value === "region"){ loc_value="regions";} //TODO: fix
-        this.selected_loc = loc_value;
-        console.log('loc_value='+loc_value);
-        console.log('nca_data_index=');
-        console.log(this.nca_data_index);
-        let data_subset = this.nca_data_index[loc_value];
-        console.log('data_subset=');
-        console.log(data_subset);
-        if(data_subset){
-            this.setState({
-                var_select_options: data_subset.map((item,index)=>
-                    <option key={"var_select_option"+index} value={item.name}>{item.type}</option>
-                ),
-                var_select_disabled: false
-            });
-        }else{
-            this.setState({
-                var_select_options: [],
-                var_select_disabled: true
-            });
-        }
-        
     }
 
     parseNCAFile(data, type, region){
@@ -334,13 +306,13 @@ class SandboxControls extends React.Component {
         for(let i=1;i<lines.length;i++){
             console.log('lines['+i+']='+lines[i]);
             let elements = lines[i].split(',');
-            console.log('elements.length='+elements.length);
+            //console.log('elements.length='+elements.length);
             if(elements.length <= 1){
                 break;
             }
             let xval = parseInt(elements[0]);
             let yval = parseFloat(elements[col_index]);
-            console.log('xval='+xval+' yval='+yval);
+            //console.log('xval='+xval+' yval='+yval);
             xvals.push(xval);
             yvals.push(yval);
         }
@@ -350,62 +322,64 @@ class SandboxControls extends React.Component {
     }
 
     updatePlotData(){
-        let region_select =  document.getElementById("loc_region_select");
-        let var_select =  document.getElementById("var_select");
-        let region_sub_select =  document.getElementById("loc_sub_select");
-        if(region_select.value === ""){
-            return;
-        }
         console.log('SanboxControls.updatePlotData()');
-        console.log('region_select='+region_select.value);
-        console.log('var_select='+var_select.value);
-        console.log('region_sub_select='+region_sub_select.value);
+        console.log('region_select='+this.state.region_select_value);
+        console.log('var_select='+this.state.var_select_value);
+        console.log('region_sub_select='+this.state.region_sub_select_value);
 
 
-        if( this.state.cached_data._loaded && 
-            (region_select.value === this.state.cached_data.region) &&
-            (var_select.value === this.state.cached_data.varible) &&
-            (region_sub_select.value === this.state.cached_data.region_sub) ){
+        if( (this.state.region_select_value === undefined) ||
+            (this.state.var_select_value === undefined) ||
+            ( (this.state.region_select_value == "region" ||
+               this.state.region_select_value == "state" )
+              && 
+              (this.state.region_sub_select_value === undefined ||
+               this.state.region_sub_select_value == "")
+            )
+            ){
+            console.log('not plotting');
+            this.plotly_data= [];
+            this.plotly_layout= {};
+            this.plotly_revision= this.plotly_revision+1;
+            if(isNaN(this.plotly_revision)){console.log("= ERROR, revision is NaN");}
+
+
+        }else if( this.state.cached_data._loaded && 
+            (this.state.region_select_value === this.state.cached_data.region) &&
+            (this.state.var_select_value === this.state.cached_data.varible) &&
+            (this.state.region_sub_select_value === this.state.cached_data.region_sub) ){
             // use cached data
             console.log('Using Cached data');
             let plot_data = new GeneratePlotData(this.state.cached_data.xvals,
                                                  this.state.cached_data.yvals);
             plot_data.setXRange(this.state.slider_min_value, this.state.slider_max_value);
 
-            this.setState((state)=>({
-                plotly_revision: state.plotly_revision+1,
-                plotly_data: plot_data.getData(), 
-                plotly_layout: plot_data.getLayout()
-            }));
+            this.plotly_data = plot_data.getData();
+            this.plotly_layout= plot_data.getLayout();
+            this.plotly_revision= this.plotly_revision+1;
+            if(isNaN(this.plotly_revision)){console.log("= ERROR, revision is NaN");}
         }else{
             // fetch .txt data from the server, parse, add to cache
             //let filename = "./TSU_Sandbox_Datafiles/national1inch_1900_2018_Sandbox.txt"
-            let filename = "./TSU_Sandbox_Datafiles/"+var_select.value;
+            let filename = "./TSU_Sandbox_Datafiles/"+this.state.var_select_value;
             console.log('fetching file from server. filename='+filename);
             axios.get(filename)
                 .then( (response)=>{
                         console.log('SanboxControls.updatePlotData() response=');
                         console.log(response);
-                        let xy_values = this.parseNCAFile(response.data, region_select.value,
-                                                                region_sub_select.value); 
+                        let xy_values = this.parseNCAFile(response.data, this.state.region_select_value, this.state.region_sub_select_value); 
                         let xvals = xy_values[0];
                         let yvals = xy_values[1];
-
-                        let plot_data = new GeneratePlotData(xvals, yvals);
-                        plot_data.setXRange(this.state.slider_min_value, this.state.slider_max_value);
 
                         this.setState((state)=>({
                             cached_data: {
                                 _loaded: true,
                                 xvals: xvals,
                                 yvals: yvals,
-                                region: region_select.value,
-                                varible: var_select.value,
-                                region_sub: region_sub_select.value
+                                region: state.region_select_value,
+                                varible: state.var_select_value,
+                                region_sub: state.region_sub_select_value
                             },
-                            plotly_revision: state.plotly_revision+1,
-                            plotly_data: plot_data.getData(), 
-                            plotly_layout: plot_data.getLayout()
                         }));
 
                     })
@@ -417,92 +391,72 @@ class SandboxControls extends React.Component {
     }
 
 
+    sliderChanged(values){
+        console.log('SanboxControls.sliderChanged(values='+values+')');
+        if(values.length && values.length === 2){
+            console.log('slider_min_value='+values[0]+' slider_max_value='+values[1]);
+            this.setState({
+                slider_min_value: values[0],
+                slider_max_value: values[1],
+            });
+        }
+
+    }
+
+
+    PlotRegionResize(){
+        let h = window.innerHeight - 210;
+        let w = window.innerWidth - 48;
+        if(window.innerWidth < 949){
+            h -= 29;
+        }
+        console.log("SanboxControls.PlotRegionResize() height="+h+" width="+w);
+        this.setState((state)=>({
+            plotly_width : w,
+            plotly_height : h,
+        }));
+    }
+
+    RobustDatasetCheckboxChanged(){
+        console.log("RobustDatasetCheckboxChanged() this.state.RobustDatasetCheckboxChecked="+this.state.RobustDatasetCheckboxChecked);
+        this.setState((state)=>({
+            RobustDatasetCheckboxChecked : ! state.RobustDatasetCheckboxChecked
+        }));
+    }
+
+    // Gets called when 'Location/Region' selector is changed
+    regionSelectChanged(){
+        console.log('SanboxControls.regionSelectChanged()');
+        let region_select =  document.getElementById("region_select");
+
+        this.setState((state)=>({
+            region_select_value: region_select.value,
+            region_sub_select_value: ""
+        }));
+    }
     variableSelectChanged(){
         console.log('SanboxControls.variableSelectChanged()');
-        let region_select =  document.getElementById("loc_region_select");
+        let region_select =  document.getElementById("region_select");
         let var_select =  document.getElementById("var_select");
-        let region_sub_select =  document.getElementById("loc_sub_select");
+        let region_sub_select =  document.getElementById("region_sub_select");
 
+        this.setState((state)=>({
+            var_select_value: var_select.value
+        }));
 
-        if(!var_select || var_select.value === ""){
-            // no value, clear plot
-            this.setState((state)=>({
-                    plotly_data: [],
-                    plotly_layout: {},
-                    plotly_revision: state.plotly_revision+1,
-            }));
-        } else if(region_select.value === "national"){
-            this.updatePlotData();
-        }else if(region_select.value === "region"){
-            if(region_sub_select && region_sub_select.value !== ""){
-                this.updatePlotData();
-            }else{
-                // no value, clear plot
-                this.setState((state)=>({
-                        plotly_data: [],
-                        plotly_layout: {},
-                        plotly_revision: state.plotly_revision+1,
-                }));
-            }
-        }else if(region_select.value === "state"){
-            if(region_sub_select && region_sub_select.value !== ""){
-                this.updatePlotData();
-            }else{
-                // no value, clear plot
-                this.setState((state)=>({
-                        plotly_data: [],
-                        plotly_layout: {},
-                        plotly_revision: state.plotly_revision+1,
-                }));
-            }
-        }
     }
 
     // Get called with the 3rd selector is changed
-    locationSubSelectChanged(){
-        console.log('SanboxControls.locationSubSelectChanged()');
-        let region_select =  document.getElementById("loc_region_select");
+    regionSubSelectChanged(){
+        console.log('SanboxControls.regionSubSelectChanged()');
+        let region_select =  document.getElementById("region_select");
         let var_select =  document.getElementById("var_select");
-        let region_sub_select =  document.getElementById("loc_sub_select");
+        let region_sub_select =  document.getElementById("region_sub_select");
 
-        if(!region_sub_select || region_sub_select.value === ""){
-            // no value, clear plot
-            this.setState((state)=>({
-                    plotly_data: [],
-                    plotly_layout: {},
-                    plotly_revision: state.plotly_revision+1,
-            }));
-        //} else if(region_select.value === "national"){
-        //    this.updatePlotData();
-        }else if(region_select.value === "region"){
-            if(var_select && var_select.value !== ""){
-                this.updatePlotData();
-            }else{
-                // no value, clear plot
-                this.setState((state)=>({
-                        plotly_data: [],
-                        plotly_layout: {},
-                        plotly_revision: state.plotly_revision+1,
-                }));
-            }
-        }else if(region_select.value === "state"){
-            if(var_select && var_select.value !== ""){
-                this.updatePlotData();
-            }else{
-                // no value, clear plot
-                this.setState((state)=>({
-                        plotly_data: [],
-                        plotly_layout: {},
-                        plotly_revision: state.plotly_revision+1,
-                }));
-            }
-        }
+        this.setState((state)=>({
+            region_sub_select_value: region_sub_select.value
+        }));
     }
-
-
-
-
-
 
 }
 
