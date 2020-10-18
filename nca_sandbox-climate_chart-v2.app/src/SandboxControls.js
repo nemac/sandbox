@@ -232,7 +232,7 @@ class SandboxControls extends React.Component {
                     console.log("Excluding "+i+" start="+data_subset[i].start);
                     continue;
                 }
-                if(var_selected_text !== undefined && var_selected_text == data_subset[i].type){
+                if(var_selected_text !== undefined && var_selected_text === data_subset[i].type){
                     var_select_value = data_subset[i].name;
                     console.log("Found var_select_value="+var_select_value+" var_selected_text="+var_selected_text+" this.state.var_select_value="+this.state.var_select_value+"  i="+i);
 
@@ -245,7 +245,7 @@ class SandboxControls extends React.Component {
             this.var_select_disabled= false;
             // if we changed from 1900 to 1950 (robust) dataset, we need up update var_select_value.
             // Node, calling setState here can cause an infinite loop.
-            if( this.state.var_select_value !=  var_select_value){
+            if( this.state.var_select_value !==  var_select_value){
                 console.log("Updating var_select_value="+var_select_value+"  this.state.var_select_value="+this.state.var_select_value);
                 this.setState({
                     var_select_value: var_select_value,
@@ -330,11 +330,11 @@ class SandboxControls extends React.Component {
 
         if( (this.state.region_select_value === undefined) ||
             (this.state.var_select_value === undefined) ||
-            ( (this.state.region_select_value == "region" ||
-               this.state.region_select_value == "state" )
+            ( (this.state.region_select_value === "region" ||
+               this.state.region_select_value === "state" )
               && 
               (this.state.region_sub_select_value === undefined ||
-               this.state.region_sub_select_value == "")
+               this.state.region_sub_select_value === "")
             )
             ){
             console.log('not plotting');
@@ -436,9 +436,7 @@ class SandboxControls extends React.Component {
     }
     variableSelectChanged(){
         console.log('SanboxControls.variableSelectChanged()');
-        let region_select =  document.getElementById("region_select");
         let var_select =  document.getElementById("var_select");
-        let region_sub_select =  document.getElementById("region_sub_select");
 
         this.setState((state)=>({
             var_select_value: var_select.value
@@ -449,8 +447,6 @@ class SandboxControls extends React.Component {
     // Get called with the 3rd selector is changed
     regionSubSelectChanged(){
         console.log('SanboxControls.regionSubSelectChanged()');
-        let region_select =  document.getElementById("region_select");
-        let var_select =  document.getElementById("var_select");
         let region_sub_select =  document.getElementById("region_sub_select");
 
         this.setState((state)=>({
