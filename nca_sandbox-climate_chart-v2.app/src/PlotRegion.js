@@ -5,21 +5,21 @@ import Plot from 'react-plotly.js';
 class PlotRegion extends React.Component {
     constructor(props) {
         super(props)
-        console.log("PlotRegion object instantated.");
-        this.name = "PlotRegion"
+        // console.log("PlotRegion object instantated.");
+        // this.name = "PlotRegion"
         window.addEventListener('resize', props.handleResize);
         props.handleResize();
 
     }
 
     render() {
-        console.log("PlotRegion render() height="+this.props.plotly_height+" width="+this.props.plotly_width);
+        // console.log("PlotRegion render() height="+this.props.plotly_height+" width="+this.props.plotly_width);
         // Automaticly resize plot
         this.props.plotly_layout['width'] = this.props.plotly_width;
         this.props.plotly_layout['height'] = this.props.plotly_height;
 
-        console.log("Rendering PlotRegion rev="+this.props.plotly_revision+" this.props.plotly_data=")
-        console.log(this.props.plotly_data)
+        // console.log("Rendering PlotRegion rev="+this.props.plotly_revision+" this.props.plotly_data=")
+        // console.log(this.props.plotly_data)
 
         return (
             <div id="plot_region" className="plot_region">
