@@ -15,8 +15,8 @@ class PlotRegion extends React.Component {
     render() {
         // console.log("PlotRegion render() height="+this.props.plotly_height+" width="+this.props.plotly_width);
         // Automaticly resize plot
-        this.props.plotly_layout['width'] = this.props.plotly_width;
-        this.props.plotly_layout['height'] = this.props.plotly_height;
+        this.props.plotly_layout['width'] =  100 // this.props.plotly_width;
+        this.props.plotly_layout['height'] =  100  // this.props.plotly_height;
 
         // console.log("Rendering PlotRegion rev="+this.props.plotly_revision+" this.props.plotly_data=")
         // console.log(this.props.plotly_data)

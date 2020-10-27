@@ -13,35 +13,39 @@ const useStyles = makeStyles((theme) => ({
   selectEmpty: {
     marginTop: theme.spacing(2),
   },
+  menuItem: {
+    textAlign: 'left',
+  },
 }));
 
 
 export default function Selector(props) {
   const classes = useStyles();
   const items = props.items;
+  const controlName = props.name;
+  const value = props.value;
+  const disabled = props.disabled;
 
-  const [item, setItem] = React.useState('');
   const handleChange = (event) => {
-    setItem(event.target.value);
+    props.onChange(event.target.value);
   };
 
-
-
  return (
-     <FormControl variant="outlined" className={classes.formControl} fullWidth={true}>
-       <InputLabel id="demo-simple-select-outlined-label">Region Based</InputLabel>
+     <FormControl variant="outlined" className={classes.formControl} fullWidth={true} disabled={disabled}>
+       <InputLabel id="demo-simple-select-outlined-label">{controlName}</InputLabel>
        <Select
          labelId="demo-simple-select-outlined-label"
          id="demo-simple-select-outlined"
-         value={item}
+         value={value}
          onChange={handleChange}
-         label="Region Based"
+         label={controlName}
+         className={classes.menuItem}
        >
        <MenuItem value="">
           <em>None</em>
         </MenuItem>
        {items.map((name) => (
-           <MenuItem key={name} value={name}>
+           <MenuItem key={name} value={name} className={classes.menuItem}>
              {name}
            </MenuItem>
          ))}

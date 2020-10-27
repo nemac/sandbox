@@ -13,7 +13,7 @@ import Box from '@material-ui/core/Box';
 import blueGrey from '@material-ui/core/colors/blueGrey';
 
 import Slider from '@material-ui/core/Slider';
-import Selector from './Selector.js';
+import SandboxSelector from './SandboxSelector.js';
 import SandboxDataCheck from './SandboxDataCheck.js';
 import Divider from '@material-ui/core/Divider';
 
@@ -23,13 +23,7 @@ import { faChartLine } from '@fortawesome/free-solid-svg-icons';
 library.add(faChartLine);
 
 
-const list_of_regions = [ "Northeast","Southeast","Midwest","Northern Great Plains",
-    "Northwest","Southwest","Southern Great Plains","Alaska","Hawaii","Puerto Rico" ];
-const list_of_states = [ "AL","AZ","AR","CA","CO","CT","DE","FL","GA","ID",
-    "IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO",
-    "MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA",
-    "RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY","AK",
-    "HI","PR","VI"];
+
 
 const axios = require('axios');
 
@@ -73,20 +67,244 @@ const useStyles = makeStyles((theme) => ({
 
 function valuetext(value) {
   return `${value}°C`;
-}
+};
+
+const RegionItems = [
+  'National',
+  'Regional',
+  'State',
+];
+
+const locatioNationalItems = [
+  'National',
+];
+
+const locationRegionalItems = [
+  'Northeast',
+  'Southeast',
+  'Midwest',
+  'Northern Great Plains',
+  'Northwest',
+  'Southwest',
+  'Southern Great Plains',
+  'Alaska','Hawaii',
+  'Puerto Rico',
+];
+
+const locationStateItems = [
+  'AK',
+  'AL',
+  'AZ',
+  'AR',
+  'CA',
+  'CO',
+  'CT',
+  'DE',
+  'FL',
+  'GA',
+  'HI',
+  'ID',
+  'IL',
+  'IN',
+  'IA',
+  'KS',
+  'KY',
+  'LA',
+  'ME',
+  'MD',
+  'MA',
+  'MI',
+  'MN',
+  'MS',
+  'MO',
+  'MT',
+  'NE',
+  'NV',
+  'NH',
+  'NJ',
+  'NM',
+  'NY',
+  'NC',
+  'ND',
+  'OH',
+  'OK',
+  'OR',
+  'PA',
+  'PR',
+  'RI',
+  'SC',
+  'SD',
+  'TN',
+  'TX',
+  'UT',
+  'VT',
+  'VA',
+  'VI',
+  'WA',
+  'WV',
+  'WI',
+  'WY',
+];
+
+const loadNCAdata = async () => {
+  await axios.get('./TSU_Sandbox_Datafiles/index.json')
+    .then( (response) => {
+      // handle success
+      console.log('response.data', response.data)
+      return response.data;
+    })
+    .catch((error) => {
+      // handle error
+      console.error(`SanboxControls.loadNCADdata() error: ${error}`);
+      return [''];
+  })
+};
 
 export default function SandboxControls() {
   const classes = useStyles();
-  const [value, setValue] = React.useState([20, 37]);
+  const [value, setValue] = React.useState(20);
 
+  const [region, setRegion] = React.useState('');
+  const [location, setLocation] = React.useState('');
+  const [climateVarible, setClimateVarible] = React.useState('');
+  const [chartData, setChartData] = React.useState([0,0]);
+
+  const [climateDataFilesJSON, setClimateDataFilesJSON] = React.useState(['']);
+  const [climateDataFile, setClimateDataFile] = React.useState(['']);
+
+  const [locationItems, setLocationItems] = React.useState(['']);
+  const [regionItems, setRegionItems] = React.useState(['']);
+  const [climateVaribleItems, setClimateVaribleItems] = React.useState(['']);
+
+  const [locationDisabled, setlocationDisabled] = React.useState(true);
+  const [climateVaribleDisabled, setClimateVaribleDisabled] = React.useState(true);
+
+  async function loadNCAdata(region, isRobust) {
+    await axios.get('./TSU_Sandbox_Datafiles/index.json')
+      .then( (response) => {
+        // handle success
+        let data = {}
+        switch (region) {
+          case 'National':
+            setClimateDataFilesJSON(response.data.national);
+            data = response.data.national.filter(type => type.robust === isRobust);
+            setClimateVaribleItems(data.map((json) => json.type));
+            break;
+          case 'Regional':
+            setClimateDataFilesJSON(response.data.regional);
+            data = response.data.regional.filter(type => type.robust === isRobust);
+            setClimateVaribleItems(data.map((json) => json.type));
+            break;
+          case 'State':
+            setClimateDataFilesJSON(response.data.state);
+            data = response.data.state.filter(type => type.robust === isRobust);
+            setClimateVaribleItems(data.map((json) => json.type));
+            break;
+          default:
+            setClimateDataFilesJSON(response.data.national);
+            data = response.data.national.filter(type => type.robust === isRobust);
+            setClimateVaribleItems(data.map((json) => json.type));
+            break;
+        }
+
+        return response.data;
+      })
+      .catch((error) => {
+        // handle error
+        console.error(`SanboxControls.loadNCADdata() error: ${error}`);
+        return [''];
+    })
+  };
+
+  // use the react effect to control when location and regions change to repupulalte the climate varible pulldown
+  React.useEffect(() => {
+    loadNCAdata(region, false);
+  }, [region, false]);
+
+
+  // hange the slider change
   const handleSliderChange = (event, newValue) => {
     setValue(newValue);
+  };
+
+  // handle state change for region
+  function handleRegionChange(newValue) {
+    setRegion(newValue);
+    switch (newValue) {
+      case 'National':
+        // National data set the location items to none since there are none
+        setLocationItems(['']);
+        setLocation('');
+
+        // National data set the location pulldown to disabled since there are no locations
+        setlocationDisabled(true);
+
+        // National data set the climatevarible pulldown to NOT disabled by changing the state
+        setClimateVaribleDisabled(false);
+        break;
+      case 'Regional':
+        // Regional data set the location items to the regional items
+        setLocationItems(locationRegionalItems);
+        setLocation('');
+
+        // Regional data set the location pulldown to disabled since there are no locations by changing the state
+        setlocationDisabled(false);
+
+        // Regional data set the climatevarible pulldown to NOT disabled by changing the state
+        setClimateVaribleDisabled(false);
+        break;
+      case 'State':
+        // Regional data set the location items to the state items
+        setLocationItems(locationStateItems);
+        setLocation('');
+
+        // Regional data set the location pulldown to disabled since there are no locations by changing the state
+        setlocationDisabled(false);
+
+        // Regional data set the climatevarible pulldown to NOT disabled by changing the state
+        setClimateVaribleDisabled(false);
+        break;
+      default:
+        setLocationItems(['']);
+        setLocation('');
+        setlocationDisabled(true);
+        setClimateVaribleDisabled(true);
+        break;
+    }
+    getChartData(newValue, location, climateVarible);
+  };
+
+  // handle state change for location within the region
+  function handleLocationChange(newValue) {
+    setLocation(newValue);
+    getChartData(region.toLowerCase(), newValue, climateVarible);
+  };
+
+  // handle state change for climate varible
+  function handleClimateVaribleChange(newValue) {
+    setClimateVarible(newValue);
+    getChartData(region.toLowerCase(), location, newValue);
+  };
+
+
+  function getChartData(region, location, climateVarible) {
+    const data = climateDataFilesJSON.filter(json => json.robust === false && json.type === climateVarible);
+    const dataFile = data.map((json) => json.name);
+
+    axios.get(`./TSU_Sandbox_Datafiles/${dataFile}`)
+      .then( (response) =>{
+          console.log('getChartData', region.toLowerCase(), location)
+          const chartDataFromFile = parseNCAFile(response.data, region, location);
+          setChartData(chartDataFromFile)
+      })
+      .catch( (error) => {
+        console.error('SanboxControls.updatePlotData() error='+error)
+      })
   };
 
   return (
     <div className={classes.root}>
       <Grid container spacing={0} justify="flex-start" direction={"row"} className={classes.root}>
-
         <Grid item xs={12} className={classes.header} width="100%" >
           <Box fontWeight="fontWeightBold" m={1} p={1} display="flex" flexWrap="nowrap" justifyContent="flex-start">
             <Box px={1} color="text.secondary" fontSize="h4.fontSize" className={classes.headerIcon}>
@@ -98,17 +316,17 @@ export default function SandboxControls() {
 
         <Grid item xs={12} sm={3} className={classes.varriableSelectors}>
           <Box fontWeight="fontWeightBold" m={1} display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="flex-start">
-            <Selector items={['test1', 'test2', 'test3']}/>
+            <SandboxSelector items={RegionItems} name={"Select a Region"} onChange={handleRegionChange} value={region} disabled={false}/>
           </Box>
         </Grid>
         <Grid item xs={12} sm={3} className={classes.varriableSelectors}>
           <Box fontWeight="fontWeightBold" m={1} display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="flex-start">
-            <Selector items={['test4', 'test5', 'test6']}/>
+            <SandboxSelector items={locationItems}  name={"Select a Location"} onChange={handleLocationChange} value={location} disabled={locationDisabled}/>
           </Box>
         </Grid>
         <Grid item xs={12} sm={3} className={classes.varriableSelectors}>
           <Box fontWeight="fontWeightBold" m={1} display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="flex-start">
-            <Selector items={['test7', 'test8', 'test9']}/>
+            <SandboxSelector items={climateVaribleItems}  name={"Climate Varible"} onChange={handleClimateVaribleChange} value={climateVarible} disabled={climateVaribleDisabled}/>
           </Box>
         </Grid>
         <Grid item xs={12} sm={3} className={classes.varriableSelectors}>
@@ -403,46 +621,51 @@ export default function SandboxControls() {
 //
 //     }
 //
-//     parseNCAFile(data, type, region){
-//         let xvals = [];
-//         let yvals = [];
-//         let lines = data.split(/\r?\n/);
-//         let headers = lines[0].split(',');
-//         // console.log('headers='+headers);
-//         for(let h=0;h<headers.length;h++){
-//             headers[h] = headers[h].trim();
-//         }
-//         let col_index = undefined;
-//         if(type === "national"){
-//             col_index = 1;
-//         }else if(type === "region" || type === "state"){
-//             for(let h=1;h<headers.length;h+=2){
-//                 if(headers[h] === region){
-//                     col_index = h;
-//                     break;
-//                 }
-//             }
-//         }
-//         console.log('region='+region);
-//         // console.log('col_index='+col_index);
-//
-//         for(let i=1;i<lines.length;i++){
-//             // console.log('lines['+i+']='+lines[i]);
-//             let elements = lines[i].split(',');
-//             //console.log('elements.length='+elements.length);
-//             if(elements.length <= 1){
-//                 break;
-//             }
-//             let xval = parseInt(elements[0]);
-//             let yval = parseFloat(elements[col_index]);
-//             //console.log('xval='+xval+' yval='+yval);
-//             xvals.push(xval);
-//             yvals.push(yval);
-//         }
-//
-//
-//         return [xvals, yvals];
-//     }
+function parseNCAFile(data, type, region){
+    let xvals = [];
+    let yvals = [];
+    let lines = data.split(/\r?\n/);
+    let headers = lines[0].split(',');
+    // console.log('headers='+headers);
+    for(let h=0;h<headers.length;h++){
+        headers[h] = headers[h].trim();
+    }
+    let col_index = undefined;
+    // console.log('col_index='+col_index);
+    // console.log('type='+type);
+    // console.log('region='+region);
+    // console.log('data='+data);
+
+    if(type === "national"){
+        col_index = 1;
+    }else if(type === "regional" || type === "state"){
+        for(let h=1;h<headers.length;h+=2){
+            // console.log('headers='+headers[h]);
+            if(headers[h] === region){
+                col_index = h;
+                break;
+            }
+        }
+    }
+    // console.log('col_index='+col_index);
+
+    for(let i=1;i<lines.length;i++){
+        // console.log('lines['+i+']='+lines[i]);
+        let elements = lines[i].split(',');
+        // console.log('elements.length='+elements.length);
+        if(elements.length <= 1){
+            break;
+        }
+        let xval = parseInt(elements[0]);
+        let yval = parseFloat(elements[col_index]);
+        // console.log('xval='+xval+' yval='+yval);
+        xvals.push(xval);
+        yvals.push(yval);
+    }
+
+
+    return [xvals, yvals];
+}
 //
 //     updatePlotData(){
 //         // console.log('SanboxControls.updatePlotData()');
