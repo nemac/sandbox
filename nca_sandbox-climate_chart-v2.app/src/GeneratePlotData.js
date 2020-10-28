@@ -1,8 +1,3 @@
-
-
-
-
-
 class GeneratePlotData {
     constructor(xvals, yvals){
         this.xmin = 1900;

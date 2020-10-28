@@ -11,8 +11,8 @@ class DoubleSlider extends React.Component {
 
     const handleChange = (event, newValue) => {
         this.props.sliderChanged(newValue);
-        console.log("handleChange="+newValue)
     };
+    
     return (
         <Slider
             min={1900}

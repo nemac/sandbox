@@ -138,16 +138,14 @@ class PlotRegion extends React.Component {
   };
   responsiveChartRef = React.createRef();
 
-
   componentDidMount() {
     this.resizeListener = window.addEventListener("resize", () => {
-
       const elREF = this.responsiveChartRef.current;
       const el = elREF;
 
       const copiedLayout = Object.assign({}, this.props.plotly_layout);
-      copiedLayout.width = el.parentNode.getBoundingClientRect().width-48;
-      copiedLayout.height = el.getBoundingClientRect().height;
+      copiedLayout.width = el.parentNode.getBoundingClientRect().width-100;
+      copiedLayout.height = el.getBoundingClientRect().height-24;
       console.log('resize', copiedLayout.height, copiedLayout.width);
 
       this.setState({
@@ -161,15 +159,14 @@ class PlotRegion extends React.Component {
   }
 
   render() {
-
     const copiedLayout = Object.assign({}, this.props.plotly_layout);
     const data = this.props.plotly_data;
     const config = {...{ responsive: true }};
     const elREF = this.responsiveChartRef.current;
     if(elREF) {
       const el = elREF;
-      copiedLayout.width = el.parentNode.getBoundingClientRect().width-48;
-      copiedLayout.height = el.getBoundingClientRect().height;
+      copiedLayout.width = el.parentNode.getBoundingClientRect().width-100;
+      copiedLayout.height = el.getBoundingClientRect().height-24;
     }
 
 
