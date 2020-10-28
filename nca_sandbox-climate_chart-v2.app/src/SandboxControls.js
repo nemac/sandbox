@@ -150,7 +150,6 @@ const loadNCAdata = async () => {
   await axios.get('./TSU_Sandbox_Datafiles/index.json')
     .then( (response) => {
       // handle success
-      console.log('response.data', response.data)
       return response.data;
     })
     .catch((error) => {
@@ -168,6 +167,7 @@ export default function SandboxControls() {
   const [location, setLocation] = useState('');
   const [climateVarible, setClimateVarible] = useState('');
   const [chartData, setChartData] = useState([0,0]);
+  const [chartLayout, setChartLayout] = useState({});
 
   const [climateDataFilesJSON, setClimateDataFilesJSON] = useState(['']);
   const [climateDataFile, setClimateDataFile] = useState(['']);
@@ -292,9 +292,10 @@ export default function SandboxControls() {
 
     axios.get(`./TSU_Sandbox_Datafiles/${dataFile}`)
       .then( (response) =>{
-          console.log('getChartData', region.toLowerCase(), location)
           const chartDataFromFile = parseNCAFile(response.data, region, location);
-          setChartData(chartDataFromFile)
+          const plot_data = new GeneratePlotData(chartDataFromFile[0], chartDataFromFile[1]);
+          setChartData(plot_data.getData());
+          setChartLayout(plot_data.getLayout());
       })
       .catch( (error) => {
         console.error('SanboxControls.updatePlotData() error='+error)
@@ -349,9 +350,10 @@ export default function SandboxControls() {
 
         <Grid item xs={12}  display="flex"  flex={1} className={classes.chartRegion}>
           <Divider variant="middle" />
-          <Box className={classes.chartBg} fontWeight="fontWeightBold" m={2} p={2} display="flex" flexDirection="row" justifyContent="center" flex={1} flexGrow={3} height="90%" >
+          <Box fontWeight="fontWeightBold" m={2} p={2} display="flex" flexDirection="row" justifyContent="center" flex={1} flexGrow={3} height="90%" >
             <PlotRegion
               plotly_data={chartData}
+              plotly_layout={chartLayout}
               />
           </Box>
         </Grid>
