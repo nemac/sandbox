@@ -350,7 +350,9 @@ export default function SandboxControls() {
         <Grid item xs={12}  display="flex"  flex={1} className={classes.chartRegion}>
           <Divider variant="middle" />
           <Box className={classes.chartBg} fontWeight="fontWeightBold" m={2} p={2} display="flex" flexDirection="row" justifyContent="center" flex={1} flexGrow={3} height="90%" >
-            Chart Goes Here
+            <PlotRegion
+              plotly_data={chartData}
+              />
           </Box>
         </Grid>
 
