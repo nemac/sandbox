@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import DoubleSlider from './DoubleSlider.js'
 import PlotRegion from './PlotRegion.js'
@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function valuetext(value) {
+const valuetext =(value) => {
   return `${value}°C`;
 };
 
@@ -162,30 +162,30 @@ const loadNCAdata = async () => {
 
 export default function SandboxControls() {
   const classes = useStyles();
-  const [value, setValue] = React.useState(20);
+  const [value, setValue] = useState(20);
 
-  const [region, setRegion] = React.useState('');
-  const [location, setLocation] = React.useState('');
-  const [climateVarible, setClimateVarible] = React.useState('');
-  const [chartData, setChartData] = React.useState([0,0]);
+  const [region, setRegion] = useState('');
+  const [location, setLocation] = useState('');
+  const [climateVarible, setClimateVarible] = useState('');
+  const [chartData, setChartData] = useState([0,0]);
 
-  const [climateDataFilesJSON, setClimateDataFilesJSON] = React.useState(['']);
-  const [climateDataFile, setClimateDataFile] = React.useState(['']);
+  const [climateDataFilesJSON, setClimateDataFilesJSON] = useState(['']);
+  const [climateDataFile, setClimateDataFile] = useState(['']);
 
-  const [locationItems, setLocationItems] = React.useState(['']);
-  const [regionItems, setRegionItems] = React.useState(['']);
-  const [climateVaribleItems, setClimateVaribleItems] = React.useState(['']);
+  const [locationItems, setLocationItems] = useState(['']);
+  const [regionItems, setRegionItems] = useState(['']);
+  const [climateVaribleItems, setClimateVaribleItems] = useState(['']);
 
-  const [locationDisabled, setlocationDisabled] = React.useState(true);
-  const [climateVaribleDisabled, setClimateVaribleDisabled] = React.useState(true);
+  const [locationDisabled, setlocationDisabled] = useState(true);
+  const [climateVaribleDisabled, setClimateVaribleDisabled] = useState(true);
 
-  async function loadNCAdata(region, isRobust) {
+  const loadNCAdata = async (region, isRobust) => {
     await axios.get('./TSU_Sandbox_Datafiles/index.json')
       .then( (response) => {
         // handle success
         let data = {}
         switch (region) {
-          case 'National':
+          case "National":
             setClimateDataFilesJSON(response.data.national);
             data = response.data.national.filter(type => type.robust === isRobust);
             setClimateVaribleItems(data.map((json) => json.type));
@@ -217,7 +217,7 @@ export default function SandboxControls() {
   };
 
   // use the react effect to control when location and regions change to repupulalte the climate varible pulldown
-  React.useEffect(() => {
+  useEffect( () => {
     loadNCAdata(region, false);
   }, [region, false]);
 
@@ -228,7 +228,7 @@ export default function SandboxControls() {
   };
 
   // handle state change for region
-  function handleRegionChange(newValue) {
+  const handleRegionChange = (newValue) => {
     setRegion(newValue);
     switch (newValue) {
       case 'National':
@@ -275,19 +275,18 @@ export default function SandboxControls() {
   };
 
   // handle state change for location within the region
-  function handleLocationChange(newValue) {
+  const handleLocationChange = (newValue) => {
     setLocation(newValue);
     getChartData(region.toLowerCase(), newValue, climateVarible);
   };
 
   // handle state change for climate varible
-  function handleClimateVaribleChange(newValue) {
+  const handleClimateVaribleChange = (newValue) => {
     setClimateVarible(newValue);
     getChartData(region.toLowerCase(), location, newValue);
   };
-
-
-  function getChartData(region, location, climateVarible) {
+  // get chart data from current state = which should include
+  const getChartData = (region, location, climateVarible) => {
     const data = climateDataFilesJSON.filter(json => json.robust === false && json.type === climateVarible);
     const dataFile = data.map((json) => json.name);
 
@@ -620,8 +619,8 @@ export default function SandboxControls() {
 //           })
 //
 //     }
-//
-function parseNCAFile(data, type, region){
+
+const parseNCAFile = (data, type, region) => {
     let xvals = [];
     let yvals = [];
     let lines = data.split(/\r?\n/);
