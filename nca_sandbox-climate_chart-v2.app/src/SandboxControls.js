@@ -12,7 +12,7 @@ import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import blueGrey from '@material-ui/core/colors/blueGrey';
 
-import Slider from '@material-ui/core/Slider';
+import SandboxSlider from './SandboxSlider.js';
 import SandboxSelector from './SandboxSelector.js';
 import SandboxDataCheck from './SandboxDataCheck.js';
 import Divider from '@material-ui/core/Divider';
@@ -21,9 +21,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faChartLine } from '@fortawesome/free-solid-svg-icons';
 library.add(faChartLine);
-
-
-
 
 const axios = require('axios');
 
@@ -50,9 +47,17 @@ const useStyles = makeStyles((theme) => ({
     height: '90px',
     maxHeight: '90px',
   },
+  divider: {
+    height: '15px',
+    maxHeight: '15px',
+  },
   yearSlider: {
     height: '75px',
     maxHeight: '75px',
+  },
+  yearSliderBox: {
+    maxWidth: 'calc(100% - 150px)',
+    marginLeft: '50px',
   },
   chartRegion: {
     height: 'calc(100% - 225px)',
@@ -64,10 +69,6 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: bgChart,
   }
 }));
-
-const valuetext =(value) => {
-  return `${value}°C`;
-};
 
 const RegionItems = [
   'National',
@@ -161,7 +162,7 @@ const loadNCAdata = async () => {
 
 export default function SandboxControls() {
   const classes = useStyles();
-  const [value, setValue] = useState(20);
+  const [sliderValues, setsliderValues] = useState([1900, 2020]);
 
   const [region, setRegion] = useState('');
   const [location, setLocation] = useState('');
@@ -223,8 +224,8 @@ export default function SandboxControls() {
 
 
   // hange the slider change
-  const handleSliderChange = (event, newValue) => {
-    setValue(newValue);
+  const handleSliderChange = (newValue) => {
+    setsliderValues(newValue);
   };
 
   // handle state change for region
@@ -314,6 +315,7 @@ export default function SandboxControls() {
           </Box>
         </Grid>
 
+
         <Grid item xs={12} sm={3} className={classes.varriableSelectors}>
           <Box fontWeight="fontWeightBold" m={1} display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="flex-start">
             <SandboxSelector items={RegionItems} name={"Select a Region"} onChange={handleRegionChange} value={region} disabled={false}/>
@@ -324,7 +326,7 @@ export default function SandboxControls() {
             <SandboxSelector items={locationItems}  name={"Select a Location"} onChange={handleLocationChange} value={location} disabled={locationDisabled}/>
           </Box>
         </Grid>
-        <Grid item xs={12} sm={3} className={classes.varriableSelectors}>
+        <Grid item xs={12} sm={3} className={classes.varriableSelectors} >
           <Box fontWeight="fontWeightBold" m={1} display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="flex-start">
             <SandboxSelector items={climateVaribleItems}  name={"Climate Varible"} onChange={handleClimateVaribleChange} value={climateVarible} disabled={climateVaribleDisabled}/>
           </Box>
@@ -335,21 +337,20 @@ export default function SandboxControls() {
           </Box>
         </Grid>
 
-        <Grid item xs={12}  className={classes.yearSlider}>
-          <Box fontWeight="fontWeightBold" p={2} display="flex" flexDirection="row" flexWrap="nowrap" flex={0} flexGrow={0} flexShrink={0}>
-            <Slider
-              value={value}
+        <Grid item xs={12}  className={classes.divider} >
+          <Divider variant="middle" />
+        </Grid>
+
+        <Grid item xs={12}  className={classes.yearSlider} >
+          <Box fontWeight="fontWeightBold" p={2} display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="center" className={classes.yearSliderBox} >
+            <SandboxSlider
+              values={sliderValues}
               onChange={handleSliderChange}
-              valueLabelDisplay="auto"
-              aria-labelledby="range-slider"
-              getAriaValueText={valuetext}
-              color="primary"
               />
           </Box>
         </Grid>
 
         <Grid item xs={12}  display="flex"  flex={1} className={classes.chartRegion}>
-          <Divider variant="middle" />
           <Box fontWeight="fontWeightBold" m={2} p={2} display="flex" flexDirection="row" justifyContent="center" flex={1} flexGrow={3} height="90%" >
             <PlotRegion
               plotly_data={chartData}
