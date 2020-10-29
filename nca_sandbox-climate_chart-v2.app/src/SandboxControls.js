@@ -162,13 +162,14 @@ const loadNCAdata = async () => {
 
 export default function SandboxControls() {
   const classes = useStyles();
-  const [sliderValues, setsliderValues] = useState([1900, 2020]);
+  const [sliderValues, setsliderValues] = useState([1900, 2018]);
   const [useRobust, setUseRobust] = useState(false);
 
   const [region, setRegion] = useState('');
   const [location, setLocation] = useState('');
   const [climatevariable, setClimatevariable] = useState('');
   const [chartData, setChartData] = useState([0,0]);
+  const [chartDataFiltered, setchartDataFiltered] = useState([0,0]);
   const [chartLayout, setChartLayout] = useState({});
 
   const [climateDataFilesJSON, setClimateDataFilesJSON] = useState(['']);
@@ -233,7 +234,8 @@ export default function SandboxControls() {
   // handle the slider change
   const handleSliderChange = (newValue) => {
     setsliderValues(newValue);
-    filterChartData({chartData, useRobust, sliderValues});
+    getChartData(region.toLowerCase(), location, climatevariable, useRobust);
+    // filterChartData({chartData, useRobust, sliderValues});
   };
 
   // handle state change for region
@@ -295,18 +297,70 @@ export default function SandboxControls() {
     getChartData(region.toLowerCase(), location, newValue, useRobust);
   };
 
-  // limits chart data by robouts and year state
-  const filterChartData = (filters) => {
-    // add this soon
-    // const data = ChartData.filter(json => json.robust === useRobust && json.type === climatevariable);
-    if (filters.chartData[1]) {
-      console.log('filterChartData', filters.chartData[1].x[0])
-    } else {
-      console.log('filterChartData no data')  
-    }
-
-
-  };
+  // // limits chart data by robouts and year state
+  // const filterChartData = (filters) => {
+  //   // add this soon
+  //   // const data = ChartData.filter(json => json.robust === useRobust && json.type === climatevariable);
+  //   // console.log('filterChartData filters', filters.sliderValues[0])
+  //   const chartData = filters.chartData[1];
+  //   if (chartData) {
+  //     const min = chartData.x.indexOf(filters.sliderValues[0].toString())
+  //     const max = chartData.x.indexOf(filters.sliderValues[1].toString())
+  //     // const length = filters.chartData[1].x.length - 1;
+  //     // const max = filters.chartData[1].x[length];
+  //
+  //     // console.log('filterChartData in if', chartData)
+  //     const filtedChartDataXY = filters.chartData.map((json, index) => {
+  //       console.log('filters.chartData',json, index, json[index] )
+  //       const limitx = json.x.filter( (item, index) => {
+  //         if (index >= min && index <= max) {
+  //           // console.log('filterChartData index, item', index, min, max, item)
+  //           return item
+  //         }
+  //       })
+  //       const limity = json.y.filter( (item, index) => {
+  //         if (index >= min && index <= max) {
+  //           // console.log('filterChartData index, item', index, min, max, item)
+  //           return item
+  //         }
+  //       })
+  //       json.x = limitx;
+  //       json.y = limity;
+  //       const newBins = {end: filters.sliderValues[1], start: filters.sliderValues[0]};
+  //       json.xbins = {...json.xbins, ...newBins }
+  //       console.log('limitx', limitx)
+  //       console.log('limity', limity)
+  //
+  //       return json
+  //       // const limitxu = limitx.filter(item, index => item[index] !== undefined);
+  //       // const limityu = limity.filter(item, index => item[index] !== undefined);
+  //       // filters.chartData.x = limitx;
+  //       // filters.chartData.y = limity;
+  //       // return
+  //       // console.log('-------------------------------')
+  //       // console.log('-------------------------------')
+  //       // console.log('-------------------------------')
+  //       // console.log('-------------------------------')
+  //       // const limitx = json.y.filter((el,i)=>x.some(j => i === j))
+  //       //
+  //       // // const limitx = json.y.filter( (_, index2) =>  {
+  //       // //   console.log('filterChartData filter json2, index2', json2, index2, min, max)
+  //       // //   return json2[index]
+  //       // //   // index2 => min && index2 <= max
+  //       // // })
+  //       // console.log('filterChartData limitx', limitx)
+  //       // json.index === useRobust && json.type === climatevariable
+  //     });
+  //
+  //     console.log('filterChartData filtedChartData', filtedChartDataXY)
+  //     setchartDataFiltered(filtedChartDataXY);
+  //
+  //   } else {
+  //     console.log('filterChartData no data')
+  //   }
+  //
+  //
+  // };
 
   // get chart data from current state = which should include
   const getChartData = (region, location, climatevariable, useRobust) => {
@@ -317,7 +371,10 @@ export default function SandboxControls() {
       .then( (response) =>{
           const chartDataFromFile = parseNCAFile(response.data, region, location);
           const plot_data = new GeneratePlotData(chartDataFromFile[0], chartDataFromFile[1]);
+          plot_data.setXRange(sliderValues[0], sliderValues[1]);
+
           setChartData(plot_data.getData());
+          // setchartDataFiltered(plot_data.getData());
           setChartLayout(plot_data.getLayout());
       })
       .catch( (error) => {
