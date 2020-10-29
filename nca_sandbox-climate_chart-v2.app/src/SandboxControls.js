@@ -62,9 +62,17 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#FBFCFE",
     border: "1px solid #E6E6E6",
     borderRadius: "4px",
+    [theme.breakpoints.down('xs')]: {
+      height: '500px',
+    },
+
   },
   selectionAreaHolder: {
     margin: "6px",
+    [theme.breakpoints.down('xs')]: {
+      height: '100vh',
+      maxHeight: '500px',
+    },
   },
   chartRegion: {
     height: 'calc(100% - 250px)',
