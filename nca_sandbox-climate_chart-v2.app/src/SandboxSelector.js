@@ -9,6 +9,7 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
     minWidth: 120,
+    backgroundColor: "#E6E6E6",
   },
   selectEmpty: {
     marginTop: theme.spacing(2),
@@ -16,6 +17,9 @@ const useStyles = makeStyles((theme) => ({
   menuItem: {
     textAlign: 'left',
   },
+  sandboxInputLabel: {
+    color: "#5C5C5C",
+  }
 }));
 
 
@@ -33,7 +37,7 @@ export default function Selector(props) {
 
  return (
      <FormControl variant="outlined" className={classes.formControl} fullWidth={true} disabled={disabled}>
-       <InputLabel id="demo-simple-select-outlined-label">{controlName}</InputLabel>
+       <InputLabel id="demo-simple-select-outlined-label" className={classes.sandboxInputLabel} >{controlName}</InputLabel>
        <Select
          labelId="demo-simple-select-outlined-label"
          id="demo-simple-select-outlined"

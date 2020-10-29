@@ -5,7 +5,6 @@ import GeneratePlotData from './GeneratePlotData.js'
 
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
@@ -14,7 +13,6 @@ import blueGrey from '@material-ui/core/colors/blueGrey';
 import SandboxSlider from './SandboxSlider.js';
 import SandboxSelector from './SandboxSelector.js';
 import SandboxDataCheck from './SandboxDataCheck.js';
-import Divider from '@material-ui/core/Divider';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -23,9 +21,12 @@ library.add(faChartLine);
 
 const axios = require('axios');
 
-const bgChart = blueGrey[100];
+const bgChart = blueGrey[50];
+const bgSelect = blueGrey[50];
 const useStyles = makeStyles((theme) => ({
   root: {
+    backgroundColor: "#FFFFFF",
+    color: "#5C5C5C",
     height: '100vh',
     [theme.breakpoints.down('xs')]: {
       overflow: 'scroll',
@@ -33,7 +34,8 @@ const useStyles = makeStyles((theme) => ({
   },
   header: {
     height: '60px',
-    maxHeight: '80px',
+    maxHeight: '60px',
+    color: "#5C5C5C",
   },
   headerIcon: {
     display: 'inline-flex',
@@ -51,15 +53,21 @@ const useStyles = makeStyles((theme) => ({
     maxHeight: '15px',
   },
   yearSlider: {
-    height: '75px',
-    maxHeight: '75px',
+    height: '100px',
+    maxHeight: '100px',
   },
-  yearSliderBox: {
-    maxWidth: 'calc(100% - 150px)',
-    marginLeft: '50px',
+  selectionArea: {
+    height: '250px',
+    maxHeight: '250px',
+    backgroundColor: "#FBFCFE",
+    border: "1px solid #E6E6E6",
+    borderRadius: "4px",
+  },
+  selectionAreaHolder: {
+    margin: "6px",
   },
   chartRegion: {
-    height: 'calc(100% - 225px)',
+    height: 'calc(100% - 250px)',
     [theme.breakpoints.down('xs')]: {
       height: '500px',
     },
@@ -326,8 +334,6 @@ export default function SandboxControls() {
     newName = newName.replace('tmax', 'over ');
     newName = newName.replace('tmin', 'over ');
     newName = newName.replace('F', '℉');
-
-    console.log('newName', newName);
     return newName;
   }
 
@@ -371,80 +377,80 @@ export default function SandboxControls() {
   return (
     <div className={classes.root}>
       <Grid container spacing={0} justify="flex-start" direction={"row"} className={classes.root}>
-        <Grid item xs={12} className={classes.header} width="100%" >
-          <Box fontWeight="fontWeightBold" m={1} p={1} display="flex" flexWrap="nowrap" justifyContent="flex-start">
-            <Box px={1} color="text.secondary" fontSize="h4.fontSize" className={classes.headerIcon}>
-              <FontAwesomeIcon icon={["fas", "chart-line"]} />
-            </Box>
-            <Box px={1} color="text.secondary" fontSize="h5.fontSize">NCA Sandbox - Climate Charts</Box>
-          </Box>
-        </Grid>
+        <Grid xs={12} width="100%" className={classes.selectionAreaHolder} >
+          <Grid container spacing={0} justify="flex-start" direction={"row"} className={classes.selectionArea}>
+            <Grid item xs={12} className={classes.header} width="100%" >
+              <Box fontWeight="fontWeightBold" m={1} p={1} display="flex" flexWrap="nowrap" justifyContent="flex-start">
+                <Box px={1} fontSize="h4.fontSize" className={classes.headerIcon}>
+                  <FontAwesomeIcon icon={["fas", "chart-line"]} />
+                </Box>
+                <Box px={1} fontSize="h5.fontSize">NCA Sandbox - Climate Charts</Box>
+              </Box>
+            </Grid>
 
 
-        <Grid item xs={12} sm={3} className={classes.varriableSelectors}>
-          <Box fontWeight="fontWeightBold" m={1} display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="flex-start">
-            <SandboxSelector
-              items={RegionItems}
-              name={"Select a Region"}
-              onChange={handleRegionChange}
-              value={region}
-              disabled={false}
-              replaceClimatevariableType={replaceClimatevariableType}
-              />
-          </Box>
-        </Grid>
-        <Grid item xs={12} sm={3} className={classes.varriableSelectors}>
-          <Box fontWeight="fontWeightBold" m={1} display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="flex-start">
-            <SandboxSelector
-              items={locationItems}
-              name={"Select a Location"}
-              onChange={handleLocationChange}
-              value={location}
-              disabled={locationDisabled}
-              replaceClimatevariableType={replaceClimatevariableType}
-              />
-          </Box>
-        </Grid>
-        <Grid item xs={12} sm={3} className={classes.varriableSelectors} >
-          <Box fontWeight="fontWeightBold" m={1} display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="flex-start">
-            <SandboxSelector
-              items={climatevariableItems}
-              name={"Climate Variable"}
-              onChange={handleClimatevariableChange}
-              value={climatevariable}
-              disabled={climatevariableDisabled}
-              replaceClimatevariableType={replaceClimatevariableType}
-              />
-          </Box>
-        </Grid>
-        <Grid item xs={12} sm={3} className={classes.varriableSelectors}>
-          <Box fontWeight="fontWeightBold" ml={2}  display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="flex-start" className={classes.checkBox}>
-            <SandboxDataCheck
-              useRobust={useRobust}
-              onChange={handleRobustChange}
-              />
-          </Box>
+            <Grid item xs={12} sm={3} className={classes.varriableSelectors}>
+              <Box fontWeight="fontWeightBold" m={1} display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="flex-start">
+                <SandboxSelector
+                  items={RegionItems}
+                  name={"Select a Region"}
+                  onChange={handleRegionChange}
+                  value={region}
+                  disabled={false}
+                  replaceClimatevariableType={replaceClimatevariableType}
+                  />
+              </Box>
+            </Grid>
+            <Grid item xs={12} sm={3} className={classes.varriableSelectors}>
+              <Box fontWeight="fontWeightBold" m={1} display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="flex-start">
+                <SandboxSelector
+                  items={locationItems}
+                  name={"Select a Location"}
+                  onChange={handleLocationChange}
+                  value={location}
+                  disabled={locationDisabled}
+                  replaceClimatevariableType={replaceClimatevariableType}
+                  />
+              </Box>
+            </Grid>
+            <Grid item xs={12} sm={3} className={classes.varriableSelectors} >
+              <Box fontWeight="fontWeightBold" m={1} display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="flex-start">
+                <SandboxSelector
+                  items={climatevariableItems}
+                  name={"Climate Variable"}
+                  onChange={handleClimatevariableChange}
+                  value={climatevariable}
+                  disabled={climatevariableDisabled}
+                  replaceClimatevariableType={replaceClimatevariableType}
+                  />
+              </Box>
+            </Grid>
+            <Grid item xs={12} sm={3} className={classes.varriableSelectors}>
+              <Box fontWeight="fontWeightBold" ml={2}  display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="flex-start" className={classes.checkBox}>
+                <SandboxDataCheck
+                  useRobust={useRobust}
+                  onChange={handleRobustChange}
+                  />
+              </Box>
+            </Grid>
+
+            <Grid item xs={12}  className={classes.yearSlider} >
+              <Box fontWeight="fontWeightBold" m={1} display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="center" >
+                <SandboxSlider
+                  useRobust={useRobust}
+                  useRobustClicked={useRobustClicked}
+                  setUseRobustClicked={setUseRobustClickedFalse}
+                  sliderMinxMaxValues={sliderMinxMaxValues}
+                  values={sliderValues}
+                  onChange={handleSliderChange}
+                  />
+              </Box>
+            </Grid>
+          </Grid>
         </Grid>
 
-        <Grid item xs={12}  className={classes.divider} >
-          <Divider variant="middle" />
-        </Grid>
-
-        <Grid item xs={12}  className={classes.yearSlider} >
-          <Box fontWeight="fontWeightBold" p={2} display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="center" className={classes.yearSliderBox} >
-            <SandboxSlider
-              useRobust={useRobust}
-              useRobustClicked={useRobustClicked}
-              setUseRobustClicked={setUseRobustClickedFalse}
-              sliderMinxMaxValues={sliderMinxMaxValues}
-              values={sliderValues}
-              onChange={handleSliderChange}
-              />
-          </Box>
-        </Grid>
-
-        <Grid item xs={12}  display="flex"  flex={1} className={classes.chartRegion}>
-          <Box display="flex" flexDirection="row" justifyContent="center" flex={1} flexGrow={3} height="90%" >
+        <Grid item xs={12} display="flex"  flex={1} className={classes.chartRegion}>
+          <Box display="flex" mt={3} flexDirection="row" justifyContent="center" flex={1} flexGrow={3} height="90%" >
             <PlotRegion
               plotly_data={chartData}
               plotly_layout={chartLayout}
