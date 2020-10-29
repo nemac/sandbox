@@ -339,7 +339,7 @@ export default function SandboxControls() {
     axios.get(`./TSU_Sandbox_Datafiles/${dataFile}`)
       .then( (response) =>{
           const chartDataFromFile = parseNCAFile(response.data, region, location);
-          const legnedText = getClimatevariableType(climatevariable);
+          const chartType = getClimatevariableType(climatevariable);
           const chartTile = replaceClimatevariableType(climatevariable);
 
           const plotInfo = {
@@ -348,7 +348,8 @@ export default function SandboxControls() {
             xmin: sliderMinxMaxValues[0],
             xmax: sliderMinxMaxValues[1],
             chartTile: chartTile,
-            legnedText,
+            legnedText: chartType,
+            chartType: chartType
           };
 
           const plot_data = new GeneratePlotData(plotInfo);

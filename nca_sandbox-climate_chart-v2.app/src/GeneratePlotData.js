@@ -6,6 +6,8 @@ class GeneratePlotData {
     this.yvals = props.yvals;
     this.chartTitle = props.chartTile;
     this.legnedText = props.legnedText;
+    this.chartType = props.chartType;
+    this.barColor = this.chartType === 'Precipitation' ? '61, 133, 198' : '88, 179, 171';
   }
 
   setXRange(props){
@@ -75,8 +77,8 @@ class GeneratePlotData {
         start:this.xmin
       },
       marker: {
-        line: {color: 'rgb(88, 179, 171)'},
-        color: 'rgb(88, 179, 171)'
+        line: {color: `rgb(${this.barColor})`},
+        color: `rgb(${this.barColor})`
       },
       nbinsx: 0,
       histfunc: 'avg',
