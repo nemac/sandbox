@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
-import DoubleSlider from './DoubleSlider.js'
 import PlotRegion from './PlotRegion.js'
 import GeneratePlotData from './GeneratePlotData.js'
 
@@ -383,17 +382,38 @@ export default function SandboxControls() {
 
         <Grid item xs={12} sm={3} className={classes.varriableSelectors}>
           <Box fontWeight="fontWeightBold" m={1} display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="flex-start">
-            <SandboxSelector items={RegionItems} name={"Select a Region"} onChange={handleRegionChange} value={region} disabled={false}/>
+            <SandboxSelector
+              items={RegionItems}
+              name={"Select a Region"}
+              onChange={handleRegionChange}
+              value={region}
+              disabled={false}
+              replaceClimatevariableType={replaceClimatevariableType}
+              />
           </Box>
         </Grid>
         <Grid item xs={12} sm={3} className={classes.varriableSelectors}>
           <Box fontWeight="fontWeightBold" m={1} display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="flex-start">
-            <SandboxSelector items={locationItems}  name={"Select a Location"} onChange={handleLocationChange} value={location} disabled={locationDisabled}/>
+            <SandboxSelector
+              items={locationItems}
+              name={"Select a Location"}
+              onChange={handleLocationChange}
+              value={location}
+              disabled={locationDisabled}
+              replaceClimatevariableType={replaceClimatevariableType}
+              />
           </Box>
         </Grid>
         <Grid item xs={12} sm={3} className={classes.varriableSelectors} >
           <Box fontWeight="fontWeightBold" m={1} display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="flex-start">
-            <SandboxSelector items={climatevariableItems}  name={"Climate Variable"} onChange={handleClimatevariableChange} value={climatevariable} disabled={climatevariableDisabled}/>
+            <SandboxSelector
+              items={climatevariableItems}
+              name={"Climate Variable"}
+              onChange={handleClimatevariableChange}
+              value={climatevariable}
+              disabled={climatevariableDisabled}
+              replaceClimatevariableType={replaceClimatevariableType}
+              />
           </Box>
         </Grid>
         <Grid item xs={12} sm={3} className={classes.varriableSelectors}>

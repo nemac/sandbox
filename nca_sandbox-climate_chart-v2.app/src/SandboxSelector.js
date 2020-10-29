@@ -25,6 +25,7 @@ export default function Selector(props) {
   const controlName = props.name;
   const value = props.value;
   const disabled = props.disabled;
+  const replaceClimatevariableType  = controlName === 'Climate Variable' ? props.replaceClimatevariableType : name => name;
 
   const handleChange = (event) => {
     props.onChange(event.target.value);
@@ -46,7 +47,7 @@ export default function Selector(props) {
         </MenuItem>
        {items.map((name) => (
            <MenuItem key={name} value={name} className={classes.menuItem}>
-             {name}
+             {replaceClimatevariableType(name)}
            </MenuItem>
          ))}
        </Select>
