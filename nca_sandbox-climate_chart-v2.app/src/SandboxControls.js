@@ -382,7 +382,7 @@ export default function SandboxControls() {
         </Grid>
 
         <Grid item xs={12}  display="flex"  flex={1} className={classes.chartRegion}>
-          <Box fontWeight="fontWeightBold" m={2} p={2} display="flex" flexDirection="row" justifyContent="center" flex={1} flexGrow={3} height="90%" >
+          <Box display="flex" flexDirection="row" justifyContent="center" flex={1} flexGrow={3} height="90%" >
             <PlotRegion
               plotly_data={chartData}
               plotly_layout={chartLayout}

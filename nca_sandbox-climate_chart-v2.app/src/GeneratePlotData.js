@@ -123,6 +123,14 @@ class GeneratePlotData {
 
     getLayout(){
         return {
+          showlegend: true,
+	        legend: {
+            autosize: true,
+            orientation: "h",
+        		xanchor: "center",
+        		x: 0.5,
+            y: -0.2
+          },
           xaxis: {
             type: 'linear',
             dtick: 5,
@@ -494,6 +502,7 @@ class GeneratePlotData {
             },
             themeRef: 'PLOTLY_WHITE'
           },
+          height: 1,
           bargroupgap: 0,
           plot_bgcolor: 'rgb(251, 252, 254)',
           paper_bgcolor: 'rgb(251, 252, 254)'
