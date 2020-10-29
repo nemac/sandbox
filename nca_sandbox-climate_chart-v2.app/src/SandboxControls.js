@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
   chartRegion: {
     height: 'calc(100% - 225px)',
     [theme.breakpoints.down('xs')]: {
-      height: '225px',
+      height: '500px',
     },
   },
   chartBg: {
@@ -163,10 +163,11 @@ const loadNCAdata = async () => {
 export default function SandboxControls() {
   const classes = useStyles();
   const [sliderValues, setsliderValues] = useState([1900, 2020]);
+  const [useRobust, setUseRobust] = useState(false);
 
   const [region, setRegion] = useState('');
   const [location, setLocation] = useState('');
-  const [climateVarible, setClimateVarible] = useState('');
+  const [climatevariable, setClimatevariable] = useState('');
   const [chartData, setChartData] = useState([0,0]);
   const [chartLayout, setChartLayout] = useState({});
 
@@ -175,10 +176,10 @@ export default function SandboxControls() {
 
   const [locationItems, setLocationItems] = useState(['']);
   const [regionItems, setRegionItems] = useState(['']);
-  const [climateVaribleItems, setClimateVaribleItems] = useState(['']);
+  const [climatevariableItems, setClimatevariableItems] = useState(['']);
 
   const [locationDisabled, setlocationDisabled] = useState(true);
-  const [climateVaribleDisabled, setClimateVaribleDisabled] = useState(true);
+  const [climatevariableDisabled, setClimatevariableDisabled] = useState(true);
 
   const loadNCAdata = async (region, isRobust) => {
     await axios.get('./TSU_Sandbox_Datafiles/index.json')
@@ -189,22 +190,22 @@ export default function SandboxControls() {
           case "National":
             setClimateDataFilesJSON(response.data.national);
             data = response.data.national.filter(type => type.robust === isRobust);
-            setClimateVaribleItems(data.map((json) => json.type));
+            setClimatevariableItems(data.map((json) => json.type));
             break;
           case 'Regional':
             setClimateDataFilesJSON(response.data.regional);
             data = response.data.regional.filter(type => type.robust === isRobust);
-            setClimateVaribleItems(data.map((json) => json.type));
+            setClimatevariableItems(data.map((json) => json.type));
             break;
           case 'State':
             setClimateDataFilesJSON(response.data.state);
             data = response.data.state.filter(type => type.robust === isRobust);
-            setClimateVaribleItems(data.map((json) => json.type));
+            setClimatevariableItems(data.map((json) => json.type));
             break;
           default:
             setClimateDataFilesJSON(response.data.national);
             data = response.data.national.filter(type => type.robust === isRobust);
-            setClimateVaribleItems(data.map((json) => json.type));
+            setClimatevariableItems(data.map((json) => json.type));
             break;
         }
 
@@ -217,15 +218,22 @@ export default function SandboxControls() {
     })
   };
 
-  // use the react effect to control when location and regions change to repupulalte the climate varible pulldown
+  // use the react effect to control when location and regions change to repupulalte the climate variable pulldown
   useEffect( () => {
-    loadNCAdata(region, false);
-  }, [region, false]);
+    loadNCAdata(region, useRobust);
+  }, [region, useRobust]);
 
 
-  // hange the slider change
+  // handle the robust change
+  const handleRobustChange = (newValue) => {
+    setUseRobust(newValue);
+    getChartData(region.toLowerCase(), location, climatevariable, newValue);
+  };
+
+  // handle the slider change
   const handleSliderChange = (newValue) => {
     setsliderValues(newValue);
+    filterChartData({chartData, useRobust, sliderValues});
   };
 
   // handle state change for region
@@ -240,8 +248,8 @@ export default function SandboxControls() {
         // National data set the location pulldown to disabled since there are no locations
         setlocationDisabled(true);
 
-        // National data set the climatevarible pulldown to NOT disabled by changing the state
-        setClimateVaribleDisabled(false);
+        // National data set the climatevariable pulldown to NOT disabled by changing the state
+        setClimatevariableDisabled(false);
         break;
       case 'Regional':
         // Regional data set the location items to the regional items
@@ -251,8 +259,8 @@ export default function SandboxControls() {
         // Regional data set the location pulldown to disabled since there are no locations by changing the state
         setlocationDisabled(false);
 
-        // Regional data set the climatevarible pulldown to NOT disabled by changing the state
-        setClimateVaribleDisabled(false);
+        // Regional data set the climatevariable pulldown to NOT disabled by changing the state
+        setClimatevariableDisabled(false);
         break;
       case 'State':
         // Regional data set the location items to the state items
@@ -262,33 +270,47 @@ export default function SandboxControls() {
         // Regional data set the location pulldown to disabled since there are no locations by changing the state
         setlocationDisabled(false);
 
-        // Regional data set the climatevarible pulldown to NOT disabled by changing the state
-        setClimateVaribleDisabled(false);
+        // Regional data set the climatevariable pulldown to NOT disabled by changing the state
+        setClimatevariableDisabled(false);
         break;
       default:
         setLocationItems(['']);
         setLocation('');
         setlocationDisabled(true);
-        setClimateVaribleDisabled(true);
+        setClimatevariableDisabled(true);
         break;
     }
-    getChartData(newValue, location, climateVarible);
+    getChartData(newValue, location, climatevariable, useRobust);
   };
 
   // handle state change for location within the region
   const handleLocationChange = (newValue) => {
     setLocation(newValue);
-    getChartData(region.toLowerCase(), newValue, climateVarible);
+    getChartData(region.toLowerCase(), newValue, climatevariable, useRobust);
   };
 
-  // handle state change for climate varible
-  const handleClimateVaribleChange = (newValue) => {
-    setClimateVarible(newValue);
-    getChartData(region.toLowerCase(), location, newValue);
+  // handle state change for climate variable
+  const handleClimatevariableChange = (newValue) => {
+    setClimatevariable(newValue);
+    getChartData(region.toLowerCase(), location, newValue, useRobust);
   };
+
+  // limits chart data by robouts and year state
+  const filterChartData = (filters) => {
+    // add this soon
+    // const data = ChartData.filter(json => json.robust === useRobust && json.type === climatevariable);
+    if (filters.chartData[1]) {
+      console.log('filterChartData', filters.chartData[1].x[0])
+    } else {
+      console.log('filterChartData no data')  
+    }
+
+
+  };
+
   // get chart data from current state = which should include
-  const getChartData = (region, location, climateVarible) => {
-    const data = climateDataFilesJSON.filter(json => json.robust === false && json.type === climateVarible);
+  const getChartData = (region, location, climatevariable, useRobust) => {
+    const data = climateDataFilesJSON.filter(json => json.robust === useRobust && json.type === climatevariable);
     const dataFile = data.map((json) => json.name);
 
     axios.get(`./TSU_Sandbox_Datafiles/${dataFile}`)
@@ -299,7 +321,7 @@ export default function SandboxControls() {
           setChartLayout(plot_data.getLayout());
       })
       .catch( (error) => {
-        console.error('SanboxControls.updatePlotData() error='+error)
+        console.error(`SanboxControls.updatePlotData() error=${error}`);
       })
   };
 
@@ -328,12 +350,15 @@ export default function SandboxControls() {
         </Grid>
         <Grid item xs={12} sm={3} className={classes.varriableSelectors} >
           <Box fontWeight="fontWeightBold" m={1} display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="flex-start">
-            <SandboxSelector items={climateVaribleItems}  name={"Climate Varible"} onChange={handleClimateVaribleChange} value={climateVarible} disabled={climateVaribleDisabled}/>
+            <SandboxSelector items={climatevariableItems}  name={"Climate Variable"} onChange={handleClimatevariableChange} value={climatevariable} disabled={climatevariableDisabled}/>
           </Box>
         </Grid>
         <Grid item xs={12} sm={3} className={classes.varriableSelectors}>
           <Box fontWeight="fontWeightBold" ml={2}  display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="flex-start" className={classes.checkBox}>
-            <SandboxDataCheck />
+            <SandboxDataCheck
+              useRobust={useRobust}
+              onChange={handleRobustChange}
+              />
           </Box>
         </Grid>
 
@@ -405,7 +430,7 @@ export default function SandboxControls() {
 //                            xvals: [],
 //                            yvals: {},
 //                            region: "",
-//                            varible: "",
+//                            variable: "",
 //                            region_sub: "",
 //                            _loaded: false
 //                          }
@@ -534,7 +559,7 @@ export default function SandboxControls() {
 //     }
 //
 //
-//     // Put all the options in the 'Climate Varible' selector, based on the 'Location/Region'
+//     // Put all the options in the 'Climate variable' selector, based on the 'Location/Region'
 //     // selector
 //     populateVariableSelect(){
 //         let robustData = this.state.RobustDatasetCheckboxChecked;
@@ -696,7 +721,7 @@ const parseNCAFile = (data, type, region) => {
 //
 //         }else if( this.state.cached_data._loaded &&
 //             (this.state.region_select_value === this.state.cached_data.region) &&
-//             (this.state.var_select_value === this.state.cached_data.varible) &&
+//             (this.state.var_select_value === this.state.cached_data.variable) &&
 //             (this.state.region_sub_select_value === this.state.cached_data.region_sub) ){
 //             // use cached data
 //             // console.log('Using Cached data');
@@ -727,7 +752,7 @@ const parseNCAFile = (data, type, region) => {
 //                                 xvals: xvals,
 //                                 yvals: yvals,
 //                                 region: state.region_select_value,
-//                                 varible: state.var_select_value,
+//                                 variable: state.var_select_value,
 //                                 region_sub: state.region_sub_select_value
 //                             },
 //                         }));

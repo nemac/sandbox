@@ -3,29 +3,23 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 
 
-export default function CheckboxLabels() {
-  const [state, setState] = React.useState({
-    checkedA: true,
-    checkedB: true,
-    checkedF: true,
-    checkedG: true,
-  });
-
+export default function CheckboxLabels(props) {
+  const useRobust = props.useRobust;
   const handleChange = (event) => {
-    setState({ ...state, [event.target.name]: event.target.checked });
+    props.onChange(event.target.checked);
   };
 
   return (
       <FormControlLabel
         control={
           <Checkbox
-            checked={state.checkedB}
+            checked={useRobust}
             onChange={handleChange}
-            name="checkedB"
+            name="useRobust"
             color="default"
           />
         }
         label="Use more robust data"
       />
   );
-}
+};

@@ -24,7 +24,7 @@ const marks = [
     label: 'Start Year',
   },
   {
-    value: 2020,
+    value: 2018,
     label: 'End Year',
   },
 ];
@@ -45,12 +45,10 @@ const valuetext =(value) => {
 
 export default function SandboxSlider(props) {
   const classes = useStyles();
-  console.log('SandboxSlider', props)
   const sliderValues = props.values;
   const disabled = props.disabled;
 
   const handleChange = (event, newValue) => {
-    console.log('handleChange', newValue)
     props.onChange(newValue);
   };
 
@@ -60,7 +58,7 @@ export default function SandboxSlider(props) {
          <Slider
            value={sliderValues}
            min={1900}
-           max={2020}
+           max={2018}
            onChange={handleChange}
            valueLabelDisplay="auto"
            aria-labelledby="range-slider"
