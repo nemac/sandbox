@@ -31,9 +31,9 @@ class GeneratePlotData {
 
   getYvalues(){
     let ret = [];
-    let x_index =
+    let x_index = this.xmin;
 
-    // get rid of -9999 data
+    // remove -9999 
     this.yvals = this.yvals.map( val => {
       let newVal = val
       if (val < 0) {

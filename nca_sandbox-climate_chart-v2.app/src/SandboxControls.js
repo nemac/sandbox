@@ -341,6 +341,8 @@ export default function SandboxControls() {
     newName = newName.replace('inch', ' inch ');
     newName = newName.replace('tmax', 'over ');
     newName = newName.replace('tmin', 'over ');
+    newName = newName.replace('Minimum Temperature over 0','Minimum Temperature under 0');
+    newName = newName.replace('Minimum Temperature over 32','Minimum Temperature under 32');
     newName = newName.replace('F', '℉');
     return newName;
   }
