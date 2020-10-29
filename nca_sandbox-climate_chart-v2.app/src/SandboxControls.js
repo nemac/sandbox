@@ -497,4 +497,3 @@ const parseNCAFile = (data, type, region) => {
 
   return [xvals, yvals];
 }
-// export default SandboxControls;

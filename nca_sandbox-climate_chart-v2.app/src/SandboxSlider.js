@@ -107,7 +107,7 @@ export default function SandboxSlider(props) {
         </Grid>
         <Grid item xs={1} width="100%" >
           <Box fontWeight="fontWeightMedium" p={1} variant="h3" display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="center" textAlign="center">
-            End Year {sliderValues[0]}
+            End Year {sliderValues[1]}
           </Box>
         </Grid>
       </Grid>
