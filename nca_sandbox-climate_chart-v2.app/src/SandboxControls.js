@@ -385,7 +385,7 @@ export default function SandboxControls() {
   return (
     <div className={classes.root}>
       <Grid container spacing={0} justify="flex-start" direction={"row"} className={classes.root}>
-        <Grid xs={12} width="100%" className={classes.selectionAreaHolder} >
+        <Grid item xs={12} width="100%" className={classes.selectionAreaHolder} >
           <Grid container spacing={0} justify="flex-start" direction={"row"} className={classes.selectionArea}>
             <Grid item xs={12} className={classes.header} width="100%" >
               <Box fontWeight="fontWeightBold" m={1} p={1} display="flex" flexWrap="nowrap" justifyContent="flex-start">

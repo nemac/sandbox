@@ -32,6 +32,15 @@ class GeneratePlotData {
   getYvalues(){
     let ret = [];
     let x_index = this.xmin;
+
+    this.yvals = this.yvals.map( val => {
+      let newVal = val
+      if (val < 0) {
+        newVal = undefined;
+      }
+      return newVal
+    })
+
     while(x_index < parseInt(this.xvals[0])){ // requested range below data range
       x_index++;
       ret.push('0');  // should this be undef/NaN? How does plotly handle it?
