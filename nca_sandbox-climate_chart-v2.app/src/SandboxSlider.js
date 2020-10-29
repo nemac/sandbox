@@ -18,16 +18,7 @@ import { ThemeProvider } from '@material-ui/styles';
 //   }
 // });
 
-const marks = [
-  {
-    value: 1900,
-    label: 'Start Year',
-  },
-  {
-    value: 2018,
-    label: 'End Year',
-  },
-];
+
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -45,20 +36,41 @@ const valuetext =(value) => {
 
 export default function SandboxSlider(props) {
   const classes = useStyles();
-  const sliderValues = props.values;
+  let sliderValues = props.values;
   const disabled = props.disabled;
+  const useRobust = props.useRobust;
+  const useRobustClicked = props.useRobustClicked;
+  const sliderMinxMaxValues = props.sliderMinxMaxValues;
+
+  // only run after robust data click
+  if (useRobustClicked) {
+      sliderValues[0] = sliderMinxMaxValues[0];
+      sliderValues[1] = sliderMinxMaxValues[1];
+      props.setUseRobustClicked(false);
+  }
 
   const handleChange = (event, newValue) => {
     props.onChange(newValue);
   };
+
+  const marks = [
+    {
+      value: sliderMinxMaxValues[0],
+      label: 'Start Year',
+    },
+    {
+      value: sliderMinxMaxValues[1],
+      label: 'End Year',
+    },
+  ];
 
  return (
      <FormControl variant="outlined" className={classes.formControl} fullWidth={true} disabled={disabled}>
        <ThemeProvider>
          <Slider
            value={sliderValues}
-           min={1900}
-           max={2018}
+           min={sliderMinxMaxValues[0]}
+           max={sliderMinxMaxValues[1]}
            onChange={handleChange}
            valueLabelDisplay="auto"
            aria-labelledby="range-slider"
