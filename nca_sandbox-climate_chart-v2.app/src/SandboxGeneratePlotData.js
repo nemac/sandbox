@@ -4,7 +4,7 @@ class SandboxGeneratePlotData {
     this.xmax = props.xmax;
     this.xvals = props.xvals;
     this.yvals = props.yvals;
-    this.chartTitle = props.chartTile;
+    this.chartTitle = props.chartTitle;
     this.legnedText = props.legnedText;
     this.chartType = props.chartType;
     this.barColor = this.chartType === 'Precipitation' ? '61, 133, 198' : '88, 179, 171';
@@ -16,7 +16,7 @@ class SandboxGeneratePlotData {
   }
 
   setTitle(props){
-    this.chartTitle = props.chartTile;
+    this.chartTitle = props.chartTitle;
   }
 
 

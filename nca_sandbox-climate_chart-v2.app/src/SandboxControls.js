@@ -332,8 +332,13 @@ export default function SandboxControls() {
   }
 
   const replaceClimatevariableType = (climatevariable) => {
-    const sandboxHumanReadable = new SandboxHumanReadable(climatevariable);
-    return sandboxHumanReadable.getPullDownText(climatevariable);
+    const sandboxHumanReadable = new SandboxHumanReadable();
+    return sandboxHumanReadable.getClimateVariablePullDownText(climatevariable);
+  }
+
+  const replaceLocationAbbreviation = (location) => {
+    const sandboxHumanReadable = new SandboxHumanReadable();
+    return sandboxHumanReadable.getLocationDownText(location);
   }
 
   // get chart data from current state = which should include
@@ -346,14 +351,15 @@ export default function SandboxControls() {
           const chartDataFromFile = parseNCAFile(response.data, region, location);
           const chartType = getClimatevariableType(climatevariable);
           const sandboxHumanReadable = new SandboxHumanReadable(climatevariable);
-          const chartTitle = sandboxHumanReadable.getChartTitle({climatevariable, region, location});
+          const titleLocation = replaceLocationAbbreviation(location);
+          const chartTitle = sandboxHumanReadable.getChartTitle({climatevariable, region, titleLocation});
 
           const plotInfo = {
             xvals: chartDataFromFile[0],
             yvals: chartDataFromFile[1],
             xmin: sliderMinxMaxValues[0],
             xmax: sliderMinxMaxValues[1],
-            chartTile: chartTitle,
+            chartTitle: chartTitle,
             legnedText: chartType,
             chartType: chartType
           };
@@ -408,6 +414,7 @@ export default function SandboxControls() {
                   value={location}
                   disabled={locationDisabled}
                   replaceClimatevariableType={replaceClimatevariableType}
+                  replaceLocationAbbreviation={replaceLocationAbbreviation}
                   />
               </Box>
             </Grid>
