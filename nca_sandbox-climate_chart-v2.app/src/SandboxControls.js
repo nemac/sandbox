@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
-import PlotRegion from './PlotRegion.js'
-import GeneratePlotData from './GeneratePlotData.js'
+import SandboxPlotRegion from './SandboxPlotRegion.js';
+import SandboxGeneratePlotData from './SandboxGeneratePlotData.js';
+import SandboxClimateVariable from './SandboxClimateVariable.js';
 
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -186,7 +187,7 @@ export default function SandboxControls() {
   const [region, setRegion] = useState('');
   const [location, setLocation] = useState('');
   const [climatevariable, setClimatevariable] = useState('');
-  const [chartData, setChartData] = useState([0,0]);
+  const [chartData, setChartData] = useState([{}]);
   const [chartDataFiltered, setchartDataFiltered] = useState([0,0]);
   const [chartLayout, setChartLayout] = useState({});
 
@@ -331,20 +332,8 @@ export default function SandboxControls() {
   }
 
   const replaceClimatevariableType = (climatevariable) => {
-    if (climatevariable.length < 1) return '';
-    const type = getClimatevariableType(climatevariable);
-    const tempType = getClimatevariableTempType(climatevariable);
-    let newName = `Days with ${tempType} ${type} ${climatevariable}`;
-    if (type === 'Precipitation') {
-      newName = `Days with ${type} over ${climatevariable}`;
-    }
-    newName = newName.replace('inch', ' inch ');
-    newName = newName.replace('tmax', 'over ');
-    newName = newName.replace('tmin', 'over ');
-    newName = newName.replace('Minimum Temperature over 0','Minimum Temperature under 0');
-    newName = newName.replace('Minimum Temperature over 32','Minimum Temperature under 32');
-    newName = newName.replace('F', '℉');
-    return newName;
+    const sandboxClimateVariable = new SandboxClimateVariable(climatevariable);
+    return sandboxClimateVariable.getPullDownText(climatevariable);
   }
 
   // get chart data from current state = which should include
@@ -356,7 +345,8 @@ export default function SandboxControls() {
       .then( (response) =>{
           const chartDataFromFile = parseNCAFile(response.data, region, location);
           const chartType = getClimatevariableType(climatevariable);
-          const chartTile = replaceClimatevariableType(climatevariable);
+          const sandboxClimateVariable = new SandboxClimateVariable(climatevariable);
+          const chartTile = sandboxClimateVariable.getChartTitle(climatevariable);
 
           const plotInfo = {
             xvals: chartDataFromFile[0],
@@ -368,16 +358,14 @@ export default function SandboxControls() {
             chartType: chartType
           };
 
-          const plot_data = new GeneratePlotData(plotInfo);
+          const plotData = new SandboxGeneratePlotData(plotInfo);
           const xRange = {
             xmin: sliderValues[0],
             xmax: sliderValues[1]
           }
-          plot_data.setXRange(xRange);
-
-          setChartData(plot_data.getData());
-          // setchartDataFiltered(plot_data.getData());
-          setChartLayout(plot_data.getLayout());
+          plotData.setXRange(xRange);
+          setChartData(plotData.getData());
+          setChartLayout(plotData.getLayout());
       })
       .catch( (error) => {
         console.error(`SanboxControls.updatePlotData() error=${error}`);
@@ -461,9 +449,9 @@ export default function SandboxControls() {
 
         <Grid item xs={12} display="flex"  flex={1} className={classes.chartRegion}>
           <Box display="flex" mt={3} flexDirection="row" justifyContent="center" flex={1} flexGrow={3} height="90%" >
-            <PlotRegion
-              plotly_data={chartData}
-              plotly_layout={chartLayout}
+            <SandboxPlotRegion
+              plotlyData={chartData}
+              plotlyLayout={chartLayout}
               />
           </Box>
         </Grid>

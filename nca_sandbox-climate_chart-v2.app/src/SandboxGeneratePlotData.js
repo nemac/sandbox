@@ -1,4 +1,4 @@
-class GeneratePlotData {
+class SandboxGeneratePlotData {
   constructor(props){
     this.xmin = props.xmin;
     this.xmax = props.xmax;
@@ -33,7 +33,7 @@ class GeneratePlotData {
     let ret = [];
     let x_index = this.xmin;
 
-    // remove -9999 
+    // remove -9999
     this.yvals = this.yvals.map( val => {
       let newVal = val
       if (val < 0) {
@@ -146,6 +146,7 @@ class GeneratePlotData {
       },
       xaxis: {
         type: 'linear',
+        title: '5-year period',
         dtick: 5,
         range: [this.xmin, this.xmax],
         tick0: 0,
@@ -171,6 +172,8 @@ class GeneratePlotData {
       },
       yaxis: {
         type: 'linear',
+        title: 'Days',
+        // dtick: 1,
         range: [0, 2.053037694013304],
         ticks: '',
         autorange: true,
@@ -532,4 +535,4 @@ class GeneratePlotData {
 }
 
 
-export default GeneratePlotData;
+export default SandboxGeneratePlotData;
