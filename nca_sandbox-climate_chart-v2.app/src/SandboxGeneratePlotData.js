@@ -147,7 +147,7 @@ class SandboxGeneratePlotData {
     const periodGroups = this.periodGroups
     return this.xvals.map( (value) => {
       const plus = value+periodGroups;
-      const tickText =  `${value}-${plus.toString().slice(-2)}`;
+      const tickText =  `${value} - ${plus.toString().slice(-2)}`;
       return tickText;
     })
   }
@@ -173,24 +173,13 @@ class SandboxGeneratePlotData {
         orientation: "h",
         xanchor: "center",
         x: 0.5,
-        y: -0.25
-      },
-      xaxis2: {
-        nticks: 1,
-        tickfont: {
-          family: 'Roboto',
-          size: 12
-        },
-        tickvals: this.getXLabelValues(),
-        ticktext: this.getXLabelText(),
+        y: -0.3
       },
       xaxis: {
         type: 'linear',
         title: `${this.periodGroups}-year period`,
         dtick: this.periodGroups,
         range: [this.xmin, this.xmax],
-        tick0: 0,
-        ticks: '',
         showline: false,
         tickfont: {
           family: 'Roboto',
@@ -205,8 +194,6 @@ class SandboxGeneratePlotData {
         constraintoward: 'center',
         automargin: false,
         showspikes: false,
-        tickformat: '',
-        tickprefix: '',
         rangemode: 'tozero',
         spikethickness: 4,
         rangeslider: {
