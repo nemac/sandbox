@@ -4,6 +4,7 @@ class SandboxGeneratePlotData {
     this.xmax = props.xmax;
     this.xvals = props.xvals;
     this.yvals = props.yvals;
+    this.maxVal = Math.max(...this.yvals);
     this.chartTitle = props.chartTitle;
     this.legnedText = props.legnedText;
     this.chartType = props.chartType;
@@ -18,7 +19,6 @@ class SandboxGeneratePlotData {
   setTitle(props){
     this.chartTitle = props.chartTitle;
   }
-
 
   getXvalues(){
     let ret = [];
@@ -58,11 +58,11 @@ class SandboxGeneratePlotData {
     return ret;
   }
 
-
-  getData(){
-    return [this.getTrace1(), this.getTrace2()]
+  getData() {
+    if (this.maxVal === -Infinity) return [{}];
+    console.log('getData', this.maxVal)
+    return [this.getTrace1(), this.getTrace2()];
   }
-
 
   getTrace1(){
     return {
@@ -156,7 +156,7 @@ class SandboxGeneratePlotData {
         tickmode: 'linear',
         autorange: false,
         tickangle: 90,
-        automargin: true,
+        automargin: false,
         showspikes: false,
         tickformat: '',
         tickprefix: '',
@@ -176,6 +176,7 @@ class SandboxGeneratePlotData {
         // dtick: 1,
         range: [0, 2.053037694013304],
         ticks: '',
+        tickformat: ',d',
         autorange: true,
         showspikes: false
       },
@@ -473,7 +474,7 @@ class SandboxGeneratePlotData {
             ticks: '',
             gridcolor: '#EBF0F8',
             linecolor: '#EBF0F8',
-            automargin: true,
+            automargin: false,
             zerolinecolor: '#EBF0F8',
             zerolinewidth: 2
           },
@@ -481,7 +482,7 @@ class SandboxGeneratePlotData {
             ticks: '',
             gridcolor: '#EBF0F8',
             linecolor: '#EBF0F8',
-            automargin: true,
+            automargin: false,
             zerolinecolor: '#EBF0F8',
             zerolinewidth: 2
           },

@@ -43,6 +43,7 @@ class SandboxPlotRegion extends React.Component {
       copiedLayout.height = el.getBoundingClientRect().height-24;
     }
 
+    console.log('SandboxPlotRegion', data)
 
     return (
       <div
