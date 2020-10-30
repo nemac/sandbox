@@ -1,6 +1,6 @@
 export default class SandboxHumanReadable {
-  constructor(props){
-    this.climateVariableValue = props
+  constructor(props) {
+    this.climateVariableValue = props;
     this.climateVariableValueNames = [
       {
         value: '1inch',
@@ -72,7 +72,7 @@ export default class SandboxHumanReadable {
         pullDownText: 'Days with Minimum Temperature Above 80°F',
         chartTitle: 'Number of Days with Minimum Temperature Above 80°F'
       }
-    ]
+    ];
 
     this.LocationNames = [
       {
@@ -327,13 +327,15 @@ export default class SandboxHumanReadable {
         value: 'Puerto Rico',
         pullDownText: 'Puerto Rico'
       }
-    ]
+    ];
   }
 
-  getChartTitle (props) {
-    if (!props.climatevariable) return ''
+  getChartTitle(props) {
+    if (!props.climatevariable) return '';
     const climateVariableValueNames = this.climateVariableValueNames;
-    const newValue = climateVariableValueNames.filter(variables => variables.value === props.climatevariable);
+    const newValue = climateVariableValueNames.filter(
+      (variables) => variables.value === props.climatevariable
+    );
     let chartTitle = newValue[0].chartTitle;
     if (props.region === 'national') chartTitle = `${chartTitle} (National)`;
     if (props.region === 'regional') chartTitle = `${chartTitle} (NCA Region ${props.titleLocation})`;
@@ -341,19 +343,23 @@ export default class SandboxHumanReadable {
     return chartTitle;
   }
 
-  getClimateVariablePullDownText (value) {
-    if (!value) return ''
+  getClimateVariablePullDownText(value) {
+    if (!value) return '';
     const climateVariableValueNames = this.climateVariableValueNames;
-    const newValue = climateVariableValueNames.filter(variables => variables.value === value);
+    const newValue = climateVariableValueNames.filter(
+      (variables) => variables.value === value
+    );
     return newValue[0].pullDownText;
   }
 
-  getLocationDownText (value) {
-    if (!value) return ''
+  getLocationDownText(value) {
+    if (!value) return '';
     const climateVariableValueNames = this.LocationNames;
-    const newValue = climateVariableValueNames.filter(variables => variables.value.toUpperCase() === value.toUpperCase());
-    let returnValue = value
-    if (newValue[0]) returnValue = newValue[0].pullDownText
+    const newValue = climateVariableValueNames.filter(
+      (variables) => variables.value.toUpperCase() === value.toUpperCase()
+    );
+    let returnValue = value;
+    if (newValue[0]) returnValue = newValue[0].pullDownText;
     return returnValue;
   }
 }

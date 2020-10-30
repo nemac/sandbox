@@ -1,16 +1,12 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Slider from '@material-ui/core/Slider';
-import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Divider from '@material-ui/core/Divider';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
-
-
 
 const muiTheme = createMuiTheme({
   overrides:{
@@ -48,7 +44,6 @@ export default function SandboxSlider(props) {
   const classes = useStyles();
   let sliderValues = props.values;
   const disabled = props.disabled;
-  const useRobust = props.useRobust;
   const useRobustClicked = props.useRobustClicked;
   const sliderMinxMaxValues = props.sliderMinxMaxValues;
 
@@ -62,17 +57,6 @@ export default function SandboxSlider(props) {
   const handleChange = (event, newValue) => {
     props.onChange(newValue);
   };
-
-  const marks = [
-    {
-      value: sliderMinxMaxValues[0],
-      label: 'Start Year',
-    },
-    {
-      value: sliderMinxMaxValues[1],
-      label: 'End Year',
-    },
-  ];
 
   return (
     <FormControl variant="outlined" className={classes.formControl} fullWidth={true} disabled={disabled}>

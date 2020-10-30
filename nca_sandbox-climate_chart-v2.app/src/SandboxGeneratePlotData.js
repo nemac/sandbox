@@ -1,5 +1,5 @@
 class SandboxGeneratePlotData {
-  constructor(props){
+  constructor(props) {
     this.xmin = props.xmin;
     this.xmax = props.xmax;
     this.xvals = props.xvals;
@@ -14,47 +14,48 @@ class SandboxGeneratePlotData {
     this.textAngle = this.useRobust ? 0 : 90;
   }
 
-  setXRange(props){
+  setXRange(props) {
     this.xmin = props.xmin;
     this.xmax = props.xmax;
   }
 
-  setTitle(props){
+  setTitle(props) {
     this.chartTitle = props.chartTitle;
   }
 
-  getXvalues(){
-    let ret = [];
-    for(let x_val=this.xmin; x_val <= this.xmax; x_val++){
-      ret.push(x_val.toString());
+  getXvalues() {
+    const ret = [];
+    for (let xVal = this.xmin; xVal <= this.xmax; xVal += 1) {
+      ret.push(xVal.toString());
     }
     return ret;
   }
 
-  getYvalues(){
-    let ret = [];
-    let x_index = this.xmin;
+  getYvalues() {
+    const ret = [];
+    let xIndex = this.xmin;
 
     // remove -9999
-    this.yvals = this.yvals.map( val => {
-      let newVal = val
+    this.yvals = this.yvals.map((val) => {
+      let newVal = val;
       if (val < 0) {
         newVal = undefined;
       }
-      return newVal
-    })
+      return newVal;
+    });
 
-    while(x_index < parseInt(this.xvals[0])){ // requested range below data range
-      x_index++;
-      ret.push('0');  // should this be undef/NaN? How does plotly handle it?
+    while (xIndex < parseInt(this.xvals[0], 10)) { // requested range below data range
+      xIndex += 1;
+      ret.push('0'); // should this be undef/NaN? How does plotly handle it?
     }
-    let yvals_index=0;
-    while(x_index <= parseInt(this.xvals[this.xvals.length-1])){ // data
-      x_index++;
-      ret.push(this.yvals[yvals_index++]);
+    let yvalsIndex = 0;
+    while (xIndex <= parseInt(this.xvals[this.xvals.length - 1], 10)) { // data
+      xIndex += 1;
+      yvalsIndex += 1;
+      ret.push(this.yvals[yvalsIndex]);
     }
-    while(x_index <= this.xmax){ //requested range above data range
-      x_index++;
+    while (xIndex <= this.xmax) { // requested range above data range
+      xIndex += 1;
       ret.push('0');
     }
     return ret;
@@ -65,20 +66,23 @@ class SandboxGeneratePlotData {
     return [this.getTrace1(), this.getTrace2()];
   }
 
-  uuidv() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-      var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+  static uuidv() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+      const r = Math.random() * 16 | 0; // eslint-disable-line
+      const v = c === 'x' ? r : (r & 0x3 | 0x8); // eslint-disable-line
       return v.toString(16);
     });
   }
 
-  getTrace1(){
+  getTrace1() {
     return {
-      uid: this.uuidv(),
-      meta: {columnNames: {
-        x: 'Year',
-        y: 'Location'
-      }},
+      uid: SandboxGeneratePlotData.uuidv(),
+      meta: {
+        columnNames: {
+          x: 'Year',
+          y: 'Location'
+        }
+      },
       mode: 'lines',
       name: `${this.legnedText}`,
       type: 'histogram',
@@ -89,23 +93,28 @@ class SandboxGeneratePlotData {
       xbins: {
         end: this.xmax,
         size: 5,
-        start:this.xmin
+        start: this.xmin
       },
       marker: {
-        line: {color: `rgb(${this.barColor})`},
+        line: { color: `rgb(${this.barColor})` },
         color: `rgb(${this.barColor})`
       },
       nbinsx: 0,
       histfunc: 'avg',
-      cumulative: {enabled: false},
+      cumulative: { enabled: false },
       transforms: [
         {
-          meta: {columnNames: {target: 'Year'}},
+          meta: {
+            columnNames:
+            {
+              target: 'Year'
+            }
+          },
           type: 'filter',
           value: [this.xmin.toString(), this.xmax.toString()],
           operation: '[]',
           targetsrc: 'dmichels:4:3b282f',
-          target: this.getXvalues(),
+          target: this.getXvalues()
         }
       ],
       legendgroup: 1,
@@ -114,13 +123,15 @@ class SandboxGeneratePlotData {
     };
   }
 
-  getTrace2(){
+  getTrace2() {
     return {
-      uid: this.uuidv(),
-      meta: {columnNames: {
-        x: 'Year',
-        y: 'Location'
-      }},
+      uid: SandboxGeneratePlotData.uuidv(),
+      meta: {
+        columnNames: {
+          x: 'Year',
+          y: 'Location'
+        }
+      },
       mode: 'markers+lines',
       name: `Annual ${this.legnedText}`,
       type: 'scatter',
@@ -128,10 +139,10 @@ class SandboxGeneratePlotData {
       x: this.getXvalues(),
       ysrc: 'dmichels:4:060bbe',
       y: this.getYvalues(),
-      marker: {color: 'rgb(0, 0, 0)'},
+      marker: { color: 'rgb(0, 0, 0)' },
       transforms: [
         {
-          meta: {columnNames: {target: 'Year'}},
+          meta: { columnNames: { target: 'Year' } },
           type: 'filter',
           value: [this.xmin.toString(), this.xmax.toString()],
           operation: '[]',
@@ -143,37 +154,45 @@ class SandboxGeneratePlotData {
   }
 
   getXLabelText() {
-    let count = 0
-    const periodGroups = this.periodGroups
-    return this.xvals.map( (value) => {
-      const plus = value+periodGroups;
-      const tickText =  `${value} - ${plus.toString().slice(-2)}`;
+    const periodGroups = this.periodGroups;
+    return this.xvals.map((value) => {
+      const plus = value + periodGroups;
+      const tickText = `${value} - ${plus.toString().slice(-2)}`;
       return tickText;
-    })
+    });
   }
 
   getXLabelValues() {
-    let count = 0
+    let count = 0;
     const periodGroups = this.periodGroups;
-    return this.xvals.map( (value) => {
+    return this.xvals.map((value) => {
       count += 1;
-      const mod = (count-1) % periodGroups;
+      const mod = (count - 1) % periodGroups;
       if (mod === 0) {
-        const tickValue = value + parseInt(periodGroups/2);
+        const tickValue = value + parseInt(periodGroups / 2, 10);
         return tickValue;
       }
-    })
+      return null;
+    });
   }
 
-  getLayout(){
+  getLayout() {
     return {
       showlegend: true,
       legend: {
         autosize: true,
-        orientation: "h",
-        xanchor: "center",
+        orientation: 'h',
+        xanchor: 'center',
         x: 0.5,
         y: -0.3
+      },
+      title: {
+        text: this.chartTitle,
+        font: {
+          family: 'Roboto',
+          size: 20
+        },
+        x: 0.5
       },
       xaxis: {
         type: 'linear',
@@ -201,7 +220,7 @@ class SandboxGeneratePlotData {
           yaxis: [0, 2],
           visible: false,
           autorange: true
-        },
+        }
       },
       yaxis: {
         rangemode: 'tozero',
@@ -215,7 +234,7 @@ class SandboxGeneratePlotData {
         tickfont: {
           family: 'Roboto',
           size: 12
-        },
+        }
       },
       bargap: 0.28,
       autosize: true,
@@ -225,8 +244,6 @@ class SandboxGeneratePlotData {
       paper_bgcolor: 'rgb(251, 252, 254)'
     };
   }
-
 }
-
 
 export default SandboxGeneratePlotData;

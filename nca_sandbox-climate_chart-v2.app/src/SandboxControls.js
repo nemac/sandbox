@@ -4,8 +4,6 @@ import SandboxPlotRegion from './SandboxPlotRegion.js';
 import SandboxGeneratePlotData from './SandboxGeneratePlotData.js';
 import SandboxHumanReadable from './SandboxHumanReadable.js';
 
-import Checkbox from '@material-ui/core/Checkbox';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
@@ -23,7 +21,6 @@ library.add(faChartLine);
 const axios = require('axios');
 
 const bgChart = blueGrey[50];
-const bgSelect = blueGrey[50];
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: "#FFFFFF",
@@ -90,10 +87,6 @@ const RegionItems = [
   'National',
   'Regional',
   'State',
-];
-
-const locatioNationalItems = [
-  'National',
 ];
 
 const locationRegionalItems = [
@@ -163,19 +156,6 @@ const locationStateItems = [
   'WY',
 ];
 
-const loadNCAdata = async () => {
-  await axios.get('./TSU_Sandbox_Datafiles/index.json')
-    .then( (response) => {
-      // handle success
-      return response.data;
-    })
-    .catch((error) => {
-      // handle error
-      console.error(`SanboxControls.loadNCADdata() error: ${error}`);
-      return [''];
-  })
-};
-
 export default function SandboxControls() {
   const classes = useStyles();
   const [sliderValues, setsliderValues] = useState([1900, 2018]);
@@ -188,15 +168,12 @@ export default function SandboxControls() {
   const [location, setLocation] = useState('');
   const [climatevariable, setClimatevariable] = useState('');
   const [chartData, setChartData] = useState([{}]);
-  const [chartDataFiltered, setchartDataFiltered] = useState([0,0]);
   const layoutDefaults = {yaxis: {rangemode: 'tozero', title: 'Days',},xaxis: {rangemode: 'tozero'}};
   const [chartLayout, setChartLayout] = useState(layoutDefaults);
 
   const [climateDataFilesJSON, setClimateDataFilesJSON] = useState(['']);
-  const [climateDataFile, setClimateDataFile] = useState(['']);
 
   const [locationItems, setLocationItems] = useState(['']);
-  const [regionItems, setRegionItems] = useState(['']);
   const [climatevariableItems, setClimatevariableItems] = useState(['']);
 
   const [locationDisabled, setlocationDisabled] = useState(true);
@@ -328,10 +305,6 @@ export default function SandboxControls() {
     return climatevariable.includes('inch') ? 'Precipitation' : 'Temperature';
   }
 
-  const getClimatevariableTempType = (climatevariable) => {
-    return climatevariable.includes('tmax') ? 'Maximum' : 'Minimum';
-  }
-
   const replaceClimatevariableType = (climatevariable) => {
     const sandboxHumanReadable = new SandboxHumanReadable();
     return sandboxHumanReadable.getClimateVariablePullDownText(climatevariable);
@@ -354,7 +327,6 @@ export default function SandboxControls() {
           const sandboxHumanReadable = new SandboxHumanReadable(climatevariable);
           const titleLocation = replaceLocationAbbreviation(location);
           const chartTitle = sandboxHumanReadable.getChartTitle({climatevariable, region, titleLocation});
-
           const plotInfo = {
             xvals: chartDataFromFile[0],
             yvals: chartDataFromFile[1],
