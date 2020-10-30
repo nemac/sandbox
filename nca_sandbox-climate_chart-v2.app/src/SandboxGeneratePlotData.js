@@ -9,6 +9,9 @@ class SandboxGeneratePlotData {
     this.legnedText = props.legnedText;
     this.chartType = props.chartType;
     this.barColor = this.chartType === 'Precipitation' ? '61, 133, 198' : '88, 179, 171';
+    this.periodGroups = props.periodGroups ? props.periodGroups : 5;
+    this.useRobust = props.useRobust;
+    this.textAngle = this.useRobust ? 0 : 90;
   }
 
   setXRange(props){
@@ -27,7 +30,6 @@ class SandboxGeneratePlotData {
     }
     return ret;
   }
-
 
   getYvalues(){
     let ret = [];
@@ -60,13 +62,19 @@ class SandboxGeneratePlotData {
 
   getData() {
     if (this.maxVal === -Infinity) return [{}];
-    console.log('getData', this.maxVal)
     return [this.getTrace1(), this.getTrace2()];
+  }
+
+  uuidv() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
   }
 
   getTrace1(){
     return {
-      uid: '1883be',
+      uid: this.uuidv(),
       meta: {columnNames: {
         x: 'Year',
         y: 'Location'
@@ -105,9 +113,10 @@ class SandboxGeneratePlotData {
       hovertemplate: ''
     };
   }
+
   getTrace2(){
     return {
-      uid: '5b1527',
+      uid: this.uuidv(),
       meta: {columnNames: {
         x: 'Year',
         y: 'Location'
@@ -131,7 +140,29 @@ class SandboxGeneratePlotData {
         }
       ]
     };
+  }
 
+  getXLabelText() {
+    let count = 0
+    const periodGroups = this.periodGroups
+    return this.xvals.map( (value) => {
+      const plus = value+periodGroups;
+      const tickText =  `${value}-${plus.toString().slice(-2)}`;
+      return tickText;
+    })
+  }
+
+  getXLabelValues() {
+    let count = 0
+    const periodGroups = this.periodGroups;
+    return this.xvals.map( (value) => {
+      count += 1;
+      const mod = (count-1) % periodGroups;
+      if (mod === 0) {
+        const tickValue = value + parseInt(periodGroups/2);
+        return tickValue;
+      }
+    })
   }
 
   getLayout(){
@@ -142,27 +173,38 @@ class SandboxGeneratePlotData {
         orientation: "h",
         xanchor: "center",
         x: 0.5,
-        y: -0.2
+        y: -0.25
       },
       xaxis: {
         type: 'linear',
-        title: '5-year period',
-        dtick: 5,
+        title: `${this.periodGroups}-year period`,
+        dtick: this.periodGroups,
         range: [this.xmin, this.xmax],
         tick0: 0,
         ticks: '',
         showline: false,
-        tickfont: {family: 'Roboto'},
-        tickmode: 'linear',
+        tickfont: {
+          family: 'Roboto',
+          size: 12
+        },
+        tickmode: 'array',
+        nticks: 5,
+        // staggerAxis: staggerLabels.xAxis(),
+        staggerMode: true,
+        staggerLines: 2,
+        tickvals: this.getXLabelValues(),
+        ticktext: this.getXLabelText(),
         autorange: false,
-        tickangle: 90,
+        tickangle: this.textAngle,
+        constraintoward: 'center',
         automargin: false,
         showspikes: false,
         tickformat: '',
         tickprefix: '',
+        rangemode: 'tozero',
         rangeslider: {
-          range: [1967.1226295828067, 2020.8773704171933],
-          yaxis: [0, 2.053037694013304],
+          range: [1900, 2020],
+          yaxis: [0, 2],
           visible: false,
           autorange: true
         },
@@ -171,10 +213,14 @@ class SandboxGeneratePlotData {
         spikethickness: 4
       },
       yaxis: {
+        rangemode: 'tozero',
         type: 'linear',
         title: 'Days',
-        // dtick: 1,
-        range: [0, 2.053037694013304],
+        tickfont: {
+          family: 'Roboto',
+          size: 12
+        },
+        range: [0, 2],
         ticks: '',
         tickformat: ',d',
         autorange: true,
@@ -225,190 +271,6 @@ class SandboxGeneratePlotData {
               }
             }
           ],
-          mesh3d: [
-            {
-              type: 'mesh3d',
-              colorbar: {
-                ticks: '',
-                outlinewidth: 0
-              }
-            }
-          ],
-          contour: [
-            {
-              type: 'contour',
-              colorbar: {
-                ticks: '',
-                outlinewidth: 0
-              },
-              autocolorscale: true
-            }
-          ],
-          heatmap: [
-            {
-              type: 'heatmap',
-              colorbar: {
-                ticks: '',
-                outlinewidth: 0
-              },
-              autocolorscale: true
-            }
-          ],
-          scatter: [
-            {
-              type: 'scatter',
-              marker: {colorbar: {
-                ticks: '',
-                outlinewidth: 0
-              }}
-            }
-          ],
-          surface: [
-            {
-              type: 'surface',
-              colorbar: {
-                ticks: '',
-                outlinewidth: 0
-              }
-            }
-          ],
-          heatmapgl: [
-            {
-              type: 'heatmapgl',
-              colorbar: {
-                ticks: '',
-                outlinewidth: 0
-              }
-            }
-          ],
-          histogram: [
-            {
-              type: 'histogram',
-              marker: {colorbar: {
-                ticks: '',
-                outlinewidth: 0
-              }}
-            }
-          ],
-          parcoords: [
-            {
-              line: {colorbar: {
-                ticks: '',
-                outlinewidth: 0
-              }},
-              type: 'parcoords'
-            }
-          ],
-          scatter3d: [
-            {
-              type: 'scatter3d',
-              marker: {colorbar: {
-                ticks: '',
-                outlinewidth: 0
-              }}
-            }
-          ],
-          scattergl: [
-            {
-              type: 'scattergl',
-              marker: {colorbar: {
-                ticks: '',
-                outlinewidth: 0
-              }}
-            }
-          ],
-          choropleth: [
-            {
-              type: 'choropleth',
-              colorbar: {
-                ticks: '',
-                outlinewidth: 0
-              }
-            }
-          ],
-          scattergeo: [
-            {
-              type: 'scattergeo',
-              marker: {colorbar: {
-                ticks: '',
-                outlinewidth: 0
-              }}
-            }
-          ],
-          histogram2d: [
-            {
-              type: 'histogram2d',
-              colorbar: {
-                ticks: '',
-                outlinewidth: 0
-              },
-              autocolorscale: true
-            }
-          ],
-          scatterpolar: [
-            {
-              type: 'scatterpolar',
-              marker: {colorbar: {
-                ticks: '',
-                outlinewidth: 0
-              }}
-            }
-          ],
-          contourcarpet: [
-            {
-              type: 'contourcarpet',
-              colorbar: {
-                ticks: '',
-                outlinewidth: 0
-              }
-            }
-          ],
-          scattercarpet: [
-            {
-              type: 'scattercarpet',
-              marker: {colorbar: {
-                ticks: '',
-                outlinewidth: 0
-              }}
-            }
-          ],
-          scattermapbox: [
-            {
-              type: 'scattermapbox',
-              marker: {colorbar: {
-                ticks: '',
-                outlinewidth: 0
-              }}
-            }
-          ],
-          scatterpolargl: [
-            {
-              type: 'scatterpolargl',
-              marker: {colorbar: {
-                ticks: '',
-                outlinewidth: 0
-              }}
-            }
-          ],
-          scatterternary: [
-            {
-              type: 'scatterternary',
-              marker: {colorbar: {
-                ticks: '',
-                outlinewidth: 0
-              }}
-            }
-          ],
-          histogram2dcontour: [
-            {
-              type: 'histogram2dcontour',
-              colorbar: {
-                ticks: '',
-                outlinewidth: 0
-              },
-              autocolorscale: true
-            }
-          ]
         },
         layout: {
           geo: {

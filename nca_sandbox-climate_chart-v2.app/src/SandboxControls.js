@@ -189,7 +189,8 @@ export default function SandboxControls() {
   const [climatevariable, setClimatevariable] = useState('');
   const [chartData, setChartData] = useState([{}]);
   const [chartDataFiltered, setchartDataFiltered] = useState([0,0]);
-  const [chartLayout, setChartLayout] = useState({});
+  const layoutDefaults = {yaxis: {rangemode: 'tozero', title: 'Days',},xaxis: {rangemode: 'tozero'}};
+  const [chartLayout, setChartLayout] = useState(layoutDefaults);
 
   const [climateDataFilesJSON, setClimateDataFilesJSON] = useState(['']);
   const [climateDataFile, setClimateDataFile] = useState(['']);
@@ -361,7 +362,8 @@ export default function SandboxControls() {
             xmax: sliderMinxMaxValues[1],
             chartTitle: chartTitle,
             legnedText: chartType,
-            chartType: chartType
+            chartType: chartType,
+            useRobust: useRobust,
           };
 
           const plotData = new SandboxGeneratePlotData(plotInfo);
