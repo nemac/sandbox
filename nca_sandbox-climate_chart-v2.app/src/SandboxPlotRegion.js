@@ -9,7 +9,9 @@ class SandboxPlotRegion extends React.Component {
   constructor(props) {
       super(props)
       this.responsiveChartRef = React.createRef();
+      this.plotlyLayout = props.plotlyLayout;
   }
+
 
   componentDidMount() {
     this.resizeListener = window.addEventListener("resize", () => {
@@ -19,6 +21,10 @@ class SandboxPlotRegion extends React.Component {
       const copiedLayout = Object.assign({}, this.props.plotlyLayout);
       copiedLayout.width = el.parentNode.getBoundingClientRect().width;
       copiedLayout.height = el.getBoundingClientRect().height-24;
+
+      this.setState({
+        layout: copiedLayout
+      });
     });
   }
 
