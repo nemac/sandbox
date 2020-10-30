@@ -1,4 +1,4 @@
-export default class SandboxClimateVariable {
+export default class SandboxHumanReadable {
   constructor(props){
     this.climateVariableValue = props
     this.climateVariableValueNames = [
@@ -75,11 +75,15 @@ export default class SandboxClimateVariable {
     ]
   }
 
-  getChartTitle (value) {
-    if (!value) return ''
+  getChartTitle (props) {
+    if (!props.climatevariable) return ''
     const climateVariableValueNames = this.climateVariableValueNames;
-    const newValue = climateVariableValueNames.filter(variables => variables.value === value);
-    return newValue[0].chartTitle;
+    const newValue = climateVariableValueNames.filter(variables => variables.value === props.climatevariable);
+    let chartTitle = newValue[0].chartTitle;
+    if (props.region === 'national') chartTitle = `${chartTitle} (National)`;
+    if (props.region === 'regional') chartTitle = `${chartTitle} (NCA Region ${props.location})`;
+    if (props.region === 'state') chartTitle = `${chartTitle} (${props.location})`;
+    return chartTitle;
   }
 
   getPullDownText (value) {

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import SandboxPlotRegion from './SandboxPlotRegion.js';
 import SandboxGeneratePlotData from './SandboxGeneratePlotData.js';
-import SandboxClimateVariable from './SandboxClimateVariable.js';
+import SandboxHumanReadable from './SandboxHumanReadable.js';
 
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -332,8 +332,8 @@ export default function SandboxControls() {
   }
 
   const replaceClimatevariableType = (climatevariable) => {
-    const sandboxClimateVariable = new SandboxClimateVariable(climatevariable);
-    return sandboxClimateVariable.getPullDownText(climatevariable);
+    const sandboxHumanReadable = new SandboxHumanReadable(climatevariable);
+    return sandboxHumanReadable.getPullDownText(climatevariable);
   }
 
   // get chart data from current state = which should include
@@ -345,15 +345,15 @@ export default function SandboxControls() {
       .then( (response) =>{
           const chartDataFromFile = parseNCAFile(response.data, region, location);
           const chartType = getClimatevariableType(climatevariable);
-          const sandboxClimateVariable = new SandboxClimateVariable(climatevariable);
-          const chartTile = sandboxClimateVariable.getChartTitle(climatevariable);
+          const sandboxHumanReadable = new SandboxHumanReadable(climatevariable);
+          const chartTitle = sandboxHumanReadable.getChartTitle({climatevariable, region, location});
 
           const plotInfo = {
             xvals: chartDataFromFile[0],
             yvals: chartDataFromFile[1],
             xmin: sliderMinxMaxValues[0],
             xmax: sliderMinxMaxValues[1],
-            chartTile: chartTile,
+            chartTile: chartTitle,
             legnedText: chartType,
             chartType: chartType
           };
