@@ -32,7 +32,11 @@ export default function Selector(props) {
   const replaceClimatevariableType  = controlName === 'Climate Variable' ? props.replaceClimatevariableType : name => name;
   const replaceLocationAbbreviation = controlName === 'Select a Location' ? props.replaceLocationAbbreviation : name => name;
 
-
+  const replaceRegional = (value) => {
+    let returnValue = value;
+    if (value.toUpperCase() === 'REGIONAL') returnValue = 'NCA Region';
+    return returnValue;
+  };
 
   const handleChange = (event) => {
     props.onChange(event.target.value);
@@ -54,7 +58,7 @@ export default function Selector(props) {
         </MenuItem>
        {items.map((name) => (
            <MenuItem key={name} value={name} className={classes.menuItem}>
-             {replaceClimatevariableType(replaceLocationAbbreviation(name))}
+             {replaceRegional(replaceClimatevariableType(replaceLocationAbbreviation(name)))}
            </MenuItem>
          ))}
        </Select>
