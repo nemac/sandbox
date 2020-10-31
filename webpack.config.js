@@ -6,7 +6,8 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 // Constant with our paths
 const paths = {
-    DIST: path.resolve(__dirname, 'dist'),
+    DIST: path.resolve(__dirname, 'dist/src'),
+    DISTSRC: path.resolve(__dirname, 'dist'),
     SRC: path.resolve(__dirname, 'src'),
     SRC_HTML: path.resolve(__dirname, 'src')
 };
@@ -28,7 +29,7 @@ module.exports = {
        maxAssetSize: 100000
     },
     output: {
-        path: paths.DIST,
+        path: paths.DISTSRC,
         filename: '[name].app.bundle.js',
         chunkFilename: '[id].js',
         publicPath: ''
