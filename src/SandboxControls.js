@@ -178,7 +178,7 @@ export default function SandboxControls() {
   const [climatevariableDisabled, setClimatevariableDisabled] = useState(true);
 
   const loadNCAdata = async (region, isRobust) => {
-    await axios.get('./TSU_Sandbox_Datafiles/index.json')
+    await axios.get('./public/TSU_Sandbox_Datafiles/index.json')
       .then( (response) => {
         // handle success
         let data = {}
