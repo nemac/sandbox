@@ -6,22 +6,22 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 // Constant with our paths
 const paths = {
-    DIST: path.resolve(__dirname, 'dist/src'),
-    DISTSRC: path.resolve(__dirname, 'dist'),
+    DIST: path.resolve(__dirname, 'dist'),
+    DISTSRC: path.resolve(__dirname, 'dist/src'),
     SRC: path.resolve(__dirname, 'src'),
     SRC_HTML: path.resolve(__dirname, 'src')
 };
 
 module.exports = {
     entry: {
-      index: path.join(paths.DISTSRC, 'index.js'),
-      SandboxControls: path.join(paths.DISTSRC, 'SandboxControls.js'),
-      SandboxGeneratePlotData: path.join(paths.DISTSRC, 'SandboxGeneratePlotData.js'),
-      SandboxPlotRegion: path.join(paths.DISTSRC, 'SandboxPlotRegion.js'),
-      SandboxHumanReadable: path.join(paths.DISTSRC, 'SandboxHumanReadable.js'),
-      SandboxSlider: path.join(paths.DISTSRC, 'SandboxSlider.js'),
-      SandboxSelector: path.join(paths.DISTSRC, 'SandboxSelector.js'),
-      SandboxDataCheck: path.join(paths.DISTSRC, 'SandboxDataCheck.js')
+      index: path.join(paths.SRC, 'index.js'),
+      SandboxControls: path.join(paths.SRC, 'SandboxControls.js'),
+      SandboxGeneratePlotData: path.join(paths.SRC, 'SandboxGeneratePlotData.js'),
+      SandboxPlotRegion: path.join(paths.SRC, 'SandboxPlotRegion.js'),
+      SandboxHumanReadable: path.join(paths.SRC, 'SandboxHumanReadable.js'),
+      SandboxSlider: path.join(paths.SRC, 'SandboxSlider.js'),
+      SandboxSelector: path.join(paths.SRC, 'SandboxSelector.js'),
+      SandboxDataCheck: path.join(paths.SRC, 'SandboxDataCheck.js')
     },
     performance: {
        hints: "warning",
@@ -29,7 +29,7 @@ module.exports = {
        maxAssetSize: 100000
     },
     output: {
-        path: paths.SRC,
+        path: paths.DISTSRC,
         filename: '[name].app.bundle.js',
         chunkFilename: '[id].js',
         publicPath: ''
