@@ -178,7 +178,7 @@ export default function SandboxControls() {
   const [climatevariableDisabled, setClimatevariableDisabled] = useState(true);
 
   const loadNCAdata = async (region, isRobust) => {
-    await axios.get('https://nemac.github.io/sandbox/public/TSU_Sandbox_Datafiles/index.json')
+    await axios.get('./public/TSU_Sandbox_Datafiles/index.json')
       .then( (response) => {
         // handle success
         let data = {}
@@ -318,7 +318,7 @@ export default function SandboxControls() {
     const data = climateDataFilesJSON.filter(json => json.robust === useRobust && json.type === climatevariable);
     const dataFile = data.map((json) => json.name);
 
-    axios.get(`https://nemac.github.io/sandbox/public/TSU_Sandbox_Datafiles/${dataFile}`)
+    axios.get(`./public/TSU_Sandbox_Datafiles/${dataFile}`)
       .then( (response) =>{
           const chartDataFromFile = parseNCAFile(response.data, region, location);
           const chartType = getClimatevariableType(climatevariable);
