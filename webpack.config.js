@@ -15,13 +15,13 @@ const paths = {
 module.exports = {
     entry: {
       index: path.join(paths.SRC, 'index.js'),
-      SandboxControls: path.join(paths.SRC, 'SandboxControls.js'),
-      SandboxGeneratePlotData: path.join(paths.SRC, 'SandboxGeneratePlotData.js'),
-      SandboxPlotRegion: path.join(paths.SRC, 'SandboxPlotRegion.js'),
-      SandboxHumanReadable: path.join(paths.SRC, 'SandboxHumanReadable.js'),
-      SandboxSlider: path.join(paths.SRC, 'SandboxSlider.js'),
-      SandboxSelector: path.join(paths.SRC, 'SandboxSelector.js'),
-      SandboxDataCheck: path.join(paths.SRC, 'SandboxDataCheck.js')
+      // SandboxControls: path.join(paths.SRC, 'SandboxControls.js'),
+      // SandboxGeneratePlotData: path.join(paths.SRC, 'SandboxGeneratePlotData.js'),
+      // SandboxPlotRegion: path.join(paths.SRC, 'SandboxPlotRegion.js'),
+      // SandboxHumanReadable: path.join(paths.SRC, 'SandboxHumanReadable.js'),
+      // SandboxSlider: path.join(paths.SRC, 'SandboxSlider.js'),
+      // SandboxSelector: path.join(paths.SRC, 'SandboxSelector.js'),
+      // SandboxDataCheck: path.join(paths.SRC, 'SandboxDataCheck.js')
     },
     performance: {
        hints: "warning",
