@@ -6,21 +6,18 @@ import SandboxHumanReadable from './SandboxHumanReadable.js';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
+import InsertChartOutlinedIcon from '@material-ui/icons/InsertChartOutlined';
 
 import SandboxSlider from './SandboxSlider.js';
 import SandboxSelector from './SandboxSelector.js';
 import SandboxDataCheck from './SandboxDataCheck.js';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faChartLine } from '@fortawesome/free-solid-svg-icons';
-library.add(faChartLine);
-
 const axios = require('axios');
 
+const white = "#FFFFFF";
 const bgChart = '#607d8b';
 const useStyles = makeStyles((theme) => ({
-  root: {
+  sandboxRoot: {
     backgroundColor: "#FFFFFF",
     color: "#5C5C5C",
     height: '100vh',
@@ -35,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
   },
   headerIcon: {
     display: 'inline-flex',
+    marginTop: '-3px',
   },
   varriableSelectors: {
     height: '90px',
@@ -237,7 +235,6 @@ export default function SandboxControls() {
   const handleSliderChange = (newValue) => {
     setsliderValues(newValue);
     getChartData(region.toLowerCase(), location, climatevariable, useRobust);
-    // filterChartData({chartData, useRobust, sliderValues});
   };
 
   // handle state change for region
@@ -351,16 +348,16 @@ export default function SandboxControls() {
   };
 
   return (
-    <div className={classes.root}>
-      <Grid container spacing={0} justify="flex-start" direction={"row"} className={classes.root}>
+    <div className={classes.sandboxRoot}>
+      <Grid container spacing={0} justify="flex-start" direction={"row"} className={classes.sandboxRoot}>
         <Grid item xs={12} width="100%" className={classes.selectionAreaHolder} >
           <Grid container spacing={0} justify="flex-start" direction={"row"} className={classes.selectionArea}>
             <Grid item xs={12} className={classes.header} width="100%" >
               <Box fontWeight="fontWeightBold" m={1} p={1} display="flex" flexWrap="nowrap" justifyContent="flex-start">
-                <Box px={1} fontSize="h4.fontSize" className={classes.headerIcon}>
-                  <FontAwesomeIcon icon={["fas", "chart-line"]} />
+                <Box px={1} fontSize="h4.fontSize" >
+                  <InsertChartOutlinedIcon fontSize="large" className={classes.headerIcon}  />
                 </Box>
-                <Box px={1} fontSize="h5.fontSize">NCA Sandbox - Climate Charts</Box>
+                <Box px={1} fontSize="h5.fontSize" >NCA Sandbox - Climate Charts</Box>
               </Box>
             </Grid>
 
