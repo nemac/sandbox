@@ -29,7 +29,7 @@ module.exports = {
        maxAssetSize: 100000
     },
     output: {
-        path: paths.DISTSRC,
+        path: paths.DIST,
         filename: '[name].app.bundle.js',
         chunkFilename: '[id].js',
         publicPath: ''
