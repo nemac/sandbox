@@ -4,12 +4,12 @@ import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import InsertChartOutlinedIcon from '@material-ui/icons/InsertChartOutlined';
 
-import SandboxPlotRegion from './SandboxPlotRegion.js';
-import SandboxGeneratePlotData from './SandboxGeneratePlotData.js';
-import SandboxHumanReadable from './SandboxHumanReadable.js';
-import SandboxSlider from './SandboxSlider.js';
-import SandboxSelector from './SandboxSelector.js';
-import SandboxDataCheck from './SandboxDataCheck.js';
+import SandboxPlotRegion from './SandboxPlotRegion';
+import SandboxGeneratePlotData from './SandboxGeneratePlotData';
+import SandboxHumanReadable from './SandboxHumanReadable';
+import SandboxSlider from './SandboxSlider';
+import SandboxSelector from './SandboxSelector';
+import SandboxDataCheck from './SandboxDataCheck';
 
 const axios = require('axios');
 
@@ -179,7 +179,7 @@ export default function SandboxControls() {
       .then( (response) => {
         // handle success
         let data = {};
-        switch (loadRegion){
+        switch (loadRegion) {
           case 'National':
             setClimateDataFilesJSON(response.data.national);
             data = response.data.national.filter(type => type.robust === isRobust);
@@ -206,7 +206,7 @@ export default function SandboxControls() {
       })
       .catch((error) => {
         // handle error
-        console.error(`SanboxControls.loadNCADdata() error: ${error}`);
+        console.error(`SanboxControls.loadNCADdata() error: ${error}`);  // eslint-disable-line no-console
         return [''];
     })
   };
@@ -342,7 +342,7 @@ export default function SandboxControls() {
         setChartLayout(plotData.getLayout());
       })
       .catch( (error) => {
-        console.error(`SanboxControls.updatePlotData() error=${error}`);
+        console.error(`SanboxControls.updatePlotData() error=${error}`); // eslint-disable-line no-console
       })
   };
 
@@ -354,7 +354,7 @@ export default function SandboxControls() {
             <Grid item xs={12} className={classes.header} width='100%' >
               <Box fontWeight='fontWeightBold' m={1} p={1} display='flex' flexWrap='nowrap' justifyContent='flex-start'>
                 <Box px={1} fontSize='h4.fontSize' >
-                  <InsertChartOutlinedIcon fontSize='large' className={classes.headerIcon}  />
+                  <InsertChartOutlinedIcon fontSize='large' className={classes.headerIcon} />
                 </Box>
                 <Box px={1} fontSize='h5.fontSize' >NCA Sandbox - Climate Charts</Box>
               </Box>
@@ -399,7 +399,7 @@ export default function SandboxControls() {
               </Box>
             </Grid>
             <Grid item xs={12} sm={3} className={classes.varriableSelectors}>
-              <Box fontWeight='fontWeightBold' ml={2}  display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start' className={classes.checkBox}>
+              <Box fontWeight='fontWeightBold' ml={2} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start' className={classes.checkBox}>
                 <SandboxDataCheck
                   useRobust={useRobust}
                   onChange={handleRobustChange}
@@ -407,7 +407,7 @@ export default function SandboxControls() {
               </Box>
             </Grid>
 
-            <Grid item xs={12}  className={classes.yearSlider} >
+            <Grid item xs={12} className={classes.yearSlider} >
               <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='center' >
                 <SandboxSlider
                   useRobust={useRobust}
@@ -422,7 +422,7 @@ export default function SandboxControls() {
           </Grid>
         </Grid>
 
-        <Grid item xs={12} display='flex'  flex={1} className={classes.chartRegion}>
+        <Grid item xs={12} display='flex' flex={1} className={classes.chartRegion}>
           <Box display='flex' mt={3} flexDirection='row' justifyContent='center' flex={1} flexGrow={3} height='90%' >
             <SandboxPlotRegion
               plotlyData={chartData}
@@ -437,33 +437,33 @@ export default function SandboxControls() {
 }
 
 const parseNCAFile = (data, type, region) => {
-  let xvals = [];
-  let yvals = [];
-  let lines = data.split(/\r?\n/);
-  let headers = lines[0].split(',');
-  for(let h=0;h<headers.length;h++){
+  const xvals = [];
+  const yvals = [];
+  const lines = data.split(/\r?\n/);
+  const headers = lines[0].split(',');
+  for (let h = 0 ; h < headers.length; h += 1) {
     headers[h] = headers[h].trim();
   }
-  let col_index = undefined;
+  let colIndex = undefined;
 
-  if(type === 'national'){
-    col_index = 1;
-  }else if(type === 'regional' || type === 'state'){
-    for(let h=1;h<headers.length;h+=2){
-      if(headers[h] === region){
-        col_index = h;
+  if (type === 'national') {
+    colIndex = 1;
+  } else if (type === 'regional' || type === 'state') {
+    for (let h = 1; h < headers.length; h += 2) {
+      if (headers[h] === region) {
+        colIndex = h;
         break;
       }
     }
   }
 
-  for(let i=1;i<lines.length;i++){
+  for (let i = 1; i < lines.length; i += 1) {
     let elements = lines[i].split(',');
-    if(elements.length <= 1){
+    if (elements.length <= 1) {
       break;
     }
-    let xval = parseInt(elements[0]);
-    let yval = parseFloat(elements[col_index]);
+    const xval = parseInt(elements[0]);
+    const yval = parseFloat(elements[colIndex]);
     xvals.push(xval);
     yvals.push(yval);
   }
