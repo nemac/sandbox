@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import '@babel/polyfill';
 import SandboxControls from './SandboxControls';
-import './Sandbox.css';
+import '../css/Sandbox.css';
 
 function App() {
   return (

@@ -7,21 +7,13 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 // Constant with our paths
 const paths = {
     DIST: path.resolve(__dirname, 'dist'),
-    DISTSRC: path.resolve(__dirname, 'dist/src'),
-    SRC: path.resolve(__dirname, 'src'),
-    SRC_HTML: path.resolve(__dirname, 'src')
+    SRC: path.resolve(__dirname, 'src/scripts'),
+    SRC_HTML: path.resolve(__dirname, 'src/html')
 };
 
 module.exports = {
     entry: {
       index: path.join(paths.SRC, 'index.js'),
-      // SandboxControls: path.join(paths.SRC, 'SandboxControls.js'),
-      // SandboxGeneratePlotData: path.join(paths.SRC, 'SandboxGeneratePlotData.js'),
-      // SandboxPlotRegion: path.join(paths.SRC, 'SandboxPlotRegion.js'),
-      // SandboxHumanReadable: path.join(paths.SRC, 'SandboxHumanReadable.js'),
-      // SandboxSlider: path.join(paths.SRC, 'SandboxSlider.js'),
-      // SandboxSelector: path.join(paths.SRC, 'SandboxSelector.js'),
-      // SandboxDataCheck: path.join(paths.SRC, 'SandboxDataCheck.js')
     },
     performance: {
        hints: "warning",
@@ -46,8 +38,10 @@ module.exports = {
         rules: [
             {
                 test: /\.js$/,
-                loader: 'babel-loader',
-                exclude: /node_modules/
+                exclude: /node_modules/,
+                use: {
+                  loader: 'babel-loader'
+                }
             },
             {
                 test: /\.css$/,
@@ -64,7 +58,7 @@ module.exports = {
                         }
                      },
                      {
-                         loader: 'postcss-loader',
+                        loader: 'postcss-loader',
                         options: {
                             postcssOptions: {
                                 plugins: [

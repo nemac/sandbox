@@ -15,11 +15,14 @@ import SandboxDataCheck from './SandboxDataCheck';
 const axios = require('axios');
 
 const white = '#FFFFFF';
-const bgChart = '#607d8b';
+const darkGreay = '#E6E6E6';
+const pullDownBackground = '#FBFCFE';
+const fontColor = '#5C5C5C';
+
 const useStyles = makeStyles((theme) => ({
   sandboxRoot: {
     backgroundColor: white,
-    color: '#5C5C5C',
+    color: fontColor,
     height: '100vh',
     [theme.breakpoints.down('xs')]: {
       overflow: 'scroll'
@@ -28,54 +31,47 @@ const useStyles = makeStyles((theme) => ({
   sandboxHeader: {
     height: '60px',
     maxHeight: '60px',
-    color: '#5C5C5C'
+    color: fontColor
   },
   sandboxHeaderIcon: {
     display: 'inline-flex',
     marginTop: '-3px'
   },
-  varriableSelectors: {
+  sandboxVarriableSelectors: {
     height: '90px',
     maxHeight: '90px'
   },
-  checkBox: {
+  sandboxCheckBox: {
     height: '90px',
     maxHeight: '90px'
   },
-  divider: {
-    height: '15px',
-    maxHeight: '15px'
-  },
-  yearSlider: {
+  sandboxYearSlider: {
     height: '100px',
     maxHeight: '100px'
   },
-  selectionArea: {
+  sandboxSelectionArea: {
     height: '250px',
     maxHeight: '250px',
-    backgroundColor: '#FBFCFE',
-    border: '1px solid #E6E6E6',
+    backgroundColor: pullDownBackground,
+    border: `1px solid ${darkGreay}`,
     borderRadius: '4px',
     [theme.breakpoints.down('xs')]: {
       height: '550px',
       minHeight: '550px'
     }
   },
-  selectionAreaHolder: {
+  sandboxSelectionAreaHolder: {
     margin: '6px',
     [theme.breakpoints.down('xs')]: {
       height: '100vh',
       maxHeight: '550px'
     }
   },
-  chartRegion: {
+  sandboxChartRegion: {
     height: 'calc(100% - 250px)',
     [theme.breakpoints.down('xs')]: {
       height: '550px'
     }
-  },
-  chartBg: {
-    backgroundColor: bgChart
   }
 }));
 
@@ -434,8 +430,8 @@ export default function SandboxControls() {
   return (
     <div className={classes.sandboxRoot}>
       <Grid container spacing={0} justify='flex-start' direction={'row'} className={classes.sandboxRoot}>
-        <Grid item xs={12} width='100%' className={classes.selectionAreaHolder} >
-          <Grid container spacing={0} justify='flex-start' direction={'row'} className={classes.selectionArea}>
+        <Grid item xs={12} width='100%' className={classes.sandboxSelectionAreaHolder} >
+          <Grid container spacing={0} justify='flex-start' direction={'row'} className={classes.sandboxSelectionArea}>
             <Grid item xs={12} className={classes.sandboxHeader} width='100%' >
               <Box fontWeight='fontWeightBold' m={1} p={1} display='flex' flexWrap='nowrap' justifyContent='flex-start'>
                 <Box px={1} fontSize='h4.fontSize' >
@@ -445,7 +441,7 @@ export default function SandboxControls() {
               </Box>
             </Grid>
 
-            <Grid item xs={12} sm={3} className={classes.varriableSelectors}>
+            <Grid item xs={12} sm={3} className={classes.sandboxVarriableSelectors}>
               <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
                   items={RegionItems}
@@ -457,7 +453,7 @@ export default function SandboxControls() {
                   />
               </Box>
             </Grid>
-            <Grid item xs={12} sm={3} className={classes.varriableSelectors}>
+            <Grid item xs={12} sm={3} className={classes.sandboxVarriableSelectors}>
               <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
                   items={locationItems}
@@ -470,7 +466,7 @@ export default function SandboxControls() {
                   />
               </Box>
             </Grid>
-            <Grid item xs={12} sm={3} className={classes.varriableSelectors} >
+            <Grid item xs={12} sm={3} className={classes.sandboxVarriableSelectors} >
               <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
                   items={climatevariableItems}
@@ -483,7 +479,7 @@ export default function SandboxControls() {
               </Box>
             </Grid>
             <Grid item xs={12} sm={3} className={classes.varriableSelectors}>
-              <Box fontWeight='fontWeightBold' ml={2} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start' className={classes.checkBox}>
+              <Box fontWeight='fontWeightBold' ml={2} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start' className={classes.sandboxCheckBox}>
                 <SandboxDataCheck
                   useRobust={useRobust}
                   onChange={handleRobustChange}
@@ -491,7 +487,7 @@ export default function SandboxControls() {
               </Box>
             </Grid>
 
-            <Grid item xs={12} className={classes.yearSlider} >
+            <Grid item xs={12} className={classes.sandboxYearSlider} >
               <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='center' >
                 <SandboxSlider
                   useRobust={useRobust}
@@ -506,7 +502,7 @@ export default function SandboxControls() {
           </Grid>
         </Grid>
 
-        <Grid item xs={12} display='flex' flex={1} className={classes.chartRegion}>
+        <Grid item xs={12} display='flex' flex={1} className={classes.sandboxChartRegion}>
           <Box display='flex' mt={3} flexDirection='row' justifyContent='center' flex={1} flexGrow={3} height='90%' >
             <SandboxPlotRegion
               plotlyData={chartData}
