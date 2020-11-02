@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
@@ -21,33 +22,33 @@ const useStyles = makeStyles((theme) => ({
     color: '#5C5C5C',
     height: '100vh',
     [theme.breakpoints.down('xs')]: {
-      overflow: 'scroll',
-    },
+      overflow: 'scroll'
+    }
   },
   header: {
     height: '60px',
     maxHeight: '60px',
-    color: '#5C5C5C',
+    color: '#5C5C5C'
   },
   headerIcon: {
     display: 'inline-flex',
-    marginTop: '-3px',
+    marginTop: '-3px'
   },
   varriableSelectors: {
     height: '90px',
-    maxHeight: '90px',
+    maxHeight: '90px'
   },
   checkBox: {
     height: '90px',
-    maxHeight: '90px',
+    maxHeight: '90px'
   },
   divider: {
     height: '15px',
-    maxHeight: '15px',
+    maxHeight: '15px'
   },
   yearSlider: {
     height: '100px',
-    maxHeight: '100px',
+    maxHeight: '100px'
   },
   selectionArea: {
     height: '250px',
@@ -57,31 +58,31 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '4px',
     [theme.breakpoints.down('xs')]: {
       height: '550px',
-      minHeight: '550px',
-    },
+      minHeight: '550px'
+    }
   },
   selectionAreaHolder: {
     margin: '6px',
     [theme.breakpoints.down('xs')]: {
       height: '100vh',
-      maxHeight: '550px',
-    },
+      maxHeight: '550px'
+    }
   },
   chartRegion: {
     height: 'calc(100% - 250px)',
     [theme.breakpoints.down('xs')]: {
-      height: '550px',
-    },
+      height: '550px'
+    }
   },
   chartBg: {
-    backgroundColor: bgChart,
+    backgroundColor: bgChart
   }
 }));
 
 const RegionItems = [
   'National',
   'Regional',
-  'State',
+  'State'
 ];
 
 const locationRegionalItems = [
@@ -92,8 +93,9 @@ const locationRegionalItems = [
   'Northwest',
   'Southwest',
   'Southern Great Plains',
-  'Alaska','Hawaii',
-  'Puerto Rico',
+  'Alaska',
+  'Hawaii',
+  'Puerto Rico'
 ];
 
 const locationStateItems = [
@@ -148,7 +150,7 @@ const locationStateItems = [
   'WA',
   'WV',
   'WI',
-  'WY',
+  'WY'
 ];
 
 export default function SandboxControls() {
@@ -176,28 +178,28 @@ export default function SandboxControls() {
 
   const loadNCAdata = async (loadRegion, isRobust) => {
     await axios.get(`${window.location.href}/public/TSU_Sandbox_Datafiles/index.json`)
-      .then( (response) => {
+      .then((response) => {
         // handle success
         let data = {};
         switch (loadRegion) {
           case 'National':
             setClimateDataFilesJSON(response.data.national);
-            data = response.data.national.filter(type => type.robust === isRobust);
+            data = response.data.national.filter((type) => type.robust === isRobust);
             setClimatevariableItems(data.map((json) => json.type));
             break;
           case 'Regional':
             setClimateDataFilesJSON(response.data.regional);
-            data = response.data.regional.filter(type => type.robust === isRobust);
+            data = response.data.regional.filter((type) => type.robust === isRobust);
             setClimatevariableItems(data.map((json) => json.type));
             break;
           case 'State':
             setClimateDataFilesJSON(response.data.state);
-            data = response.data.state.filter(type => type.robust === isRobust);
+            data = response.data.state.filter((type) => type.robust === isRobust);
             setClimatevariableItems(data.map((json) => json.type));
             break;
           default:
             setClimateDataFilesJSON(response.data.national);
-            data = response.data.national.filter(type => type.robust === isRobust);
+            data = response.data.national.filter((type) => type.robust === isRobust);
             setClimatevariableItems(data.map((json) => json.type));
             break;
         }
@@ -206,34 +208,143 @@ export default function SandboxControls() {
       })
       .catch((error) => {
         // handle error
-        console.error(`SanboxControls.loadNCADdata() error: ${error}`);  // eslint-disable-line no-console
+        console.error(`SanboxControls.loadNCADdata() error: ${error}`); // eslint-disable-line no-console
         return [''];
-    })
+      });
   };
 
-  // use the react effect to control when location and regions change to repupulalte the climate variable pulldown
-  useEffect( () => {
+  // use the react effect to control when location and
+  // regions change to repupulalte the climate variable pulldown
+  useEffect(() => {
     loadNCAdata(region, useRobust);
   }, [region, useRobust]);
 
+  const parseNCAFile = (data, type, parseRegion) => {
+    const xvals = [];
+    const yvals = [];
+    const lines = data.split(/\r?\n/);
+    const headers = lines[0].split(',');
+    for (let h = 0; h < headers.length; h += 1) {
+      headers[h] = headers[h].trim();
+    }
+    let colIndex = undefined;
+
+    if (type === 'national') {
+      colIndex = 1;
+    } else if (type === 'regional' || type === 'state') {
+      for (let h = 1; h < headers.length; h += 2) {
+        if (headers[h] === parseRegion) {
+          colIndex = h;
+          break;
+        }
+      }
+    }
+
+    for (let i = 1; i < lines.length; i += 1) {
+      const elements = lines[i].split(',');
+      if (elements.length <= 1) {
+        break;
+      }
+      const xval = parseInt(elements[0], 10);
+      const yval = parseFloat(elements[colIndex]);
+      xvals.push(xval);
+      yvals.push(yval);
+    }
+
+    return [xvals, yvals];
+  };
+
+  const getClimatevariableType = (switchClimatevariable) => {
+    const returnValue = switchClimatevariable.includes('inch') ? 'Precipitation' : 'Temperature';
+    return returnValue;
+  };
+
+  const replaceLocationAbbreviation = (replaceAbbreviationLocation) => {
+    const sandboxHumanReadable = new SandboxHumanReadable();
+    return sandboxHumanReadable.getLocationDownText(replaceAbbreviationLocation);
+  };
+
+  // get chart data from current state = which should include
+  const getChartData = (props) => {
+    const { region } = props;
+    const { location } = props;
+    const { climatevariable } = props;
+    const { useRobust } = props;
+
+    const data = climateDataFilesJSON.filter((json) => {
+      const returnData = json.robust === useRobust && json.type === climatevariable;
+      return returnData;
+    });
+    const dataFile = data.map((json) => json.name);
+
+    axios.get(`${window.location.href}/public/TSU_Sandbox_Datafiles/${dataFile}`)
+      .then((response) => {
+        const chartDataFromFile = parseNCAFile(response.data, region, location);
+        const chartType = getClimatevariableType(climatevariable);
+        const sandboxHumanReadable = new SandboxHumanReadable(climatevariable);
+        const titleLocation = replaceLocationAbbreviation(location);
+        const chartTitle = sandboxHumanReadable.getChartTitle({
+          climatevariable,
+          region,
+          titleLocation
+        });
+        const plotInfo = {
+          xvals: chartDataFromFile[0],
+          yvals: chartDataFromFile[1],
+          xmin: sliderMinxMaxValues[0],
+          xmax: sliderMinxMaxValues[1],
+          chartTitle,
+          legnedText: chartType,
+          chartType,
+          useRobust
+        };
+        const plotData = new SandboxGeneratePlotData(plotInfo);
+        const xRange = {
+          xmin: sliderValues[0],
+          xmax: sliderValues[1]
+        };
+        plotData.setXRange(xRange);
+        setChartData(plotData.getData());
+        setChartLayout(plotData.getLayout());
+      })
+      .catch((error) => {
+        console.error(`SanboxControls.updatePlotData() error=${error}`); // eslint-disable-line no-console
+      });
+  };
 
   // handle the robust change
   const handleRobustChange = (newValue) => {
-    newValue ? setSliderMinxMaxValues([1950, 2018]) : setSliderMinxMaxValues([1900, 2018]);
+    if (newValue) {
+      setSliderMinxMaxValues([1950, 2018]);
+    } else {
+      setSliderMinxMaxValues([1900, 2018]);
+    }
     setUseRobust(newValue);
     setUseRobustClicked(true);
-    getChartData(region.toLowerCase(), location, climatevariable, newValue);
+    getChartData({
+      region: region.toLowerCase(),
+      location,
+      climatevariable,
+      newValue
+    });
   };
 
   // handle seting robust data clicked to false, this allows slider
   //  to reset values to min max after robust data checkbox is clicked.
   const setUseRobustClickedFalse = (newValue) => {
     setUseRobustClicked(false);
-  }
+    return null;
+  };
   // handle the slider change
   const handleSliderChange = (newValue) => {
     setsliderValues(newValue);
-    getChartData(region.toLowerCase(), location, climatevariable, useRobust);
+    getChartData({
+      region: region.toLowerCase(),
+      location,
+      climatevariable,
+      useRobust
+    });
+    return null;
   };
 
   // handle state change for region
@@ -256,7 +367,8 @@ export default function SandboxControls() {
         setLocationItems(locationRegionalItems);
         setLocation('');
 
-        // Regional data set the location pulldown to disabled since there are no locations by changing the state
+        // Regional data set the location pulldown to disabled
+        // since there are no locations by changing the state
         setlocationDisabled(false);
 
         // Regional data set the climatevariable pulldown to NOT disabled by changing the state
@@ -267,7 +379,8 @@ export default function SandboxControls() {
         setLocationItems(locationStateItems);
         setLocation('');
 
-        // Regional data set the location pulldown to disabled since there are no locations by changing the state
+        // Regional data set the location pulldown to disabled
+        // since there are no locations by changing the state
         setlocationDisabled(false);
 
         // Regional data set the climatevariable pulldown to NOT disabled by changing the state
@@ -280,70 +393,40 @@ export default function SandboxControls() {
         setClimatevariableDisabled(true);
         break;
     }
-    getChartData(newValue, location, climatevariable, useRobust);
+    getChartData({
+      region: newValue,
+      location,
+      climatevariable,
+      useRobust
+    });
   };
 
   // handle state change for location within the region
   const handleLocationChange = (newValue) => {
     setLocation(newValue);
-    getChartData(region.toLowerCase(), newValue, climatevariable, useRobust);
+    getChartData({
+      region: region.toLowerCase(),
+      location: newValue,
+      climatevariable,
+      useRobust
+    });
   };
 
   // handle state change for climate variable
   const handleClimatevariableChange = (newValue) => {
     setClimatevariable(newValue);
-    getChartData(region.toLowerCase(), location, newValue, useRobust);
+    getChartData({
+      region: region.toLowerCase(),
+      location,
+      climatevariable: newValue,
+      useRobust
+    });
+    return null;
   };
 
-  const getClimatevariableType = (climatevariable) => {
-    return climatevariable.includes('inch') ? 'Precipitation' : 'Temperature';
-  }
-
-  const replaceClimatevariableType = (climatevariable) => {
+  const replaceClimatevariableType = (replaceClimatevariable) => {
     const sandboxHumanReadable = new SandboxHumanReadable();
-    return sandboxHumanReadable.getClimateVariablePullDownText(climatevariable);
-  }
-
-  const replaceLocationAbbreviation = (location) => {
-    const sandboxHumanReadable = new SandboxHumanReadable();
-    return sandboxHumanReadable.getLocationDownText(location);
-  }
-
-  // get chart data from current state = which should include
-  const getChartData = (region, location, climatevariable, useRobust) => {
-    const data = climateDataFilesJSON.filter(json => json.robust === useRobust && json.type === climatevariable);
-    const dataFile = data.map((json) => json.name);
-
-    axios.get(`${window.location.href}/public/TSU_Sandbox_Datafiles/${dataFile}`)
-      .then( (response) =>{
-        const chartDataFromFile = parseNCAFile(response.data, region, location);
-        const chartType = getClimatevariableType(climatevariable);
-        const sandboxHumanReadable = new SandboxHumanReadable(climatevariable);
-        const titleLocation = replaceLocationAbbreviation(location);
-        const chartTitle = sandboxHumanReadable.getChartTitle({climatevariable, region, titleLocation});
-        const plotInfo = {
-          xvals: chartDataFromFile[0],
-          yvals: chartDataFromFile[1],
-          xmin: sliderMinxMaxValues[0],
-          xmax: sliderMinxMaxValues[1],
-          chartTitle: chartTitle,
-          legnedText: chartType,
-          chartType: chartType,
-          useRobust: useRobust,
-        };
-
-        const plotData = new SandboxGeneratePlotData(plotInfo);
-        const xRange = {
-          xmin: sliderValues[0],
-          xmax: sliderValues[1]
-        }
-        plotData.setXRange(xRange);
-        setChartData(plotData.getData());
-        setChartLayout(plotData.getLayout());
-      })
-      .catch( (error) => {
-        console.error(`SanboxControls.updatePlotData() error=${error}`); // eslint-disable-line no-console
-      })
+    return sandboxHumanReadable.getClimateVariablePullDownText(replaceClimatevariable);
   };
 
   return (
@@ -359,7 +442,6 @@ export default function SandboxControls() {
                 <Box px={1} fontSize='h5.fontSize' >NCA Sandbox - Climate Charts</Box>
               </Box>
             </Grid>
-
 
             <Grid item xs={12} sm={3} className={classes.varriableSelectors}>
               <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
@@ -436,37 +518,9 @@ export default function SandboxControls() {
   );
 }
 
-const parseNCAFile = (data, type, region) => {
-  const xvals = [];
-  const yvals = [];
-  const lines = data.split(/\r?\n/);
-  const headers = lines[0].split(',');
-  for (let h = 0 ; h < headers.length; h += 1) {
-    headers[h] = headers[h].trim();
-  }
-  let colIndex = undefined;
-
-  if (type === 'national') {
-    colIndex = 1;
-  } else if (type === 'regional' || type === 'state') {
-    for (let h = 1; h < headers.length; h += 2) {
-      if (headers[h] === region) {
-        colIndex = h;
-        break;
-      }
-    }
-  }
-
-  for (let i = 1; i < lines.length; i += 1) {
-    let elements = lines[i].split(',');
-    if (elements.length <= 1) {
-      break;
-    }
-    const xval = parseInt(elements[0]);
-    const yval = parseFloat(elements[colIndex]);
-    xvals.push(xval);
-    yvals.push(yval);
-  }
-
-  return [xvals, yvals];
-}
+SandboxControls.propTypes = {
+  region: PropTypes.string,
+  location: PropTypes.string,
+  climatevariable: PropTypes.string,
+  useRobust: PropTypes.string
+};

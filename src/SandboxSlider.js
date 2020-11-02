@@ -11,7 +11,7 @@ const muiTheme = createMuiTheme({
   overrides: {
     MuiSlider: {
       thumb: {
-        color: '#5C5C5C',
+        color: '#5C5C5C'
       },
       track: {
         color: '#5C5C5C'
@@ -27,10 +27,10 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
     minWidth: 120,
-    color: '#5C5C5C',
+    color: '#5C5C5C'
   },
   selectEmpty: {
-    marginTop: theme.spacing(2),
+    marginTop: theme.spacing(2)
   }
 }));
 

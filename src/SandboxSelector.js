@@ -10,16 +10,16 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
     minWidth: 120,
-    backgroundColor: '#E6E6E6',
+    backgroundColor: '#E6E6E6'
   },
   selectEmpty: {
-    marginTop: theme.spacing(2),
+    marginTop: theme.spacing(2)
   },
   menuItem: {
-    textAlign: 'left',
+    textAlign: 'left'
   },
   sandboxInputLabel: {
-    color: '#5C5C5C',
+    color: '#5C5C5C'
   }
 }));
 
