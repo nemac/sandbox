@@ -227,7 +227,7 @@ export default function SandboxControls() {
     for (let h = 0; h < headers.length; h += 1) {
       headers[h] = headers[h].trim();
     }
-    let colIndex = undefined;
+    let colIndex = undefined; // eslint-disable-line no-undef-init
 
     if (type === 'national') {
       colIndex = 1;
@@ -266,26 +266,27 @@ export default function SandboxControls() {
 
   // get chart data from current state = which should include
   const getChartData = (props) => {
-    const { region } = props;
-    const { location } = props;
-    const { climatevariable } = props;
-    const { useRobust } = props;
+    const { chartDataRegion } = props;
+    const { chartDataLocation } = props;
+    const { chartDataClimatevariable } = props;
+    const { chartDataUseRobust } = props;
 
     const data = climateDataFilesJSON.filter((json) => {
-      const returnData = json.robust === useRobust && json.type === climatevariable;
+      const returnData = json.robust === chartDataUseRobust &&
+        json.type === chartDataClimatevariable;
       return returnData;
     });
     const dataFile = data.map((json) => json.name);
 
     axios.get(`${window.location.href}/public/TSU_Sandbox_Datafiles/${dataFile}`)
       .then((response) => {
-        const chartDataFromFile = parseNCAFile(response.data, region, location);
-        const chartType = getClimatevariableType(climatevariable);
-        const sandboxHumanReadable = new SandboxHumanReadable(climatevariable);
-        const titleLocation = replaceLocationAbbreviation(location);
+        const chartDataFromFile = parseNCAFile(response.data, chartDataRegion, chartDataLocation);
+        const chartType = getClimatevariableType(chartDataClimatevariable);
+        const sandboxHumanReadable = new SandboxHumanReadable(chartDataClimatevariable);
+        const titleLocation = replaceLocationAbbreviation(chartDataLocation);
         const chartTitle = sandboxHumanReadable.getChartTitle({
-          climatevariable,
-          region,
+          climatevariable: chartDataClimatevariable,
+          region: chartDataRegion,
           titleLocation
         });
         const plotInfo = {
@@ -296,7 +297,7 @@ export default function SandboxControls() {
           chartTitle,
           legnedText: chartType,
           chartType,
-          useRobust
+          useRobust: chartDataUseRobust
         };
         const plotData = new SandboxGeneratePlotData(plotInfo);
         const xRange = {
@@ -322,10 +323,10 @@ export default function SandboxControls() {
     setUseRobust(newValue);
     setUseRobustClicked(true);
     getChartData({
-      region: region.toLowerCase(),
-      location,
-      climatevariable,
-      newValue
+      chartDataRegion: region.toLowerCase(),
+      chartDataLocation: location,
+      chartDataClimatevariable: climatevariable,
+      chartDataUseRobust: newValue
     });
   };
 
@@ -339,10 +340,10 @@ export default function SandboxControls() {
   const handleSliderChange = (newValue) => {
     setsliderValues(newValue);
     getChartData({
-      region: region.toLowerCase(),
-      location,
-      climatevariable,
-      useRobust
+      chartDataRegion: region.toLowerCase(),
+      chartDataLocation: location,
+      chartDataClimatevariable: climatevariable,
+      chartDataUseRobust: useRobust
     });
     return null;
   };
@@ -394,10 +395,10 @@ export default function SandboxControls() {
         break;
     }
     getChartData({
-      region: newValue,
-      location,
-      climatevariable,
-      useRobust
+      chartDataRegion: newValue,
+      chartDataLocation: location,
+      chartDataClimatevariable: climatevariable,
+      chartDataUseRobust: useRobust
     });
   };
 
@@ -405,10 +406,10 @@ export default function SandboxControls() {
   const handleLocationChange = (newValue) => {
     setLocation(newValue);
     getChartData({
-      region: region.toLowerCase(),
-      location: newValue,
-      climatevariable,
-      useRobust
+      chartDataRegion: region.toLowerCase(),
+      chartDataLocation: newValue,
+      chartDataClimatevariable: climatevariable,
+      chartDataUseRobust: useRobust
     });
   };
 
@@ -416,10 +417,10 @@ export default function SandboxControls() {
   const handleClimatevariableChange = (newValue) => {
     setClimatevariable(newValue);
     getChartData({
-      region: region.toLowerCase(),
-      location,
-      climatevariable: newValue,
-      useRobust
+      chartDataRegion: region.toLowerCase(),
+      chartDataLocation: location,
+      chartDataClimatevariable: newValue,
+      chartDataUseRobust: useRobust
     });
     return null;
   };
@@ -519,8 +520,8 @@ export default function SandboxControls() {
 }
 
 SandboxControls.propTypes = {
-  region: PropTypes.string,
-  location: PropTypes.string,
-  climatevariable: PropTypes.string,
-  useRobust: PropTypes.string
+  chartDataRegion: PropTypes.string,
+  chartDataLocation: PropTypes.string,
+  chartDataClimatevariable: PropTypes.string,
+  chartDataUseRobust: PropTypes.bool
 };
