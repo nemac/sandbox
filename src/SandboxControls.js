@@ -1,25 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import SandboxPlotRegion from './SandboxPlotRegion.js';
-import SandboxGeneratePlotData from './SandboxGeneratePlotData.js';
-import SandboxHumanReadable from './SandboxHumanReadable.js';
-
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import InsertChartOutlinedIcon from '@material-ui/icons/InsertChartOutlined';
 
+import SandboxPlotRegion from './SandboxPlotRegion.js';
+import SandboxGeneratePlotData from './SandboxGeneratePlotData.js';
+import SandboxHumanReadable from './SandboxHumanReadable.js';
 import SandboxSlider from './SandboxSlider.js';
 import SandboxSelector from './SandboxSelector.js';
 import SandboxDataCheck from './SandboxDataCheck.js';
 
 const axios = require('axios');
 
-const white = "#FFFFFF";
+const white = '#FFFFFF';
 const bgChart = '#607d8b';
 const useStyles = makeStyles((theme) => ({
   sandboxRoot: {
-    backgroundColor: "#FFFFFF",
-    color: "#5C5C5C",
+    backgroundColor: white,
+    color: '#5C5C5C',
     height: '100vh',
     [theme.breakpoints.down('xs')]: {
       overflow: 'scroll',
@@ -28,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   header: {
     height: '60px',
     maxHeight: '60px',
-    color: "#5C5C5C",
+    color: '#5C5C5C',
   },
   headerIcon: {
     display: 'inline-flex',
@@ -53,16 +52,16 @@ const useStyles = makeStyles((theme) => ({
   selectionArea: {
     height: '250px',
     maxHeight: '250px',
-    backgroundColor: "#FBFCFE",
-    border: "1px solid #E6E6E6",
-    borderRadius: "4px",
+    backgroundColor: '#FBFCFE',
+    border: '1px solid #E6E6E6',
+    borderRadius: '4px',
     [theme.breakpoints.down('xs')]: {
       height: '550px',
       minHeight: '550px',
     },
   },
   selectionAreaHolder: {
-    margin: "6px",
+    margin: '6px',
     [theme.breakpoints.down('xs')]: {
       height: '100vh',
       maxHeight: '550px',
@@ -164,7 +163,7 @@ export default function SandboxControls() {
   const [location, setLocation] = useState('');
   const [climatevariable, setClimatevariable] = useState('');
   const [chartData, setChartData] = useState([{}]);
-  const layoutDefaults = {yaxis: {rangemode: 'tozero', title: 'Days',},xaxis: {rangemode: 'tozero'}};
+  const layoutDefaults = { yaxis: { rangemode: 'tozero', title: 'Days' }, xaxis: { rangemode: 'tozero' } };
   const [chartLayout, setChartLayout] = useState(layoutDefaults);
 
   const [climateDataFilesJSON, setClimateDataFilesJSON] = useState(['']);
@@ -175,13 +174,13 @@ export default function SandboxControls() {
   const [locationDisabled, setlocationDisabled] = useState(true);
   const [climatevariableDisabled, setClimatevariableDisabled] = useState(true);
 
-  const loadNCAdata = async (region, isRobust) => {
+  const loadNCAdata = async (loadRegion, isRobust) => {
     await axios.get(`${window.location.href}/public/TSU_Sandbox_Datafiles/index.json`)
       .then( (response) => {
         // handle success
-        let data = {}
-        switch (region) {
-          case "National":
+        let data = {};
+        switch (loadRegion){
+          case 'National':
             setClimateDataFilesJSON(response.data.national);
             data = response.data.national.filter(type => type.robust === isRobust);
             setClimatevariableItems(data.map((json) => json.type));
@@ -317,30 +316,30 @@ export default function SandboxControls() {
 
     axios.get(`${window.location.href}/public/TSU_Sandbox_Datafiles/${dataFile}`)
       .then( (response) =>{
-          const chartDataFromFile = parseNCAFile(response.data, region, location);
-          const chartType = getClimatevariableType(climatevariable);
-          const sandboxHumanReadable = new SandboxHumanReadable(climatevariable);
-          const titleLocation = replaceLocationAbbreviation(location);
-          const chartTitle = sandboxHumanReadable.getChartTitle({climatevariable, region, titleLocation});
-          const plotInfo = {
-            xvals: chartDataFromFile[0],
-            yvals: chartDataFromFile[1],
-            xmin: sliderMinxMaxValues[0],
-            xmax: sliderMinxMaxValues[1],
-            chartTitle: chartTitle,
-            legnedText: chartType,
-            chartType: chartType,
-            useRobust: useRobust,
-          };
+        const chartDataFromFile = parseNCAFile(response.data, region, location);
+        const chartType = getClimatevariableType(climatevariable);
+        const sandboxHumanReadable = new SandboxHumanReadable(climatevariable);
+        const titleLocation = replaceLocationAbbreviation(location);
+        const chartTitle = sandboxHumanReadable.getChartTitle({climatevariable, region, titleLocation});
+        const plotInfo = {
+          xvals: chartDataFromFile[0],
+          yvals: chartDataFromFile[1],
+          xmin: sliderMinxMaxValues[0],
+          xmax: sliderMinxMaxValues[1],
+          chartTitle: chartTitle,
+          legnedText: chartType,
+          chartType: chartType,
+          useRobust: useRobust,
+        };
 
-          const plotData = new SandboxGeneratePlotData(plotInfo);
-          const xRange = {
-            xmin: sliderValues[0],
-            xmax: sliderValues[1]
-          }
-          plotData.setXRange(xRange);
-          setChartData(plotData.getData());
-          setChartLayout(plotData.getLayout());
+        const plotData = new SandboxGeneratePlotData(plotInfo);
+        const xRange = {
+          xmin: sliderValues[0],
+          xmax: sliderValues[1]
+        }
+        plotData.setXRange(xRange);
+        setChartData(plotData.getData());
+        setChartLayout(plotData.getLayout());
       })
       .catch( (error) => {
         console.error(`SanboxControls.updatePlotData() error=${error}`);
@@ -349,24 +348,24 @@ export default function SandboxControls() {
 
   return (
     <div className={classes.sandboxRoot}>
-      <Grid container spacing={0} justify="flex-start" direction={"row"} className={classes.sandboxRoot}>
-        <Grid item xs={12} width="100%" className={classes.selectionAreaHolder} >
-          <Grid container spacing={0} justify="flex-start" direction={"row"} className={classes.selectionArea}>
-            <Grid item xs={12} className={classes.header} width="100%" >
-              <Box fontWeight="fontWeightBold" m={1} p={1} display="flex" flexWrap="nowrap" justifyContent="flex-start">
-                <Box px={1} fontSize="h4.fontSize" >
-                  <InsertChartOutlinedIcon fontSize="large" className={classes.headerIcon}  />
+      <Grid container spacing={0} justify='flex-start' direction={'row'} className={classes.sandboxRoot}>
+        <Grid item xs={12} width='100%' className={classes.selectionAreaHolder} >
+          <Grid container spacing={0} justify='flex-start' direction={'row'} className={classes.selectionArea}>
+            <Grid item xs={12} className={classes.header} width='100%' >
+              <Box fontWeight='fontWeightBold' m={1} p={1} display='flex' flexWrap='nowrap' justifyContent='flex-start'>
+                <Box px={1} fontSize='h4.fontSize' >
+                  <InsertChartOutlinedIcon fontSize='large' className={classes.headerIcon}  />
                 </Box>
-                <Box px={1} fontSize="h5.fontSize" >NCA Sandbox - Climate Charts</Box>
+                <Box px={1} fontSize='h5.fontSize' >NCA Sandbox - Climate Charts</Box>
               </Box>
             </Grid>
 
 
             <Grid item xs={12} sm={3} className={classes.varriableSelectors}>
-              <Box fontWeight="fontWeightBold" m={1} display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="flex-start">
+              <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
                   items={RegionItems}
-                  name={"Select a Region"}
+                  name={'Select a Region'}
                   onChange={handleRegionChange}
                   value={region}
                   disabled={false}
@@ -375,10 +374,10 @@ export default function SandboxControls() {
               </Box>
             </Grid>
             <Grid item xs={12} sm={3} className={classes.varriableSelectors}>
-              <Box fontWeight="fontWeightBold" m={1} display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="flex-start">
+              <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
                   items={locationItems}
-                  name={"Select a Location"}
+                  name={'Select a Location'}
                   onChange={handleLocationChange}
                   value={location}
                   disabled={locationDisabled}
@@ -388,10 +387,10 @@ export default function SandboxControls() {
               </Box>
             </Grid>
             <Grid item xs={12} sm={3} className={classes.varriableSelectors} >
-              <Box fontWeight="fontWeightBold" m={1} display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="flex-start">
+              <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
                   items={climatevariableItems}
-                  name={"Climate Variable"}
+                  name={'Climate Variable'}
                   onChange={handleClimatevariableChange}
                   value={climatevariable}
                   disabled={climatevariableDisabled}
@@ -400,7 +399,7 @@ export default function SandboxControls() {
               </Box>
             </Grid>
             <Grid item xs={12} sm={3} className={classes.varriableSelectors}>
-              <Box fontWeight="fontWeightBold" ml={2}  display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="flex-start" className={classes.checkBox}>
+              <Box fontWeight='fontWeightBold' ml={2}  display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start' className={classes.checkBox}>
                 <SandboxDataCheck
                   useRobust={useRobust}
                   onChange={handleRobustChange}
@@ -409,13 +408,13 @@ export default function SandboxControls() {
             </Grid>
 
             <Grid item xs={12}  className={classes.yearSlider} >
-              <Box fontWeight="fontWeightBold" m={1} display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="center" >
+              <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='center' >
                 <SandboxSlider
                   useRobust={useRobust}
                   useRobustClicked={useRobustClicked}
                   setUseRobustClicked={setUseRobustClickedFalse}
                   sliderMinxMaxValues={sliderMinxMaxValues}
-                  values={sliderValues}
+                  sliderValues={sliderValues}
                   onChange={handleSliderChange}
                   />
               </Box>
@@ -423,8 +422,8 @@ export default function SandboxControls() {
           </Grid>
         </Grid>
 
-        <Grid item xs={12} display="flex"  flex={1} className={classes.chartRegion}>
-          <Box display="flex" mt={3} flexDirection="row" justifyContent="center" flex={1} flexGrow={3} height="90%" >
+        <Grid item xs={12} display='flex'  flex={1} className={classes.chartRegion}>
+          <Box display='flex' mt={3} flexDirection='row' justifyContent='center' flex={1} flexGrow={3} height='90%' >
             <SandboxPlotRegion
               plotlyData={chartData}
               plotlyLayout={chartLayout}
@@ -447,9 +446,9 @@ const parseNCAFile = (data, type, region) => {
   }
   let col_index = undefined;
 
-  if(type === "national"){
+  if(type === 'national'){
     col_index = 1;
-  }else if(type === "regional" || type === "state"){
+  }else if(type === 'regional' || type === 'state'){
     for(let h=1;h<headers.length;h+=2){
       if(headers[h] === region){
         col_index = h;

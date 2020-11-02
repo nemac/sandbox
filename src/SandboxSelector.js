@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
     minWidth: 120,
-    backgroundColor: "#E6E6E6",
+    backgroundColor: '#E6E6E6',
   },
   selectEmpty: {
     marginTop: theme.spacing(2),
@@ -18,10 +18,9 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'left',
   },
   sandboxInputLabel: {
-    color: "#5C5C5C",
+    color: '#5C5C5C',
   }
 }));
-
 
 export default function Selector(props) {
   const classes = useStyles();
@@ -29,8 +28,8 @@ export default function Selector(props) {
   const controlName = props.name;
   const value = props.value;
   const disabled = props.disabled;
-  const replaceClimatevariableType  = controlName === 'Climate Variable' ? props.replaceClimatevariableType : name => name;
-  const replaceLocationAbbreviation = controlName === 'Select a Location' ? props.replaceLocationAbbreviation : name => name;
+  const replaceClimatevariableType = controlName === 'Climate Variable' ? props.replaceClimatevariableType : (name) => name;
+  const replaceLocationAbbreviation = controlName === 'Select a Location' ? props.replaceLocationAbbreviation : (name) => name;
 
   const replaceRegional = (value) => {
     let returnValue = value;
@@ -42,26 +41,25 @@ export default function Selector(props) {
     props.onChange(event.target.value);
   };
 
- return (
-     <FormControl variant="outlined" className={classes.formControl} fullWidth={true} disabled={disabled}>
-       <InputLabel id="demo-simple-select-outlined-label" className={classes.sandboxInputLabel} >{controlName}</InputLabel>
-       <Select
-         labelId="demo-simple-select-outlined-label"
-         id="demo-simple-select-outlined"
-         value={value}
-         onChange={handleChange}
-         label={controlName}
-         className={classes.menuItem}
-       >
-       <MenuItem value="">
+  return (
+    <FormControl variant='outlined' className={classes.formControl} fullWidth={true} disabled={disabled}>
+      <InputLabel id='demo-simple-select-outlined-label' className={classes.sandboxInputLabel} >{controlName}</InputLabel>
+      <Select
+        labelId='demo-simple-select-outlined-label'
+        id='demo-simple-select-outlined'
+        value={value}
+        onChange={handleChange}
+        label={controlName}
+        className={classes.menuItem}
+        >
+        <MenuItem value=''>
           <em>None</em>
         </MenuItem>
-       {items.map((name) => (
-           <MenuItem key={name} value={name} className={classes.menuItem}>
-             {replaceRegional(replaceClimatevariableType(replaceLocationAbbreviation(name)))}
-           </MenuItem>
-         ))}
-       </Select>
-     </FormControl>
- );
+        {items.map((name) => (
+          <MenuItem key={name} value={name} className={classes.menuItem}>
+            {replaceRegional(replaceClimatevariableType(replaceLocationAbbreviation(name)))}
+          </MenuItem>))}
+        </Select>
+      </FormControl>
+  );
 }

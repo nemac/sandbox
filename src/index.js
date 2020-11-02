@@ -1,15 +1,15 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import '@babel/polyfill'
-import SandboxControls from './SandboxControls.js'
+import React from 'react';
+import ReactDOM from 'react-dom';
+import '@babel/polyfill';
+import SandboxControls from './SandboxControls';
 import './Sandbox.css';
 
-const App = () => {
+function App() {
   return (
     <div>
       <SandboxControls />
     </div>
   );
-};
+}
 
-ReactDOM.render(<App />, document.querySelector("#root"));
+ReactDOM.render(<App />, document.querySelector('#root'));

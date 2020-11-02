@@ -10,7 +10,7 @@
     "deploy": "gh-pages -d dist",
     "start": "webpack-dev-server --open --hot --mode development",
     "build": "webpack --mode production",
-    "lint": "eslint ."
+    "lint": "eslint ./src"
   },
   "license": "MIT",
   "eslintConfig": {
@@ -32,6 +32,7 @@
     "@babel/core": "^7.7.5",
     "@babel/preset-env": "^7.7.6",
     "@babel/preset-react": "^7.7.4",
+    "@testing-library/react": "^11.1.0",
     "autoprefixer": "^9.7.3",
     "babel-loader": "^8.0.6",
     "css-loader": "^3.3.2",
@@ -61,8 +62,10 @@
     "@babel/polyfill": "^7.12.1",
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
+    "@material-ui/styles": "^4.10.0",
     "axios": "^0.20.0",
     "plotly.js": "^1.54.7",
+    "prop-types": "^15.7.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-plotly.js": "^2.4.0"
