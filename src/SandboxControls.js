@@ -25,12 +25,12 @@ const useStyles = makeStyles((theme) => ({
       overflow: 'scroll'
     }
   },
-  header: {
+  sandboxHeader: {
     height: '60px',
     maxHeight: '60px',
     color: '#5C5C5C'
   },
-  headerIcon: {
+  sandboxHeaderIcon: {
     display: 'inline-flex',
     marginTop: '-3px'
   },
@@ -217,6 +217,7 @@ export default function SandboxControls() {
   // regions change to repupulalte the climate variable pulldown
   useEffect(() => {
     loadNCAdata(region, useRobust);
+    setUseRobustClicked(false);
   }, [region, useRobust]);
 
   const parseNCAFile = (data, type, parseRegion) => {
@@ -435,10 +436,10 @@ export default function SandboxControls() {
       <Grid container spacing={0} justify='flex-start' direction={'row'} className={classes.sandboxRoot}>
         <Grid item xs={12} width='100%' className={classes.selectionAreaHolder} >
           <Grid container spacing={0} justify='flex-start' direction={'row'} className={classes.selectionArea}>
-            <Grid item xs={12} className={classes.header} width='100%' >
+            <Grid item xs={12} className={classes.sandboxHeader} width='100%' >
               <Box fontWeight='fontWeightBold' m={1} p={1} display='flex' flexWrap='nowrap' justifyContent='flex-start'>
                 <Box px={1} fontSize='h4.fontSize' >
-                  <InsertChartOutlinedIcon fontSize='large' className={classes.headerIcon} />
+                  <InsertChartOutlinedIcon fontSize='large' className={classes.sandboxHeaderIcon} />
                 </Box>
                 <Box px={1} fontSize='h5.fontSize' >NCA Sandbox - Climate Charts</Box>
               </Box>
@@ -495,7 +496,7 @@ export default function SandboxControls() {
                 <SandboxSlider
                   useRobust={useRobust}
                   useRobustClicked={useRobustClicked}
-                  setUseRobustClicked={setUseRobustClickedFalse}
+                  setUseRobustClickedFalse={setUseRobustClickedFalse}
                   sliderMinxMaxValues={sliderMinxMaxValues}
                   sliderValues={sliderValues}
                   onChange={handleSliderChange}

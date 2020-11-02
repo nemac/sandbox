@@ -43,13 +43,11 @@ export default function SandboxSlider(props) {
   const { useRobustClicked } = props;
   const { sliderMinxMaxValues } = props;
   const { onChange } = props;
-  const { setUseRobustClicked } = props;
 
   // only run after robust data click
   if (useRobustClicked) {
     sliderValues[0] = sliderMinxMaxValues[0];
     sliderValues[1] = sliderMinxMaxValues[1];
-    setUseRobustClicked(false);
   }
 
   const handleChange = (event, newValue) => {
@@ -106,6 +104,5 @@ SandboxSlider.propTypes = {
   disabled: PropTypes.bool,
   useRobustClicked: PropTypes.bool,
   sliderMinxMaxValues: PropTypes.array,
-  onChange: PropTypes.func,
-  setUseRobustClicked: PropTypes.func
+  onChange: PropTypes.func
 };

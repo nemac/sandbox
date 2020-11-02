@@ -29,6 +29,7 @@ export default function Selector(props) {
   const { controlName } = props;
   const { value } = props;
   const { disabled } = props;
+  const { onChange } = props;
   const replaceClimatevariableType = controlName === 'Climate Variable' ? props.replaceClimatevariableType : (name) => name;
   const replaceLocationAbbreviation = controlName === 'Select a Location' ? props.replaceLocationAbbreviation : (name) => name;
 
@@ -39,7 +40,7 @@ export default function Selector(props) {
   };
 
   const handleChange = (event) => {
-    props.onChange(event.target.value);
+    onChange(event.target.value);
   };
 
   return (
