@@ -7,7 +7,6 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 // Constant with our paths
 const paths = {
     DIST: path.resolve(__dirname, 'dist'),
-    DISTSRC: path.resolve(__dirname, 'dist/src'),
     SRC: path.resolve(__dirname, 'src/scripts'),
     SRC_HTML: path.resolve(__dirname, 'src/html')
 };
@@ -57,7 +56,7 @@ module.exports = {
                         }
                      },
                      {
-                         loader: 'postcss-loader',
+                        loader: 'postcss-loader',
                         options: {
                             postcssOptions: {
                                 plugins: [
