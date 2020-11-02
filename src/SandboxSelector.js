@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -24,16 +25,16 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Selector(props) {
   const classes = useStyles();
-  const items = props.items;
-  const controlName = props.name;
-  const value = props.value;
-  const disabled = props.disabled;
+  const { items } = props;
+  const { controlName } = props;
+  const { value } = props;
+  const { disabled } = props;
   const replaceClimatevariableType = controlName === 'Climate Variable' ? props.replaceClimatevariableType : (name) => name;
   const replaceLocationAbbreviation = controlName === 'Select a Location' ? props.replaceLocationAbbreviation : (name) => name;
 
-  const replaceRegional = (value) => {
-    let returnValue = value;
-    if (value.toUpperCase() === 'REGIONAL') returnValue = 'NCA Region';
+  const replaceRegional = (regionalValue) => {
+    let returnValue = regionalValue;
+    if (regionalValue.toUpperCase() === 'REGIONAL') returnValue = 'NCA Region';
     return returnValue;
   };
 
@@ -63,3 +64,13 @@ export default function Selector(props) {
       </FormControl>
   );
 }
+
+Selector.propTypes = {
+  items: PropTypes.array,
+  controlName: PropTypes.string,
+  value: PropTypes.string,
+  disabled: PropTypes.bool,
+  replaceClimatevariableType: PropTypes.func,
+  replaceLocationAbbreviation: PropTypes.func,
+  onChange: PropTypes.func
+};

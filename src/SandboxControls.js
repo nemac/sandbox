@@ -365,7 +365,7 @@ export default function SandboxControls() {
               <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
                   items={RegionItems}
-                  name={'Select a Region'}
+                  controlName={'Select a Region'}
                   onChange={handleRegionChange}
                   value={region}
                   disabled={false}
@@ -377,7 +377,7 @@ export default function SandboxControls() {
               <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
                   items={locationItems}
-                  name={'Select a Location'}
+                  controlName={'Select a Location'}
                   onChange={handleLocationChange}
                   value={location}
                   disabled={locationDisabled}
@@ -390,7 +390,7 @@ export default function SandboxControls() {
               <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
                   items={climatevariableItems}
-                  name={'Climate Variable'}
+                  controlName={'Climate Variable'}
                   onChange={handleClimatevariableChange}
                   value={climatevariable}
                   disabled={climatevariableDisabled}
