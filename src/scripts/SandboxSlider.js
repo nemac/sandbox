@@ -7,17 +7,19 @@ import Box from '@material-ui/core/Box';
 import Divider from '@material-ui/core/Divider';
 import { makeStyles, createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 
+const sliderColor = '#5C5C5C';
+
 const muiTheme = createMuiTheme({
   overrides: {
     MuiSlider: {
       thumb: {
-        color: '#5C5C5C'
+        color: sliderColor
       },
       track: {
-        color: '#5C5C5C'
+        color: sliderColor
       },
       rail: {
-        color: '#5C5C5C'
+        color: sliderColor
       }
     }
   }
