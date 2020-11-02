@@ -81,7 +81,7 @@ export default class SandboxHumanReadable {
       },
       {
         value: 'AL',
-        pullDownText: 'Aalabama'
+        pullDownText: 'Alabama'
       },
       {
         value: 'AZ',

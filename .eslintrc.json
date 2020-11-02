@@ -5,6 +5,7 @@
     "browser": true,
     "jquery": true
   },
+  "ignorePatterns": ["*.test*.js"],
   "rules": {
     "comma-dangle": ["error", "never"],
     "no-underscore-dangle": ["off"],

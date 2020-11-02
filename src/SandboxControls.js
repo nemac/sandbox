@@ -1,88 +1,88 @@
 import React, { useEffect, useState } from 'react';
-import SandboxPlotRegion from './SandboxPlotRegion.js';
-import SandboxGeneratePlotData from './SandboxGeneratePlotData.js';
-import SandboxHumanReadable from './SandboxHumanReadable.js';
-
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import InsertChartOutlinedIcon from '@material-ui/icons/InsertChartOutlined';
 
-import SandboxSlider from './SandboxSlider.js';
-import SandboxSelector from './SandboxSelector.js';
-import SandboxDataCheck from './SandboxDataCheck.js';
+import SandboxPlotRegion from './SandboxPlotRegion';
+import SandboxGeneratePlotData from './SandboxGeneratePlotData';
+import SandboxHumanReadable from './SandboxHumanReadable';
+import SandboxSlider from './SandboxSlider';
+import SandboxSelector from './SandboxSelector';
+import SandboxDataCheck from './SandboxDataCheck';
 
 const axios = require('axios');
 
-const white = "#FFFFFF";
+const white = '#FFFFFF';
 const bgChart = '#607d8b';
 const useStyles = makeStyles((theme) => ({
   sandboxRoot: {
-    backgroundColor: "#FFFFFF",
-    color: "#5C5C5C",
+    backgroundColor: white,
+    color: '#5C5C5C',
     height: '100vh',
     [theme.breakpoints.down('xs')]: {
-      overflow: 'scroll',
-    },
+      overflow: 'scroll'
+    }
   },
-  header: {
+  sandboxHeader: {
     height: '60px',
     maxHeight: '60px',
-    color: "#5C5C5C",
+    color: '#5C5C5C'
   },
-  headerIcon: {
+  sandboxHeaderIcon: {
     display: 'inline-flex',
-    marginTop: '-3px',
+    marginTop: '-3px'
   },
   varriableSelectors: {
     height: '90px',
-    maxHeight: '90px',
+    maxHeight: '90px'
   },
   checkBox: {
     height: '90px',
-    maxHeight: '90px',
+    maxHeight: '90px'
   },
   divider: {
     height: '15px',
-    maxHeight: '15px',
+    maxHeight: '15px'
   },
   yearSlider: {
     height: '100px',
-    maxHeight: '100px',
+    maxHeight: '100px'
   },
   selectionArea: {
     height: '250px',
     maxHeight: '250px',
-    backgroundColor: "#FBFCFE",
-    border: "1px solid #E6E6E6",
-    borderRadius: "4px",
+    backgroundColor: '#FBFCFE',
+    border: '1px solid #E6E6E6',
+    borderRadius: '4px',
     [theme.breakpoints.down('xs')]: {
       height: '550px',
-      minHeight: '550px',
-    },
+      minHeight: '550px'
+    }
   },
   selectionAreaHolder: {
-    margin: "6px",
+    margin: '6px',
     [theme.breakpoints.down('xs')]: {
       height: '100vh',
-      maxHeight: '550px',
-    },
+      maxHeight: '550px'
+    }
   },
   chartRegion: {
     height: 'calc(100% - 250px)',
     [theme.breakpoints.down('xs')]: {
-      height: '550px',
-    },
+      height: '550px'
+    }
   },
   chartBg: {
-    backgroundColor: bgChart,
+    backgroundColor: bgChart
   }
 }));
 
 const RegionItems = [
   'National',
   'Regional',
-  'State',
+  'State'
 ];
 
 const locationRegionalItems = [
@@ -93,8 +93,9 @@ const locationRegionalItems = [
   'Northwest',
   'Southwest',
   'Southern Great Plains',
-  'Alaska','Hawaii',
-  'Puerto Rico',
+  'Alaska',
+  'Hawaii',
+  'Puerto Rico'
 ];
 
 const locationStateItems = [
@@ -149,7 +150,7 @@ const locationStateItems = [
   'WA',
   'WV',
   'WI',
-  'WY',
+  'WY'
 ];
 
 export default function SandboxControls() {
@@ -164,7 +165,7 @@ export default function SandboxControls() {
   const [location, setLocation] = useState('');
   const [climatevariable, setClimatevariable] = useState('');
   const [chartData, setChartData] = useState([{}]);
-  const layoutDefaults = {yaxis: {rangemode: 'tozero', title: 'Days',},xaxis: {rangemode: 'tozero'}};
+  const layoutDefaults = { yaxis: { rangemode: 'tozero', title: 'Days' }, xaxis: { rangemode: 'tozero' } };
   const [chartLayout, setChartLayout] = useState(layoutDefaults);
 
   const [climateDataFilesJSON, setClimateDataFilesJSON] = useState(['']);
@@ -175,30 +176,30 @@ export default function SandboxControls() {
   const [locationDisabled, setlocationDisabled] = useState(true);
   const [climatevariableDisabled, setClimatevariableDisabled] = useState(true);
 
-  const loadNCAdata = async (region, isRobust) => {
+  const loadNCAdata = async (loadRegion, isRobust) => {
     await axios.get(`${window.location.href}/public/TSU_Sandbox_Datafiles/index.json`)
-      .then( (response) => {
+      .then((response) => {
         // handle success
-        let data = {}
-        switch (region) {
-          case "National":
+        let data = {};
+        switch (loadRegion) {
+          case 'National':
             setClimateDataFilesJSON(response.data.national);
-            data = response.data.national.filter(type => type.robust === isRobust);
+            data = response.data.national.filter((type) => type.robust === isRobust);
             setClimatevariableItems(data.map((json) => json.type));
             break;
           case 'Regional':
             setClimateDataFilesJSON(response.data.regional);
-            data = response.data.regional.filter(type => type.robust === isRobust);
+            data = response.data.regional.filter((type) => type.robust === isRobust);
             setClimatevariableItems(data.map((json) => json.type));
             break;
           case 'State':
             setClimateDataFilesJSON(response.data.state);
-            data = response.data.state.filter(type => type.robust === isRobust);
+            data = response.data.state.filter((type) => type.robust === isRobust);
             setClimatevariableItems(data.map((json) => json.type));
             break;
           default:
             setClimateDataFilesJSON(response.data.national);
-            data = response.data.national.filter(type => type.robust === isRobust);
+            data = response.data.national.filter((type) => type.robust === isRobust);
             setClimatevariableItems(data.map((json) => json.type));
             break;
         }
@@ -207,34 +208,145 @@ export default function SandboxControls() {
       })
       .catch((error) => {
         // handle error
-        console.error(`SanboxControls.loadNCADdata() error: ${error}`);
+        console.error(`SanboxControls.loadNCADdata() error: ${error}`); // eslint-disable-line no-console
         return [''];
-    })
+      });
   };
 
-  // use the react effect to control when location and regions change to repupulalte the climate variable pulldown
-  useEffect( () => {
+  // use the react effect to control when location and
+  // regions change to repupulalte the climate variable pulldown
+  useEffect(() => {
     loadNCAdata(region, useRobust);
+    setUseRobustClicked(false);
   }, [region, useRobust]);
 
+  const parseNCAFile = (data, type, parseRegion) => {
+    const xvals = [];
+    const yvals = [];
+    const lines = data.split(/\r?\n/);
+    const headers = lines[0].split(',');
+    for (let h = 0; h < headers.length; h += 1) {
+      headers[h] = headers[h].trim();
+    }
+    let colIndex = undefined; // eslint-disable-line no-undef-init
+
+    if (type === 'national') {
+      colIndex = 1;
+    } else if (type === 'regional' || type === 'state') {
+      for (let h = 1; h < headers.length; h += 2) {
+        if (headers[h] === parseRegion) {
+          colIndex = h;
+          break;
+        }
+      }
+    }
+
+    for (let i = 1; i < lines.length; i += 1) {
+      const elements = lines[i].split(',');
+      if (elements.length <= 1) {
+        break;
+      }
+      const xval = parseInt(elements[0], 10);
+      const yval = parseFloat(elements[colIndex]);
+      xvals.push(xval);
+      yvals.push(yval);
+    }
+
+    return [xvals, yvals];
+  };
+
+  const getClimatevariableType = (switchClimatevariable) => {
+    const returnValue = switchClimatevariable.includes('inch') ? 'Precipitation' : 'Temperature';
+    return returnValue;
+  };
+
+  const replaceLocationAbbreviation = (replaceAbbreviationLocation) => {
+    const sandboxHumanReadable = new SandboxHumanReadable();
+    return sandboxHumanReadable.getLocationDownText(replaceAbbreviationLocation);
+  };
+
+  // get chart data from current state = which should include
+  const getChartData = (props) => {
+    const { chartDataRegion } = props;
+    const { chartDataLocation } = props;
+    const { chartDataClimatevariable } = props;
+    const { chartDataUseRobust } = props;
+
+    const data = climateDataFilesJSON.filter((json) => {
+      const returnData = json.robust === chartDataUseRobust &&
+        json.type === chartDataClimatevariable;
+      return returnData;
+    });
+    const dataFile = data.map((json) => json.name);
+
+    axios.get(`${window.location.href}/public/TSU_Sandbox_Datafiles/${dataFile}`)
+      .then((response) => {
+        const chartDataFromFile = parseNCAFile(response.data, chartDataRegion, chartDataLocation);
+        const chartType = getClimatevariableType(chartDataClimatevariable);
+        const sandboxHumanReadable = new SandboxHumanReadable(chartDataClimatevariable);
+        const titleLocation = replaceLocationAbbreviation(chartDataLocation);
+        const chartTitle = sandboxHumanReadable.getChartTitle({
+          climatevariable: chartDataClimatevariable,
+          region: chartDataRegion,
+          titleLocation
+        });
+        const plotInfo = {
+          xvals: chartDataFromFile[0],
+          yvals: chartDataFromFile[1],
+          xmin: sliderMinxMaxValues[0],
+          xmax: sliderMinxMaxValues[1],
+          chartTitle,
+          legnedText: chartType,
+          chartType,
+          useRobust: chartDataUseRobust
+        };
+        const plotData = new SandboxGeneratePlotData(plotInfo);
+        const xRange = {
+          xmin: sliderValues[0],
+          xmax: sliderValues[1]
+        };
+        plotData.setXRange(xRange);
+        setChartData(plotData.getData());
+        setChartLayout(plotData.getLayout());
+      })
+      .catch((error) => {
+        console.error(`SanboxControls.updatePlotData() error=${error}`); // eslint-disable-line no-console
+      });
+  };
 
   // handle the robust change
   const handleRobustChange = (newValue) => {
-    newValue ? setSliderMinxMaxValues([1950, 2018]) : setSliderMinxMaxValues([1900, 2018]);
+    if (newValue) {
+      setSliderMinxMaxValues([1950, 2018]);
+    } else {
+      setSliderMinxMaxValues([1900, 2018]);
+    }
     setUseRobust(newValue);
     setUseRobustClicked(true);
-    getChartData(region.toLowerCase(), location, climatevariable, newValue);
+    getChartData({
+      chartDataRegion: region.toLowerCase(),
+      chartDataLocation: location,
+      chartDataClimatevariable: climatevariable,
+      chartDataUseRobust: newValue
+    });
   };
 
   // handle seting robust data clicked to false, this allows slider
   //  to reset values to min max after robust data checkbox is clicked.
   const setUseRobustClickedFalse = (newValue) => {
     setUseRobustClicked(false);
-  }
+    return null;
+  };
   // handle the slider change
   const handleSliderChange = (newValue) => {
     setsliderValues(newValue);
-    getChartData(region.toLowerCase(), location, climatevariable, useRobust);
+    getChartData({
+      chartDataRegion: region.toLowerCase(),
+      chartDataLocation: location,
+      chartDataClimatevariable: climatevariable,
+      chartDataUseRobust: useRobust
+    });
+    return null;
   };
 
   // handle state change for region
@@ -257,7 +369,8 @@ export default function SandboxControls() {
         setLocationItems(locationRegionalItems);
         setLocation('');
 
-        // Regional data set the location pulldown to disabled since there are no locations by changing the state
+        // Regional data set the location pulldown to disabled
+        // since there are no locations by changing the state
         setlocationDisabled(false);
 
         // Regional data set the climatevariable pulldown to NOT disabled by changing the state
@@ -268,7 +381,8 @@ export default function SandboxControls() {
         setLocationItems(locationStateItems);
         setLocation('');
 
-        // Regional data set the location pulldown to disabled since there are no locations by changing the state
+        // Regional data set the location pulldown to disabled
+        // since there are no locations by changing the state
         setlocationDisabled(false);
 
         // Regional data set the climatevariable pulldown to NOT disabled by changing the state
@@ -281,92 +395,61 @@ export default function SandboxControls() {
         setClimatevariableDisabled(true);
         break;
     }
-    getChartData(newValue, location, climatevariable, useRobust);
+    getChartData({
+      chartDataRegion: newValue,
+      chartDataLocation: location,
+      chartDataClimatevariable: climatevariable,
+      chartDataUseRobust: useRobust
+    });
   };
 
   // handle state change for location within the region
   const handleLocationChange = (newValue) => {
     setLocation(newValue);
-    getChartData(region.toLowerCase(), newValue, climatevariable, useRobust);
+    getChartData({
+      chartDataRegion: region.toLowerCase(),
+      chartDataLocation: newValue,
+      chartDataClimatevariable: climatevariable,
+      chartDataUseRobust: useRobust
+    });
   };
 
   // handle state change for climate variable
   const handleClimatevariableChange = (newValue) => {
     setClimatevariable(newValue);
-    getChartData(region.toLowerCase(), location, newValue, useRobust);
+    getChartData({
+      chartDataRegion: region.toLowerCase(),
+      chartDataLocation: location,
+      chartDataClimatevariable: newValue,
+      chartDataUseRobust: useRobust
+    });
+    return null;
   };
 
-  const getClimatevariableType = (climatevariable) => {
-    return climatevariable.includes('inch') ? 'Precipitation' : 'Temperature';
-  }
-
-  const replaceClimatevariableType = (climatevariable) => {
+  const replaceClimatevariableType = (replaceClimatevariable) => {
     const sandboxHumanReadable = new SandboxHumanReadable();
-    return sandboxHumanReadable.getClimateVariablePullDownText(climatevariable);
-  }
-
-  const replaceLocationAbbreviation = (location) => {
-    const sandboxHumanReadable = new SandboxHumanReadable();
-    return sandboxHumanReadable.getLocationDownText(location);
-  }
-
-  // get chart data from current state = which should include
-  const getChartData = (region, location, climatevariable, useRobust) => {
-    const data = climateDataFilesJSON.filter(json => json.robust === useRobust && json.type === climatevariable);
-    const dataFile = data.map((json) => json.name);
-
-    axios.get(`${window.location.href}/public/TSU_Sandbox_Datafiles/${dataFile}`)
-      .then( (response) =>{
-          const chartDataFromFile = parseNCAFile(response.data, region, location);
-          const chartType = getClimatevariableType(climatevariable);
-          const sandboxHumanReadable = new SandboxHumanReadable(climatevariable);
-          const titleLocation = replaceLocationAbbreviation(location);
-          const chartTitle = sandboxHumanReadable.getChartTitle({climatevariable, region, titleLocation});
-          const plotInfo = {
-            xvals: chartDataFromFile[0],
-            yvals: chartDataFromFile[1],
-            xmin: sliderMinxMaxValues[0],
-            xmax: sliderMinxMaxValues[1],
-            chartTitle: chartTitle,
-            legnedText: chartType,
-            chartType: chartType,
-            useRobust: useRobust,
-          };
-
-          const plotData = new SandboxGeneratePlotData(plotInfo);
-          const xRange = {
-            xmin: sliderValues[0],
-            xmax: sliderValues[1]
-          }
-          plotData.setXRange(xRange);
-          setChartData(plotData.getData());
-          setChartLayout(plotData.getLayout());
-      })
-      .catch( (error) => {
-        console.error(`SanboxControls.updatePlotData() error=${error}`);
-      })
+    return sandboxHumanReadable.getClimateVariablePullDownText(replaceClimatevariable);
   };
 
   return (
     <div className={classes.sandboxRoot}>
-      <Grid container spacing={0} justify="flex-start" direction={"row"} className={classes.sandboxRoot}>
-        <Grid item xs={12} width="100%" className={classes.selectionAreaHolder} >
-          <Grid container spacing={0} justify="flex-start" direction={"row"} className={classes.selectionArea}>
-            <Grid item xs={12} className={classes.header} width="100%" >
-              <Box fontWeight="fontWeightBold" m={1} p={1} display="flex" flexWrap="nowrap" justifyContent="flex-start">
-                <Box px={1} fontSize="h4.fontSize" >
-                  <InsertChartOutlinedIcon fontSize="large" className={classes.headerIcon}  />
+      <Grid container spacing={0} justify='flex-start' direction={'row'} className={classes.sandboxRoot}>
+        <Grid item xs={12} width='100%' className={classes.selectionAreaHolder} >
+          <Grid container spacing={0} justify='flex-start' direction={'row'} className={classes.selectionArea}>
+            <Grid item xs={12} className={classes.sandboxHeader} width='100%' >
+              <Box fontWeight='fontWeightBold' m={1} p={1} display='flex' flexWrap='nowrap' justifyContent='flex-start'>
+                <Box px={1} fontSize='h4.fontSize' >
+                  <InsertChartOutlinedIcon fontSize='large' className={classes.sandboxHeaderIcon} />
                 </Box>
-                <Box px={1} fontSize="h5.fontSize" >NCA Sandbox - Climate Charts</Box>
+                <Box px={1} fontSize='h5.fontSize' >NCA Sandbox - Climate Charts</Box>
               </Box>
             </Grid>
 
-
             <Grid item xs={12} sm={3} className={classes.varriableSelectors}>
-              <Box fontWeight="fontWeightBold" m={1} display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="flex-start">
+              <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
                   items={RegionItems}
-                  name={"Select a Region"}
+                  controlName={'Select a Region'}
                   onChange={handleRegionChange}
                   value={region}
                   disabled={false}
@@ -375,10 +458,10 @@ export default function SandboxControls() {
               </Box>
             </Grid>
             <Grid item xs={12} sm={3} className={classes.varriableSelectors}>
-              <Box fontWeight="fontWeightBold" m={1} display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="flex-start">
+              <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
                   items={locationItems}
-                  name={"Select a Location"}
+                  controlName={'Select a Location'}
                   onChange={handleLocationChange}
                   value={location}
                   disabled={locationDisabled}
@@ -388,10 +471,10 @@ export default function SandboxControls() {
               </Box>
             </Grid>
             <Grid item xs={12} sm={3} className={classes.varriableSelectors} >
-              <Box fontWeight="fontWeightBold" m={1} display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="flex-start">
+              <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
                   items={climatevariableItems}
-                  name={"Climate Variable"}
+                  controlName={'Climate Variable'}
                   onChange={handleClimatevariableChange}
                   value={climatevariable}
                   disabled={climatevariableDisabled}
@@ -400,7 +483,7 @@ export default function SandboxControls() {
               </Box>
             </Grid>
             <Grid item xs={12} sm={3} className={classes.varriableSelectors}>
-              <Box fontWeight="fontWeightBold" ml={2}  display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="flex-start" className={classes.checkBox}>
+              <Box fontWeight='fontWeightBold' ml={2} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start' className={classes.checkBox}>
                 <SandboxDataCheck
                   useRobust={useRobust}
                   onChange={handleRobustChange}
@@ -408,14 +491,14 @@ export default function SandboxControls() {
               </Box>
             </Grid>
 
-            <Grid item xs={12}  className={classes.yearSlider} >
-              <Box fontWeight="fontWeightBold" m={1} display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="center" >
+            <Grid item xs={12} className={classes.yearSlider} >
+              <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='center' >
                 <SandboxSlider
                   useRobust={useRobust}
                   useRobustClicked={useRobustClicked}
-                  setUseRobustClicked={setUseRobustClickedFalse}
+                  setUseRobustClickedFalse={setUseRobustClickedFalse}
                   sliderMinxMaxValues={sliderMinxMaxValues}
-                  values={sliderValues}
+                  sliderValues={sliderValues}
                   onChange={handleSliderChange}
                   />
               </Box>
@@ -423,8 +506,8 @@ export default function SandboxControls() {
           </Grid>
         </Grid>
 
-        <Grid item xs={12} display="flex"  flex={1} className={classes.chartRegion}>
-          <Box display="flex" mt={3} flexDirection="row" justifyContent="center" flex={1} flexGrow={3} height="90%" >
+        <Grid item xs={12} display='flex' flex={1} className={classes.chartRegion}>
+          <Box display='flex' mt={3} flexDirection='row' justifyContent='center' flex={1} flexGrow={3} height='90%' >
             <SandboxPlotRegion
               plotlyData={chartData}
               plotlyLayout={chartLayout}
@@ -437,37 +520,9 @@ export default function SandboxControls() {
   );
 }
 
-const parseNCAFile = (data, type, region) => {
-  let xvals = [];
-  let yvals = [];
-  let lines = data.split(/\r?\n/);
-  let headers = lines[0].split(',');
-  for(let h=0;h<headers.length;h++){
-    headers[h] = headers[h].trim();
-  }
-  let col_index = undefined;
-
-  if(type === "national"){
-    col_index = 1;
-  }else if(type === "regional" || type === "state"){
-    for(let h=1;h<headers.length;h+=2){
-      if(headers[h] === region){
-        col_index = h;
-        break;
-      }
-    }
-  }
-
-  for(let i=1;i<lines.length;i++){
-    let elements = lines[i].split(',');
-    if(elements.length <= 1){
-      break;
-    }
-    let xval = parseInt(elements[0]);
-    let yval = parseFloat(elements[col_index]);
-    xvals.push(xval);
-    yvals.push(yval);
-  }
-
-  return [xvals, yvals];
-}
+SandboxControls.propTypes = {
+  chartDataRegion: PropTypes.string,
+  chartDataLocation: PropTypes.string,
+  chartDataClimatevariable: PropTypes.string,
+  chartDataUseRobust: PropTypes.bool
+};

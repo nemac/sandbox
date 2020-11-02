@@ -1,12 +1,14 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 
+export default function SandboxCheckboxLabels(props) {
+  const { useRobust } = props;
+  const { onChange } = props;
 
-export default function CheckboxLabels(props) {
-  const useRobust = props.useRobust;
   const handleChange = (event) => {
-    props.onChange(event.target.checked);
+    onChange(event.target.checked);
   };
 
   return (
@@ -22,4 +24,9 @@ export default function CheckboxLabels(props) {
         label="Use more robust data"
       />
   );
+}
+
+SandboxCheckboxLabels.propTypes = {
+  useRobust: PropTypes.bool,
+  onChange: PropTypes.func
 };
