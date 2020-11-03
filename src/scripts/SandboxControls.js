@@ -173,7 +173,7 @@ export default function SandboxControls() {
   const [climatevariableDisabled, setClimatevariableDisabled] = useState(true);
 
   const loadNCAdata = async (loadRegion, isRobust) => {
-    await axios.get(`${window.location.href}/public/TSU_Sandbox_Datafiles/index.json`)
+    await axios.get(`${window.location.href}/sandboxdata/TSU_Sandbox_Datafiles/index.json`)
       .then((response) => {
         // handle success
         let data = {};
@@ -275,7 +275,7 @@ export default function SandboxControls() {
     });
     const dataFile = data.map((json) => json.name);
 
-    axios.get(`${window.location.href}/public/TSU_Sandbox_Datafiles/${dataFile}`)
+    axios.get(`${window.location.href}/sandboxdata/TSU_Sandbox_Datafiles/${dataFile}`)
       .then((response) => {
         const chartDataFromFile = parseNCAFile(response.data, chartDataRegion, chartDataLocation);
         const chartType = getClimatevariableType(chartDataClimatevariable);
