@@ -1,12 +1,13 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:300,400,600,700);
-$roboto:  Roboto, Helvetica, 'Helvetica Neue', Arial, sans-serif; // default should be everywhere
+$roboto:  Roboto, Helvetica, 'Helvetica Neue', Arial, sans-serif;
+$fontColor: #5C5C5C;
 
-// general page styles
 html, body {
-    height: 100%;
-    font-family: $roboto;
+  font-family: $roboto;
 }
 
-a:hover {
-  text-decoration: none !important;
+.sandboxHeader {
+  height: 60px;
+  max-height: 60px;
+  color: $fontColor;
 }

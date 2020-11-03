@@ -11,6 +11,7 @@ import SandboxHumanReadable from './SandboxHumanReadable';
 import SandboxSlider from './SandboxSlider';
 import SandboxSelector from './SandboxSelector';
 import SandboxDataCheck from './SandboxDataCheck';
+import '../css/Sandbox.scss';
 
 const axios = require('axios');
 
@@ -432,7 +433,7 @@ export default function SandboxControls() {
       <Grid container spacing={0} justify='flex-start' direction={'row'} className={classes.sandboxRoot}>
         <Grid item xs={12} width='100%' className={classes.sandboxSelectionAreaHolder} >
           <Grid container spacing={0} justify='flex-start' direction={'row'} className={classes.sandboxSelectionArea}>
-            <Grid item xs={12} className={classes.sandboxHeader} width='100%' >
+            <Grid item xs={12} className={'sandboxHeader'} width='100%' >
               <Box fontWeight='fontWeightBold' m={1} p={1} display='flex' flexWrap='nowrap' justifyContent='flex-start'>
                 <Box px={1} fontSize='h4.fontSize' >
                   <InsertChartOutlinedIcon fontSize='large' className={classes.sandboxHeaderIcon} />
