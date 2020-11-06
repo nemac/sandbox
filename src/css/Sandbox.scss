@@ -7,10 +7,12 @@ html, body {
 }
 
 .sandbox-holderofall, .root {
+  font-family: $roboto;
   height: calc(100vh - 10px);
 }
 
 .sandboxHeader {
+  font-family: $roboto;
   height: 50px;
   max-height: 50px;
   color: $fontColor;
