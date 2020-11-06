@@ -11,9 +11,31 @@ html, body {
   height: calc(100vh - 10px);
 }
 
-.sandboxHeader {
+.sandbox-header {
   font-family: $roboto;
   height: 50px;
   max-height: 50px;
   color: $fontColor;
 }
+
+.sandbox-header-icon {
+  display: inline-flex !important;
+  margin-top: -3px;
+}
+
+.sandbox-varriable-selectors {
+  height: 75px;
+  max-height: 75px;
+}
+
+.sandbox-check-box {
+  height: 75px;
+  max-height: 75px;
+}
+
+.sandbox-year-slider {
+  height: 95px;
+  max-height: 95px;
+}
+
+

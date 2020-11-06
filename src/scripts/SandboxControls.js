@@ -29,27 +29,6 @@ const useStyles = makeStyles((theme) => ({
       overflow: 'scroll'
     }
   },
-  sandboxHeader: {
-    height: '60px',
-    maxHeight: '60px',
-    color: fontColor
-  },
-  sandboxHeaderIcon: {
-    display: 'inline-flex',
-    marginTop: '-3px'
-  },
-  sandboxVarriableSelectors: {
-    height: '75px',
-    maxHeight: '75px'
-  },
-  sandboxCheckBox: {
-    height: '75px',
-    maxHeight: '75px'
-  },
-  sandboxYearSlider: {
-    height: '95px',
-    maxHeight: '95px'
-  },
   sandboxSelectionArea: {
     height: '200px',
     maxHeight: '200px',
@@ -440,16 +419,16 @@ export default function SandboxControls() {
       <Grid container spacing={0} justify='flex-start' direction={'row'} className={classes.sandboxRoot}>
         <Grid item xs={12} width='100%' className={classes.sandboxSelectionAreaHolder} >
           <Grid container spacing={0} justify='flex-start' direction={'row'} className={classes.sandboxSelectionArea}>
-            <Grid item xs={12} className={'sandboxHeader'} width='100%' >
+            <Grid item xs={12} className={'sandbox-header'} width='100%' >
               <Box fontWeight='fontWeightBold' mt={1} p={0} display='flex' flexWrap='nowrap' justifyContent='flex-start'>
                 <Box px={1} fontSize='h4.fontSize' >
-                  <InsertChartOutlinedIcon fontSize='large' className={classes.sandboxHeaderIcon} />
+                  <InsertChartOutlinedIcon fontSize='large' className={'sandbox-header-icon'} />
                 </Box>
                 <Box px={1} fontSize='h5.fontSize' >NCA Sandbox - Climate Charts</Box>
               </Box>
             </Grid>
 
-            <Grid item xs={12} sm={3} className={classes.sandboxVarriableSelectors}>
+            <Grid item xs={12} sm={3} className={'sandbox-varriable-selectors'}>
               <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
                   items={RegionItems}
@@ -461,7 +440,7 @@ export default function SandboxControls() {
                   />
               </Box>
             </Grid>
-            <Grid item xs={12} sm={3} className={classes.sandboxVarriableSelectors}>
+            <Grid item xs={12} sm={3} className={'sandbox-varriable-selectors'}>
               <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
                   items={locationItems}
@@ -474,7 +453,7 @@ export default function SandboxControls() {
                   />
               </Box>
             </Grid>
-            <Grid item xs={12} sm={3} className={classes.sandboxVarriableSelectors} >
+            <Grid item xs={12} sm={3} className={'sandbox-varriable-selectors'} >
               <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
                   items={climatevariableItems}
@@ -487,8 +466,8 @@ export default function SandboxControls() {
               </Box>
             </Grid>
 
-            <Grid item xs={12} sm={3} className={classes.varriableSelectors}>
-              <Box fontWeight='fontWeightBold' ml={2} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start' className={classes.sandboxCheckBox}>
+            <Grid item xs={12} sm={3} className={'sandbox-varriable-selectors'}>
+              <Box fontWeight='fontWeightBold' ml={2} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start' className={'sandbox-check-box'}>
                 <SandboxDataCheck
                   useRobust={useRobust}
                   onChange={handleRobustChange}
@@ -496,7 +475,7 @@ export default function SandboxControls() {
               </Box>
             </Grid>
 
-            <Grid item xs={12} className={classes.sandboxYearSlider} >
+            <Grid item xs={12} className={'sandbox-year-slider'} >
               <Box fontWeight='fontWeightBold' mx={2} mb={1} className="SliderBox" display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='center' >
                 <SandboxSlider
                   useRobust={useRobust}
