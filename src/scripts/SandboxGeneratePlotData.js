@@ -197,8 +197,8 @@ class SandboxGeneratePlotData {
         autosize: true,
         orientation: 'h',
         xanchor: 'center',
-        x: 0.5,
-        y: 1.1,
+        x: 0.85,
+        y: 1.05,
         font: {
           family: this.font,
           size: this.fontSizeLabels
