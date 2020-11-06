@@ -5,7 +5,7 @@ import SandboxControls from './SandboxControls';
 
 function App() {
   return (
-    <div>
+    <div className="sandbox-holderofall">
       <SandboxControls />
     </div>
   );

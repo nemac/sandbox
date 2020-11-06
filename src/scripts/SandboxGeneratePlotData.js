@@ -1,5 +1,19 @@
 class SandboxGeneratePlotData {
   constructor(props) {
+    // style guide driven colors, fonts, ticks may need expanding
+    //  https://docs.google.com/document/d/1_zO39hdlGL9uY0Y0Vf57ncYNYXuACUAIM0fKCUo3spc/edit?ts=5fa547dd#
+    this.blue = '4, 90, 141';
+    this.red = '189, 0, 38';
+    this.green = '127, 188, 65';
+    this.brown = '153, 52, 4';
+    this.font = 'Arial';
+    this.zeroLineColor = '#000000';
+    this.zerolinewidth = 1;
+    this.gridColor = '#BFBFBF';
+    this.gridWidth = 1;
+    this.fontSizePrimary = 14;
+    this.fontSizeLabels = 12;
+    this.fontSizeLabelsSecondary = 10;
     this.xmin = props.xmin;
     this.xmax = props.xmax;
     this.xvals = props.xvals;
@@ -8,10 +22,10 @@ class SandboxGeneratePlotData {
     this.chartTitle = props.chartTitle;
     this.legnedText = props.legnedText;
     this.chartType = props.chartType;
-    this.barColor = this.chartType === 'Precipitation' ? '61, 133, 198' : '88, 179, 171';
+    this.barColor = this.chartType === 'Precipitation' ? this.blue : this.brown;
     this.periodGroups = props.periodGroups ? props.periodGroups : 5;
     this.useRobust = props.useRobust;
-    this.textAngle = this.useRobust ? 0 : 90;
+    this.textAngle = this.useRobust ? 0 : 0;
   }
 
   setXRange(props) {
@@ -157,7 +171,7 @@ class SandboxGeneratePlotData {
     const periodGroups = this.periodGroups;
     return this.xvals.map((value) => {
       const plus = value + periodGroups;
-      const tickText = `${value} - ${plus.toString().slice(-2)}`;
+      const tickText = `${value}–${plus.toString().slice(-2)}`;
       return tickText;
     });
   }
@@ -184,25 +198,39 @@ class SandboxGeneratePlotData {
         orientation: 'h',
         xanchor: 'center',
         x: 0.5,
-        y: -0.3
+        y: 1.1,
+        font: {
+          family: this.font,
+          size: this.fontSizeLabels
+        }
       },
       title: {
         text: this.chartTitle,
         font: {
-          family: 'Roboto',
-          size: 20
+          family: this.font,
+          size: this.fontSizePrimary
         },
         x: 0.5
       },
       xaxis: {
         type: 'linear',
-        title: `${this.periodGroups}-year period`,
+        title: {
+          text: `${this.periodGroups}–year period`,
+          font: {
+            family: this.font,
+            size: this.fontSizeLabels
+          }
+        },
         dtick: this.periodGroups,
         range: [this.xmin, this.xmax],
+        zeroline: true,
         showline: false,
+        showgrid: false,
+        zerolinecolor: this.zeroLineColor,
+        zerolinewidth: this.zerolinewidth,
         tickfont: {
-          family: 'Roboto',
-          size: 12
+          family: this.font,
+          size: this.fontSizeLabelsSecondary
         },
         tickmode: 'array',
         nticks: 5,
@@ -225,15 +253,25 @@ class SandboxGeneratePlotData {
       yaxis: {
         rangemode: 'tozero',
         type: 'linear',
-        title: 'Days',
+        title: {
+          text: 'Days',
+          font: {
+            family: this.font,
+            size: this.fontSizeLabels
+          }
+        },
+        zerolinecolor: this.zeroLineColor,
+        zerolinewidth: this.zerolinewidth,
+        gridcolor: this.gridColor,
+        gridwidth: this.gridwidth,
         range: [0, 2],
         ticks: '',
         tickformat: ',d',
         autorange: true,
         showspikes: false,
         tickfont: {
-          family: 'Roboto',
-          size: 12
+          family: this.font,
+          size: this.fontSizeLabels
         }
       },
       bargap: 0.28,

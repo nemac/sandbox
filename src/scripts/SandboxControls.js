@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   sandboxRoot: {
     backgroundColor: white,
     color: fontColor,
-    height: '100vh',
+    height: 'calc(100vh - 10px)',
     [theme.breakpoints.down('xs')]: {
       overflow: 'scroll'
     }
@@ -39,20 +39,20 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '-3px'
   },
   sandboxVarriableSelectors: {
-    height: '90px',
-    maxHeight: '90px'
+    height: '75px',
+    maxHeight: '75px'
   },
   sandboxCheckBox: {
-    height: '90px',
-    maxHeight: '90px'
+    height: '75px',
+    maxHeight: '75px'
   },
   sandboxYearSlider: {
-    height: '100px',
-    maxHeight: '100px'
+    height: '95px',
+    maxHeight: '95px'
   },
   sandboxSelectionArea: {
-    height: '250px',
-    maxHeight: '250px',
+    height: '200px',
+    maxHeight: '200px',
     backgroundColor: pullDownBackground,
     border: `1px solid ${darkGreay}`,
     borderRadius: '4px',
@@ -69,7 +69,14 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   sandboxChartRegion: {
-    height: 'calc(100% - 250px)',
+    height: 'calc(100% - 225px)',
+    maxHeight: 'calc(100% - 225px)',
+    [theme.breakpoints.down('xs')]: {
+      height: '550px'
+    }
+  },
+  sandboxChartRegionBox: {
+    height: 'calc(100% - 10px)',
     [theme.breakpoints.down('xs')]: {
       height: '550px'
     }
@@ -434,7 +441,7 @@ export default function SandboxControls() {
         <Grid item xs={12} width='100%' className={classes.sandboxSelectionAreaHolder} >
           <Grid container spacing={0} justify='flex-start' direction={'row'} className={classes.sandboxSelectionArea}>
             <Grid item xs={12} className={'sandboxHeader'} width='100%' >
-              <Box fontWeight='fontWeightBold' m={1} p={1} display='flex' flexWrap='nowrap' justifyContent='flex-start'>
+              <Box fontWeight='fontWeightBold' mt={1} p={0} display='flex' flexWrap='nowrap' justifyContent='flex-start'>
                 <Box px={1} fontSize='h4.fontSize' >
                   <InsertChartOutlinedIcon fontSize='large' className={classes.sandboxHeaderIcon} />
                 </Box>
@@ -479,6 +486,7 @@ export default function SandboxControls() {
                   />
               </Box>
             </Grid>
+
             <Grid item xs={12} sm={3} className={classes.varriableSelectors}>
               <Box fontWeight='fontWeightBold' ml={2} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start' className={classes.sandboxCheckBox}>
                 <SandboxDataCheck
@@ -489,7 +497,7 @@ export default function SandboxControls() {
             </Grid>
 
             <Grid item xs={12} className={classes.sandboxYearSlider} >
-              <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='center' >
+              <Box fontWeight='fontWeightBold' mx={2} mb={1} className="SliderBox" display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='center' >
                 <SandboxSlider
                   useRobust={useRobust}
                   useRobustClicked={useRobustClicked}
@@ -504,7 +512,7 @@ export default function SandboxControls() {
         </Grid>
 
         <Grid item xs={12} display='flex' flex={1} className={classes.sandboxChartRegion}>
-          <Box display='flex' mt={3} flexDirection='row' justifyContent='center' flex={1} flexGrow={3} height='90%' >
+          <Box display='flex' flexDirection='row' m={1} justifyContent='center' flex={1} flexGrow={3} className={classes.sandboxChartRegionBox}>
             <SandboxPlotRegion
               plotlyData={chartData}
               plotlyLayout={chartLayout}
