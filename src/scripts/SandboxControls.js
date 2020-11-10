@@ -331,7 +331,6 @@ export default function SandboxControls() {
 
     // get the data file name
     const dataFile = data.map((json) => json.name);
-
     // define the data file location should always be the current url and public folder
     const path = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
     axios.get(`${path}/sandboxdata/TSU_Sandbox_Datafiles/${dataFile}`)
@@ -457,7 +456,7 @@ export default function SandboxControls() {
 
     // make sure user robust clicked is now false
     setUseRobustClicked(false);
-  }, [useRobust]);
+  }, [region, useRobust]);
 
   // use the react effect to control when loading state from URL
   // this should only happen once during startup.
@@ -488,7 +487,6 @@ export default function SandboxControls() {
       setSliderMinxMaxValues(defaultRanges);
       changedSliderValues = defaultRanges;
     }
-
     // update the chart data to refelect change in robust
     // this will reset the slider values to avoid errors with ranges
     getChartData({

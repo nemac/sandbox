@@ -40,7 +40,6 @@ class SandboxPlotRegion extends React.Component {
       copiedLayout.width = el.parentNode.getBoundingClientRect().width;
       copiedLayout.height = el.getBoundingClientRect().height;
     }
-
     return (
       <div className="PlotRegionDiv"
         {...{
