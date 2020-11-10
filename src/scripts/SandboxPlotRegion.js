@@ -33,7 +33,7 @@ class SandboxPlotRegion extends React.Component {
     const { plotlyLayout } = this.props;
     const copiedLayout = { ...plotlyLayout };
     const { plotlyData } = this.props;
-    const config = { ...{ responsive: true } };
+    const config = { ...{ responsive: true, displayModeBar: false } };
     const elREF = this.responsiveChartRef.current;
     if (elREF) {
       const el = elREF;

@@ -4,6 +4,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import InsertChartOutlinedIcon from '@material-ui/icons/InsertChartOutlined';
+import Button from '@material-ui/core/Button';
+import SaveIcon from '@material-ui/icons/Save';
 
 import SandboxPlotRegion from './SandboxPlotRegion';
 import SandboxGeneratePlotData from './SandboxGeneratePlotData';
@@ -59,6 +61,26 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('xs')]: {
       height: '550px'
     }
+  },
+  extendedIcon: {
+    marginRight: theme.spacing(1)
+  },
+  fabroot: {
+    position: 'absolute',
+    bottom: 'calc(100% - 300px)',
+    right: theme.spacing(2),
+    zIndex: 1000,
+    [theme.breakpoints.down('xs')]: {
+      position: 'relative',
+      bottom: theme.spacing(1),
+      left: theme.spacing(2),
+      zIndex: 1000
+    }
+  },
+  fabsvg: {
+    position: 'relative',
+    margin: theme.spacing(1),
+    zIndex: 1000
   }
 }));
 
@@ -614,6 +636,154 @@ export default function SandboxControls() {
     return sandboxHumanReadable.getClimateVariablePullDownText(replaceClimatevariable);
   };
 
+  // hack to export svg, not using using pure JS
+  const convertToOneSvg = (svgSelector) => {
+    // fiond and covnert html all plotly chart nodes
+    // (plotly puts legends and the chart in seperate nodes)
+    // to an JS array
+    const svgs = Array.from(document.querySelectorAll(svgSelector));
+    const mergedDiv = document.createElement('div');
+    mergedDiv.setAttribute('id', 'merged-div');
+
+    // create a new svg element
+    const mergedSVG = document.createElement('svg');
+
+    // set new svg element getAttributes to match the first plotly svg element
+    // this will ensure width/height style and all the other settings match in the export
+    mergedSVG.setAttribute('xmlns', svgs[0].getAttribute('xmlns'));
+    mergedSVG.setAttribute('xmlns:xlink', svgs[0].getAttribute('xmlns:xlink'));
+    mergedSVG.setAttribute('width', svgs[0].getAttribute('width'));
+    mergedSVG.setAttribute('height', svgs[0].getAttribute('height'));
+    mergedSVG.setAttribute('style', svgs[0].getAttribute('style'));
+
+    // append the svg to the div - this is needed to export the svg tet properly
+    mergedDiv.appendChild(mergedSVG);
+
+    // iterate all the plotly nodes and merge them into the same svg node
+    // this forces all the svg into one dom element to export correctly
+    svgs.forEach((svgnode) => {
+      const content = Array.from(svgnode.childNodes);
+      content.forEach((svgele) => {
+        const node = svgele.cloneNode(true);
+        mergedSVG.appendChild(node);
+      });
+    });
+
+    // create the base64 data text so the svg is written correctly
+    const base64doc = btoa(unescape(encodeURIComponent(mergedSVG.outerHTML)));
+
+    // remove the added dom element used to create the svg base64 data
+    mergedDiv.remove();
+    return base64doc;
+  };
+
+  // creates a download file name with current date and time and all the
+  // chart settings from the ui
+  const getDownloadName = () => {
+    // get curent data time
+    const date = new Date();
+
+    // get human readable versons of text
+    const sandboxHumanReadable = new SandboxHumanReadable('');
+    const chartTitle = sandboxHumanReadable.getChartTitle({
+      climatevariable,
+      region,
+      titleLocation: location
+    });
+
+    // format file name
+    return `${chartTitle}-${date.toString()}`;
+  };
+
+  // take blob data and add it to a href, intiate a click so the file downloads
+  const donwloadFile = (data, type = 'svg') => {
+    // create a new a element
+    const a = document.createElement('a');
+
+    // add click handler
+    const e = new MouseEvent('click');
+
+    // create download name based on curent settings
+    a.download = `${getDownloadName()}.${type}`;
+
+    if (type === 'svg') {
+      // add data to href so its "on the fly"
+      const b64start = 'data:image/svg+xml;base64,';
+      a.href = `${b64start}${data}`;
+    } else {
+      a.href = data;
+    }
+
+    // force click
+    a.dispatchEvent(e);
+
+    // Remove a element
+    a.remove();
+    return null;
+  };
+
+  // convert svg base64 data to png
+  const convertToPng = (svgSelector) => {
+    // fiond and covnert html all plotly chart nodes
+    // (plotly puts legends and the chart in seperate nodes)
+    // to an JS array
+    const svgs = Array.from(document.querySelectorAll(svgSelector));
+    const width = svgs[0].getAttribute('width');
+    const height = svgs[0].getAttribute('height');
+    const mergedDiv = document.createElement('div');
+    mergedDiv.setAttribute('id', 'merged-div');
+
+    // create a new svg element
+    const mergedSVG = document.createElement('svg');
+
+    // set new svg element getAttributes to match the first plotly svg element
+    // this will ensure width/height style and all the other settings match in the export
+    mergedSVG.setAttribute('xmlns', svgs[0].getAttribute('xmlns'));
+    mergedSVG.setAttribute('xmlns:xlink', svgs[0].getAttribute('xmlns:xlink'));
+    mergedSVG.setAttribute('width', width);
+    mergedSVG.setAttribute('height', height);
+    mergedSVG.setAttribute('style', svgs[0].getAttribute('style'));
+    // append the svg to the div - this is needed to export the svg tet properly
+    mergedDiv.appendChild(mergedSVG);
+
+    // iterate all the plotly nodes and merge them into the same svg node
+    // this forces all the svg into one dom element to export correctly
+    svgs.forEach((svgnode) => {
+      const content = Array.from(svgnode.childNodes);
+      content.forEach((svgele) => {
+        const node = svgele.cloneNode(true);
+        mergedSVG.appendChild(node);
+      });
+    });
+
+    const blob = new Blob([mergedSVG.outerHTML], { type: 'image/svg+xml;charset=utf-8' });
+    const URL = window.URL || window.webkitURL || window;
+    const blobURL = URL.createObjectURL(blob);
+    const image = new Image();
+
+    image.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const context = canvas.getContext('2d');
+      context.drawImage(image, 0, 0, width, height);
+      const png = canvas.toDataURL();
+      donwloadFile(png, 'png');
+    };
+    image.src = blobURL;
+  };
+
+  // handles downloads chart as SVG
+  const handleDownloadChartAsSVG = () => {
+    const base64doc = convertToOneSvg('.js-plotly-plot .main-svg');
+    donwloadFile(base64doc);
+  };
+
+  // handles downloads chart as SVG
+  const handleDownloadChartAsPNG = () => {
+    convertToPng('.js-plotly-plot .main-svg');
+  };
+
   return (
     <div className={classes.sandboxRoot}>
       <Grid container spacing={0} justify='flex-start' direction={'row'} className={classes.sandboxRoot}>
@@ -691,6 +861,14 @@ export default function SandboxControls() {
         </Grid>
 
         <Grid item xs={12} display='flex' flex={1} className={classes.sandboxChartRegion}>
+          <div className={classes.fabroot}>
+            <Button onClick={handleDownloadChartAsPNG} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveIcon />}>
+              .PNG
+            </Button>
+            <Button onClick={handleDownloadChartAsSVG} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveIcon />}>
+              .SVG
+            </Button>
+          </div>
           <Box display='flex' flexDirection='row' m={1} justifyContent='center' flex={1} flexGrow={3} className={classes.sandboxChartRegionBox}>
             <SandboxPlotRegion
               plotlyData={chartData}

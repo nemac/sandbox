@@ -193,6 +193,7 @@ class SandboxGeneratePlotData {
   getLayout() {
     return {
       showlegend: true,
+      displayModeBar: false,
       legend: {
         autosize: true,
         orientation: 'h',
