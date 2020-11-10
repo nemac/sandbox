@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import InsertChartOutlinedIcon from '@material-ui/icons/InsertChartOutlined';
+import Button from '@material-ui/core/Button';
 
 import SandboxPlotRegion from './SandboxPlotRegion';
 import SandboxGeneratePlotData from './SandboxGeneratePlotData';
@@ -614,6 +615,42 @@ export default function SandboxControls() {
     return sandboxHumanReadable.getClimateVariablePullDownText(replaceClimatevariable);
   };
 
+
+  // hack to export svg, not using plotly libray instead using JS
+  const downloadSVGAsText = () => {
+    const svgs = Array.prototype.slice.call(document.querySelectorAll('.js-plotly-plot .main-svg'));
+
+    const mergedDiv = document.createElement('div');
+    mergedDiv.setAttribute('id', 'merged-div');
+    const mergedSVG = document.createElement('svg');
+
+    mergedSVG.setAttribute('xmlns', svgs[0].getAttribute('xmlns'));
+    mergedSVG.setAttribute('xmlns:xlink', svgs[0].getAttribute('xmlns:xlink'));
+    mergedSVG.setAttribute('width', svgs[0].getAttribute('width'));
+    mergedSVG.setAttribute('height', svgs[0].getAttribute('height'));
+    mergedSVG.setAttribute('style',  svgs[0].getAttribute('style'));
+
+    mergedDiv.appendChild(mergedSVG);
+
+    const svgArray = svgs.forEach((svgnode) => {
+      const content = Array.from(svgnode.childNodes);
+      content.map((svgele) => {
+        const node = svgele.cloneNode(true);
+        mergedSVG.appendChild(node)
+      });
+    });
+
+    const base64doc = btoa(unescape(encodeURIComponent(mergedSVG.outerHTML)));
+    const a = document.createElement('a');
+    const e = new MouseEvent('click');
+    a.download = 'download.svg';
+    a.href = 'data:image/svg+xml;base64,' + base64doc;
+    a.dispatchEvent(e);
+    a.remove();
+    mergedSVG.remove();
+    mergedDiv.remove();
+  }
+
   return (
     <div className={classes.sandboxRoot}>
       <Grid container spacing={0} justify='flex-start' direction={'row'} className={classes.sandboxRoot}>
@@ -666,7 +703,7 @@ export default function SandboxControls() {
               </Box>
             </Grid>
 
-            <Grid item xs={12} sm={3} className={'sandbox-varriable-selectors'}>
+            <Grid item xs={12} sm={2} className={'sandbox-varriable-selectors'}>
               <Box fontWeight='fontWeightBold' ml={2} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start' className={'sandbox-check-box'}>
                 <SandboxDataCheck
                   useRobust={useRobust}
@@ -674,6 +711,16 @@ export default function SandboxControls() {
                   />
               </Box>
             </Grid>
+
+            <Grid item xs={12} sm={1} className={'sandbox-varriable-selectors'}>
+              <Box fontWeight='fontWeightBold' ml={2} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
+                <Button  onClick={downloadSVGAsText} variant="contained" color="default">
+                  Primary
+                </Button>
+              </Box>
+            </Grid>
+
+
 
             <Grid item xs={12} className={'sandbox-year-slider'} >
               <Box fontWeight='fontWeightBold' mx={2} mb={1} className="SliderBox" display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='center' >
