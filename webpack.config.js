@@ -6,9 +6,10 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 // Constant with our paths
 const paths = {
-    DIST: path.resolve(__dirname, 'dist'),
-    SRC: path.resolve(__dirname, 'src/scripts'),
-    SRC_HTML: path.resolve(__dirname, 'src/html')
+  DISTSCRIPTS: path.resolve(__dirname, 'dist/scripts'),
+  DIST: path.resolve(__dirname, 'dist'),
+  SRC: path.resolve(__dirname, 'src/scripts'),
+  SRC_HTML: path.resolve(__dirname, 'src/html')
 };
 
 module.exports = {
@@ -21,9 +22,9 @@ module.exports = {
        maxAssetSize: 100000
     },
     output: {
-        path: paths.DIST,
-        filename: '[name].app.bundle.js',
-        chunkFilename: '[id].js',
+        // path: paths.DISTSCRIPTS,
+        filename: 'scripts/[name].app.bundle.js',
+        chunkFilename: 'scripts/[id].js',
         publicPath: ''
     },
     optimization: {
@@ -40,50 +41,44 @@ module.exports = {
                 test: /\.js$/,
                 exclude: /node_modules/,
                 use: {
-                  loader: 'babel-loader'
-                }
+                  loader: 'babel-loader',
+                },
             },
             {
-                test: /\.css$/,
+                test: /\.s?css$/,
                 exclude: /node_modules/,
                 use: [
-                    { loader: 'style-loader' },
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            modules: {
-                                localIdentName: "[name]__[local]___[hash:base64:5]",
-                            },
-                            sourceMap: true
-                        }
-                     },
-                     {
-                        loader: 'postcss-loader',
-                        options: {
-                            postcssOptions: {
-                                plugins: [
-                                    [ 'autoprefixer', {}, ],
-                                ],
-                            },
-                        }
-                      }
+                  MiniCssExtractPlugin.loader,
+                  "css-loader",
+                  "sass-loader",
+                  "postcss-loader"
                 ]
-            },
-            {
-              test: /\.scss$/,
-              use: [ 'style-loader', MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader']
             }
+
         ]
     },
     plugins: [
         new MiniCssExtractPlugin({
-          filename: 'style.[contenthash].css',
+          filename:  path.join('css/style.[contenthash].css'),
+          chunkFilename: "[id].css"
         }),
         new HtmlWebpackPlugin({
           hash: true,
           template: path.join(paths.SRC_HTML, 'index.html'),
           filename: path.join(paths.DIST, 'index.html'),
-          inject: 'body'
+          inject: 'body',
+          minify: {
+            removeComments: true,
+            collapseWhitespace: true,
+            removeRedundantAttributes: true,
+            useShortDoctype: true,
+            removeEmptyAttributes: true,
+            removeStyleLinkTypeAttributes: true,
+            keepClosingSlash: true,
+            minifyJS: true,
+            minifyCSS: true,
+            minifyURLs: true,
+          },
         }),
        new webpack.HotModuleReplacementPlugin(),
     ]

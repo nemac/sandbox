@@ -38,11 +38,10 @@ class SandboxPlotRegion extends React.Component {
     if (elREF) {
       const el = elREF;
       copiedLayout.width = el.parentNode.getBoundingClientRect().width;
-      copiedLayout.height = el.getBoundingClientRect().height - 24;
+      copiedLayout.height = el.getBoundingClientRect().height;
     }
-
     return (
-      <div
+      <div className="PlotRegionDiv"
         {...{
           ref: this.responsiveChartRef
         }}

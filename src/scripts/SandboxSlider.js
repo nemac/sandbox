@@ -27,12 +27,9 @@ const muiTheme = createMuiTheme({
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120,
+    margin: theme.spacing(0),
+    minHeight: 95,
     color: '#5C5C5C'
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(2)
   }
 }));
 
@@ -92,10 +89,6 @@ export default function SandboxSlider(props) {
             End Year <br />{sliderValues[1]}
           </Box>
         </Grid>
-      </Grid>
-      <Grid container spacing={0} justify='flex-start' direction={'row'} >
-        <Box fontWeight='fontWeightRegular' pb={2} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='center' textAlign='center'>
-        </Box>
       </Grid>
     </FormControl>
   );
