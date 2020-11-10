@@ -337,9 +337,9 @@ export default class SandboxHumanReadable {
       (variables) => variables.value === props.climatevariable
     );
     let chartTitle = newValue[0].chartTitle;
-    if (props.region === 'national') chartTitle = `${chartTitle} (National)`;
-    if (props.region === 'regional') chartTitle = `${chartTitle} (NCA Region ${props.titleLocation})`;
-    if (props.region === 'state') chartTitle = `${chartTitle} (${props.titleLocation})`;
+    if (props.region === 'National') chartTitle = `${chartTitle} (National)`;
+    if (props.region === 'Regional') chartTitle = `${chartTitle} (NCA Region ${props.titleLocation})`;
+    if (props.region === 'State') chartTitle = `${chartTitle} (${props.titleLocation})`;
     return chartTitle;
   }
 

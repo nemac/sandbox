@@ -244,7 +244,7 @@ class SandboxGeneratePlotData {
         rangemode: 'tozero',
         spikethickness: 4,
         rangeslider: {
-          range: [1900, 2020],
+          range: [1900, this.xmax],
           yaxis: [0, 2],
           visible: false,
           autorange: true

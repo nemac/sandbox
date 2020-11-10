@@ -137,72 +137,136 @@ const locationStateItems = [
 ];
 
 export default function SandboxControls() {
-  const classes = useStyles();
-  const [sliderValues, setsliderValues] = useState([1900, 2018]);
-  const [sliderMinxMaxValues, setSliderMinxMaxValues] = useState([1900, 2018]);
+  // check url parameters frist for values
+  const urlParams = new URLSearchParams(window.location.search);
 
-  const [useRobust, setUseRobust] = useState(false);
+  // check url parameters for the region if none make it blank
+  const URLRegion = urlParams.get('region') ? urlParams.get('region') : '';
+
+  // check url parameters for a location if none make it blank
+  const URLLocation = urlParams.get('location') ? urlParams.get('location') : '';
+
+  // check url parameters for a climatevariable if none make it blank
+  const URLClimatevariable = urlParams.get('climatevariable') ? urlParams.get('climatevariable') : '';
+
+  // check url parameters for a using robust if none assume its false,
+  // but his is a string so we will need to convert it to a boolean
+  const RawURLUseRobust = urlParams.get('useRobust') ? urlParams.get('useRobust') : false;
+  const URLUseRobust = (RawURLUseRobust === 'true');
+
+  // check url parameters for the slider values if none make the default [1900, 2020]
+  // its possible the max will be re set by the data files.
+  let URLSliderValues = urlParams.get('sliderValues') ?
+    urlParams.get('sliderValues').split(',').map((value) => parseInt(value, 10)) : [1900, 2020];
+  let URLSliderMinxMaxValues = [1900, 2020];
+
+  // if usng robust the make the default min max are set, there can
+  // be issues if when the min is lower than the actual Minimum in the data
+  if (URLUseRobust) {
+    URLSliderMinxMaxValues = [1950, 2020];
+    if (URLSliderValues[0] < URLSliderMinxMaxValues[0]) {
+      URLSliderValues = [1950, 2020];
+    }
+  }
+
+  // set defaults for intial states of ui compnents
+  let URLClimatevariableDisabled = true;
+  let URLLocationDisabled = true;
+  let URLLocationItems = [''];
+
+  // the region determines some of the inital states, so if the URl contains a region
+  // make sure we set those states, also there diferent location values for different regions
+  switch (URLRegion) {
+    case 'National':
+      // National data set the climatevariable pulldown to NOT disabled by changing the state
+      URLClimatevariableDisabled = false;
+      break;
+    case 'Regional':
+      // National data set the climatevariable pulldown to NOT disabled by changing the state
+      URLLocationItems = locationRegionalItems;
+      URLLocationDisabled = false;
+      URLClimatevariableDisabled = false;
+      break;
+    case 'State':
+      // National data set the climatevariable pulldown to NOT disabled by changing the state
+      URLLocationItems = locationStateItems;
+      URLLocationDisabled = false;
+      URLClimatevariableDisabled = false;
+      break;
+    default:
+      // default state
+      URLClimatevariableDisabled = true;
+      URLLocationDisabled = true;
+      break;
+  }
+
+  // set React state via React Hooks
+  const classes = useStyles();
+  const [atStart, setAtStart] = useState(true);
+  const [sliderValues, setsliderValues] = useState(URLSliderValues);
+  const [sliderMinxMaxValues, setSliderMinxMaxValues] = useState(URLSliderMinxMaxValues);
+
+  const [useRobust, setUseRobust] = useState(URLUseRobust);
   const [useRobustClicked, setUseRobustClicked] = useState(false);
 
-  const [region, setRegion] = useState('');
-  const [location, setLocation] = useState('');
-  const [climatevariable, setClimatevariable] = useState('');
+  const [region, setRegion] = useState(URLRegion);
+  const [location, setLocation] = useState(URLLocation);
+  const [climatevariable, setClimatevariable] = useState(URLClimatevariable);
   const [chartData, setChartData] = useState([{}]);
   const layoutDefaults = { yaxis: { rangemode: 'tozero', title: 'Days' }, xaxis: { rangemode: 'tozero' } };
   const [chartLayout, setChartLayout] = useState(layoutDefaults);
 
   const [climateDataFilesJSON, setClimateDataFilesJSON] = useState(['']);
 
-  const [locationItems, setLocationItems] = useState(['']);
+  const [locationItems, setLocationItems] = useState(URLLocationItems);
   const [climatevariableItems, setClimatevariableItems] = useState(['']);
 
-  const [locationDisabled, setlocationDisabled] = useState(true);
-  const [climatevariableDisabled, setClimatevariableDisabled] = useState(true);
+  const [locationDisabled, setlocationDisabled] = useState(URLLocationDisabled);
+  const [climatevariableDisabled,
+    setClimatevariableDisabled] = useState(URLClimatevariableDisabled);
 
-  const loadNCAdata = async (loadRegion, isRobust) => {
-    await axios.get(`${window.location.href}/sandboxdata/TSU_Sandbox_Datafiles/index.json`)
-      .then((response) => {
-        // handle success
-        let data = {};
-        switch (loadRegion) {
-          case 'National':
-            setClimateDataFilesJSON(response.data.national);
-            data = response.data.national.filter((type) => type.robust === isRobust);
-            setClimatevariableItems(data.map((json) => json.type));
-            break;
-          case 'Regional':
-            setClimateDataFilesJSON(response.data.regional);
-            data = response.data.regional.filter((type) => type.robust === isRobust);
-            setClimatevariableItems(data.map((json) => json.type));
-            break;
-          case 'State':
-            setClimateDataFilesJSON(response.data.state);
-            data = response.data.state.filter((type) => type.robust === isRobust);
-            setClimatevariableItems(data.map((json) => json.type));
-            break;
-          default:
-            setClimateDataFilesJSON(response.data.national);
-            data = response.data.national.filter((type) => type.robust === isRobust);
-            setClimatevariableItems(data.map((json) => json.type));
-            break;
-        }
-
-        return response.data;
-      })
-      .catch((error) => {
-        // handle error
-        console.error(`SanboxControls.loadNCADdata() error: ${error}`); // eslint-disable-line no-console
-        return [''];
-      });
+  // sets climate variable type for precip or temp, this will likely change latter...
+  const getClimatevariableType = (switchClimatevariable) => {
+    const returnValue = switchClimatevariable.includes('inch') ? 'Precipitation' : 'Temperature';
+    return returnValue;
   };
 
-  // use the react effect to control when location and
-  // regions change to repupulalte the climate variable pulldown
-  useEffect(() => {
-    loadNCAdata(region, useRobust);
-    setUseRobustClicked(false);
-  }, [region, useRobust]);
+  // replace the state abbrevaiations from the data text files with a more
+  // human readable full state name AK becomes Alaska
+  const replaceLocationAbbreviation = (replaceAbbreviationLocation) => {
+    const sandboxHumanReadable = new SandboxHumanReadable();
+    return sandboxHumanReadable.getLocationDownText(replaceAbbreviationLocation);
+  };
 
+  // function to set URL parameters based on state and user seletions
+  const sandBoxURL = (props) => {
+    // get values from argument keys
+    const { chartDataRegion } = props;
+    const { chartDataLocation } = props;
+    const { chartDataClimatevariable } = props;
+    const { chartDataUseRobust } = props;
+    const { chartDataSliderValues } = props;
+
+    // create new URL parameter object
+    const searchParams = new URLSearchParams();
+
+    // get the url parameters
+    searchParams.set('region', chartDataRegion);
+    searchParams.set('location', chartDataLocation);
+    searchParams.set('climatevariable', chartDataClimatevariable);
+    searchParams.set('useRobust', chartDataUseRobust);
+    searchParams.set('sliderValues', chartDataSliderValues);
+
+    // convert url parameters to a string and add the leading ? so it we can add it
+    // to browser history (back button works)
+    const urlParameters = `?${searchParams.toString()}`;
+
+    // adds url and url parameters to browser history
+    window.history.replaceState({}, document.title, urlParameters);
+    return urlParameters;
+  };
+
+  // parse data file which is in CSV format
   const parseNCAFile = (data, type, parseRegion) => {
     const xvals = [];
     const yvals = [];
@@ -238,41 +302,64 @@ export default function SandboxControls() {
     return [xvals, yvals];
   };
 
-  const getClimatevariableType = (switchClimatevariable) => {
-    const returnValue = switchClimatevariable.includes('inch') ? 'Precipitation' : 'Temperature';
-    return returnValue;
-  };
-
-  const replaceLocationAbbreviation = (replaceAbbreviationLocation) => {
-    const sandboxHumanReadable = new SandboxHumanReadable();
-    return sandboxHumanReadable.getLocationDownText(replaceAbbreviationLocation);
-  };
-
   // get chart data from current state = which should include
   const getChartData = (props) => {
+    // get argument keys
     const { chartDataRegion } = props;
     const { chartDataLocation } = props;
     const { chartDataClimatevariable } = props;
     const { chartDataUseRobust } = props;
+    const { climateDataFilesJSONFile } = props;
+    const { chartDataSliderValues } = props;
 
-    const data = climateDataFilesJSON.filter((json) => {
-      const returnData = json.robust === chartDataUseRobust &&
-        json.type === chartDataClimatevariable;
-      return returnData;
+    // update url history this is the point at which we will need to make sure
+    // the graph looks the same when shared via url
+    sandBoxURL({
+      chartDataRegion,
+      chartDataLocation,
+      chartDataClimatevariable,
+      chartDataUseRobust,
+      chartDataSliderValues
     });
+
+    //  limite the posbiel data file to if robust and the climate variable (should be one)
+    const data = climateDataFilesJSONFile.filter((json) => {
+      const returnValue = json.robust === chartDataUseRobust &&
+        json.type === chartDataClimatevariable;
+      return returnValue;
+    });
+
+    // get the data file name
     const dataFile = data.map((json) => json.name);
 
-    axios.get(`${window.location.href}/sandboxdata/TSU_Sandbox_Datafiles/${dataFile}`)
+    // define the data file location should always be the current url and public folder
+    const path = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
+    axios.get(`${path}/sandboxdata/TSU_Sandbox_Datafiles/${dataFile}`)
       .then((response) => {
-        const chartDataFromFile = parseNCAFile(response.data, chartDataRegion, chartDataLocation);
+        // parse the csv text file
+        const chartDataFromFile =
+          parseNCAFile(response.data, chartDataRegion.toLowerCase(), chartDataLocation);
+
+        // get the chart type which is the climate variable
         const chartType = getClimatevariableType(chartDataClimatevariable);
+
+        // create a new instance of the sandbox human readable class this transforms
+        // the short text to something
+        // humans can read tmax100F beceomes Days with Maximum Temperature Above 100°F and
+        // AK becomes Alaska
         const sandboxHumanReadable = new SandboxHumanReadable(chartDataClimatevariable);
+
+        // get the location from the ui
         const titleLocation = replaceLocationAbbreviation(chartDataLocation);
+
+        // conver the all the parameters to human readable title
         const chartTitle = sandboxHumanReadable.getChartTitle({
           climatevariable: chartDataClimatevariable,
           region: chartDataRegion,
           titleLocation
         });
+
+        // create the plotly input so the chart is created based on users seletion
         const plotInfo = {
           xvals: chartDataFromFile[0],
           yvals: chartDataFromFile[1],
@@ -283,35 +370,139 @@ export default function SandboxControls() {
           chartType,
           useRobust: chartDataUseRobust
         };
+
+        // get the charts data formated for plotly
         const plotData = new SandboxGeneratePlotData(plotInfo);
         const xRange = {
           xmin: sliderValues[0],
           xmax: sliderValues[1]
         };
+
+        // set the charts min and max based on the data in the data file
         plotData.setXRange(xRange);
+
+        // change reacts state so it refreshes
         setChartData(plotData.getData());
         setChartLayout(plotData.getLayout());
       })
+      // handle errors
       .catch((error) => {
         console.error(`SanboxControls.updatePlotData() error=${error}`); // eslint-disable-line no-console
       });
   };
 
+  // function loads the index.json file to find the correct data.txt file based on the varriables
+  // the user chooses or from URL parameters
+  const loadNCAdata = async (loadRegion, isRobust) => {
+    const path = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
+    await axios.get(`${path}/sandboxdata/TSU_Sandbox_Datafiles/index.json`)
+      .then((response) => {
+        // handle success
+        let responseData = {};
+        let data = {};
+
+        // Regions change the file and how the object is refrenced
+        //  TODO might be better to fix this in the future
+        switch (loadRegion) {
+          case 'National':
+            responseData = response.data.national;
+            break;
+          case 'Regional':
+            responseData = response.data.regional;
+            break;
+          case 'State':
+            responseData = response.data.state;
+            break;
+          default:
+            responseData = response.data.national;
+            break;
+        }
+
+        // set climate data json data file
+        setClimateDataFilesJSON(responseData);
+
+        // filter data if robust data checked
+        data = responseData.filter((type) => type.robust === isRobust);
+
+        // get climate variable items
+        setClimatevariableItems(data.map((json) => json.type));
+
+        // only send chart data if at the intializing of the app aka the first time
+        // this is here for when URL parameters are passed
+        if (atStart) {
+          getChartData({
+            chartDataRegion: region,
+            chartDataLocation: location,
+            chartDataClimatevariable: climatevariable,
+            chartDataUseRobust: useRobust,
+            climateDataFilesJSONFile: responseData,
+            chartDataSliderValues: sliderValues
+          });
+        }
+
+        return responseData;
+      })
+      .catch((error) => {
+        // handle error
+        console.error(`SanboxControls loadNCAdata error: ${error}`); // eslint-disable-line no-console
+        return [''];
+      });
+  };
+
+  // use the react effect to control when location and
+  // regions change to repopulate the climate variable pulldown
+  useEffect(() => {
+    // call loadNCAdata when useRobust changes
+    loadNCAdata(region, useRobust, atStart);
+
+    // make sure user robust clicked is now false
+    setUseRobustClicked(false);
+  }, [useRobust]);
+
+  // use the react effect to control when loading state from URL
+  // this should only happen once during startup.
+  useEffect(() => {
+    // call loadNCAdata when at start changes, meaning only call this
+    // when the site fist starts and intializes
+    loadNCAdata(region, useRobust, atStart);
+
+    // make suire the start state is no false and this will never run again
+    // the loadNCAdata function will only update chartdata the first timei t runs
+    setAtStart(false);
+  }, [atStart]);
+
   // handle the robust change
   const handleRobustChange = (newValue) => {
+    // when user clicks robust we need to make sure the min is not below the
+    //  the lowest value, robust data tends to start at 1950 not robust 1900, if
+    // the user was looking at 1900 - 1970 on the site then this would
+    // cause errors because the frst data is well before 1950.  this makes sure
+    // that cannot happen
+    let defaultRanges = [1900, 2020];
+    let changedSliderValues = sliderMinxMaxValues;
     if (newValue) {
-      setSliderMinxMaxValues([1950, 2018]);
+      defaultRanges = [1950, 2020];
+      setSliderMinxMaxValues(defaultRanges);
+      changedSliderValues = defaultRanges;
     } else {
-      setSliderMinxMaxValues([1900, 2018]);
+      setSliderMinxMaxValues(defaultRanges);
+      changedSliderValues = defaultRanges;
     }
-    setUseRobust(newValue);
-    setUseRobustClicked(true);
+
+    // update the chart data to refelect change in robust
+    // this will reset the slider values to avoid errors with ranges
     getChartData({
-      chartDataRegion: region.toLowerCase(),
+      chartDataRegion: region,
       chartDataLocation: location,
       chartDataClimatevariable: climatevariable,
-      chartDataUseRobust: newValue
+      chartDataUseRobust: newValue,
+      climateDataFilesJSONFile: climateDataFilesJSON,
+      chartDataSliderValues: changedSliderValues
     });
+
+    // udpdate react state so it all refreshes
+    setUseRobust(newValue);
+    setUseRobustClicked(true);
   };
 
   // handle seting robust data clicked to false, this allows slider
@@ -320,14 +511,17 @@ export default function SandboxControls() {
     setUseRobustClicked(false);
     return null;
   };
+
   // handle the slider change
   const handleSliderChange = (newValue) => {
     setsliderValues(newValue);
     getChartData({
-      chartDataRegion: region.toLowerCase(),
+      chartDataRegion: region,
       chartDataLocation: location,
       chartDataClimatevariable: climatevariable,
-      chartDataUseRobust: useRobust
+      chartDataUseRobust: useRobust,
+      climateDataFilesJSONFile: climateDataFilesJSON,
+      chartDataSliderValues: newValue
     });
     return null;
   };
@@ -382,7 +576,9 @@ export default function SandboxControls() {
       chartDataRegion: newValue,
       chartDataLocation: location,
       chartDataClimatevariable: climatevariable,
-      chartDataUseRobust: useRobust
+      chartDataUseRobust: useRobust,
+      climateDataFilesJSONFile: climateDataFilesJSON,
+      chartDataSliderValues: sliderValues
     });
   };
 
@@ -390,10 +586,12 @@ export default function SandboxControls() {
   const handleLocationChange = (newValue) => {
     setLocation(newValue);
     getChartData({
-      chartDataRegion: region.toLowerCase(),
+      chartDataRegion: region,
       chartDataLocation: newValue,
       chartDataClimatevariable: climatevariable,
-      chartDataUseRobust: useRobust
+      chartDataUseRobust: useRobust,
+      climateDataFilesJSONFile: climateDataFilesJSON,
+      chartDataSliderValues: sliderValues
     });
   };
 
@@ -401,14 +599,18 @@ export default function SandboxControls() {
   const handleClimatevariableChange = (newValue) => {
     setClimatevariable(newValue);
     getChartData({
-      chartDataRegion: region.toLowerCase(),
+      chartDataRegion: region,
       chartDataLocation: location,
       chartDataClimatevariable: newValue,
-      chartDataUseRobust: useRobust
+      chartDataUseRobust: useRobust,
+      climateDataFilesJSONFile: climateDataFilesJSON,
+      chartDataSliderValues: sliderValues
     });
     return null;
   };
 
+  // repalce the climate variable with human readable climate variable
+  // tmax100F beceomes Days with Maximum Temperature Above 100°F
   const replaceClimatevariableType = (replaceClimatevariable) => {
     const sandboxHumanReadable = new SandboxHumanReadable();
     return sandboxHumanReadable.getClimateVariablePullDownText(replaceClimatevariable);
@@ -508,5 +710,7 @@ SandboxControls.propTypes = {
   chartDataRegion: PropTypes.string,
   chartDataLocation: PropTypes.string,
   chartDataClimatevariable: PropTypes.string,
-  chartDataUseRobust: PropTypes.bool
+  chartDataUseRobust: PropTypes.bool,
+  chartDataSliderValues: PropTypes.array,
+  climateDataFilesJSONFile: PropTypes.object
 };
