@@ -227,6 +227,7 @@ class SandboxGeneratePlotData {
         zeroline: true,
         showline: false,
         showgrid: false,
+        fixedrange: true,
         zerolinecolor: this.zeroLineColor,
         zerolinewidth: this.zerolinewidth,
         tickfont: {
@@ -270,6 +271,7 @@ class SandboxGeneratePlotData {
         tickformat: ',d',
         autorange: true,
         showspikes: false,
+        fixedrange: true,
         tickfont: {
           family: this.font,
           size: this.fontSizeLabels
