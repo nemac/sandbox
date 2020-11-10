@@ -18,7 +18,7 @@ import '../css/Sandbox.scss';
 const axios = require('axios');
 
 const white = '#FFFFFF';
-const darkGreay = '#E6E6E6';
+const darkGrey = '#E6E6E6';
 const pullDownBackground = '#FBFCFE';
 const fontColor = '#5C5C5C';
 
@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     height: '200px',
     maxHeight: '200px',
     backgroundColor: pullDownBackground,
-    border: `1px solid ${darkGreay}`,
+    border: `1px solid ${darkGrey}`,
     borderRadius: '4px',
     [theme.breakpoints.down('xs')]: {
       height: '550px',
