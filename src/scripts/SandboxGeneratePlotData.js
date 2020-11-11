@@ -6,14 +6,16 @@ class SandboxGeneratePlotData {
     this.red = '189, 0, 38';
     this.green = '127, 188, 65';
     this.brown = '153, 52, 4';
+    this.precipitationColor = '#5AB4AC';
+    this.temperatureColor = '#FEB24C';
     this.font = 'Arial';
     this.zeroLineColor = '#000000';
     this.zerolinewidth = 1;
     this.gridColor = '#BFBFBF';
     this.gridWidth = 1;
-    this.fontSizePrimary = 14;
-    this.fontSizeLabels = 12;
-    this.fontSizeLabelsSecondary = 10;
+    this.fontSizePrimary = '14pt';
+    this.fontSizeLabels = '12pt';
+    this.fontSizeLabelsSecondary = '12pt';
     this.xmin = props.xmin;
     this.xmax = props.xmax;
     this.xvals = props.xvals;
@@ -22,10 +24,10 @@ class SandboxGeneratePlotData {
     this.chartTitle = props.chartTitle;
     this.legnedText = props.legnedText;
     this.chartType = props.chartType;
-    this.barColor = this.chartType === 'Precipitation' ? this.blue : this.brown;
+    this.barColor = this.chartType === 'Precipitation' ? this.precipitationColor : this.temperatureColor;
     this.periodGroups = props.periodGroups ? props.periodGroups : 5;
     this.useRobust = props.useRobust;
-    this.textAngle = this.useRobust ? 0 : 0;
+    this.textAngle = this.useRobust ? 90 : 90;
   }
 
   setXRange(props) {
@@ -111,7 +113,7 @@ class SandboxGeneratePlotData {
       },
       marker: {
         line: { color: `rgb(${this.barColor})` },
-        color: `rgb(${this.barColor})`
+        color: this.barColor
       },
       nbinsx: 0,
       histfunc: 'avg',
@@ -170,7 +172,7 @@ class SandboxGeneratePlotData {
   getXLabelText() {
     const periodGroups = this.periodGroups;
     return this.xvals.map((value) => {
-      const plus = value + periodGroups;
+      const plus = value + (periodGroups - 1);
       const tickText = `${value}–${plus.toString().slice(-2)}`;
       return tickText;
     });
@@ -235,7 +237,7 @@ class SandboxGeneratePlotData {
           size: this.fontSizeLabelsSecondary
         },
         tickmode: 'array',
-        nticks: 5,
+        nticks: this.periodGroups,
         tickvals: this.getXLabelValues(),
         ticktext: this.getXLabelText(),
         autorange: false,
