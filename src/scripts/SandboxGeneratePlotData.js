@@ -10,9 +10,9 @@ class SandboxGeneratePlotData {
     this.temperatureColor = '#FEB24C';
     this.font = 'Arial';
     this.zeroLineColor = '#000000';
-    this.zerolinewidth = 1;
+    this.zerolinewidth = '1pt';
     this.gridColor = '#BFBFBF';
-    this.gridWidth = 1;
+    this.gridWidth = '1pt';
     this.fontSizePrimary = '14pt';
     this.fontSizeLabels = '12pt';
     this.fontSizeLabelsSecondary = '12pt';
@@ -116,7 +116,7 @@ class SandboxGeneratePlotData {
         color: this.barColor
       },
       nbinsx: 0,
-      histfunc: 'avg',
+      histfunc: 'sum',
       cumulative: { enabled: false },
       transforms: [
         {
