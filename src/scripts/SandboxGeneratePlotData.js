@@ -91,6 +91,13 @@ class SandboxGeneratePlotData {
         peroidSum += value;
         count += 1;
       }
+
+      // make last bar if its not full period
+      if (index = this.yvals.map.length) {
+        peroidSum += value;
+        returnSum = peroidSum;
+        return Number(Number(returnSum).toFixed(4));
+      }
     });
     return sumXvalsAll.filter((value) => value !== undefined);
   }
@@ -110,6 +117,13 @@ class SandboxGeneratePlotData {
       } else { // eslint-disable-line no-else-return
         peroidSum += value;
         count += 1;
+      }
+
+      // make last bar if its not full period
+      if (index = this.yvals.map.length) {
+        peroidSum += value;
+        returnAvg = peroidSum / this.periodGroups;
+        return Number(Number(returnAvg).toFixed(4));
       }
     });
     return avgXvalsAll.filter((value) => value !== undefined);
