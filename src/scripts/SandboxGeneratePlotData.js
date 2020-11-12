@@ -6,14 +6,19 @@ class SandboxGeneratePlotData {
     this.red = '189, 0, 38';
     this.green = '127, 188, 65';
     this.brown = '153, 52, 4';
+    this.chartBackgroundColor = '#FBFCFE';
+    this.annualLineColor = '#000000';
+    this.precipitationColor = '#5AB4AC';
+    this.temperatureColor = '#FEB24C';
+    this.bargap = 0.15;
     this.font = 'Arial';
     this.zeroLineColor = '#000000';
-    this.zerolinewidth = 1;
+    this.zerolinewidth = '1pt';
     this.gridColor = '#BFBFBF';
-    this.gridWidth = 1;
-    this.fontSizePrimary = 14;
-    this.fontSizeLabels = 12;
-    this.fontSizeLabelsSecondary = 10;
+    this.gridWidth = '1pt';
+    this.fontSizePrimary = '14pt';
+    this.fontSizeLabels = '12pt';
+    this.fontSizeLabelsSecondary = '12pt';
     this.xmin = props.xmin;
     this.xmax = props.xmax;
     this.xvals = props.xvals;
@@ -22,10 +27,118 @@ class SandboxGeneratePlotData {
     this.chartTitle = props.chartTitle;
     this.legnedText = props.legnedText;
     this.chartType = props.chartType;
-    this.barColor = this.chartType === 'Precipitation' ? this.blue : this.brown;
+    this.barColor = this.chartType === 'Precipitation' ? this.precipitationColor : this.temperatureColor;
     this.periodGroups = props.periodGroups ? props.periodGroups : 5;
     this.useRobust = props.useRobust;
-    this.textAngle = this.useRobust ? 0 : 0;
+    this.textAngle = this.useRobust ? 90 : 90;
+    this.xValsSumByPeriod = this.xValsSumByPeriod();
+    this.xValsAvgByPeriod = this.xValsAvgByPeriod();
+    this.yValsPeriod = this.yValsPeriod();
+    this.yValsPeriodLabel = this.yValsPeriodLabel();
+    this.yValsSumAll = this.yValsSumAll();
+    this.yValsAvgAll = this.yValsAvgAll();
+  }
+
+  // creates the y values for each period
+  yValsPeriodLabel() {
+    let count = 0;
+    const yValsPeriodAll = this.xvals.map((value, index) => { // eslint-disable-line
+      // return value
+      if (index === 0) {
+        const plus = value + (this.periodGroups - 1);
+        const tickText = `${value}–${plus.toString().slice(-2)}`;
+        return tickText;
+      }
+      if (count === (this.periodGroups - 1)) {
+        count = 0;
+        const plus = value + (this.periodGroups - 1);
+        const tickText = `${value}–${plus.toString().slice(-2)}`;
+        return tickText;
+      }
+      count += 1;
+    });
+    return yValsPeriodAll.filter((value) => value !== undefined);
+  }
+
+  // creates the y values for each period
+  yValsPeriod() {
+    let count = 0;
+    const yValsPeriodAll = this.xvals.map((value, index) => { // eslint-disable-line
+      // return value
+      if (index === 0) {
+        return value;
+      }
+      if (count === (this.periodGroups - 1)) {
+        count = 0;
+        return value;
+      }
+      count += 1;
+    });
+    return yValsPeriodAll.filter((value) => value !== undefined);
+  }
+
+  yValsSumAll() {
+    return this.yvals.reduce((a, b) => a + b, 0);
+  }
+
+  // sums for the defined periods, creates a new array with period means
+  xValsSumByPeriod() {
+    let count = 0;
+    let peroidSum = 0;
+    let returnSum = 0;
+    const yvalsCount = this.yvals.length - 1;
+    const sumXvalsAll = this.yvals.map((value, index) => { // eslint-disable-line
+      if (count === (this.periodGroups - 1)) {
+        peroidSum += value;
+        returnSum = peroidSum;
+        count = 0;
+        peroidSum = 0;
+        return Number(Number(returnSum).toFixed(4));
+      } else { // eslint-disable-line no-else-return
+        peroidSum += value;
+        count += 1;
+      }
+
+      // make last bar if its not full period
+      if (index === yvalsCount) {
+        peroidSum += value;
+        returnSum = peroidSum;
+        return Number(Number(returnSum).toFixed(4));
+      }
+    });
+    return sumXvalsAll.filter((value) => value !== undefined);
+  }
+
+  yValsAvgAll() {
+    return this.yvals.reduce((a, b) => a + b, 0) / this.yvals.length;
+  }
+
+  // means for the defined periods, creates a new array with period means
+  xValsAvgByPeriod() {
+    let count = 0;
+    let peroidSum = 0;
+    let returnAvg = 0;
+    const yvalsCount = this.yvals.length - 1;
+    const avgXvalsAll = this.yvals.map((value, index) => { // eslint-disable-line
+      if (count === (this.periodGroups - 1)) {
+        peroidSum += value;
+        returnAvg = peroidSum / this.periodGroups;
+        count = 0;
+        peroidSum = 0;
+        return Number(Number(returnAvg).toFixed(4));
+      } else { // eslint-disable-line no-else-return
+        peroidSum += value;
+        count += 1;
+      }
+
+      // make last bar if its not full period
+      if (index === yvalsCount) {
+        peroidSum += value;
+        returnAvg = peroidSum / this.periodGroups;
+        return Number(Number(returnAvg).toFixed(4));
+      }
+    });
+    return avgXvalsAll.filter((value) => value !== undefined);
   }
 
   setXRange(props) {
@@ -77,6 +190,7 @@ class SandboxGeneratePlotData {
 
   getData() {
     if (this.maxVal === -Infinity) return [{}];
+    // return [this.getTrace1()];
     return [this.getTrace1(), this.getTrace2()];
   }
 
@@ -91,109 +205,52 @@ class SandboxGeneratePlotData {
   getTrace1() {
     return {
       uid: SandboxGeneratePlotData.uuidv(),
-      meta: {
-        columnNames: {
-          x: 'Year',
-          y: 'Location'
-        }
-      },
       mode: 'lines',
-      name: `${this.legnedText}`,
-      type: 'histogram',
-      xsrc: 'dmichels:4:3b282f',
-      x: this.getXvalues(),
-      ysrc: 'dmichels:4:060bbe',
-      y: this.getYvalues(),
-      xbins: {
-        end: this.xmax,
-        size: 5,
-        start: this.xmin
-      },
+      name: `${this.legnedText} for Period`,
+      type: 'bar',
+      x: this.yValsPeriod,
+      y: this.xValsAvgByPeriod,
       marker: {
-        line: { color: `rgb(${this.barColor})` },
-        color: `rgb(${this.barColor})`
+        line: {
+          color: this.barColor
+        },
+        color: this.barColor
       },
       nbinsx: 0,
-      histfunc: 'avg',
-      cumulative: { enabled: false },
-      transforms: [
-        {
-          meta: {
-            columnNames:
-            {
-              target: 'Year'
-            }
-          },
-          type: 'filter',
-          value: [this.xmin.toString(), this.xmax.toString()],
-          operation: '[]',
-          targetsrc: 'dmichels:4:3b282f',
-          target: this.getXvalues()
-        }
-      ],
+      hovermode: 'closest',
+      hoverinfo: 'x+y',
+      cumulative: {
+        enabled: false
+      },
       legendgroup: 1,
-      orientation: 'v',
-      hovertemplate: ''
+      orientation: 'v'
     };
   }
 
   getTrace2() {
     return {
       uid: SandboxGeneratePlotData.uuidv(),
-      meta: {
-        columnNames: {
-          x: 'Year',
-          y: 'Location'
-        }
-      },
       mode: 'markers+lines',
       name: `Annual ${this.legnedText}`,
       type: 'scatter',
-      xsrc: 'dmichels:4:3b282f',
-      x: this.getXvalues(),
-      ysrc: 'dmichels:4:060bbe',
-      y: this.getYvalues(),
-      marker: { color: 'rgb(0, 0, 0)' },
-      transforms: [
-        {
-          meta: { columnNames: { target: 'Year' } },
-          type: 'filter',
-          value: [this.xmin.toString(), this.xmax.toString()],
-          operation: '[]',
-          targetsrc: 'dmichels:4:3b282f',
-          target: this.getXvalues()
-        }
-      ]
+      x: this.xvals,
+      y: this.yvals,
+      marker: {
+        color: this.annualLineColor
+      },
+      hovermode: 'closest',
+      hoverinfo: 'x+y'
     };
-  }
-
-  getXLabelText() {
-    const periodGroups = this.periodGroups;
-    return this.xvals.map((value) => {
-      const plus = value + periodGroups;
-      const tickText = `${value}–${plus.toString().slice(-2)}`;
-      return tickText;
-    });
-  }
-
-  getXLabelValues() {
-    let count = 0;
-    const periodGroups = this.periodGroups;
-    return this.xvals.map((value) => {
-      count += 1;
-      const mod = (count - 1) % periodGroups;
-      if (mod === 0) {
-        const tickValue = value + parseInt(periodGroups / 2, 10);
-        return tickValue;
-      }
-      return null;
-    });
   }
 
   getLayout() {
     return {
-      showlegend: true,
       displayModeBar: false,
+      autosize: true,
+      height: 1,
+      bargroupgap: 0,
+      plot_bgcolor: this.chartBackgroundColor,
+      paper_bgcolor: this.chartBackgroundColor,
       legend: {
         autosize: true,
         orientation: 'h',
@@ -215,6 +272,22 @@ class SandboxGeneratePlotData {
       },
       xaxis: {
         type: 'linear',
+        range: [this.xmin - 5, this.xmax + 5],
+        bargap: this.bargap,
+        autorange: false,
+        automargin: false,
+        showspikes: false,
+        zeroline: true,
+        showline: false,
+        showgrid: false,
+        fixedrange: true,
+        rangemode: 'tozero',
+        zerolinecolor: this.zeroLineColor,
+        zerolinewidth: this.zerolinewidth,
+        tickfont: {
+          family: this.font,
+          size: this.fontSizeLabelsSecondary
+        },
         title: {
           text: `${this.periodGroups}–year period`,
           font: {
@@ -222,39 +295,30 @@ class SandboxGeneratePlotData {
             size: this.fontSizeLabels
           }
         },
-        dtick: this.periodGroups,
-        range: [this.xmin, this.xmax],
-        zeroline: true,
-        showline: false,
-        showgrid: false,
-        fixedrange: true,
-        zerolinecolor: this.zeroLineColor,
-        zerolinewidth: this.zerolinewidth,
-        tickfont: {
-          family: this.font,
-          size: this.fontSizeLabelsSecondary
-        },
-        tickmode: 'array',
-        nticks: 5,
-        tickvals: this.getXLabelValues(),
-        ticktext: this.getXLabelText(),
-        autorange: false,
+        dtick: 5,
+        tick0: 0,
         tickangle: this.textAngle,
         constraintoward: 'center',
-        automargin: false,
-        showspikes: false,
-        rangemode: 'tozero',
+        tickformat: '',
+        tickprefix: '',
+        tickmode: 'array',
+        nticks: this.periodGroups,
+        tickvals: this.yValsPeriod,
+        ticktext: this.yValsPeriodLabel,
+        ticks: 'outside',
+        tickcolor: this.zeroLineColor,
+        tickwidth: this.zerolinewidth,
         spikethickness: 4,
+        displayModeBar: false,
+        autosize: true,
         rangeslider: {
-          range: [1900, this.xmax],
+          range: [this.xmin, this.xmax],
           yaxis: [0, 2],
           visible: false,
           autorange: true
         }
       },
       yaxis: {
-        rangemode: 'tozero',
-        type: 'linear',
         title: {
           text: 'Days',
           font: {
@@ -262,27 +326,49 @@ class SandboxGeneratePlotData {
             size: this.fontSizeLabels
           }
         },
+        rangemode: 'tozero',
+        type: 'linear',
+        range: [0, 2],
+        ticks: 'outside',
+        tickcolor: this.zeroLineColor,
+        tickwidth: this.zerolinewidth,
+        dtick: 0.5,
+        autorange: true,
+        showspikes: false,
+        fixedrange: true,
+        showline: true,
+        linecolor: this.zeroLineColor,
+        linewidth: this.zerolinewidth,
         zerolinecolor: this.zeroLineColor,
         zerolinewidth: this.zerolinewidth,
         gridcolor: this.gridColor,
         gridwidth: this.gridwidth,
-        range: [0, 2],
-        ticks: '',
-        tickformat: ',d',
-        autorange: true,
-        showspikes: false,
-        fixedrange: true,
-        tickfont: {
-          family: this.font,
-          size: this.fontSizeLabels
+        bargap: this.bargap
+      },
+      shapes: [{
+        type: 'line',
+        layer: 'below',
+        x0: this.xmin - 5,
+        y0: this.yValsAvgAll,
+        x1: this.xmax + 5,
+        y1: this.yValsAvgAll,
+        line: {
+          color: this.zeroLineColor,
+          width: this.zerolinewidth
         }
       },
-      bargap: 0.28,
-      autosize: true,
-      height: 1,
-      bargroupgap: 0,
-      plot_bgcolor: 'rgb(251, 252, 254)',
-      paper_bgcolor: 'rgb(251, 252, 254)'
+      {
+        type: 'line',
+        layer: 'above',
+        x0: this.xmin - 5,
+        y0: 0,
+        x1: this.xmax + 5,
+        y1: 0,
+        line: {
+          color: this.zeroLineColor,
+          width: this.zerolinewidth
+        }
+      }]
     };
   }
 }
