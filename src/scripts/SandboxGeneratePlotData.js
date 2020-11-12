@@ -80,6 +80,7 @@ class SandboxGeneratePlotData {
     let count = 0;
     let peroidSum = 0;
     let returnSum = 0;
+    const yvalsCount = this.yvals.length - 1;
     const sumXvalsAll = this.yvals.map((value, index) => { // eslint-disable-line
       if (count === (this.periodGroups - 1)) {
         peroidSum += value;
@@ -93,7 +94,7 @@ class SandboxGeneratePlotData {
       }
 
       // make last bar if its not full period
-      if (index = this.yvals.map.length) {
+      if (index === yvalsCount) {
         peroidSum += value;
         returnSum = peroidSum;
         return Number(Number(returnSum).toFixed(4));
@@ -107,6 +108,7 @@ class SandboxGeneratePlotData {
     let count = 0;
     let peroidSum = 0;
     let returnAvg = 0;
+    const yvalsCount = this.yvals.length - 1;
     const avgXvalsAll = this.yvals.map((value, index) => { // eslint-disable-line
       if (count === (this.periodGroups - 1)) {
         peroidSum += value;
@@ -120,7 +122,7 @@ class SandboxGeneratePlotData {
       }
 
       // make last bar if its not full period
-      if (index = this.yvals.map.length) {
+      if (index === yvalsCount) {
         peroidSum += value;
         returnAvg = peroidSum / this.periodGroups;
         return Number(Number(returnAvg).toFixed(4));
