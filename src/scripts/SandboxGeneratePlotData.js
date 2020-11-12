@@ -35,6 +35,8 @@ class SandboxGeneratePlotData {
     this.xValsAvgByPeriod = this.xValsAvgByPeriod();
     this.yValsPeriod = this.yValsPeriod();
     this.yValsPeriodLabel = this.yValsPeriodLabel();
+    this.yValsSumAll = this.yValsSumAll();
+    this.yValsAvgAll = this.yValsAvgAll();
   }
 
   // creates the y values for each period
@@ -75,6 +77,10 @@ class SandboxGeneratePlotData {
     return yValsPeriodAll.filter((value) => value !== undefined);
   }
 
+  yValsSumAll() {
+    return this.yvals.reduce((a, b) => a + b, 0);
+  }
+
   // sums for the defined periods, creates a new array with period means
   xValsSumByPeriod() {
     let count = 0;
@@ -101,6 +107,10 @@ class SandboxGeneratePlotData {
       }
     });
     return sumXvalsAll.filter((value) => value !== undefined);
+  }
+
+  yValsAvgAll() {
+    return this.yvals.reduce((a, b) => a + b, 0) / this.yvals.length;
   }
 
   // means for the defined periods, creates a new array with period means
@@ -322,6 +332,7 @@ class SandboxGeneratePlotData {
         ticks: 'outside',
         tickcolor: this.zeroLineColor,
         tickwidth: this.zerolinewidth,
+        dtick: 0.5,
         autorange: true,
         showspikes: false,
         fixedrange: true,
@@ -333,7 +344,31 @@ class SandboxGeneratePlotData {
         gridcolor: this.gridColor,
         gridwidth: this.gridwidth,
         bargap: this.bargap
-      }
+      },
+      shapes: [{
+        type: 'line',
+        layer: 'below',
+        x0: this.xmin - 5,
+        y0: this.yValsAvgAll,
+        x1: this.xmax + 5,
+        y1: this.yValsAvgAll,
+        line: {
+          color: this.zeroLineColor,
+          width: this.zerolinewidth
+        }
+      },
+      {
+        type: 'line',
+        layer: 'above',
+        x0: this.xmin - 5,
+        y0: 0,
+        x1: this.xmax + 5,
+        y1: 0,
+        line: {
+          color: this.zeroLineColor,
+          width: this.zerolinewidth
+        }
+      }]
     };
   }
 }
