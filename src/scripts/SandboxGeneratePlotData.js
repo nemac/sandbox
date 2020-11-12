@@ -7,10 +7,10 @@ class SandboxGeneratePlotData {
     this.green = '127, 188, 65';
     this.brown = '153, 52, 4';
     this.chartBackgroundColor = '#FBFCFE';
-    this.annualLineColor = '#000000'
+    this.annualLineColor = '#000000';
     this.precipitationColor = '#5AB4AC';
     this.temperatureColor = '#FEB24C';
-    this.bargap = 0.15,
+    this.bargap = 0.15;
     this.font = 'Arial';
     this.zeroLineColor = '#000000';
     this.zerolinewidth = '1pt';
@@ -35,16 +35,12 @@ class SandboxGeneratePlotData {
     this.xValsAvgByPeriod = this.xValsAvgByPeriod();
     this.yValsPeriod = this.yValsPeriod();
     this.yValsPeriodLabel = this.yValsPeriodLabel();
-
-    console.log('this.yValsPeriodLabel', this.yValsPeriodLabel)
-    console.log('this.yValsPeriod', this.yValsPeriod)
-
   }
 
   // creates the y values for each period
   yValsPeriodLabel() {
     let count = 0;
-    const yValsPeriodAll = this.xvals.map((value, index) => {
+    const yValsPeriodAll = this.xvals.map((value, index) => { // eslint-disable-line
       // return value
       if (index === 0) {
         const plus = value + (this.periodGroups - 1);
@@ -59,68 +55,64 @@ class SandboxGeneratePlotData {
       }
       count += 1;
     });
-    return yValsPeriodAll.filter((value) => value !== undefined );
+    return yValsPeriodAll.filter((value) => value !== undefined);
   }
 
   // creates the y values for each period
   yValsPeriod() {
     let count = 0;
-    const yValsPeriodAll = this.xvals.map((value, index) => {
+    const yValsPeriodAll = this.xvals.map((value, index) => { // eslint-disable-line
       // return value
       if (index === 0) {
-        const plus = value + (this.periodGroups - 1);
-        const tickText = `${value}–${plus.toString().slice(-2)}`;
         return value;
       }
       if (count === (this.periodGroups - 1)) {
         count = 0;
-        const plus = value + (this.periodGroups - 1);
-        const tickText = `${value}–${plus.toString().slice(-2)}`;
         return value;
       }
       count += 1;
     });
-    return yValsPeriodAll.filter((value) => value !== undefined );
+    return yValsPeriodAll.filter((value) => value !== undefined);
   }
 
   // sums for the defined periods, creates a new array with period means
   xValsSumByPeriod() {
-    let count = 0
+    let count = 0;
     let peroidSum = 0;
-    let returnSum = 0
-    const sumXvalsAll = this.yvals.map((value, index) => {
+    let returnSum = 0;
+    const sumXvalsAll = this.yvals.map((value, index) => { // eslint-disable-line
       if (count === (this.periodGroups - 1)) {
         peroidSum += value;
         returnSum = peroidSum;
         count = 0;
         peroidSum = 0;
         return Number(Number(returnSum).toFixed(4));
-      } else {
+      } else { // eslint-disable-line no-else-return
         peroidSum += value;
         count += 1;
       }
-    })
-    return sumXvalsAll.filter((value) => value !== undefined );
+    });
+    return sumXvalsAll.filter((value) => value !== undefined);
   }
 
   // means for the defined periods, creates a new array with period means
   xValsAvgByPeriod() {
     let count = 0;
     let peroidSum = 0;
-    let returnAvg = 0
-    const avgXvalsAll = this.yvals.map((value, index) => {
+    let returnAvg = 0;
+    const avgXvalsAll = this.yvals.map((value, index) => { // eslint-disable-line
       if (count === (this.periodGroups - 1)) {
         peroidSum += value;
-        returnAvg = peroidSum/this.periodGroups;
+        returnAvg = peroidSum / this.periodGroups;
         count = 0;
         peroidSum = 0;
         return Number(Number(returnAvg).toFixed(4));
-      } else {
+      } else { // eslint-disable-line no-else-return
         peroidSum += value;
         count += 1;
       }
-    })
-    return avgXvalsAll.filter((value) => value !== undefined );
+    });
+    return avgXvalsAll.filter((value) => value !== undefined);
   }
 
   setXRange(props) {
@@ -193,16 +185,20 @@ class SandboxGeneratePlotData {
       x: this.yValsPeriod,
       y: this.xValsAvgByPeriod,
       marker: {
-        line: {color: this.barColor},
+        line: {
+          color: this.barColor
+        },
         color: this.barColor
       },
       nbinsx: 0,
-      hovermode:'closest',
+      hovermode: 'closest',
       hoverinfo: 'x+y',
-      cumulative: {enabled: false},
+      cumulative: {
+        enabled: false
+      },
       legendgroup: 1,
-      orientation: 'v',
-    }
+      orientation: 'v'
+    };
   }
 
   getTrace2() {
@@ -213,15 +209,16 @@ class SandboxGeneratePlotData {
       type: 'scatter',
       x: this.xvals,
       y: this.yvals,
-      marker: {color: this.annualLineColor},
-      hovermode:'closest',
+      marker: {
+        color: this.annualLineColor
+      },
+      hovermode: 'closest',
       hoverinfo: 'x+y'
-    }
+    };
   }
 
   getLayout() {
     return {
-      // showlegend: true,
       displayModeBar: false,
       autosize: true,
       height: 1,
@@ -251,8 +248,6 @@ class SandboxGeneratePlotData {
         type: 'linear',
         range: [this.xmin - 5, this.xmax + 5],
         bargap: this.bargap,
-        tickfont: {family: 'Roboto'},
-        tickmode: 'linear',
         autorange: false,
         automargin: false,
         showspikes: false,
@@ -276,7 +271,6 @@ class SandboxGeneratePlotData {
         },
         dtick: 5,
         tick0: 0,
-        ticks: '',
         tickangle: this.textAngle,
         constraintoward: 'center',
         tickformat: '',
@@ -309,7 +303,6 @@ class SandboxGeneratePlotData {
         rangemode: 'tozero',
         type: 'linear',
         range: [0, 2],
-        ticks: '',
         ticks: 'outside',
         tickcolor: this.zeroLineColor,
         tickwidth: this.zerolinewidth,
@@ -323,9 +316,9 @@ class SandboxGeneratePlotData {
         zerolinewidth: this.zerolinewidth,
         gridcolor: this.gridColor,
         gridwidth: this.gridwidth,
-        bargap: this.bargap,
+        bargap: this.bargap
       }
-    }
+    };
   }
 }
 
