@@ -332,7 +332,7 @@ class SandboxGeneratePlotData {
         ticks: 'outside',
         tickcolor: this.zeroLineColor,
         tickwidth: this.zerolinewidth,
-        dtick: 0.5,
+        // dtick: 0.5,
         autorange: true,
         showspikes: false,
         fixedrange: true,
