@@ -39,66 +39,61 @@ class SandboxGeneratePlotData {
     this.yValsSumAll = sumAll <= -50 ? undefined : sumAll;
     const avgAll = this.yValsAvgAll();
     this.yValsAvgAll = avgAll <= -50 ? 0 : avgAll;
-    this.prettyRange = this.pretty([0, this.maxVal]);
-    this.yRange = [0, this.prettyRange[this.prettyRange.length - 1] ];
+    this.prettyRange = SandboxGeneratePlotData.pretty([0, this.maxVal]);
+    this.yRange = [0, this.prettyRange[this.prettyRange.length - 1]];
   }
 
-  pretty(range, n, internal_only){
+  static pretty(range, n = 5, internalOnly = false) {
     // from https://gist.github.com/Frencil/aab561687cdd2b0de04a
-    if (typeof n == "undefined" || isNaN(parseInt(n))){
-      n = 5;
-    }
-    n = parseInt(n);
-    if (typeof internal_only == "undefined"){
-      internal_only = false;
-    }
-
-    var min_n = n / 3;
-    var shrink_sml = 0.75;
-    var high_u_bias = 1.5;
-    var u5_bias = 0.5 + 1.5 * high_u_bias;
-    var d = Math.abs(range[0] - range[1]);
-    var c = d / n;
-    if ((Math.log(d) / Math.LN10) < -2){
-      c = (Math.max(Math.abs(d)) * shrink_sml) / min_n;
+    let numberOfDivisons = n;
+    numberOfDivisons = parseInt(n, 10);
+    const minN = numberOfDivisons / 3;
+    const shrinkSml = 0.75;
+    const highUBias = 1.5;
+    const u5Bias = 0.5 + 1.5 * highUBias;
+    const d = Math.abs(range[0] - range[1]);
+    let c = d / n;
+    if ((Math.log(d) / Math.LN10) < -2) {
+      c = (Math.max(Math.abs(d)) * shrinkSml) / minN;
     }
 
-    var base = Math.pow(10, Math.floor(Math.log(c)/Math.LN10));
-    var base_toFixed = 0;
-    if (base < 1){
-      base_toFixed = Math.abs(Math.round(Math.log(base)/Math.LN10));
+    const base = 10 ** Math.floor(Math.log(c) / Math.LN10);
+    let baseToFixed = 0;
+    if (base < 1) {
+      baseToFixed = Math.abs(Math.round(Math.log(base) / Math.LN10));
     }
 
-    var unit = base;
-    if ( ((2 * base) - c) < (high_u_bias * (c - unit)) ){
+    let unit = base;
+    if (((2 * base) - c) < (highUBias * (c - unit))) {
       unit = 2 * base;
-      if ( ((5 * base) - c) < (u5_bias * (c - unit)) ){
+      if (((5 * base) - c) < (u5Bias * (c - unit))) {
         unit = 5 * base;
-        if ( ((10 * base) - c) < (high_u_bias * (c - unit)) ){
+        if (((10 * base) - c) < (highUBias * (c - unit))) {
           unit = 10 * base;
         }
       }
     }
 
-    var ticks = [];
-    if (range[0] <= unit){
-      var i = 0;
+    let ticks = [];
+    let i = 0;
+    if (range[0] <= unit) {
+      i = 0;
     } else {
-      var i = Math.floor(range[0]/unit)*unit;
-      i = parseFloat(i.toFixed(base_toFixed));
+      i = Math.floor(range[0] / unit) * unit;
+      i = parseFloat(i.toFixed(baseToFixed));
     }
-    while (i < range[1]){
+    while (i < range[1]) {
       ticks.push(i);
       i += unit;
-      if (base_toFixed > 0){
-        i = parseFloat(i.toFixed(base_toFixed));
+      if (baseToFixed > 0) {
+        i = parseFloat(i.toFixed(baseToFixed));
       }
     }
     ticks.push(i);
 
-    if (internal_only){
-      if (ticks[0] < range[0]){ ticks = ticks.slice(1); }
-      if (ticks[ticks.length-1] > range[1]){ ticks.pop(); }
+    if (internalOnly) {
+      if (ticks[0] < range[0]) { ticks = ticks.slice(1); }
+      if (ticks[ticks.length - 1] > range[1]) { ticks.pop(); }
     }
 
     return ticks;
