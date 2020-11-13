@@ -35,8 +35,68 @@ class SandboxGeneratePlotData {
     this.xValsAvgByPeriod = this.xValsAvgByPeriod();
     this.yValsPeriod = this.yValsPeriod();
     this.yValsPeriodLabel = this.yValsPeriodLabel();
-    this.yValsSumAll = this.yValsSumAll();
-    this.yValsAvgAll = this.yValsAvgAll();
+    const sumAll = this.yValsSumAll();
+    this.yValsSumAll = sumAll <= -50 ? undefined : sumAll;
+    const avgAll = this.yValsAvgAll();
+    this.yValsAvgAll = avgAll <= -50 ? 0 : avgAll;
+    this.prettyRange = SandboxGeneratePlotData.pretty([0, this.maxVal]);
+    this.yRange = [0, this.prettyRange[this.prettyRange.length - 1]];
+  }
+
+  static pretty(range, n = 5, internalOnly = false) {
+    // from https://gist.github.com/Frencil/aab561687cdd2b0de04a
+    let numberOfDivisons = n;
+    numberOfDivisons = parseInt(n, 10);
+    const minN = numberOfDivisons / 3;
+    const shrinkSml = 0.75;
+    const highUBias = 1.5;
+    const u5Bias = 0.5 + 1.5 * highUBias;
+    const d = Math.abs(range[0] - range[1]);
+    let c = d / n;
+    if ((Math.log(d) / Math.LN10) < -2) {
+      c = (Math.max(Math.abs(d)) * shrinkSml) / minN;
+    }
+
+    const base = 10 ** Math.floor(Math.log(c) / Math.LN10);
+    let baseToFixed = 0;
+    if (base < 1) {
+      baseToFixed = Math.abs(Math.round(Math.log(base) / Math.LN10));
+    }
+
+    let unit = base;
+    if (((2 * base) - c) < (highUBias * (c - unit))) {
+      unit = 2 * base;
+      if (((5 * base) - c) < (u5Bias * (c - unit))) {
+        unit = 5 * base;
+        if (((10 * base) - c) < (highUBias * (c - unit))) {
+          unit = 10 * base;
+        }
+      }
+    }
+
+    let ticks = [];
+    let i = 0;
+    if (range[0] <= unit) {
+      i = 0;
+    } else {
+      i = Math.floor(range[0] / unit) * unit;
+      i = parseFloat(i.toFixed(baseToFixed));
+    }
+    while (i < range[1]) {
+      ticks.push(i);
+      i += unit;
+      if (baseToFixed > 0) {
+        i = parseFloat(i.toFixed(baseToFixed));
+      }
+    }
+    ticks.push(i);
+
+    if (internalOnly) {
+      if (ticks[0] < range[0]) { ticks = ticks.slice(1); }
+      if (ticks[ticks.length - 1] > range[1]) { ticks.pop(); }
+    }
+
+    return ticks;
   }
 
   // creates the y values for each period
@@ -66,11 +126,11 @@ class SandboxGeneratePlotData {
     const yValsPeriodAll = this.xvals.map((value, index) => { // eslint-disable-line
       // return value
       if (index === 0) {
-        return value;
+        return value <= -50 ? undefined : value;
       }
       if (count === (this.periodGroups - 1)) {
         count = 0;
-        return value;
+        return value <= -50 ? undefined : value;
       }
       count += 1;
     });
@@ -89,13 +149,13 @@ class SandboxGeneratePlotData {
     const yvalsCount = this.yvals.length - 1;
     const sumXvalsAll = this.yvals.map((value, index) => { // eslint-disable-line
       if (count === (this.periodGroups - 1)) {
-        peroidSum += value;
+        peroidSum += value <= -50 ? undefined : value;
         returnSum = peroidSum;
         count = 0;
         peroidSum = 0;
         return Number(Number(returnSum).toFixed(4));
       } else { // eslint-disable-line no-else-return
-        peroidSum += value;
+        peroidSum += value <= -50 ? undefined : value;
         count += 1;
       }
 
@@ -121,13 +181,13 @@ class SandboxGeneratePlotData {
     const yvalsCount = this.yvals.length - 1;
     const avgXvalsAll = this.yvals.map((value, index) => { // eslint-disable-line
       if (count === (this.periodGroups - 1)) {
-        peroidSum += value;
+        peroidSum += value <= -50 ? undefined : value;
         returnAvg = peroidSum / this.periodGroups;
         count = 0;
         peroidSum = 0;
         return Number(Number(returnAvg).toFixed(4));
       } else { // eslint-disable-line no-else-return
-        peroidSum += value;
+        peroidSum += value <= -50 ? undefined : value;
         count += 1;
       }
 
@@ -234,7 +294,7 @@ class SandboxGeneratePlotData {
       name: `Annual ${this.legnedText}`,
       type: 'scatter',
       x: this.xvals,
-      y: this.yvals,
+      y: this.getYvalues(),
       marker: {
         color: this.annualLineColor
       },
@@ -328,15 +388,14 @@ class SandboxGeneratePlotData {
         },
         rangemode: 'tozero',
         type: 'linear',
-        range: [0, 2],
         ticks: 'outside',
         tickcolor: this.zeroLineColor,
         tickwidth: this.zerolinewidth,
-        // dtick: 0.5,
-        autorange: true,
+        autorange: false,
         showspikes: false,
-        fixedrange: true,
+        fixedrange: false,
         showline: true,
+        range: this.yRange,
         linecolor: this.zeroLineColor,
         linewidth: this.zerolinewidth,
         zerolinecolor: this.zeroLineColor,
