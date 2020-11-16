@@ -6,6 +6,7 @@ import Box from '@material-ui/core/Box';
 import InsertChartOutlinedIcon from '@material-ui/icons/InsertChartOutlined';
 import Button from '@material-ui/core/Button';
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
+import MailOutlineIcon from '@material-ui/icons/MailOutline';
 
 import SandboxPlotRegion from './SandboxPlotRegion';
 import SandboxGeneratePlotData from './SandboxGeneratePlotData';
@@ -373,7 +374,7 @@ export default function SandboxControls() {
         // get the location from the ui
         const titleLocation = replaceLocationAbbreviation(chartDataLocation);
 
-        // conver the all the parameters to human readable title
+        // convert the all the parameters to human readable title
         const chartTitle = sandboxHumanReadable.getChartTitle({
           climatevariable: chartDataClimatevariable,
           region: chartDataRegion,
@@ -664,8 +665,12 @@ export default function SandboxControls() {
     svgs.forEach((svgnode) => {
       const content = Array.from(svgnode.childNodes);
       content.forEach((svgele) => {
-        const node = svgele.cloneNode(true);
-        mergedSVG.appendChild(node);
+        // drag layer contains svg that is not needed and results
+        // in svg data that will require manipulation of data.
+        if (!svgele.classList.contains('draglayer')) {
+          const node = svgele.cloneNode(true);
+          mergedSVG.appendChild(node);
+        }
       });
     });
 
@@ -779,6 +784,34 @@ export default function SandboxControls() {
     donwloadFile(base64doc);
   };
 
+  // handles mail to TSU
+  const handleMailToTSU = () => {
+    const sandboxHumanReadable = new SandboxHumanReadable();
+    const TSUEMail = document.createElement('a');
+
+    // convert the all the parameters to human readable title
+    const chartTitle = sandboxHumanReadable.getChartTitle({
+      climatevariable,
+      region,
+      titleLocation: location
+    });
+
+    // email subject
+    const emailSubject = 'Here is my chart for the NCA';
+
+    // email subject with link to chart
+    const emailBody = `I created a chart to show the ${chartTitle}, using the NCA Sandbox. Here is a link to the chart: \n ${encodeURIComponent(window.location.href)}`;
+    TSUEMail.href = `mailto:mail@example.org?subject=${emailSubject}&body=${emailBody}`;
+
+    // force click
+    const e = new MouseEvent('click');
+    TSUEMail.dispatchEvent(e);
+
+    // Remove a element
+    TSUEMail.remove();
+    return null;
+  };
+
   // handles downloads chart as SVG
   const handleDownloadChartAsPNG = () => {
     convertToPng('.js-plotly-plot .main-svg');
@@ -868,6 +901,9 @@ export default function SandboxControls() {
             <Button onClick={handleDownloadChartAsSVG} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveAltIcon />}>
               .SVG
             </Button>
+            <Button onClick={handleMailToTSU} className={classes.fabsvg} variant="contained" color="default" startIcon={<MailOutlineIcon />}>
+              Send to TSU
+            </Button>
           </div>
           <Box display='flex' flexDirection='row' m={1} justifyContent='center' flex={1} flexGrow={3} className={classes.sandboxChartRegionBox}>
             <SandboxPlotRegion
@@ -876,7 +912,6 @@ export default function SandboxControls() {
               />
           </Box>
         </Grid>
-
       </Grid>
     </div>
   );
