@@ -28,11 +28,6 @@ export default class SandboxHumanReadable {
         chartTitle: 'Number of Days with Maximum Temperature Below 0°F'
       },
       {
-        value: 'tmax100F',
-        pullDownText: 'Days with Maximum Temperature Above 100°F',
-        chartTitle: 'Number of Days with Maximum Temperature Above 100°F'
-      },
-      {
         value: 'tmax32F',
         pullDownText: 'Days with Maximum Temperature Below 32°F',
         chartTitle: 'Number of Days with Maximum Temperature Below 32°F'
@@ -46,6 +41,11 @@ export default class SandboxHumanReadable {
         value: 'tmax95F',
         pullDownText: 'Days with Maximum Temperature Above 95°F',
         chartTitle: 'Number of Days with Maximum Temperature Above 95°F'
+      },
+      {
+        value: 'tmax100F',
+        pullDownText: 'Days with Maximum Temperature Above 100°F',
+        chartTitle: 'Number of Days with Maximum Temperature Above 100°F'
       },
       {
         value: 'tmin0F',
