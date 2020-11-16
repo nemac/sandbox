@@ -39,8 +39,8 @@ export default class SandboxHumanReadable {
       },
       {
         value: 'tmax90F',
-        pullDownText: 'Days with Maximum Temperature Above 100°F',
-        chartTitle: 'Number of Days with Maximum Temperature Above 100°F'
+        pullDownText: 'Days with Maximum Temperature Above 90°F',
+        chartTitle: 'Number of Days with Maximum Temperature Above 90°F'
       },
       {
         value: 'tmax95F',
