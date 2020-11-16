@@ -40,7 +40,7 @@ class SandboxGeneratePlotData {
     this.yValsSumAll = sumAll <= -50 ? undefined : sumAll;
     const avgAll = this.yValsAvgAll();
     this.yValsAvgAll = avgAll <= -50 ? 0 : avgAll;
-    const min = this.minVal < 0 ? 0 : this.minVal
+    const min = this.minVal < 0 ? 0 : this.minVal;
     this.prettyRange = SandboxGeneratePlotData.pretty([min, this.maxVal]);
     this.yRange = [this.prettyRange[0], this.prettyRange[this.prettyRange.length - 1]];
   }
