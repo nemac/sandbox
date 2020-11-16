@@ -432,7 +432,19 @@ class SandboxGeneratePlotData {
       },
       {
         type: 'line',
-        layer: 'lowest',
+        layer: 'above',
+        x0: this.xmin - 5,
+        y0: this.yRange[this.yRange.length - 1],
+        x1: this.xmax + 5,
+        y1: this.yRange[this.yRange.length - 1],
+        line: {
+          color: this.gridColor,
+          width: this.gridwidth
+        }
+      },
+      {
+        type: 'line',
+        layer: 'above',
         x0: this.xmin - 5,
         y0: this.yRange[0],
         x1: this.xmax + 5,
