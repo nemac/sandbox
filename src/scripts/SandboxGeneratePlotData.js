@@ -24,6 +24,7 @@ class SandboxGeneratePlotData {
     this.xvals = props.xvals;
     this.yvals = props.yvals;
     this.maxVal = Math.max(...this.yvals);
+    this.minVal = Math.min(...this.yvals);
     this.chartTitle = props.chartTitle;
     this.legnedText = props.legnedText;
     this.chartType = props.chartType;
@@ -39,8 +40,9 @@ class SandboxGeneratePlotData {
     this.yValsSumAll = sumAll <= -50 ? undefined : sumAll;
     const avgAll = this.yValsAvgAll();
     this.yValsAvgAll = avgAll <= -50 ? 0 : avgAll;
-    this.prettyRange = SandboxGeneratePlotData.pretty([0, this.maxVal]);
-    this.yRange = [0, this.prettyRange[this.prettyRange.length - 1]];
+    const min = this.minVal < 0 ? 0 : this.minVal
+    this.prettyRange = SandboxGeneratePlotData.pretty([min, this.maxVal]);
+    this.yRange = [this.prettyRange[0], this.prettyRange[this.prettyRange.length - 1]];
   }
 
   static pretty(range, n = 5, internalOnly = false) {
@@ -423,6 +425,18 @@ class SandboxGeneratePlotData {
         y0: 0,
         x1: this.xmax + 5,
         y1: 0,
+        line: {
+          color: this.zeroLineColor,
+          width: this.zerolinewidth
+        }
+      },
+      {
+        type: 'line',
+        layer: 'lowest',
+        x0: this.xmin - 5,
+        y0: this.yRange[0],
+        x1: this.xmax + 5,
+        y1: this.yRange[0],
         line: {
           color: this.zeroLineColor,
           width: this.zerolinewidth
