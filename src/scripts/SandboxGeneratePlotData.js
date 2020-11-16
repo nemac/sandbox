@@ -393,7 +393,7 @@ class SandboxGeneratePlotData {
         tickwidth: this.zerolinewidth,
         autorange: false,
         showspikes: false,
-        fixedrange: false,
+        fixedrange: true,
         showline: true,
         range: this.yRange,
         linecolor: this.zeroLineColor,
