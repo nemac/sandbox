@@ -11,9 +11,8 @@ import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import SandboxPlotRegion from './SandboxPlotRegion';
 import SandboxGeneratePlotData from './SandboxGeneratePlotData';
 import SandboxHumanReadable from './SandboxHumanReadable';
-import SandboxSlider from './SandboxSlider';
 import SandboxSelector from './SandboxSelector';
-import SandboxDataCheck from './SandboxDataCheck';
+// import SandboxDataCheck from './SandboxDataCheck';
 import '../css/Sandbox.scss';
 
 const axios = require('axios');
@@ -51,8 +50,8 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   sandboxChartRegion: {
-    height: 'calc(100% - 225px)',
-    maxHeight: 'calc(100% - 225px)',
+    height: 'calc(100% - 205px)',
+    maxHeight: 'calc(100% - 205px)',
     [theme.breakpoints.down('xs')]: {
       height: '550px'
     }
@@ -67,16 +66,16 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(1)
   },
   fabroot: {
-    position: 'absolute',
-    bottom: 'calc(100% - 300px)',
-    right: theme.spacing(2),
-    zIndex: 1000,
-    [theme.breakpoints.down('xs')]: {
-      position: 'relative',
-      bottom: theme.spacing(1),
-      left: theme.spacing(2),
-      zIndex: 1000
-    }
+    // position: 'absolute',
+    // bottom: 'calc(100% - 300px)',
+    // right: theme.spacing(2),
+    // zIndex: 1000,
+    // [theme.breakpoints.down('xs')]: {
+    //   position: 'relative',
+    //   bottom: theme.spacing(1),
+    //   left: theme.spacing(2),
+    //   zIndex: 1000
+    // }
   },
   fabsvg: {
     position: 'relative',
@@ -172,25 +171,11 @@ export default function SandboxControls() {
   // check url parameters for a climatevariable if none make it blank
   const URLClimatevariable = urlParams.get('climatevariable') ? urlParams.get('climatevariable') : '';
 
-  // check url parameters for a using robust if none assume its false,
-  // but his is a string so we will need to convert it to a boolean
-  const RawURLUseRobust = urlParams.get('useRobust') ? urlParams.get('useRobust') : false;
-  const URLUseRobust = (RawURLUseRobust === 'true');
-
-  // check url parameters for the slider values if none make the default [1900, 2020]
-  // its possible the max will be re set by the data files.
-  let URLSliderValues = urlParams.get('sliderValues') ?
-    urlParams.get('sliderValues').split(',').map((value) => parseInt(value, 10)) : [1900, 2020];
-  let URLSliderMinxMaxValues = [1900, 2020];
-
-  // if usng robust the make the default min max are set, there can
-  // be issues if when the min is lower than the actual Minimum in the data
-  if (URLUseRobust) {
-    URLSliderMinxMaxValues = [1950, 2020];
-    if (URLSliderValues[0] < URLSliderMinxMaxValues[0]) {
-      URLSliderValues = [1950, 2020];
-    }
-  }
+  // // check url parameters for the slider values if none make the default [1900, 2020]
+  // // its possible the max will be re set by the data files.
+  // let URLSliderValues = urlParams.get('sliderValues') ?
+  //   urlParams.get('sliderValues').split(',').map((value) => parseInt(value, 10)) : [1900, 2020];
+  // let URLSliderMinxMaxValues = [1900, 2020];
 
   // set defaults for intial states of ui compnents
   let URLClimatevariableDisabled = true;
@@ -223,14 +208,14 @@ export default function SandboxControls() {
       break;
   }
 
+  const useRobust = false;
+  const defaultRanges = [1900, 2020];
+
   // set React state via React Hooks
   const classes = useStyles();
   const [atStart, setAtStart] = useState(true);
-  const [sliderValues, setsliderValues] = useState(URLSliderValues);
-  const [sliderMinxMaxValues, setSliderMinxMaxValues] = useState(URLSliderMinxMaxValues);
-
-  const [useRobust, setUseRobust] = useState(URLUseRobust);
-  const [useRobustClicked, setUseRobustClicked] = useState(false);
+  const [sliderValues, setsliderValues] = useState(defaultRanges);
+  const [sliderMinxMaxValues, setSliderMinxMaxValues] = useState(defaultRanges);
 
   const [region, setRegion] = useState(URLRegion);
   const [location, setLocation] = useState(URLLocation);
@@ -267,7 +252,6 @@ export default function SandboxControls() {
     const { chartDataRegion } = props;
     const { chartDataLocation } = props;
     const { chartDataClimatevariable } = props;
-    const { chartDataUseRobust } = props;
     const { chartDataSliderValues } = props;
 
     // create new URL parameter object
@@ -277,8 +261,7 @@ export default function SandboxControls() {
     searchParams.set('region', chartDataRegion);
     searchParams.set('location', chartDataLocation);
     searchParams.set('climatevariable', chartDataClimatevariable);
-    searchParams.set('useRobust', chartDataUseRobust);
-    searchParams.set('sliderValues', chartDataSliderValues);
+    // searchParams.set('sliderValues', chartDataSliderValues);
 
     // convert url parameters to a string and add the leading ? so it we can add it
     // to browser history (back button works)
@@ -341,7 +324,6 @@ export default function SandboxControls() {
       chartDataRegion,
       chartDataLocation,
       chartDataClimatevariable,
-      chartDataUseRobust,
       chartDataSliderValues
     });
 
@@ -483,7 +465,7 @@ export default function SandboxControls() {
     loadNCAdata(region, useRobust, atStart);
 
     // make sure user robust clicked is now false
-    setUseRobustClicked(false);
+    // setUseRobustClicked(false);
   }, [region, useRobust]);
 
   // use the react effect to control when loading state from URL
@@ -498,59 +480,59 @@ export default function SandboxControls() {
     setAtStart(false);
   }, [atStart]);
 
-  // handle the robust change
-  const handleRobustChange = (newValue) => {
-    // when user clicks robust we need to make sure the min is not below the
-    //  the lowest value, robust data tends to start at 1950 not robust 1900, if
-    // the user was looking at 1900 - 1970 on the site then this would
-    // cause errors because the frst data is well before 1950.  this makes sure
-    // that cannot happen
-    let defaultRanges = [1900, 2020];
-    let changedSliderValues = sliderMinxMaxValues;
-    if (newValue) {
-      defaultRanges = [1950, 2020];
-      setSliderMinxMaxValues(defaultRanges);
-      changedSliderValues = defaultRanges;
-    } else {
-      setSliderMinxMaxValues(defaultRanges);
-      changedSliderValues = defaultRanges;
-    }
-    // update the chart data to refelect change in robust
-    // this will reset the slider values to avoid errors with ranges
-    getChartData({
-      chartDataRegion: region,
-      chartDataLocation: location,
-      chartDataClimatevariable: climatevariable,
-      chartDataUseRobust: newValue,
-      climateDataFilesJSONFile: climateDataFilesJSON,
-      chartDataSliderValues: changedSliderValues
-    });
+  // // handle the robust change
+  // const handleRobustChange = (newValue) => {
+  //   // when user clicks robust we need to make sure the min is not below the
+  //   //  the lowest value, robust data tends to start at 1950 not robust 1900, if
+  //   // the user was looking at 1900 - 1970 on the site then this would
+  //   // cause errors because the frst data is well before 1950.  this makes sure
+  //   // that cannot happen
+  //   let defaultRanges = [1900, 2020];
+  //   let changedSliderValues = sliderMinxMaxValues;
+  //   if (newValue) {
+  //     defaultRanges = [1950, 2020];
+  //     setSliderMinxMaxValues(defaultRanges);
+  //     changedSliderValues = defaultRanges;
+  //   } else {
+  //     setSliderMinxMaxValues(defaultRanges);
+  //     changedSliderValues = defaultRanges;
+  //   }
+  //   // update the chart data to refelect change in robust
+  //   // this will reset the slider values to avoid errors with ranges
+  //   getChartData({
+  //     chartDataRegion: region,
+  //     chartDataLocation: location,
+  //     chartDataClimatevariable: climatevariable,
+  //     chartDataUseRobust: newValue,
+  //     climateDataFilesJSONFile: climateDataFilesJSON,
+  //     chartDataSliderValues: changedSliderValues
+  //   });
+  //
+  //   // udpdate react state so it all refreshes
+  //   setUseRobust(newValue);
+  //   // setUseRobustClicked(true);
+  // };
 
-    // udpdate react state so it all refreshes
-    setUseRobust(newValue);
-    setUseRobustClicked(true);
-  };
+  // // handle seting robust data clicked to false, this allows slider
+  // //  to reset values to min max after robust data checkbox is clicked.
+  // const setUseRobustClickedFalse = (newValue) => {
+  //   // setUseRobustClicked(false);
+  //   return null;
+  // };
 
-  // handle seting robust data clicked to false, this allows slider
-  //  to reset values to min max after robust data checkbox is clicked.
-  const setUseRobustClickedFalse = (newValue) => {
-    setUseRobustClicked(false);
-    return null;
-  };
-
-  // handle the slider change
-  const handleSliderChange = (newValue) => {
-    setsliderValues(newValue);
-    getChartData({
-      chartDataRegion: region,
-      chartDataLocation: location,
-      chartDataClimatevariable: climatevariable,
-      chartDataUseRobust: useRobust,
-      climateDataFilesJSONFile: climateDataFilesJSON,
-      chartDataSliderValues: newValue
-    });
-    return null;
-  };
+  // // handle the slider change
+  // const handleSliderChange = (newValue) => {
+  //   setsliderValues(newValue);
+  //   getChartData({
+  //     chartDataRegion: region,
+  //     chartDataLocation: location,
+  //     chartDataClimatevariable: climatevariable,
+  //     chartDataUseRobust: useRobust,
+  //     climateDataFilesJSONFile: climateDataFilesJSON,
+  //     chartDataSliderValues: newValue
+  //   });
+  //   return null;
+  // };
 
   // handle state change for region
   const handleRegionChange = (newValue) => {
@@ -873,43 +855,38 @@ export default function SandboxControls() {
                   />
               </Box>
             </Grid>
-
-            <Grid item xs={12} sm={3} className={'sandbox-varriable-selectors'}>
-              <Box fontWeight='fontWeightBold' ml={2} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start' className={'sandbox-check-box'}>
-                <SandboxDataCheck
-                  useRobust={useRobust}
-                  onChange={handleRobustChange}
+            <Grid item xs={12} sm={3} className={'sandbox-varriable-selectors'} >
+              <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
+                <SandboxSelector
+                  items={climatevariableItems}
+                  controlName={'Period'}
+                  onChange={handleClimatevariableChange}
+                  value={climatevariable}
+                  disabled={climatevariableDisabled}
+                  replaceClimatevariableType={replaceClimatevariableType}
                   />
               </Box>
             </Grid>
 
             <Grid item xs={12} className={'sandbox-year-slider'} >
-              <Box fontWeight='fontWeightBold' mx={2} mb={1} className="SliderBox" display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='center' >
-                <SandboxSlider
-                  useRobust={useRobust}
-                  useRobustClicked={useRobustClicked}
-                  setUseRobustClickedFalse={setUseRobustClickedFalse}
-                  sliderMinxMaxValues={sliderMinxMaxValues}
-                  sliderValues={sliderValues}
-                  onChange={handleSliderChange}
-                  />
+              <Box fontWeight='fontWeightBold' mx={2} mt={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-end' >
+                <div className={classes.fabroot}>
+                  <Button onClick={handleDownloadChartAsPNG} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveAltIcon />}>
+                    .PNG
+                  </Button>
+                  <Button onClick={handleDownloadChartAsSVG} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveAltIcon />}>
+                    .SVG
+                  </Button>
+                  <Button onClick={handleMailToTSU} className={classes.fabsvg} variant="contained" color="default" startIcon={<MailOutlineIcon />}>
+                    Send to TSU
+                  </Button>
+                </div>
               </Box>
             </Grid>
           </Grid>
         </Grid>
 
         <Grid item xs={12} display='flex' flex={1} className={classes.sandboxChartRegion}>
-          <div className={classes.fabroot}>
-            <Button onClick={handleDownloadChartAsPNG} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveAltIcon />}>
-              .PNG
-            </Button>
-            <Button onClick={handleDownloadChartAsSVG} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveAltIcon />}>
-              .SVG
-            </Button>
-            <Button onClick={handleMailToTSU} className={classes.fabsvg} variant="contained" color="default" startIcon={<MailOutlineIcon />}>
-              Send to TSU
-            </Button>
-          </div>
           <Box display='flex' flexDirection='row' m={1} justifyContent='center' flex={1} flexGrow={3} className={classes.sandboxChartRegionBox}>
             <SandboxPlotRegion
               plotlyData={chartData}
