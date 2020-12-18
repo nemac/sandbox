@@ -28,14 +28,15 @@ class SandboxGeneratePlotData {
     this.chartTitle = props.chartTitle;
     this.legnedText = props.legnedText;
     this.chartType = props.chartType;
+    this.climatevariable = props.climatevariable;
     this.barColor = this.chartType === 'Precipitation' ? this.precipitationColor : this.temperatureColor;
     this.periodGroups = props.periodGroups ? props.periodGroups : 5;
     this.useRobust = props.useRobust;
     this.textAngle = this.useRobust ? 90 : 90;
-    this.xValsSumByPeriod = this.xValsSumByPeriod();
-    this.xValsAvgByPeriod = this.xValsAvgByPeriod();
-    this.yValsPeriod = this.yValsPeriod();
-    this.yValsPeriodLabel = this.yValsPeriodLabel();
+    this.yValsSumByPeriod = this.yValsSumByPeriod();
+    this.yValsAvgByPeriod = this.yValsAvgByPeriod();
+    this.xValsPeriod = this.xValsPeriod();
+    this.xValsPeriodLabel = this.xValsPeriodLabel();
     const sumAll = this.yValsSumAll();
     this.yValsSumAll = sumAll <= -50 ? undefined : sumAll;
     const avgAll = this.yValsAvgAll();
@@ -102,28 +103,31 @@ class SandboxGeneratePlotData {
   }
 
   // creates the y values for each period
-  yValsPeriodLabel() {
+  xValsPeriodLabel() {
     let count = 0;
     const yValsPeriodAll = this.xvals.map((value, index) => { // eslint-disable-line
       // return value
       if (index === 0) {
         const plus = value + (this.periodGroups - 1);
         const tickText = `${value}–${plus.toString().slice(-2)}`;
+        count += 1;
         return tickText;
       }
       if (count === (this.periodGroups - 1)) {
         count = 0;
         const plus = value + (this.periodGroups - 1);
         const tickText = `${value}–${plus.toString().slice(-2)}`;
+        count += 1;
         return tickText;
       }
       count += 1;
+      return '';
     });
     return yValsPeriodAll.filter((value) => value !== undefined);
   }
 
   // creates the y values for each period
-  yValsPeriod() {
+  xValsPeriod() {
     let count = 0;
     const yValsPeriodAll = this.xvals.map((value, index) => { // eslint-disable-line
       // return value
@@ -135,16 +139,18 @@ class SandboxGeneratePlotData {
         return value <= -50 ? undefined : value;
       }
       count += 1;
+      return value <= -50 ? undefined : value;
     });
     return yValsPeriodAll.filter((value) => value !== undefined);
   }
 
+  // sum values
   yValsSumAll() {
     return this.yvals.reduce((a, b) => a + b, 0);
   }
 
   // sums for the defined periods, creates a new array with period means
-  xValsSumByPeriod() {
+  yValsSumByPeriod() {
     let count = 0;
     let peroidSum = 0;
     let returnSum = 0;
@@ -171,12 +177,13 @@ class SandboxGeneratePlotData {
     return sumXvalsAll.filter((value) => value !== undefined);
   }
 
+  // overall average
   yValsAvgAll() {
     return this.yvals.reduce((a, b) => a + b, 0) / this.yvals.length;
   }
 
   // means for the defined periods, creates a new array with period means
-  xValsAvgByPeriod() {
+  yValsAvgByPeriod() {
     let count = 0;
     let peroidSum = 0;
     let returnAvg = 0;
@@ -232,16 +239,15 @@ class SandboxGeneratePlotData {
       }
       return newVal;
     });
-
     while (xIndex < parseInt(this.xvals[0], 10)) { // requested range below data range
       xIndex += 1;
       ret.push('0'); // should this be undef/NaN? How does plotly handle it?
     }
     let yvalsIndex = 0;
     while (xIndex <= parseInt(this.xvals[this.xvals.length - 1], 10)) { // data
-      xIndex += 1;
-      yvalsIndex += 1;
       ret.push(this.yvals[yvalsIndex]);
+      yvalsIndex += 1;
+      xIndex += 1;
     }
     while (xIndex <= this.xmax) { // requested range above data range
       xIndex += 1;
@@ -252,7 +258,6 @@ class SandboxGeneratePlotData {
 
   getData() {
     if (this.maxVal === -Infinity) return [{}];
-    // return [this.getTrace1()];
     return [this.getTrace1(), this.getTrace2()];
   }
 
@@ -268,22 +273,28 @@ class SandboxGeneratePlotData {
     return {
       uid: SandboxGeneratePlotData.uuidv(),
       mode: 'lines',
-      name: `${this.legnedText} for Period`,
-      type: 'bar',
-      x: this.yValsPeriod,
-      y: this.xValsAvgByPeriod,
+      name: 'Average Days',
+      type: 'histogram',
+      histfunc: 'avg',
+      xbins: {
+        start: this.xmin,
+        end: this.xmax,
+        size: 5
+      },
+      nbinsx: 0,
+      x: this.xvals,
+      y: this.getYvalues(),
+      bargroupgap: 5,
       marker: {
         line: {
-          color: this.barColor
+          color: this.barColor,
+          width: 1
         },
         color: this.barColor
       },
-      nbinsx: 0,
       hovermode: 'closest',
       hoverinfo: 'x+y',
-      cumulative: {
-        enabled: false
-      },
+      // hovertemplate: 'Average days: %{y:0.2f} for the years %{x}<br><extra></extra>',
       legendgroup: 1,
       orientation: 'v'
     };
@@ -292,16 +303,17 @@ class SandboxGeneratePlotData {
   getTrace2() {
     return {
       uid: SandboxGeneratePlotData.uuidv(),
-      mode: 'markers+lines',
-      name: `Annual ${this.legnedText}`,
+      mode: 'lines',
+      name: 'Annual',
       type: 'scatter',
       x: this.xvals,
       y: this.getYvalues(),
       marker: {
         color: this.annualLineColor
       },
-      hovermode: 'closest',
       hoverinfo: 'x+y'
+      // hovertemplate: ' <br /> %{y:0.2f} Annual ' +
+      // this.climatevariable + ' for the year: %{x}<extra></extra>  <br /> ',
     };
   }
 
@@ -310,7 +322,7 @@ class SandboxGeneratePlotData {
       displayModeBar: false,
       autosize: true,
       height: 1,
-      bargroupgap: 0,
+      bargap: this.bargap,
       plot_bgcolor: this.chartBackgroundColor,
       paper_bgcolor: this.chartBackgroundColor,
       legend: {
@@ -335,7 +347,6 @@ class SandboxGeneratePlotData {
       xaxis: {
         type: 'linear',
         range: [this.xmin - 5, this.xmax + 5],
-        bargap: this.bargap,
         autorange: false,
         automargin: false,
         showspikes: false,
@@ -346,6 +357,19 @@ class SandboxGeneratePlotData {
         rangemode: 'tozero',
         zerolinecolor: this.zeroLineColor,
         zerolinewidth: this.zerolinewidth,
+
+        dtick: 5,
+        tick0: 0,
+        tickangle: this.textAngle,
+        tickformat: '',
+        tickprefix: '',
+        nticks: this.periodGroups,
+        // tickmode: 'array',
+        // tickvals: this.xValsPeriod,
+        // ticktext: this.xValsPeriodLabel,
+        ticks: 'outside',
+        tickcolor: this.zeroLineColor,
+        tickwidth: this.zerolinewidth,
         tickfont: {
           family: this.font,
           size: this.fontSizeLabelsSecondary
@@ -357,28 +381,11 @@ class SandboxGeneratePlotData {
             size: this.fontSizeLabels
           }
         },
-        dtick: 5,
-        tick0: 0,
-        tickangle: this.textAngle,
         constraintoward: 'center',
-        tickformat: '',
-        tickprefix: '',
-        tickmode: 'array',
-        nticks: this.periodGroups,
-        tickvals: this.yValsPeriod,
-        ticktext: this.yValsPeriodLabel,
-        ticks: 'outside',
-        tickcolor: this.zeroLineColor,
-        tickwidth: this.zerolinewidth,
+
         spikethickness: 4,
         displayModeBar: false,
-        autosize: true,
-        rangeslider: {
-          range: [this.xmin, this.xmax],
-          yaxis: [0, 2],
-          visible: false,
-          autorange: true
-        }
+        autosize: true
       },
       yaxis: {
         title: {
@@ -389,6 +396,7 @@ class SandboxGeneratePlotData {
           }
         },
         rangemode: 'tozero',
+        range: this.yRange,
         type: 'linear',
         ticks: 'outside',
         tickcolor: this.zeroLineColor,
@@ -397,7 +405,6 @@ class SandboxGeneratePlotData {
         showspikes: false,
         fixedrange: true,
         showline: true,
-        range: this.yRange,
         linecolor: this.zeroLineColor,
         linewidth: this.zerolinewidth,
         zerolinecolor: this.zeroLineColor,
@@ -405,6 +412,14 @@ class SandboxGeneratePlotData {
         gridcolor: this.gridColor,
         gridwidth: this.gridwidth,
         bargap: this.bargap
+      },
+      template: {
+        layout: {
+          hovermode: 'closest',
+          hoverinfo: 'x+y',
+          plot_bgcolor: this.chartBackgroundColor,
+          paper_bgcolor: this.chartBackgroundColor
+        }
       },
       shapes: [{
         type: 'line',

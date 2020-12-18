@@ -381,6 +381,10 @@ export default function SandboxControls() {
           titleLocation
         });
 
+        // get climate varriable human readable format
+        const humandReadablechartDataClimatevariable =
+          sandboxHumanReadable.getClimateVariablePullDownText(chartDataClimatevariable);
+
         // create the plotly input so the chart is created based on users seletion
         const plotInfo = {
           xvals: chartDataFromFile[0],
@@ -390,7 +394,8 @@ export default function SandboxControls() {
           chartTitle,
           legnedText: chartType,
           chartType,
-          useRobust: chartDataUseRobust
+          useRobust: chartDataUseRobust,
+          climatevariable: humandReadablechartDataClimatevariable
         };
 
         // get the charts data formated for plotly
