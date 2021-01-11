@@ -41,6 +41,21 @@ export default function Selector(props) {
     onChange(event.target.value);
   };
 
+  const replaceWithHumanReadable = (theControlName, val) => {
+    switch (theControlName) {
+      case 'Climate Variable':
+        return replaceClimatevariableType(val);
+      case 'Select a Location':
+        return replaceLocationAbbreviation(val);
+      case 'Select a Region':
+        return replaceRegional(val);
+      case 'Select a Period':
+        return replacePeriodType(val);
+      default:
+        return replaceClimatevariableType(val);
+    }
+  };
+
   return (
     <FormControl variant='outlined' className={classes.formControl} fullWidth={true} disabled={disabled}>
       <InputLabel id='demo-simple-select-outlined-label' className={classes.sandboxInputLabel} >{controlName}</InputLabel>
@@ -57,7 +72,7 @@ export default function Selector(props) {
         </MenuItem>
         {items.map((name) => (
           <MenuItem key={name} value={name} className={classes.menuItem}>
-            {replaceRegional(replaceClimatevariableType(replaceLocationAbbreviation(replacePeriodType(name))))}
+            {replaceWithHumanReadable(controlName, name)}
           </MenuItem>))}
         </Select>
       </FormControl>
