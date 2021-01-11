@@ -1,6 +1,22 @@
 export default class SandboxHumanReadable {
   constructor(props) {
+    const theDate = new Date();
+    const thisYear = theDate.getFullYear();
+
     this.climateVariableValue = props;
+    this.peroids = [
+      {
+        value: '1900-current',
+        pullDownText: `1900 - ${thisYear}`,
+        range: [1900, thisYear]
+      },
+      {
+        value: '1950-current',
+        pullDownText: `1950 - ${thisYear}`,
+        range: [1950, thisYear]
+      }
+    ];
+
     this.climateVariableValueNames = [
       {
         value: '1inch',
@@ -352,10 +368,28 @@ export default class SandboxHumanReadable {
     return newValue[0].pullDownText;
   }
 
+  getPeriodPullDownText(value) {
+    if (!value) return '';
+    const periodValueNames = this.peroids;
+    const newValue = periodValueNames.filter(
+      (variables) => variables.value === value
+    );
+    return newValue[0].pullDownText;
+  }
+
+  getPeriodRange(value) {
+    if (!value) return '';
+    const periodValueNames = this.peroids;
+    const newValue = periodValueNames.filter(
+      (variables) => variables.value === value
+    );
+    return newValue[0].range;
+  }
+
   getLocationDownText(value) {
     if (!value) return '';
-    const climateVariableValueNames = this.LocationNames;
-    const newValue = climateVariableValueNames.filter(
+    const locationValueNames = this.LocationNames;
+    const newValue = locationValueNames.filter(
       (variables) => variables.value.toUpperCase() === value.toUpperCase()
     );
     let returnValue = value;

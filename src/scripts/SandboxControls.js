@@ -12,7 +12,6 @@ import SandboxPlotRegion from './SandboxPlotRegion';
 import SandboxGeneratePlotData from './SandboxGeneratePlotData';
 import SandboxHumanReadable from './SandboxHumanReadable';
 import SandboxSelector from './SandboxSelector';
-// import SandboxDataCheck from './SandboxDataCheck';
 import '../css/Sandbox.scss';
 
 const axios = require('axios');
@@ -88,6 +87,11 @@ const RegionItems = [
   'National',
   'Regional',
   'State'
+];
+
+const Peroids = [
+  `1900-current`,
+  `1950-current`
 ];
 
 const locationRegionalItems = [
@@ -171,11 +175,8 @@ export default function SandboxControls() {
   // check url parameters for a climatevariable if none make it blank
   const URLClimatevariable = urlParams.get('climatevariable') ? urlParams.get('climatevariable') : '';
 
-  // // check url parameters for the slider values if none make the default [1900, 2020]
-  // // its possible the max will be re set by the data files.
-  // let URLSliderValues = urlParams.get('sliderValues') ?
-  //   urlParams.get('sliderValues').split(',').map((value) => parseInt(value, 10)) : [1900, 2020];
-  // let URLSliderMinxMaxValues = [1900, 2020];
+  // check url parameters for a period variable if none make it blank
+  const URLPeriod = urlParams.get('period') ? urlParams.get('period') : '1900-current';
 
   // set defaults for intial states of ui compnents
   let URLClimatevariableDisabled = true;
@@ -208,18 +209,16 @@ export default function SandboxControls() {
       break;
   }
 
-  const useRobust = false;
-  const defaultRanges = [1900, 2020];
-
   // set React state via React Hooks
   const classes = useStyles();
   const [atStart, setAtStart] = useState(true);
-  const [sliderValues, setsliderValues] = useState(defaultRanges);
-  const [sliderMinxMaxValues, setSliderMinxMaxValues] = useState(defaultRanges);
+
 
   const [region, setRegion] = useState(URLRegion);
   const [location, setLocation] = useState(URLLocation);
   const [climatevariable, setClimatevariable] = useState(URLClimatevariable);
+  const [period, setPeriod] = useState(URLPeriod);
+
   const [chartData, setChartData] = useState([{}]);
   const layoutDefaults = { yaxis: { rangemode: 'tozero', title: 'Days' }, xaxis: { rangemode: 'tozero' } };
   const [chartLayout, setChartLayout] = useState(layoutDefaults);
@@ -252,7 +251,7 @@ export default function SandboxControls() {
     const { chartDataRegion } = props;
     const { chartDataLocation } = props;
     const { chartDataClimatevariable } = props;
-    const { chartDataSliderValues } = props;
+    const { chartDataPeriod } = props;
 
     // create new URL parameter object
     const searchParams = new URLSearchParams();
@@ -261,7 +260,7 @@ export default function SandboxControls() {
     searchParams.set('region', chartDataRegion);
     searchParams.set('location', chartDataLocation);
     searchParams.set('climatevariable', chartDataClimatevariable);
-    // searchParams.set('sliderValues', chartDataSliderValues);
+    searchParams.set('period', chartDataPeriod);
 
     // convert url parameters to a string and add the leading ? so it we can add it
     // to browser history (back button works)
@@ -314,9 +313,8 @@ export default function SandboxControls() {
     const { chartDataRegion } = props;
     const { chartDataLocation } = props;
     const { chartDataClimatevariable } = props;
-    const { chartDataUseRobust } = props;
+    const { chartDataPeriod } = props;
     const { climateDataFilesJSONFile } = props;
-    const { chartDataSliderValues } = props;
 
     // update url history this is the point at which we will need to make sure
     // the graph looks the same when shared via url
@@ -324,12 +322,12 @@ export default function SandboxControls() {
       chartDataRegion,
       chartDataLocation,
       chartDataClimatevariable,
-      chartDataSliderValues
+      chartDataPeriod
     });
 
-    //  limite the posbiel data file to if robust and the climate variable (should be one)
+    //  limit the possible data file to period (years aka 1900 - current 1950 - current) and the climate variable (should be one)
     const data = climateDataFilesJSONFile.filter((json) => {
-      const returnValue = json.robust === chartDataUseRobust &&
+      const returnValue = json.period === chartDataPeriod &&
         json.type === chartDataClimatevariable;
       return returnValue;
     });
@@ -367,24 +365,29 @@ export default function SandboxControls() {
         const humandReadablechartDataClimatevariable =
           sandboxHumanReadable.getClimateVariablePullDownText(chartDataClimatevariable);
 
+        // get period range
+        const humandReadablPeriodRange =
+          sandboxHumanReadable.getPeriodRange(chartDataPeriod);
+
         // create the plotly input so the chart is created based on users seletion
         const plotInfo = {
           xvals: chartDataFromFile[0],
           yvals: chartDataFromFile[1],
-          xmin: sliderMinxMaxValues[0],
-          xmax: sliderMinxMaxValues[1],
+          xmin: humandReadablPeriodRange[0],
+          xmax: humandReadablPeriodRange[1],
           chartTitle,
           legnedText: chartType,
           chartType,
-          useRobust: chartDataUseRobust,
           climatevariable: humandReadablechartDataClimatevariable
         };
 
         // get the charts data formated for plotly
         const plotData = new SandboxGeneratePlotData(plotInfo);
+
+
         const xRange = {
-          xmin: sliderValues[0],
-          xmax: sliderValues[1]
+          xmin: humandReadablPeriodRange[0],
+          xmax: humandReadablPeriodRange[1]
         };
 
         // set the charts min and max based on the data in the data file
@@ -402,7 +405,7 @@ export default function SandboxControls() {
 
   // function loads the index.json file to find the correct data.txt file based on the varriables
   // the user chooses or from URL parameters
-  const loadNCAdata = async (loadRegion, isRobust) => {
+  const loadNCAdata = async (loadRegion, period) => {
     const path = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
     await axios.get(`${path}/sandboxdata/TSU_Sandbox_Datafiles/index.json`)
       .then((response) => {
@@ -430,8 +433,8 @@ export default function SandboxControls() {
         // set climate data json data file
         setClimateDataFilesJSON(responseData);
 
-        // filter data if robust data checked
-        data = responseData.filter((type) => type.robust === isRobust);
+        // filter data for period
+        data = responseData.filter((type) => type.period === period);
 
         // get climate variable items
         setClimatevariableItems(data.map((json) => json.type));
@@ -443,9 +446,8 @@ export default function SandboxControls() {
             chartDataRegion: region,
             chartDataLocation: location,
             chartDataClimatevariable: climatevariable,
-            chartDataUseRobust: useRobust,
-            climateDataFilesJSONFile: responseData,
-            chartDataSliderValues: sliderValues
+            chartDataPeriod: period,
+            climateDataFilesJSONFile: responseData
           });
         }
 
@@ -461,78 +463,21 @@ export default function SandboxControls() {
   // use the react effect to control when location and
   // regions change to repopulate the climate variable pulldown
   useEffect(() => {
-    // call loadNCAdata when useRobust changes
-    loadNCAdata(region, useRobust, atStart);
-
-    // make sure user robust clicked is now false
-    // setUseRobustClicked(false);
-  }, [region, useRobust]);
+    // call loadNCAdata when region changes
+    loadNCAdata(region, period, atStart);
+  }, [region]);
 
   // use the react effect to control when loading state from URL
   // this should only happen once during startup.
   useEffect(() => {
     // call loadNCAdata when at start changes, meaning only call this
     // when the site fist starts and intializes
-    loadNCAdata(region, useRobust, atStart);
+    loadNCAdata(region, period, atStart);
 
     // make suire the start state is no false and this will never run again
     // the loadNCAdata function will only update chartdata the first timei t runs
     setAtStart(false);
   }, [atStart]);
-
-  // // handle the robust change
-  // const handleRobustChange = (newValue) => {
-  //   // when user clicks robust we need to make sure the min is not below the
-  //   //  the lowest value, robust data tends to start at 1950 not robust 1900, if
-  //   // the user was looking at 1900 - 1970 on the site then this would
-  //   // cause errors because the frst data is well before 1950.  this makes sure
-  //   // that cannot happen
-  //   let defaultRanges = [1900, 2020];
-  //   let changedSliderValues = sliderMinxMaxValues;
-  //   if (newValue) {
-  //     defaultRanges = [1950, 2020];
-  //     setSliderMinxMaxValues(defaultRanges);
-  //     changedSliderValues = defaultRanges;
-  //   } else {
-  //     setSliderMinxMaxValues(defaultRanges);
-  //     changedSliderValues = defaultRanges;
-  //   }
-  //   // update the chart data to refelect change in robust
-  //   // this will reset the slider values to avoid errors with ranges
-  //   getChartData({
-  //     chartDataRegion: region,
-  //     chartDataLocation: location,
-  //     chartDataClimatevariable: climatevariable,
-  //     chartDataUseRobust: newValue,
-  //     climateDataFilesJSONFile: climateDataFilesJSON,
-  //     chartDataSliderValues: changedSliderValues
-  //   });
-  //
-  //   // udpdate react state so it all refreshes
-  //   setUseRobust(newValue);
-  //   // setUseRobustClicked(true);
-  // };
-
-  // // handle seting robust data clicked to false, this allows slider
-  // //  to reset values to min max after robust data checkbox is clicked.
-  // const setUseRobustClickedFalse = (newValue) => {
-  //   // setUseRobustClicked(false);
-  //   return null;
-  // };
-
-  // // handle the slider change
-  // const handleSliderChange = (newValue) => {
-  //   setsliderValues(newValue);
-  //   getChartData({
-  //     chartDataRegion: region,
-  //     chartDataLocation: location,
-  //     chartDataClimatevariable: climatevariable,
-  //     chartDataUseRobust: useRobust,
-  //     climateDataFilesJSONFile: climateDataFilesJSON,
-  //     chartDataSliderValues: newValue
-  //   });
-  //   return null;
-  // };
 
   // handle state change for region
   const handleRegionChange = (newValue) => {
@@ -584,9 +529,8 @@ export default function SandboxControls() {
       chartDataRegion: newValue,
       chartDataLocation: location,
       chartDataClimatevariable: climatevariable,
-      chartDataUseRobust: useRobust,
-      climateDataFilesJSONFile: climateDataFilesJSON,
-      chartDataSliderValues: sliderValues
+      chartDataPeriod: period,
+      climateDataFilesJSONFile: climateDataFilesJSON
     });
   };
 
@@ -597,9 +541,8 @@ export default function SandboxControls() {
       chartDataRegion: region,
       chartDataLocation: newValue,
       chartDataClimatevariable: climatevariable,
-      chartDataUseRobust: useRobust,
-      climateDataFilesJSONFile: climateDataFilesJSON,
-      chartDataSliderValues: sliderValues
+      chartDataPeriod: period,
+      climateDataFilesJSONFile: climateDataFilesJSON
     });
   };
 
@@ -610,9 +553,21 @@ export default function SandboxControls() {
       chartDataRegion: region,
       chartDataLocation: location,
       chartDataClimatevariable: newValue,
-      chartDataUseRobust: useRobust,
-      climateDataFilesJSONFile: climateDataFilesJSON,
-      chartDataSliderValues: sliderValues
+      chartDataPeriod: period,
+      climateDataFilesJSONFile: climateDataFilesJSON
+    });
+    return null;
+  };
+
+  // handle state change for climate variable
+  const handlePeriodChange = (newValue) => {
+    setPeriod(newValue);
+    getChartData({
+      chartDataRegion: region,
+      chartDataLocation: location,
+      chartDataClimatevariable: climatevariable,
+      chartDataPeriod: newValue,
+      climateDataFilesJSONFile: climateDataFilesJSON
     });
     return null;
   };
@@ -622,6 +577,19 @@ export default function SandboxControls() {
   const replaceClimatevariableType = (replaceClimatevariable) => {
     const sandboxHumanReadable = new SandboxHumanReadable();
     return sandboxHumanReadable.getClimateVariablePullDownText(replaceClimatevariable);
+  };
+
+  // repalce the period variable with human readable period variable
+  // 1900-current beceomes 1900 - X year in YYYY format - 2021
+  const replacePeriodType = (replacePeriod) => {
+    const sandboxHumanReadable = new SandboxHumanReadable();
+    return sandboxHumanReadable.getPeriodPullDownText(replacePeriod);
+  };
+
+  // get the period range
+  const getPeriodRange = (replacePeriod) => {
+    const sandboxHumanReadable = new SandboxHumanReadable();
+    return sandboxHumanReadable.getPeriodPullDownText(replacePeriod);
   };
 
   // hack to export svg, not using using pure JS
@@ -858,17 +826,17 @@ export default function SandboxControls() {
             <Grid item xs={12} sm={3} className={'sandbox-varriable-selectors'} >
               <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
-                  items={climatevariableItems}
-                  controlName={'Period'}
-                  onChange={handleClimatevariableChange}
-                  value={climatevariable}
-                  disabled={climatevariableDisabled}
+                  items={Peroids}
+                  controlName={'Select a Period'}
+                  onChange={handlePeriodChange}
+                  value={period}
                   replaceClimatevariableType={replaceClimatevariableType}
+                  replacePeriodType={replacePeriodType}
                   />
               </Box>
             </Grid>
 
-            <Grid item xs={12} className={'sandbox-year-slider'} >
+            <Grid item xs={12} className={'sandbox-exports'} >
               <Box fontWeight='fontWeightBold' mx={2} mt={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-end' >
                 <div className={classes.fabroot}>
                   <Button onClick={handleDownloadChartAsPNG} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveAltIcon />}>
@@ -903,7 +871,5 @@ SandboxControls.propTypes = {
   chartDataRegion: PropTypes.string,
   chartDataLocation: PropTypes.string,
   chartDataClimatevariable: PropTypes.string,
-  chartDataUseRobust: PropTypes.bool,
-  chartDataSliderValues: PropTypes.array,
   climateDataFilesJSONFile: PropTypes.object
 };

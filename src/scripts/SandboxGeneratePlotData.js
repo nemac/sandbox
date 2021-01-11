@@ -31,8 +31,7 @@ class SandboxGeneratePlotData {
     this.climatevariable = props.climatevariable;
     this.barColor = this.chartType === 'Precipitation' ? this.precipitationColor : this.temperatureColor;
     this.periodGroups = props.periodGroups ? props.periodGroups : 5;
-    this.useRobust = props.useRobust;
-    this.textAngle = this.useRobust ? 90 : 90;
+    this.textAngle = 90;
     this.yValsSumByPeriod = this.yValsSumByPeriod();
     this.yValsAvgByPeriod = this.yValsAvgByPeriod();
     this.xValsPeriod = this.xValsPeriod();

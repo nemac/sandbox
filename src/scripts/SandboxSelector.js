@@ -29,6 +29,7 @@ export default function Selector(props) {
   const { onChange } = props;
   const replaceClimatevariableType = controlName === 'Climate Variable' ? props.replaceClimatevariableType : (name) => name;
   const replaceLocationAbbreviation = controlName === 'Select a Location' ? props.replaceLocationAbbreviation : (name) => name;
+  const replacePeriodType = controlName === 'Select a Period' ? props.replacePeriodType : (name) => name;
 
   const replaceRegional = (regionalValue) => {
     let returnValue = regionalValue;
@@ -56,7 +57,7 @@ export default function Selector(props) {
         </MenuItem>
         {items.map((name) => (
           <MenuItem key={name} value={name} className={classes.menuItem}>
-            {replaceRegional(replaceClimatevariableType(replaceLocationAbbreviation(name)))}
+            {replaceRegional(replaceClimatevariableType(replaceLocationAbbreviation(replacePeriodType(name))))}
           </MenuItem>))}
         </Select>
       </FormControl>
@@ -70,5 +71,6 @@ Selector.propTypes = {
   disabled: PropTypes.bool,
   replaceClimatevariableType: PropTypes.func,
   replaceLocationAbbreviation: PropTypes.func,
+  replacePeriodType: PropTypes.func,
   onChange: PropTypes.func
 };
