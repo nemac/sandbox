@@ -181,6 +181,7 @@ export default function SandboxControls() {
   // set defaults for intial states of ui compnents
   let URLClimatevariableDisabled = true;
   let URLLocationDisabled = true;
+  let URLPeriodDisabled = true;
   let URLLocationItems = [''];
 
   // the region determines some of the inital states, so if the URl contains a region
@@ -189,23 +190,27 @@ export default function SandboxControls() {
     case 'National':
       // National data set the climatevariable pulldown to NOT disabled by changing the state
       URLClimatevariableDisabled = false;
+      URLPeriodDisabled = false;
       break;
     case 'Regional':
       // National data set the climatevariable pulldown to NOT disabled by changing the state
       URLLocationItems = locationRegionalItems;
       URLLocationDisabled = false;
       URLClimatevariableDisabled = false;
+      URLPeriodDisabled = false;
       break;
     case 'State':
       // National data set the climatevariable pulldown to NOT disabled by changing the state
       URLLocationItems = locationStateItems;
       URLLocationDisabled = false;
       URLClimatevariableDisabled = false;
+      URLPeriodDisabled = false;
       break;
     default:
       // default state
       URLClimatevariableDisabled = true;
       URLLocationDisabled = true;
+      URLPeriodDisabled = true;
       break;
   }
 
@@ -230,6 +235,8 @@ export default function SandboxControls() {
   const [locationDisabled, setlocationDisabled] = useState(URLLocationDisabled);
   const [climatevariableDisabled,
     setClimatevariableDisabled] = useState(URLClimatevariableDisabled);
+
+  const [periodDisabled, setPeriodDisabled] = useState(URLPeriodDisabled);
 
   // sets climate variable type for precip or temp, this will likely change latter...
   const getClimatevariableType = (switchClimatevariable) => {
@@ -381,6 +388,12 @@ export default function SandboxControls() {
           climatevariable: humandReadablechartDataClimatevariable
         };
 
+        // if no data will returned than do not proceed to plotly
+        if (!climateDataFilesJSONFile) return null;
+        if (!chartDataRegion) return null;
+        if (chartDataRegion !== 'National' && !chartDataLocation) return null;
+        if (!chartDataClimatevariable) return null;
+
         // get the charts data formated for plotly
         const plotData = new SandboxGeneratePlotData(plotInfo);
 
@@ -395,6 +408,7 @@ export default function SandboxControls() {
         // change reacts state so it refreshes
         setChartData(plotData.getData());
         setChartLayout(plotData.getLayout());
+        return plotData;
       })
       // handle errors
       .catch((error) => {
@@ -404,7 +418,7 @@ export default function SandboxControls() {
 
   // function loads the index.json file to find the correct data.txt file based on the varriables
   // the user chooses or from URL parameters
-  const loadNCAdata = async (loadRegion, argPeriod) => {
+  const loadData = async (loadRegion, argPeriod) => {
     const path = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
     await axios.get(`${path}/sandboxdata/TSU_Sandbox_Datafiles/index.json`)
       .then((response) => {
@@ -454,7 +468,7 @@ export default function SandboxControls() {
       })
       .catch((error) => {
         // handle error
-        console.error(`SanboxControls loadNCAdata error: ${error}`); // eslint-disable-line no-console
+        console.error(`SanboxControls loadData error: ${error}`); // eslint-disable-line no-console
         return [''];
       });
   };
@@ -462,19 +476,19 @@ export default function SandboxControls() {
   // use the react effect to control when location and
   // regions change to repopulate the climate variable pulldown
   useEffect(() => {
-    // call loadNCAdata when region changes
-    loadNCAdata(region, period, atStart);
+    // call loadData when region changes
+    loadData(region, period, atStart);
   }, [region]);
 
   // use the react effect to control when loading state from URL
   // this should only happen once during startup.
   useEffect(() => {
-    // call loadNCAdata when at start changes, meaning only call this
+    // call loadData when at start changes, meaning only call this
     // when the site fist starts and intializes
-    loadNCAdata(region, period, atStart);
+    loadData(region, period, atStart);
 
     // make suire the start state is no false and this will never run again
-    // the loadNCAdata function will only update chartdata the first timei t runs
+    // the loadData function will only update chartdata the first timei t runs
     setAtStart(false);
   }, [atStart]);
 
@@ -492,6 +506,9 @@ export default function SandboxControls() {
 
         // National data set the climatevariable pulldown to NOT disabled by changing the state
         setClimatevariableDisabled(false);
+
+        // National data set the period pulldown to NOT disabled by changing the state
+        setPeriodDisabled(false);
         break;
       case 'Regional':
         // Regional data set the location items to the regional items
@@ -504,6 +521,9 @@ export default function SandboxControls() {
 
         // Regional data set the climatevariable pulldown to NOT disabled by changing the state
         setClimatevariableDisabled(false);
+
+        // Regional data set the period pulldown to NOT disabled by changing the state
+        setPeriodDisabled(false);
         break;
       case 'State':
         // Regional data set the location items to the state items
@@ -516,12 +536,16 @@ export default function SandboxControls() {
 
         // Regional data set the climatevariable pulldown to NOT disabled by changing the state
         setClimatevariableDisabled(false);
+
+        // Regional data set the period pulldown to NOT disabled by changing the state
+        setPeriodDisabled(false);
         break;
       default:
         setLocationItems(['']);
         setLocation('');
         setlocationDisabled(true);
         setClimatevariableDisabled(true);
+        setPeriodDisabled(true);
         break;
     }
     getChartData({
@@ -823,6 +847,7 @@ export default function SandboxControls() {
                   controlName={'Select a Period'}
                   onChange={handlePeriodChange}
                   value={period}
+                  disabled={periodDisabled}
                   replaceClimatevariableType={replaceClimatevariableType}
                   replacePeriodType={replacePeriodType}
                   />
