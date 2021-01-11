@@ -13,9 +13,12 @@ class SandboxGeneratePlotData {
     this.bargap = 0.15;
     this.font = 'Arial';
     this.zeroLineColor = '#000000';
-    this.zerolinewidth = '1pt';
+    this.zerolinewidth = '1.25';
     this.gridColor = '#BFBFBF';
-    this.gridWidth = '1pt';
+    this.AverageAllColor = '#858585';
+    this.AverageAllWidth = '6';
+    this.AverageAllFontSize = '14pt';
+    this.gridWidth = '1';
     this.fontSizePrimary = '14pt';
     this.fontSizeLabels = '12pt';
     this.fontSizeLabelsSecondary = '12pt';
@@ -420,16 +423,35 @@ class SandboxGeneratePlotData {
           paper_bgcolor: this.chartBackgroundColor
         }
       },
+      annotations: [{
+        xref: 'x',
+        yref: 'y',
+        x: this.xmax + 2.5,
+        y: this.yValsAvgAll.toFixed(1),
+        text: `Average days<br>${this.yValsAvgAll.toFixed(1)}`,
+        showarrow: true,
+        arrowhead: 7,
+        arrowsize: 2,
+        arrowwidth: 2,
+        arrowcolor: this.AverageAllColor,
+        ay: -100,
+        ax: 10,
+        font: {
+          family: this.font,
+          size: this.AverageAllFontSize,
+          color: this.AverageAllColor
+        }
+      }],
       shapes: [{
         type: 'line',
         layer: 'below',
         x0: this.xmin - 5,
-        y0: this.yValsAvgAll,
+        y0: this.yValsAvgAll.toFixed(1),
         x1: this.xmax + 5,
-        y1: this.yValsAvgAll,
+        y1: this.yValsAvgAll.toFixed(1),
         line: {
-          color: this.zeroLineColor,
-          width: this.zerolinewidth
+          color: this.AverageAllColor,
+          width: this.AverageAllWidth
         }
       },
       {
