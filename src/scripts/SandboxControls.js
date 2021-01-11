@@ -90,8 +90,8 @@ const RegionItems = [
 ];
 
 const Peroids = [
-  `1900-current`,
-  `1950-current`
+  '1900-current',
+  '1950-current'
 ];
 
 const locationRegionalItems = [
@@ -213,7 +213,6 @@ export default function SandboxControls() {
   const classes = useStyles();
   const [atStart, setAtStart] = useState(true);
 
-
   const [region, setRegion] = useState(URLRegion);
   const [location, setLocation] = useState(URLLocation);
   const [climatevariable, setClimatevariable] = useState(URLClimatevariable);
@@ -325,7 +324,8 @@ export default function SandboxControls() {
       chartDataPeriod
     });
 
-    //  limit the possible data file to period (years aka 1900 - current 1950 - current) and the climate variable (should be one)
+    // limit the possible data file to period
+    // (years aka 1900 - current 1950 - current) and the climate variable (should be one)
     const data = climateDataFilesJSONFile.filter((json) => {
       const returnValue = json.period === chartDataPeriod &&
         json.type === chartDataClimatevariable;
@@ -384,7 +384,6 @@ export default function SandboxControls() {
         // get the charts data formated for plotly
         const plotData = new SandboxGeneratePlotData(plotInfo);
 
-
         const xRange = {
           xmin: humandReadablPeriodRange[0],
           xmax: humandReadablPeriodRange[1]
@@ -405,7 +404,7 @@ export default function SandboxControls() {
 
   // function loads the index.json file to find the correct data.txt file based on the varriables
   // the user chooses or from URL parameters
-  const loadNCAdata = async (loadRegion, period) => {
+  const loadNCAdata = async (loadRegion, argPeriod) => {
     const path = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
     await axios.get(`${path}/sandboxdata/TSU_Sandbox_Datafiles/index.json`)
       .then((response) => {
@@ -434,7 +433,7 @@ export default function SandboxControls() {
         setClimateDataFilesJSON(responseData);
 
         // filter data for period
-        data = responseData.filter((type) => type.period === period);
+        data = responseData.filter((type) => type.period === argPeriod);
 
         // get climate variable items
         setClimatevariableItems(data.map((json) => json.type));
@@ -582,12 +581,6 @@ export default function SandboxControls() {
   // repalce the period variable with human readable period variable
   // 1900-current beceomes 1900 - X year in YYYY format - 2021
   const replacePeriodType = (replacePeriod) => {
-    const sandboxHumanReadable = new SandboxHumanReadable();
-    return sandboxHumanReadable.getPeriodPullDownText(replacePeriod);
-  };
-
-  // get the period range
-  const getPeriodRange = (replacePeriod) => {
     const sandboxHumanReadable = new SandboxHumanReadable();
     return sandboxHumanReadable.getPeriodPullDownText(replacePeriod);
   };
@@ -871,5 +864,6 @@ SandboxControls.propTypes = {
   chartDataRegion: PropTypes.string,
   chartDataLocation: PropTypes.string,
   chartDataClimatevariable: PropTypes.string,
+  chartDataPeriod: PropTypes.string,
   climateDataFilesJSONFile: PropTypes.object
 };
