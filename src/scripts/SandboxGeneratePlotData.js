@@ -303,7 +303,7 @@ class SandboxGeneratePlotData {
     return {
       uid: SandboxGeneratePlotData.uuidv(),
       mode: 'lines',
-      name: 'Annual',
+      name: 'Annual Days',
       type: 'scatter',
       x: this.xvals,
       y: this.getYvalues(),
@@ -328,8 +328,8 @@ class SandboxGeneratePlotData {
         autosize: true,
         orientation: 'h',
         xanchor: 'center',
-        x: 0.85,
-        y: 1.05,
+        x: 0.08,
+        y: 1.125,
         font: {
           family: this.font,
           size: this.fontSizeLabels
@@ -341,7 +341,7 @@ class SandboxGeneratePlotData {
           family: this.font,
           size: this.fontSizePrimary
         },
-        x: 0.5
+        x: 0.4
       },
       xaxis: {
         type: 'linear',
@@ -374,7 +374,7 @@ class SandboxGeneratePlotData {
           size: this.fontSizeLabelsSecondary
         },
         title: {
-          text: `${this.periodGroups}–year period`,
+          text: `${this.periodGroups}-Year Average`,
           font: {
             family: this.font,
             size: this.fontSizeLabels
