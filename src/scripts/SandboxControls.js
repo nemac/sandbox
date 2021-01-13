@@ -7,6 +7,10 @@ import InsertChartOutlinedIcon from '@material-ui/icons/InsertChartOutlined';
 import Button from '@material-ui/core/Button';
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
+import Collapse from '@material-ui/core/Collapse';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+import Fab from '@material-ui/core/Fab';
 
 import SandboxPlotRegion from './SandboxPlotRegion';
 import SandboxGeneratePlotData from './SandboxGeneratePlotData';
@@ -52,7 +56,8 @@ const useStyles = makeStyles((theme) => ({
     height: 'calc(100% - 205px)',
     maxHeight: 'calc(100% - 205px)',
     [theme.breakpoints.down('xs')]: {
-      height: '550px'
+      height: '550px',
+      maxHeight: '550px'
     }
   },
   sandboxChartRegionBox: {
@@ -61,25 +66,66 @@ const useStyles = makeStyles((theme) => ({
       height: '550px'
     }
   },
+  sandboxExports: {
+    height: '70px',
+    maxheight: '70px',
+    [theme.breakpoints.down('xs')]: {
+      height: '260px',
+      maxheight: '260px'
+    }
+  },
+  sandboxExportsButtonBox: {
+    justifyContent: 'flex-end',
+    [theme.breakpoints.down('xs')]: {
+      justifyContent: 'unset'
+    }
+  },
   extendedIcon: {
     marginRight: theme.spacing(1)
-  },
-  fabroot: {
-    // position: 'absolute',
-    // bottom: 'calc(100% - 300px)',
-    // right: theme.spacing(2),
-    // zIndex: 1000,
-    // [theme.breakpoints.down('xs')]: {
-    //   position: 'relative',
-    //   bottom: theme.spacing(1),
-    //   left: theme.spacing(2),
-    //   zIndex: 1000
-    // }
   },
   fabsvg: {
     position: 'relative',
     margin: theme.spacing(1),
-    zIndex: 1000
+    zIndex: 1000,
+    [theme.breakpoints.down('xs')]: {
+      width: '100%'
+    }
+  },
+  alertClose: {
+  //   margin: '0px',
+  //   top: '22px',
+  //   right: '22px',
+  //   position: 'absolute',
+  //   backgroundColor: '#f8877f',
+  //   color: '#000000'
+  },
+  alertBoxHolder: {
+    // position: 'relative',
+    // top: '0px',
+    // bottom: '0px',
+  //   bottom: '0px',
+  //   height: 'calc(100% - 275px)',
+  //   maxHeight: 'calc(100% - 275px)',
+  //   [theme.breakpoints.down('xs')]: {
+  //     position: 'inherit',
+  //     height: '150px',
+  //     maxHeight: '150px',
+  //   }
+  },
+  alertBox: {
+  //   borderColor: '#d2190b',
+  //   color: '#000000'
+  },
+  alertBoxCollapse: {
+    // position: 'relative',
+    // width: '60%',
+    // height: '150px',
+    // zIndex: 1000,
+    // opacity: 0.85,
+    [theme.breakpoints.down('xs')]: {
+      // bottom: '450px',
+      // height: '350px'
+    }
   }
 }));
 
@@ -217,6 +263,8 @@ export default function SandboxControls() {
   // set React state via React Hooks
   const classes = useStyles();
   const [atStart, setAtStart] = useState(true);
+  const [open, setOpen] = React.useState(true);
+  const [chartErrorMessage, setChartErrorMessage] = React.useState('Chart Error');
 
   const [region, setRegion] = useState(URLRegion);
   const [location, setLocation] = useState(URLLocation);
@@ -396,6 +444,19 @@ export default function SandboxControls() {
 
         // get the charts data formated for plotly
         const plotData = new SandboxGeneratePlotData(plotInfo);
+
+        // check if region or location has data if not display
+        // no data available for location and clear the chart
+        if ( !plotData.hasData() ) {
+          setOpen(true);
+          setChartErrorMessage(`Oops, there is no data available for ${humandReadablechartDataClimatevariable}
+            for ${titleLocation}. Try changing ${titleLocation} to another location. Or try
+            changing ${humandReadablechartDataClimatevariable} to another climate variable.`);
+            return null;
+        }
+
+        // in case the error messae is still open make sure its closed
+        setOpen(false);
 
         const xRange = {
           xmin: humandReadablPeriodRange[0],
@@ -854,8 +915,8 @@ export default function SandboxControls() {
               </Box>
             </Grid>
 
-            <Grid item xs={12} className={'sandbox-exports'} >
-              <Box fontWeight='fontWeightBold' mx={2} mt={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-end' >
+            <Grid item xs={12} className={classes.sandboxExports} >
+              <Box className={classes.sandboxExportsButtonBox} fontWeight='fontWeightBold' mt={1} display='flex' flexDirection='row' flexWrap='nowrap' >
                 <div className={classes.fabroot}>
                   <Button onClick={handleDownloadChartAsPNG} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveAltIcon />}>
                     .PNG
@@ -873,12 +934,26 @@ export default function SandboxControls() {
         </Grid>
 
         <Grid item xs={12} display='flex' flex={1} className={classes.sandboxChartRegion}>
+
+          <Box display='flex' flexDirection='row' m={1} width={1} justifyContent='center' flex={1} flexGrow={3} className={classes.alertBoxHolder}>
+            <Collapse in={open} className={classes.alertBoxCollapse}>
+              <Box className={classes.alertBox} bgcolor='error.main' color='text.primary' p={2} m={2} borderRadius={4} border={1}>
+                <Fab className={classes.alertClose} aria-label='close' size='small' onClick={() => {setOpen(false); }} >
+                  <CloseIcon fontSize="inherit" />
+                </Fab>
+                <Box fontWeight="fontWeightBol d" py={1} >Data Missing</Box>
+                {chartErrorMessage}
+              </Box>
+            </Collapse>
+          </Box>
+
           <Box display='flex' flexDirection='row' m={1} justifyContent='center' flex={1} flexGrow={3} className={classes.sandboxChartRegionBox}>
             <SandboxPlotRegion
               plotlyData={chartData}
               plotlyLayout={chartLayout}
               />
           </Box>
+
         </Grid>
       </Grid>
     </div>
