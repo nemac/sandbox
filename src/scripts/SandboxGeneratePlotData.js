@@ -46,15 +46,15 @@ class SandboxGeneratePlotData {
     const min = this.minVal < 0 ? 0 : this.minVal;
     this.prettyRange = SandboxGeneratePlotData.pretty([min, this.maxVal]);
     this.yRange = [this.prettyRange[0], this.prettyRange[this.prettyRange.length - 1]];
-    console.log('this.maxVal', this.maxVal);
-    console.log('this.maxVal', this.maxVal);
   }
 
   // some regions-locations have no data or -9999 need
   // to check if the region or location has data and is so return false
   // so we can pass an message to user
   hasData() {
-    if(isNaN(this.maxVal) || isNaN(this.minVal)) {
+    if( (isNaN(this.maxVal) || isNaN(this.minVal)) ||
+         (this.maxVal === 0 && this.minVal === 0) ||
+         (this.maxVal === -999 && this.minVal === -999)) {
       return false;
     }
     return true;
@@ -271,6 +271,15 @@ class SandboxGeneratePlotData {
   }
 
   getData() {
+    // remove bad data so chart resets to all zeros
+    if (!this.hasData() ) {
+      this.yvals = this.yvals.map(value => isNaN(value) ? 0 : value);
+      this.yValsSumByPeriod = this.yValsSumByPeriod.map(value => isNaN(value) ? 0 : value);
+      this.yValsAvgByPeriod = this.yValsAvgByPeriod.map(value => isNaN(value) ? 0 : value);
+      this.yRange = this.yRange.map(value => isNaN(value) ? 0 : value);
+      this.yValsSumAll = 0;
+      this.yValsAvgAll = 0;
+    }
     if (this.maxVal === -Infinity) return [{}];
     return [this.getTrace1(), this.getTrace2()];
   }

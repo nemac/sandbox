@@ -8,9 +8,8 @@ import Button from '@material-ui/core/Button';
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import Collapse from '@material-ui/core/Collapse';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
-import Fab from '@material-ui/core/Fab';
+import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
+import red from '@material-ui/core/colors/red';
 
 import SandboxPlotRegion from './SandboxPlotRegion';
 import SandboxGeneratePlotData from './SandboxGeneratePlotData';
@@ -24,6 +23,9 @@ const white = '#FFFFFF';
 const darkGrey = '#E6E6E6';
 const pullDownBackground = '#FBFCFE';
 const fontColor = '#5C5C5C';
+
+const errorBgColor = red[500];
+const errorBorderColor = red[900];
 
 const useStyles = makeStyles((theme) => ({
   sandboxRoot: {
@@ -91,41 +93,8 @@ const useStyles = makeStyles((theme) => ({
       width: '100%'
     }
   },
-  alertClose: {
-  //   margin: '0px',
-  //   top: '22px',
-  //   right: '22px',
-  //   position: 'absolute',
-  //   backgroundColor: '#f8877f',
-  //   color: '#000000'
-  },
-  alertBoxHolder: {
-    // position: 'relative',
-    // top: '0px',
-    // bottom: '0px',
-  //   bottom: '0px',
-  //   height: 'calc(100% - 275px)',
-  //   maxHeight: 'calc(100% - 275px)',
-  //   [theme.breakpoints.down('xs')]: {
-  //     position: 'inherit',
-  //     height: '150px',
-  //     maxHeight: '150px',
-  //   }
-  },
   alertBox: {
-  //   borderColor: '#d2190b',
-  //   color: '#000000'
-  },
-  alertBoxCollapse: {
-    // position: 'relative',
-    // width: '60%',
-    // height: '150px',
-    // zIndex: 1000,
-    // opacity: 0.85,
-    [theme.breakpoints.down('xs')]: {
-      // bottom: '450px',
-      // height: '350px'
-    }
+    color: '#000000'
   }
 }));
 
@@ -450,13 +419,13 @@ export default function SandboxControls() {
         if ( !plotData.hasData() ) {
           setOpen(true);
           setChartErrorMessage(`Oops, there is no data available for ${humandReadablechartDataClimatevariable}
-            for ${titleLocation}. Try changing ${titleLocation} to another location. Or try
-            changing ${humandReadablechartDataClimatevariable} to another climate variable.`);
-            return null;
+            for ${titleLocation}. Try changing ${titleLocation} to another location, or try
+            changing ${humandReadablechartDataClimatevariable} to another climate variable, or
+            try changing the time period`);
+        // in case the error message is still open make sure its closed
+        } else {
+          setOpen(false);
         }
-
-        // in case the error messae is still open make sure its closed
-        setOpen(false);
 
         const xRange = {
           xmin: humandReadablPeriodRange[0],
@@ -935,13 +904,13 @@ export default function SandboxControls() {
 
         <Grid item xs={12} display='flex' flex={1} className={classes.sandboxChartRegion}>
 
-          <Box display='flex' flexDirection='row' m={1} width={1} justifyContent='center' flex={1} flexGrow={3} className={classes.alertBoxHolder}>
-            <Collapse in={open} className={classes.alertBoxCollapse}>
-              <Box className={classes.alertBox} bgcolor='error.main' color='text.primary' p={2} m={2} borderRadius={4} border={1}>
-                <Fab className={classes.alertClose} aria-label='close' size='small' onClick={() => {setOpen(false); }} >
-                  <CloseIcon fontSize="inherit" />
-                </Fab>
-                <Box fontWeight="fontWeightBol d" py={1} >Data Missing</Box>
+          <Box display='flex' flexDirection='row' m={1} width={1} justifyContent='center' flex={1} flexGrow={3}>
+            <Collapse in={open} >
+              <Box className={classes.alertBox} bgcolor={errorBgColor} color='text.primary' p={1} m={1} borderRadius={4} border={1} borderColor={errorBorderColor} >
+                <Box fontWeight="fontWeightBold" py={1} display='flex'>
+                  <div className={'sandbox-alert-icon'} ><ErrorOutlineIcon color='text.primary' /></div>
+                  <div className={'sandbox-alert-header'}>Some data is not available</div>
+                </Box>
                 {chartErrorMessage}
               </Box>
             </Collapse>
