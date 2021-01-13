@@ -449,7 +449,7 @@ class SandboxGeneratePlotData {
         yref: 'y',
         x: this.xmax + 2.5,
         y: this.yValsAvgAll.toFixed(1),
-        text: `Average days<br>${this.yValsAvgAll.toFixed(1)}`,
+        text: `Average days ${this.yValsAvgAll.toFixed(1)}`,
         showarrow: true,
         arrowhead: 7,
         arrowsize: 2,
