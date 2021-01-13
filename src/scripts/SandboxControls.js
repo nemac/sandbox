@@ -93,8 +93,14 @@ const useStyles = makeStyles((theme) => ({
       width: '100%'
     }
   },
-  alertBox: {
-    color: '#000000'
+  sandboxAlertCollapse: {
+    position: 'relative',
+    width: '100%'
+  },
+  sandboxAlertBox: {
+    color: '#000000',
+    position: 'absolute',
+    zIndex: '1000'
   }
 }));
 
@@ -905,10 +911,10 @@ export default function SandboxControls() {
         <Grid item xs={12} display='flex' flex={1} className={classes.sandboxChartRegion}>
 
           <Box display='flex' flexDirection='row' m={1} width={1} justifyContent='center' flex={1} flexGrow={3}>
-            <Collapse in={open} >
-              <Box className={classes.alertBox} bgcolor={errorBgColor} color='text.primary' p={1} m={1} borderRadius={4} border={1} borderColor={errorBorderColor} >
+            <Collapse className={classes.sandboxAlertCollapse} in={open} >
+              <Box className={classes.sandboxAlertBox} bgcolor={errorBgColor} color='text.primary' p={1} m={1} borderRadius={4} border={1} borderColor={errorBorderColor} >
                 <Box fontWeight="fontWeightBold" py={1} display='flex'>
-                  <div className={'sandbox-alert-icon'} ><ErrorOutlineIcon color='text.primary' /></div>
+                  <div className={'sandbox-alert-icon'} ><ErrorOutlineIcon /></div>
                   <div className={'sandbox-alert-header'}>Some data is not available</div>
                 </Box>
                 {chartErrorMessage}
