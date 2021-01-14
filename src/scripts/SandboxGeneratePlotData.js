@@ -15,6 +15,7 @@ class SandboxGeneratePlotData {
     this.zeroLineColor = '#000000';
     this.zerolinewidth = '1.25';
     this.gridColor = '#BFBFBF';
+    this.AverageAllFontColor = '#000000';
     this.AverageAllColor = '#858585';
     this.AverageAllWidth = '6';
     this.AverageAllFontSize = '14pt';
@@ -52,7 +53,7 @@ class SandboxGeneratePlotData {
   // to check if the region or location has data and is so return false
   // so we can pass an message to user
   hasData() {
-    if( (isNaN(this.maxVal) || isNaN(this.minVal)) ||
+    if ((Number.isNaN(this.maxVal) || Number.isNaN(this.minVal)) ||
          (this.maxVal === 0 && this.minVal === 0) ||
          (this.maxVal === -999 && this.minVal === -999)) {
       return false;
@@ -272,11 +273,11 @@ class SandboxGeneratePlotData {
 
   getData() {
     // remove bad data so chart resets to all zeros
-    if (!this.hasData() ) {
-      this.yvals = this.yvals.map(value => isNaN(value) ? 0 : value);
-      this.yValsSumByPeriod = this.yValsSumByPeriod.map(value => isNaN(value) ? 0 : value);
-      this.yValsAvgByPeriod = this.yValsAvgByPeriod.map(value => isNaN(value) ? 0 : value);
-      this.yRange = this.yRange.map(value => isNaN(value) ? 0 : value);
+    if (!this.hasData()) {
+      this.yvals = this.yvals.map((v) => (Number.isNaN(v) ? 0 : v));
+      this.yValsSumByPeriod = this.yValsSumByPeriod.map((v) => (Number.isNaN(v) ? 0 : v));
+      this.yValsAvgByPeriod = this.yValsAvgByPeriod.map((v) => (Number.isNaN(v) ? 0 : v));
+      this.yRange = this.yRange.map((v) => (Number.isNaN(v) ? 0 : v));
       this.yValsSumAll = 0;
       this.yValsAvgAll = 0;
     }
@@ -460,11 +461,10 @@ class SandboxGeneratePlotData {
         font: {
           family: this.font,
           size: this.AverageAllFontSize,
-          color: this.AverageAllColor
+          color: this.AverageAllFontColor
         }
       }],
-      shapes: [
-        {
+      shapes: [{
         type: 'line',
         layer: 'below',
         x0: this.xmin - 5,

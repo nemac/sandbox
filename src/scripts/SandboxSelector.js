@@ -27,9 +27,9 @@ export default function Selector(props) {
   const { value } = props;
   const { disabled } = props;
   const { onChange } = props;
-  const replaceClimatevariableType = controlName === 'Climate Variable' ? props.replaceClimatevariableType : (name) => name;
+  const replaceClimatevariableType = controlName === 'Select a Climate Variable' ? props.replaceClimatevariableType : (name) => name;
   const replaceLocationAbbreviation = controlName === 'Select a Location' ? props.replaceLocationAbbreviation : (name) => name;
-  const replacePeriodType = controlName === 'Select a Period' ? props.replacePeriodType : (name) => name;
+  const replacePeriodType = controlName === 'Select a Time Period' ? props.replacePeriodType : (name) => name;
 
   const replaceRegional = (regionalValue) => {
     let returnValue = regionalValue;
@@ -43,13 +43,13 @@ export default function Selector(props) {
 
   const replaceWithHumanReadable = (theControlName, val) => {
     switch (theControlName) {
-      case 'Climate Variable':
+      case 'Select a Climate Variable':
         return replaceClimatevariableType(val);
       case 'Select a Location':
         return replaceLocationAbbreviation(val);
       case 'Select a Region':
         return replaceRegional(val);
-      case 'Select a Period':
+      case 'Select a Time Period':
         return replacePeriodType(val);
       default:
         return replaceClimatevariableType(val);

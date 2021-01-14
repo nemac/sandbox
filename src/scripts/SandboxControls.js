@@ -422,12 +422,13 @@ export default function SandboxControls() {
 
         // check if region or location has data if not display
         // no data available for location and clear the chart
-        if ( !plotData.hasData() ) {
+        if (!plotData.hasData()) {
           setOpen(true);
-          setChartErrorMessage(`Oops, there is no data available for ${humandReadablechartDataClimatevariable}
-            for ${titleLocation}. Try changing ${titleLocation} to another location, or try
-            changing ${humandReadablechartDataClimatevariable} to another climate variable, or
-            try changing the time period`);
+          setChartErrorMessage(`Unfortunately, there is no data available for ${humandReadablechartDataClimatevariable}
+            for ${titleLocation}. To resolve this issue, try one or all of these three actions.
+            1) Change the location.
+            2) Change the climate variable.
+            3) Change the time period`);
         // in case the error message is still open make sure its closed
         } else {
           setOpen(false);
@@ -868,7 +869,7 @@ export default function SandboxControls() {
               <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
                   items={climatevariableItems}
-                  controlName={'Climate Variable'}
+                  controlName={'Select a Climate Variable'}
                   onChange={handleClimatevariableChange}
                   value={climatevariable}
                   disabled={climatevariableDisabled}
@@ -880,7 +881,7 @@ export default function SandboxControls() {
               <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
                   items={Peroids}
-                  controlName={'Select a Period'}
+                  controlName={'Select a Time Period'}
                   onChange={handlePeriodChange}
                   value={period}
                   disabled={periodDisabled}
@@ -915,7 +916,7 @@ export default function SandboxControls() {
               <Box className={classes.sandboxAlertBox} bgcolor={errorBgColor} color='text.primary' p={1} m={1} borderRadius={4} border={1} borderColor={errorBorderColor} >
                 <Box fontWeight="fontWeightBold" py={1} display='flex'>
                   <div className={'sandbox-alert-icon'} ><ErrorOutlineIcon /></div>
-                  <div className={'sandbox-alert-header'}>Some data is not available</div>
+                  <div className={'sandbox-alert-header'}>Data is not available</div>
                 </Box>
                 {chartErrorMessage}
               </Box>

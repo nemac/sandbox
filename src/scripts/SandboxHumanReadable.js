@@ -95,7 +95,7 @@ export default class SandboxHumanReadable {
         value: 'AK',
         pullDownText: 'Alaska',
         defaultPeriod: '1900-current',
-        validClimateVariables: ['1inch','2inch','3inch','4inch','tmax0F','tmax32F','tmax90F','tmax95F','tmax100F','tmin0F','tmin32F','tmin70F','tmin75F','tmin80F'],
+        validClimateVariables: ['1inch', '2inch', '3inch', '4inch', 'tmax0F', 'tmax32F', 'tmax90F', 'tmax95F', 'tmax100F', 'tmin0F', 'tmin32F', 'tmin70F', 'tmin75F', 'tmin80F'],
         validPeriods: ['1900-current', '1950-current']
       },
       {
