@@ -153,7 +153,7 @@ class SandboxGeneratePlotData {
     if (period > data.length) {
       return getAverage(data);
     }
-    for (let x = this.periodGroups; x - period - 1  < data.length; x += 1) {
+    for (let x = 0; x - period - 1  < data.length; x += 1) {
       movingAveragesX.push(data[x])
     }
     return movingAveragesX;
@@ -329,8 +329,8 @@ class SandboxGeneratePlotData {
     }
 
     // is average is the line and yearly the bar
-    // return [this.traceYearlyBar(), this.traceAverageLine()];
-    return [this.traceYearlyBar(), this.traceAverageLine(), this.traceMovingAverageLineBase()];
+    return [this.traceYearlyBar(), this.traceAverageLine()];
+    // return [this.traceYearlyBar(), this.traceAverageLine(), this.traceMovingAverageLineBase()];
   }
 
   // get the chart layout
