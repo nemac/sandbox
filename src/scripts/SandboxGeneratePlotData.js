@@ -395,6 +395,13 @@ class SandboxGeneratePlotData {
       marker: {
         color: this.annualLineColor
       },
+      line: {
+        color: this.AverageColor,
+        width: this.AverageWidth,
+        dash: 'solid',
+        shape: 'linear',
+        simplify:	true
+      },
       hoverinfo: 'x+y'
       // hovertemplate: ' <br /> %{y:0.2f} Annual ' +
       // this.climatevariable + ' for the year: %{x}<extra></extra>  <br /> ',
@@ -443,7 +450,7 @@ class SandboxGeneratePlotData {
         color: this.AverageColor,
         width: this.AverageWidth,
         dash: 'solid',
-        shape: 'linear',
+        shape: 'spline',
         simplify:	true
       },
       hoverinfo: 'x+y',
@@ -463,7 +470,7 @@ class SandboxGeneratePlotData {
         color: this.AverageColor,
         width: this.AverageWidth,
         dash: 'solid',
-        shape: 'linear',
+        shape: 'spline',
         simplify:	true
 
       },

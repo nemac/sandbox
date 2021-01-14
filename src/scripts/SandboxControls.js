@@ -933,7 +933,7 @@ export default function SandboxControls() {
               <Box className={classes.sandboxExportsButtonBox} fontWeight='fontWeightBold' mt={1} display='flex' flexDirection='row' flexWrap='nowrap' >
                 <div className={classes.fabroot}>
                   <Button onClick={handleSwtichAverageAndYearly} className={classes.fabsvg} variant="contained" color="default" startIcon={<SwapHorizontalCircleIcon />}>
-                    Switch avg and yrly
+                    Switch average and yearly
                   </Button>
                   <Button onClick={handleDownloadChartAsPNG} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveAltIcon />}>
                     .PNG
