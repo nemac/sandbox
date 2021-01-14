@@ -7,6 +7,9 @@ import InsertChartOutlinedIcon from '@material-ui/icons/InsertChartOutlined';
 import Button from '@material-ui/core/Button';
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
+import Collapse from '@material-ui/core/Collapse';
+import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
+import red from '@material-ui/core/colors/red';
 
 import SandboxPlotRegion from './SandboxPlotRegion';
 import SandboxGeneratePlotData from './SandboxGeneratePlotData';
@@ -20,6 +23,9 @@ const white = '#FFFFFF';
 const darkGrey = '#E6E6E6';
 const pullDownBackground = '#FBFCFE';
 const fontColor = '#5C5C5C';
+
+const errorBgColor = red[500];
+const errorBorderColor = red[900];
 
 const useStyles = makeStyles((theme) => ({
   sandboxRoot: {
@@ -52,7 +58,8 @@ const useStyles = makeStyles((theme) => ({
     height: 'calc(100% - 205px)',
     maxHeight: 'calc(100% - 205px)',
     [theme.breakpoints.down('xs')]: {
-      height: '550px'
+      height: '550px',
+      maxHeight: '550px'
     }
   },
   sandboxChartRegionBox: {
@@ -61,25 +68,39 @@ const useStyles = makeStyles((theme) => ({
       height: '550px'
     }
   },
+  sandboxExports: {
+    height: '70px',
+    maxheight: '70px',
+    [theme.breakpoints.down('xs')]: {
+      height: '260px',
+      maxheight: '260px'
+    }
+  },
+  sandboxExportsButtonBox: {
+    justifyContent: 'flex-end',
+    [theme.breakpoints.down('xs')]: {
+      justifyContent: 'unset'
+    }
+  },
   extendedIcon: {
     marginRight: theme.spacing(1)
-  },
-  fabroot: {
-    // position: 'absolute',
-    // bottom: 'calc(100% - 300px)',
-    // right: theme.spacing(2),
-    // zIndex: 1000,
-    // [theme.breakpoints.down('xs')]: {
-    //   position: 'relative',
-    //   bottom: theme.spacing(1),
-    //   left: theme.spacing(2),
-    //   zIndex: 1000
-    // }
   },
   fabsvg: {
     position: 'relative',
     margin: theme.spacing(1),
-    zIndex: 1000
+    zIndex: 1000,
+    [theme.breakpoints.down('xs')]: {
+      width: '100%'
+    }
+  },
+  sandboxAlertCollapse: {
+    position: 'relative',
+    width: '100%'
+  },
+  sandboxAlertBox: {
+    color: '#000000',
+    position: 'absolute',
+    zIndex: '1000'
   }
 }));
 
@@ -217,6 +238,8 @@ export default function SandboxControls() {
   // set React state via React Hooks
   const classes = useStyles();
   const [atStart, setAtStart] = useState(true);
+  const [open, setOpen] = React.useState(true);
+  const [chartErrorMessage, setChartErrorMessage] = React.useState('Chart Error');
 
   const [region, setRegion] = useState(URLRegion);
   const [location, setLocation] = useState(URLLocation);
@@ -396,6 +419,20 @@ export default function SandboxControls() {
 
         // get the charts data formated for plotly
         const plotData = new SandboxGeneratePlotData(plotInfo);
+
+        // check if region or location has data if not display
+        // no data available for location and clear the chart
+        if (!plotData.hasData()) {
+          setOpen(true);
+          setChartErrorMessage(`Unfortunately, there is no data available for ${humandReadablechartDataClimatevariable}
+            for ${titleLocation}. To resolve this issue, try one or all of these three actions.
+            1) Change the location.
+            2) Change the climate variable.
+            3) Change the time period`);
+        // in case the error message is still open make sure its closed
+        } else {
+          setOpen(false);
+        }
 
         const xRange = {
           xmin: humandReadablPeriodRange[0],
@@ -832,7 +869,7 @@ export default function SandboxControls() {
               <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
                   items={climatevariableItems}
-                  controlName={'Climate Variable'}
+                  controlName={'Select a Climate Variable'}
                   onChange={handleClimatevariableChange}
                   value={climatevariable}
                   disabled={climatevariableDisabled}
@@ -844,7 +881,7 @@ export default function SandboxControls() {
               <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
                   items={Peroids}
-                  controlName={'Select a Period'}
+                  controlName={'Select a Time Period'}
                   onChange={handlePeriodChange}
                   value={period}
                   disabled={periodDisabled}
@@ -854,8 +891,8 @@ export default function SandboxControls() {
               </Box>
             </Grid>
 
-            <Grid item xs={12} className={'sandbox-exports'} >
-              <Box fontWeight='fontWeightBold' mx={2} mt={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-end' >
+            <Grid item xs={12} className={classes.sandboxExports} >
+              <Box className={classes.sandboxExportsButtonBox} fontWeight='fontWeightBold' mt={1} display='flex' flexDirection='row' flexWrap='nowrap' >
                 <div className={classes.fabroot}>
                   <Button onClick={handleDownloadChartAsPNG} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveAltIcon />}>
                     .PNG
@@ -873,12 +910,26 @@ export default function SandboxControls() {
         </Grid>
 
         <Grid item xs={12} display='flex' flex={1} className={classes.sandboxChartRegion}>
+
+          <Box display='flex' flexDirection='row' m={1} width={1} justifyContent='center' flex={1} flexGrow={3}>
+            <Collapse className={classes.sandboxAlertCollapse} in={open} >
+              <Box className={classes.sandboxAlertBox} bgcolor={errorBgColor} color='text.primary' p={1} m={1} borderRadius={4} border={1} borderColor={errorBorderColor} >
+                <Box fontWeight="fontWeightBold" py={1} display='flex'>
+                  <div className={'sandbox-alert-icon'} ><ErrorOutlineIcon /></div>
+                  <div className={'sandbox-alert-header'}>Data is not available</div>
+                </Box>
+                {chartErrorMessage}
+              </Box>
+            </Collapse>
+          </Box>
+
           <Box display='flex' flexDirection='row' m={1} justifyContent='center' flex={1} flexGrow={3} className={classes.sandboxChartRegionBox}>
             <SandboxPlotRegion
               plotlyData={chartData}
               plotlyLayout={chartLayout}
               />
           </Box>
+
         </Grid>
       </Grid>
     </div>

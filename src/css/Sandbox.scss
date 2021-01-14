@@ -33,11 +33,17 @@ html, body {
   max-height: 75px;
 }
 
-.sandbox-exports {
-  height: 70px;
-  max-height: 70px;
-}
-
 .sandbox-hover {
   padding: 6px !important;
+}
+
+.sandbox-alert-icon {
+  display: flex;
+  padding: 7px 0;
+  font-size: 22px;
+  margin-right: 12px;
+}
+
+.sandbox-alert-header {
+  padding: 10px 0;
 }
