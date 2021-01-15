@@ -37,7 +37,6 @@ export default function Alert(props) {
       case 'Error':
         return errorBgColor;
       case 'Warning':
-        console.log('backgroundColor', theErrorType, warningBgColor)
         return warningBgColor;
       default:
         return warningBgColor;
@@ -71,6 +70,7 @@ export default function Alert(props) {
 
 Alert.propTypes = {
   chartErrorTitle: PropTypes.string,
-  chartErrorMessage:  PropTypes.string,
-  errorType:  PropTypes.string
+  chartErrorMessage: PropTypes.string,
+  errorType: PropTypes.string,
+  openError: PropTypes.string
 };

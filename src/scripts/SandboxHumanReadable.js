@@ -137,7 +137,7 @@ export default class SandboxHumanReadable {
       },
       {
         value: 'ID',
-        pullDownText: 'Idaho',
+        pullDownText: 'Idaho'
       },
       {
         value: 'IL',

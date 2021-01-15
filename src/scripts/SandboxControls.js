@@ -282,7 +282,8 @@ export default function SandboxControls() {
         json.type === chartDataClimatevariable;
       return returnValue;
     });
-  }
+    return checkData;
+  };
 
   // sets climate variable type for precip or temp, this will likely change latter...
   const getClimatevariableType = (switchClimatevariable) => {
@@ -460,7 +461,7 @@ export default function SandboxControls() {
             1) Change the location.
             2) Change the climate variable.
             3) Change the time period`);
-        } else if(plotData.isAllZeros()) {
+        } else if (plotData.isAllZeros()) {
           setOpenError(true);
           setErrorType('Warning');
           setChartErrorTitle('Warning data is all zeros');

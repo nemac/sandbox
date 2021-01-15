@@ -61,7 +61,7 @@ class SandboxGeneratePlotData {
   // some regions-locations have 0 for all data and that is okay but we need to warn
   // user so they don't think its an error
   isAllZeros() {
-    if (this.maxVal === 0 && this.minVal === 0){
+    if (this.maxVal === 0 && this.minVal === 0) {
       return true;
     }
     return false;
