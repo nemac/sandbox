@@ -268,23 +268,6 @@ export default function SandboxControls() {
 
   const [periodDisabled, setPeriodDisabled] = useState(URLPeriodDisabled);
 
-  // check if location + time peroid has data
-  const checkData = (props) => {
-    const { chartDataLocation } = props;
-    const { chartDataClimatevariable } = props;
-    const { chartDataPeriod } = props;
-    const { climateDataFilesJSONFile } = props;
-
-    // limit the possible data file to period
-    const data = climateDataFilesJSONFile.filter((json) => {
-      const returnValue = json.value === chartDataLocation &&
-        json.period === chartDataPeriod &&
-        json.type === chartDataClimatevariable;
-      return returnValue;
-    });
-    return checkData;
-  };
-
   // sets climate variable type for precip or temp, this will likely change latter...
   const getClimatevariableType = (switchClimatevariable) => {
     const returnValue = switchClimatevariable.includes('inch') ? 'Precipitation' : 'Temperature';
