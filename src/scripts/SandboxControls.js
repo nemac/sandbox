@@ -201,7 +201,7 @@ export default function SandboxControls() {
   const URLPeriod = urlParams.get('period') ? urlParams.get('period') : '1900-current';
 
   // check url parameters for a using average bar true (averages are bar) if blank
-  const URLUseAvgBar = urlParams.get('uab') === null ? true : (urlParams.get('uab') === 'true')
+  const URLUseAvgBar = urlParams.get('uab') === null ? true : (urlParams.get('uab') === 'true');
 
   // set defaults for intial states of ui compnents
   let URLClimatevariableDisabled = true;
@@ -422,7 +422,7 @@ export default function SandboxControls() {
           legnedText: chartType,
           chartType,
           climatevariable: humandReadablechartDataClimatevariable,
-          chartUseAvgBar,
+          chartUseAvgBar
         };
 
         // if no data will returned than do not proceed to plotly
@@ -655,7 +655,7 @@ export default function SandboxControls() {
   // handles switching of yearly and average in chart
   // avg as bars and yearly as line - default
   // yearly as bars and avg as line
-  const handleSwtichAverageAndYearly= () => {
+  const handleSwtichAverageAndYearly = () => {
     // do something
     const bool = !useAvgBar;
     setUseAvgBar(bool);
@@ -982,5 +982,6 @@ SandboxControls.propTypes = {
   chartDataLocation: PropTypes.string,
   chartDataClimatevariable: PropTypes.string,
   chartDataPeriod: PropTypes.string,
-  climateDataFilesJSONFile: PropTypes.object
+  climateDataFilesJSONFile: PropTypes.object,
+  chartUseAvgBar: PropTypes.string
 };
