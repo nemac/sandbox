@@ -1,9 +1,3 @@
-//  TODO
-//    hover labels with good text and values
-//    add json config for limits of data/variable combos
-//    better file names
-//    moving average vs period average
-//    when switching areas we probably need to zero out chart...
 class SandboxGeneratePlotData {
   constructor(props) {
     // style guide driven colors, fonts, ticks may need expanding
@@ -64,13 +58,22 @@ class SandboxGeneratePlotData {
     this.yRange = [this.prettyRange[0], this.prettyRange[this.prettyRange.length - 1]];
   }
 
+  // some regions-locations have 0 for all data and that is okay but we need to warn
+  // user so they don't think its an error
+  isAllZeros() {
+    if (this.maxVal === 0 && this.minVal === 0){
+      return true;
+    }
+    return false;
+  }
+
   // some regions-locations have no data or -9999 need
   // to check if the region or location has data and is so return false
   // so we can pass an message to user
   hasData() {
     if ((Number.isNaN(this.maxVal) || Number.isNaN(this.minVal)) ||
-         (this.maxVal === 0 && this.minVal === 0) ||
-         (this.maxVal === -999 && this.minVal === -999)) {
+         (this.maxVal === -999 && this.minVal === -999) ||
+         (this.maxVal === 0 && this.minVal === -999)) {
       return false;
     }
     return true;
