@@ -1,8 +1,8 @@
 //  TODO
 //    hover labels with good text and values
-//    moving average vs period average
 //    add json config for limits of data/variable combos
 //    better file names
+//    moving average vs period average
 //    when switching areas we probably need to zero out chart...
 class SandboxGeneratePlotData {
   constructor(props) {
@@ -47,6 +47,7 @@ class SandboxGeneratePlotData {
     this.climatevariable = props.climatevariable;
     this.barColor = this.chartType === 'Precipitation' ? this.precipitationColor : this.temperatureColor;
     this.periodGroups = props.periodGroups ? props.periodGroups : 5;
+    this.AverageMovingPeriod = 5;
     this.textAngle = 90;
     this.yValsSumByPeriod = this.yValsSumByPeriod();
     this.yValsAvgByPeriod = this.yValsAvgByPeriod();
@@ -134,7 +135,7 @@ class SandboxGeneratePlotData {
   // calc moving average
   computeMovingAverage() {
     const data = this.yvals;
-    const period = this.periodGroups;
+    const period = this.AverageMovingPeriod;
     const getAverage = (avgArr) => avgArr.reduce((a, b) => a + b, 0) / avgArr.length;
     const movingAverages = [];
 
@@ -152,7 +153,7 @@ class SandboxGeneratePlotData {
   // calc moving average
   movingAverageXValues() {
     const data = this.xvals;
-    const period = this.periodGroups;
+    const period = this.AverageMovingPeriod;
     const movingAveragesX = [];
 
     for (let x = 0; x - period - 1 < data.length; x += 1) {
@@ -378,9 +379,9 @@ class SandboxGeneratePlotData {
         },
         color: this.barColor
       },
-      hovermode: 'closest',
+      hovermode: 'x',
       hoverinfo: 'x+y',
-      // hovertemplate: 'Average days: %{y:0.2f} for the years %{x}<br><extra></extra>',
+      hovertemplate: ` On average, there were %{y:0.2f} <br> ${this.climatevariable.toLowerCase().replace('with', 'with the')} <br> between the years %{x} <extra></extra>`,
       legendgroup: 1,
       orientation: 'v'
     };
@@ -405,9 +406,8 @@ class SandboxGeneratePlotData {
         shape: 'linear',
         simplify: true
       },
-      hoverinfo: 'x+y'
-      // hovertemplate: ' <br /> %{y:0.2f} Annual ' +
-      // this.climatevariable + ' for the year: %{x}<extra></extra>  <br /> ',
+      hoverinfo: 'x+y',
+      hovertemplate: ` There were %{y:0.2f} <br> ${this.climatevariable.toLowerCase().replace('with', 'with the').replace('precipitation ', 'precipitation <br> ').replace('temperature ', 'temperature <br> ')} <br> for the year %{x}  <extra></extra>`
     };
   }
 
@@ -432,11 +432,12 @@ class SandboxGeneratePlotData {
         },
         color: this.barColor
       },
+      hovermode: 'x',
       histfunc: 'sum',
       hoverinfo: 'x+y',
       legendgroup: 1,
-      orientation: 'v'
-      // hovertemplate: 'Average days: %{y:0.2f} for the years %{x}<br><extra></extra>',
+      orientation: 'v',
+      hovertemplate: ` There were %{y:0.2f} <br> ${this.climatevariable.toLowerCase().replace('with', 'with the').replace('precipitation ', 'precipitation <br> ').replace('temperature ', 'temperature <br> ')} <br> for the year %{x}  <extra></extra>`
     };
   }
 
@@ -456,8 +457,10 @@ class SandboxGeneratePlotData {
         shape: 'spline',
         simplify: true
       },
+      customdata: this.xValsMovingAverage.map((val) => `${val} - ${val + this.AverageMovingPeriod}`),
       hoverinfo: 'x+y',
-      visible: 'legendonly'
+      visible: 'legendonly',
+      hovertemplate: ` On average, there were %{y:0.2f} <br> ${this.climatevariable.toLowerCase().replace('with', 'with the')} <br> between the years %{customdata} <br><extra></extra>`
     };
   }
 
@@ -477,7 +480,9 @@ class SandboxGeneratePlotData {
         shape: 'spline',
         simplify: true
       },
-      hoverinfo: 'x+y'
+      customdata: this.xValsPeriod.map((val) => `${val} - ${val + this.periodGroups - 1}`),
+      hoverinfo: 'x+y',
+      hovertemplate: ` On average, there were %{y:0.2f} <br> ${this.climatevariable.toLowerCase().replace('with', 'with the')} <br> between the years %{customdata} <br><extra></extra>`
     };
   }
 
@@ -753,7 +758,7 @@ class SandboxGeneratePlotData {
       },
       template: {
         layout: {
-          hovermode: 'closest',
+          hovermode: 'x',
           hoverinfo: 'x+y',
           plot_bgcolor: this.chartBackgroundColor,
           paper_bgcolor: this.chartBackgroundColor
