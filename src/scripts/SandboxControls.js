@@ -6,6 +6,7 @@ import Box from '@material-ui/core/Box';
 import InsertChartOutlinedIcon from '@material-ui/icons/InsertChartOutlined';
 import Button from '@material-ui/core/Button';
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
+import SwapHorizontalCircleIcon from '@material-ui/icons/SwapHorizontalCircle';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import Collapse from '@material-ui/core/Collapse';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
@@ -199,6 +200,9 @@ export default function SandboxControls() {
   // check url parameters for a period variable if none make it blank
   const URLPeriod = urlParams.get('period') ? urlParams.get('period') : '1900-current';
 
+  // check url parameters for a using average bar true (averages are bar) if blank
+  const URLUseAvgBar = urlParams.get('uab') === null ? true : (urlParams.get('uab') === 'true');
+
   // set defaults for intial states of ui compnents
   let URLClimatevariableDisabled = true;
   let URLLocationDisabled = true;
@@ -238,13 +242,18 @@ export default function SandboxControls() {
   // set React state via React Hooks
   const classes = useStyles();
   const [atStart, setAtStart] = useState(true);
-  const [open, setOpen] = React.useState(true);
-  const [chartErrorMessage, setChartErrorMessage] = React.useState('Chart Error');
+  const [open, setOpen] = useState(false);
+  const [chartErrorMessage, setChartErrorMessage] = useState('Chart Error');
 
   const [region, setRegion] = useState(URLRegion);
   const [location, setLocation] = useState(URLLocation);
   const [climatevariable, setClimatevariable] = useState(URLClimatevariable);
   const [period, setPeriod] = useState(URLPeriod);
+
+  // average bars or line
+  // when true average is the bars when false average is line
+  // when true yearly is the line when false yearly is bars
+  const [useAvgBar, setUseAvgBar] = useState(URLUseAvgBar);
 
   const [chartData, setChartData] = useState([{}]);
   const layoutDefaults = { yaxis: { rangemode: 'tozero', title: 'Days' }, xaxis: { rangemode: 'tozero' } };
@@ -281,6 +290,7 @@ export default function SandboxControls() {
     const { chartDataLocation } = props;
     const { chartDataClimatevariable } = props;
     const { chartDataPeriod } = props;
+    const { chartUseAvgBar } = props;
 
     // create new URL parameter object
     const searchParams = new URLSearchParams();
@@ -290,6 +300,7 @@ export default function SandboxControls() {
     searchParams.set('location', chartDataLocation);
     searchParams.set('climatevariable', chartDataClimatevariable);
     searchParams.set('period', chartDataPeriod);
+    searchParams.set('uab', chartUseAvgBar);
 
     // convert url parameters to a string and add the leading ? so it we can add it
     // to browser history (back button works)
@@ -344,6 +355,7 @@ export default function SandboxControls() {
     const { chartDataClimatevariable } = props;
     const { chartDataPeriod } = props;
     const { climateDataFilesJSONFile } = props;
+    const { chartUseAvgBar } = props;
 
     // update url history this is the point at which we will need to make sure
     // the graph looks the same when shared via url
@@ -351,7 +363,8 @@ export default function SandboxControls() {
       chartDataRegion,
       chartDataLocation,
       chartDataClimatevariable,
-      chartDataPeriod
+      chartDataPeriod,
+      chartUseAvgBar
     });
 
     // limit the possible data file to period
@@ -408,7 +421,8 @@ export default function SandboxControls() {
           chartTitle,
           legnedText: chartType,
           chartType,
-          climatevariable: humandReadablechartDataClimatevariable
+          climatevariable: humandReadablechartDataClimatevariable,
+          chartUseAvgBar
         };
 
         // if no data will returned than do not proceed to plotly
@@ -422,6 +436,7 @@ export default function SandboxControls() {
 
         // check if region or location has data if not display
         // no data available for location and clear the chart
+        //  TODO needs check for you need more data....
         if (!plotData.hasData()) {
           setOpen(true);
           setChartErrorMessage(`Unfortunately, there is no data available for ${humandReadablechartDataClimatevariable}
@@ -497,7 +512,8 @@ export default function SandboxControls() {
             chartDataLocation: location,
             chartDataClimatevariable: climatevariable,
             chartDataPeriod: period,
-            climateDataFilesJSONFile: responseData
+            climateDataFilesJSONFile: responseData,
+            chartUseAvgBar: useAvgBar
           });
         }
 
@@ -524,7 +540,7 @@ export default function SandboxControls() {
     // when the site fist starts and intializes
     loadData(region, period, atStart);
 
-    // make suire the start state is no false and this will never run again
+    // make sure the start state is no false and this will never run again
     // the loadData function will only update chartdata the first timei t runs
     setAtStart(false);
   }, [atStart]);
@@ -590,7 +606,8 @@ export default function SandboxControls() {
       chartDataLocation: location,
       chartDataClimatevariable: climatevariable,
       chartDataPeriod: period,
-      climateDataFilesJSONFile: climateDataFilesJSON
+      climateDataFilesJSONFile: climateDataFilesJSON,
+      chartUseAvgBar: useAvgBar
     });
   };
 
@@ -602,7 +619,8 @@ export default function SandboxControls() {
       chartDataLocation: newValue,
       chartDataClimatevariable: climatevariable,
       chartDataPeriod: period,
-      climateDataFilesJSONFile: climateDataFilesJSON
+      climateDataFilesJSONFile: climateDataFilesJSON,
+      chartUseAvgBar: useAvgBar
     });
   };
 
@@ -614,7 +632,8 @@ export default function SandboxControls() {
       chartDataLocation: location,
       chartDataClimatevariable: newValue,
       chartDataPeriod: period,
-      climateDataFilesJSONFile: climateDataFilesJSON
+      climateDataFilesJSONFile: climateDataFilesJSON,
+      chartUseAvgBar: useAvgBar
     });
     return null;
   };
@@ -627,7 +646,26 @@ export default function SandboxControls() {
       chartDataLocation: location,
       chartDataClimatevariable: climatevariable,
       chartDataPeriod: newValue,
-      climateDataFilesJSONFile: climateDataFilesJSON
+      climateDataFilesJSONFile: climateDataFilesJSON,
+      chartUseAvgBar: useAvgBar
+    });
+    return null;
+  };
+
+  // handles switching of yearly and average in chart
+  // avg as bars and yearly as line - default
+  // yearly as bars and avg as line
+  const handleSwtichAverageAndYearly = () => {
+    // do something
+    const bool = !useAvgBar;
+    setUseAvgBar(bool);
+    getChartData({
+      chartDataRegion: region,
+      chartDataLocation: location,
+      chartDataClimatevariable: climatevariable,
+      chartDataPeriod: period,
+      climateDataFilesJSONFile: climateDataFilesJSON,
+      chartUseAvgBar: bool
     });
     return null;
   };
@@ -894,6 +932,9 @@ export default function SandboxControls() {
             <Grid item xs={12} className={classes.sandboxExports} >
               <Box className={classes.sandboxExportsButtonBox} fontWeight='fontWeightBold' mt={1} display='flex' flexDirection='row' flexWrap='nowrap' >
                 <div className={classes.fabroot}>
+                  <Button onClick={handleSwtichAverageAndYearly} className={classes.fabsvg} variant="contained" color="default" startIcon={<SwapHorizontalCircleIcon />}>
+                    Switch average and yearly
+                  </Button>
                   <Button onClick={handleDownloadChartAsPNG} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveAltIcon />}>
                     .PNG
                   </Button>
@@ -941,5 +982,6 @@ SandboxControls.propTypes = {
   chartDataLocation: PropTypes.string,
   chartDataClimatevariable: PropTypes.string,
   chartDataPeriod: PropTypes.string,
-  climateDataFilesJSONFile: PropTypes.object
+  climateDataFilesJSONFile: PropTypes.object,
+  chartUseAvgBar: PropTypes.string
 };

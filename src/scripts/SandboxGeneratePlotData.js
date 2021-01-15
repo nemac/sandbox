@@ -1,3 +1,9 @@
+//  TODO
+//    hover labels with good text and values
+//    moving average vs period average
+//    add json config for limits of data/variable combos
+//    better file names
+//    when switching areas we probably need to zero out chart...
 class SandboxGeneratePlotData {
   constructor(props) {
     // style guide driven colors, fonts, ticks may need expanding
@@ -11,14 +17,19 @@ class SandboxGeneratePlotData {
     this.precipitationColor = '#5AB4AC';
     this.temperatureColor = '#FEB24C';
     this.bargap = 0.15;
+    this.legendBarLineX = 0.85;
+    this.legendBarLineY = 1.125;
     this.font = 'Arial';
     this.zeroLineColor = '#000000';
     this.zerolinewidth = '1.25';
     this.gridColor = '#BFBFBF';
     this.AverageAllFontColor = '#000000';
     this.AverageAllColor = '#858585';
+    this.AverageMovingColor = '#858585';
     this.AverageAllWidth = '6';
     this.AverageAllFontSize = '14pt';
+    this.AverageWidth = '3';
+    this.AverageColor = '#000000';
     this.gridWidth = '1';
     this.fontSizePrimary = '14pt';
     this.fontSizeLabels = '12pt';
@@ -27,6 +38,7 @@ class SandboxGeneratePlotData {
     this.xmax = props.xmax;
     this.xvals = props.xvals;
     this.yvals = props.yvals;
+    this.useAvgBar = props.chartUseAvgBar;
     this.maxVal = Math.max(...this.yvals);
     this.minVal = Math.min(...this.yvals);
     this.chartTitle = props.chartTitle;
@@ -38,6 +50,8 @@ class SandboxGeneratePlotData {
     this.textAngle = 90;
     this.yValsSumByPeriod = this.yValsSumByPeriod();
     this.yValsAvgByPeriod = this.yValsAvgByPeriod();
+    this.yValsMovingAverage = this.computeMovingAverage();
+    this.xValsMovingAverage = this.movingAverageXValues();
     this.xValsPeriod = this.xValsPeriod();
     this.xValsPeriodLabel = this.xValsPeriodLabel();
     const sumAll = this.yValsSumAll();
@@ -117,6 +131,36 @@ class SandboxGeneratePlotData {
     return ticks;
   }
 
+  // calc moving average
+  computeMovingAverage() {
+    const data = this.yvals;
+    const period = this.periodGroups;
+    const getAverage = (avgArr) => avgArr.reduce((a, b) => a + b, 0) / avgArr.length;
+    const movingAverages = [];
+
+    // if the period is greater than the length of the dataset
+    // then return the average of the whole dataset
+    if (period > data.length) {
+      return getAverage(data);
+    }
+    for (let x = 0; x + period - 1 < data.length; x += 1) {
+      movingAverages.push(getAverage(data.slice(x, x + period)));
+    }
+    return movingAverages;
+  }
+
+  // calc moving average
+  movingAverageXValues() {
+    const data = this.xvals;
+    const period = this.periodGroups;
+    const movingAveragesX = [];
+
+    for (let x = 0; x - period - 1 < data.length; x += 1) {
+      movingAveragesX.push(data[x]);
+    }
+    return movingAveragesX;
+  }
+
   // creates the y values for each period
   xValsPeriodLabel() {
     let count = 0;
@@ -154,7 +198,6 @@ class SandboxGeneratePlotData {
         return value <= -50 ? undefined : value;
       }
       count += 1;
-      return value <= -50 ? undefined : value;
     });
     return yValsPeriodAll.filter((value) => value !== undefined);
   }
@@ -282,7 +325,25 @@ class SandboxGeneratePlotData {
       this.yValsAvgAll = 0;
     }
     if (this.maxVal === -Infinity) return [{}];
-    return [this.getTrace1(), this.getTrace2()];
+
+    // is average is the bar and yearly the line chart
+    if (this.useAvgBar) {
+      return [this.traceAverageBar(), this.traceYearlyLine()];
+    }
+
+    // is average is the line and yearly the bar
+    return [this.traceYearlyBar(), this.traceAverageLine()];
+    // return [this.traceYearlyBar(), this.traceAverageLine(), this.traceMovingAverageLineBase()];
+  }
+
+  // get the chart layout
+  getLayout() {
+    // layout when average is the bar and yearly the line chart
+    if (this.useAvgBar) {
+      return this.layoutAverageBar();
+    }
+    // layout when average is the line and yearly the bar
+    return this.layoutYearBar();
   }
 
   static uuidv() {
@@ -293,11 +354,12 @@ class SandboxGeneratePlotData {
     });
   }
 
-  getTrace1() {
+  // trace for averages when average is a bar
+  traceAverageBar() {
     return {
       uid: SandboxGeneratePlotData.uuidv(),
       mode: 'lines',
-      name: 'Average Days',
+      name: 'Average days per year',
       type: 'histogram',
       histfunc: 'avg',
       xbins: {
@@ -324,16 +386,24 @@ class SandboxGeneratePlotData {
     };
   }
 
-  getTrace2() {
+  // trace for year when average is a bar
+  traceYearlyLine() {
     return {
       uid: SandboxGeneratePlotData.uuidv(),
       mode: 'lines',
-      name: 'Annual Days',
+      name: 'Days per year',
       type: 'scatter',
       x: this.xvals,
       y: this.getYvalues(),
       marker: {
         color: this.annualLineColor
+      },
+      line: {
+        color: this.AverageColor,
+        width: this.AverageWidth,
+        dash: 'solid',
+        shape: 'linear',
+        simplify: true
       },
       hoverinfo: 'x+y'
       // hovertemplate: ' <br /> %{y:0.2f} Annual ' +
@@ -341,7 +411,78 @@ class SandboxGeneratePlotData {
     };
   }
 
-  getLayout() {
+  // trace for year when year is a bar
+  traceYearlyBar() {
+    return {
+      uid: SandboxGeneratePlotData.uuidv(),
+      mode: 'lines',
+      name: 'Days per year',
+      type: 'bar',
+      x: this.xvals,
+      y: this.getYvalues(),
+      xbins: {
+        start: this.xmin,
+        end: this.xmax,
+        size: 5
+      },
+      marker: {
+        line: {
+          color: this.barColor,
+          width: 1
+        },
+        color: this.barColor
+      },
+      histfunc: 'sum',
+      hoverinfo: 'x+y',
+      legendgroup: 1,
+      orientation: 'v'
+      // hovertemplate: 'Average days: %{y:0.2f} for the years %{x}<br><extra></extra>',
+    };
+  }
+
+  // trace for averages when year is a bar
+  traceMovingAverageLineBase() {
+    return {
+      uid: SandboxGeneratePlotData.uuidv(),
+      mode: 'lines',
+      name: 'Moving Average Days',
+      type: 'scatter',
+      x: this.xValsMovingAverage,
+      y: this.yValsMovingAverage,
+      line: {
+        color: this.AverageColor,
+        width: this.AverageWidth,
+        dash: 'solid',
+        shape: 'spline',
+        simplify: true
+      },
+      hoverinfo: 'x+y',
+      visible: 'legendonly'
+    };
+  }
+
+  // trace for averages when year is a bar
+  traceAverageLine() {
+    return {
+      uid: SandboxGeneratePlotData.uuidv(),
+      mode: 'lines',
+      name: 'Average days per year',
+      type: 'scatter',
+      x: this.xValsPeriod,
+      y: this.yValsAvgByPeriod,
+      line: {
+        color: this.AverageColor,
+        width: this.AverageWidth,
+        dash: 'solid',
+        shape: 'spline',
+        simplify: true
+      },
+      hoverinfo: 'x+y'
+    };
+  }
+
+  // layout  when average is a bar
+  layoutAverageBar() {
     return {
       displayModeBar: false,
       autosize: true,
@@ -350,11 +491,11 @@ class SandboxGeneratePlotData {
       plot_bgcolor: this.chartBackgroundColor,
       paper_bgcolor: this.chartBackgroundColor,
       legend: {
+        yanchor: 'top',
         autosize: true,
         orientation: 'h',
-        xanchor: 'center',
-        x: 0.08,
-        y: 1.125,
+        x: this.legendBarLineX,
+        y: this.legendBarLineY,
         font: {
           family: this.font,
           size: this.fontSizeLabels
@@ -399,14 +540,187 @@ class SandboxGeneratePlotData {
           size: this.fontSizeLabelsSecondary
         },
         title: {
-          text: `${this.periodGroups}-Year Average`,
+          text: `${this.periodGroups}-Year Averages`,
           font: {
             family: this.font,
             size: this.fontSizeLabels
           }
         },
         constraintoward: 'center',
+        spikethickness: 4,
+        displayModeBar: false,
+        autosize: true
+      },
+      yaxis: {
+        title: {
+          text: 'Days',
+          font: {
+            family: this.font,
+            size: this.fontSizeLabels
+          }
+        },
+        rangemode: 'tozero',
+        range: this.yRange,
+        type: 'linear',
+        ticks: 'outside',
+        tickcolor: this.zeroLineColor,
+        tickwidth: this.zerolinewidth,
+        autorange: false,
+        showspikes: false,
+        fixedrange: true,
+        showline: true,
+        linecolor: this.zeroLineColor,
+        linewidth: this.zerolinewidth,
+        zerolinecolor: this.zeroLineColor,
+        zerolinewidth: this.zerolinewidth,
+        gridcolor: this.gridColor,
+        gridwidth: this.gridwidth,
+        bargap: this.bargap
+      },
+      template: {
+        layout: {
+          hovermode: 'closest',
+          hoverinfo: 'x+y',
+          plot_bgcolor: this.chartBackgroundColor,
+          paper_bgcolor: this.chartBackgroundColor
+        }
+      },
+      annotations: [{
+        xref: 'x',
+        yref: 'y',
+        x: this.xmax + 2.5,
+        y: this.yValsAvgAll.toFixed(1),
+        text: `Average days ${this.yValsAvgAll.toFixed(1)}`,
+        showarrow: true,
+        arrowhead: 7,
+        arrowsize: 2,
+        arrowwidth: 2,
+        arrowcolor: this.AverageAllColor,
+        ay: -100,
+        ax: 10,
+        font: {
+          family: this.font,
+          size: this.AverageAllFontSize,
+          color: this.AverageAllFontColor
+        }
+      }],
+      shapes: [{
+        type: 'line',
+        layer: 'below',
+        x0: this.xmin - 5,
+        y0: this.yValsAvgAll.toFixed(1),
+        x1: this.xmax + 5,
+        y1: this.yValsAvgAll.toFixed(1),
+        line: {
+          color: this.AverageAllColor,
+          width: this.AverageAllWidth
+        }
+      },
+      {
+        type: 'line',
+        layer: 'above',
+        x0: this.xmin - 5,
+        y0: 0,
+        x1: this.xmax + 5,
+        y1: 0,
+        line: {
+          color: this.zeroLineColor,
+          width: this.zerolinewidth
+        }
+      },
+      {
+        type: 'line',
+        layer: 'above',
+        x0: this.xmin - 5,
+        y0: this.yRange[this.yRange.length - 1],
+        x1: this.xmax + 5,
+        y1: this.yRange[this.yRange.length - 1],
+        line: {
+          color: this.gridColor,
+          width: this.gridwidth
+        }
+      },
+      {
+        type: 'line',
+        layer: 'above',
+        x0: this.xmin - 5,
+        y0: this.yRange[0],
+        x1: this.xmax + 5,
+        y1: this.yRange[0],
+        line: {
+          color: this.zeroLineColor,
+          width: this.zerolinewidth
+        }
+      }]
+    };
+  }
 
+  // layout  when year is a bar
+  layoutYearBar() {
+    return {
+      displayModeBar: false,
+      autosize: true,
+      height: 1,
+      bargap: this.bargap,
+      plot_bgcolor: this.chartBackgroundColor,
+      paper_bgcolor: this.chartBackgroundColor,
+      legend: {
+        yanchor: 'top',
+        autosize: true,
+        orientation: 'h',
+        x: this.legendBarLineX,
+        y: this.legendBarLineY,
+        font: {
+          family: this.font,
+          size: this.fontSizeLabels
+        }
+      },
+      title: {
+        text: this.chartTitle,
+        font: {
+          family: this.font,
+          size: this.fontSizePrimary
+        },
+        x: 0.4
+      },
+      xaxis: {
+        type: 'linear',
+        range: [this.xmin - 5, this.xmax + 5],
+        autorange: false,
+        automargin: false,
+        showspikes: false,
+        zeroline: true,
+        showline: false,
+        showgrid: false,
+        fixedrange: true,
+        rangemode: 'tozero',
+        zerolinecolor: this.zeroLineColor,
+        zerolinewidth: this.zerolinewidth,
+
+        dtick: 5,
+        tick0: 0,
+        tickangle: this.textAngle,
+        tickformat: '',
+        tickprefix: '',
+        nticks: this.periodGroups,
+        // tickmode: 'array',
+        // tickvals: this.xValsPeriod,
+        // ticktext: this.xValsPeriodLabel,
+        ticks: 'outside',
+        tickcolor: this.zeroLineColor,
+        tickwidth: this.zerolinewidth,
+        tickfont: {
+          family: this.font,
+          size: this.fontSizeLabelsSecondary
+        },
+        title: {
+          text: 'Year',
+          font: {
+            family: this.font,
+            size: this.fontSizeLabels
+          }
+        },
+        constraintoward: 'center',
         spikethickness: 4,
         displayModeBar: false,
         autosize: true
