@@ -1,12 +1,10 @@
 //  TODO
 //    add json config for limits of data/variable combos - added but not limiting yet
-//    better file names
-//    moving average vs period average
-//    when switching areas we probably need to zero out chart...
 //    seperate more logic form SandboxControls.js
 //        floating buttons
 //    move all json configs in SandboxHumanReadable.js to seperate file
-//    avg lines need to connect with missing data.
+//    when switching areas we probably need to zero out chart...
+//    moving average vs period average
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
