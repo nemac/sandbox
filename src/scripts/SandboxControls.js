@@ -757,19 +757,19 @@ export default function SandboxControls() {
   // creates a download file name with current date and time and all the
   // chart settings from the ui
   const getDownloadName = () => {
-    // get curent data time
-    const date = new Date();
+    // // get curent data time
+    // const date = new Date().toISOString().slice(0, 10);
 
     // get human readable versons of text
     const sandboxHumanReadable = new SandboxHumanReadable('');
     const chartTitle = sandboxHumanReadable.getChartTitle({
       climatevariable,
       region,
-      titleLocation: location
+      titleLocation: replaceLocationAbbreviation(location)
     });
 
     // format file name
-    return `${chartTitle}-${date.toString()}`;
+    return `${chartTitle}`;
   };
 
   // take blob data and add it to a href, intiate a click so the file downloads
