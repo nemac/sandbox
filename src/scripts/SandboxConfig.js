@@ -5,7 +5,7 @@ export default class SandboxConfig {
         value: 'AK',
         region: 'State',
         defaultPeriod: '1950-current',
-        inValid: [{
+        inValidClimateVariables: [{
           climatevariable: '1inch',
           period: '1900-current'
         },
@@ -20,57 +20,67 @@ export default class SandboxConfig {
         {
           climatevariable: '4inch',
           period: '1900-current'
-        }]
+        }],
+        inValidPeriods: [{}]
       },
       {
         value: 'AL',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'AZ',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'AR',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'CA',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'CO',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'CT',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'DE',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'FL',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'GA',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'HI',
         defaultPeriod: '1950-current',
-        inValid: [{
+        inValidClimateVariables: [{
           climatevariable: '1inch',
           period: '1900-current'
         },
@@ -85,284 +95,348 @@ export default class SandboxConfig {
         {
           climatevariable: '4inch',
           period: '1900-current'
-        }]
+        }],
+        inValidPeriods: [{}]
       },
       {
         value: 'ID',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'IL',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'IN',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'IA',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'KS',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'KY',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'LA',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'ME',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'MD',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'MA',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'MI',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'MN',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'MS',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'MO',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'MT',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'NE',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'NV',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'NH',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'NJ',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'NM',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'NY',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'NC',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'ND',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'OH',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'OK',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'OR',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'PA',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'PR',
         defaultPeriod: '1950-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'RI',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'SC',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'SD',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'TN',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'TX',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'UT',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'VT',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'VA',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'VI',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'WA',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'WV',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'WI',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'WY',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'National',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'Northeast',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'Southeast',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'Midwest',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'Northern Great Plains',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'Northwest',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'Southwest',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'Southern Great Plains',
         defaultPeriod: '1900-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'Alaska',
         defaultPeriod: '1950-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'Hawaii',
         defaultPeriod: '1950-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       },
       {
         value: 'Puerto Rico',
         defaultPeriod: '1950-current',
-        inValid: [{}]
+        inValidClimateVariables: [{}],
+        inValidPeriods: [{}]
       }
     ];
   }
 
   // check if location + time peroid has data
-  checkData(props) {
+  getDefaultPeriod(props) {
     const { chartDataLocation } = props;
-    const { chartDataClimatevariable } = props;
-    const { chartDataPeriod } = props;
 
-    // limit the possible data file to period
-    const data = this.config.filter((json) => {
-      const returnValue = json.value === chartDataLocation &&
-        json.period === chartDataPeriod &&
-        json.type === chartDataClimatevariable;
-      return returnValue;
-    });
-    return data;
+    // limit config based on location
+    const config = this.config.filter((data) => data.value === chartDataLocation);
+    return config[0].defaultPeriod;
+  }
+
+  // check invalid variables so we can exclude them if needed
+  getInValidClimateVariables(props) {
+    const { chartDataLocation } = props;
+
+    // limit config based on location
+    const config = this.config.filter((data) => data.value === chartDataLocation);
+    return config[0].inValidClimateVariables;
+  }
+
+  // check invalid pariods so we can exclude them if needed
+  getInValidPeriods(props) {
+    const { chartDataLocation } = props;
+
+    // limit config based on location
+    const config = this.config.filter((data) => data.value === chartDataLocation);
+    return config[0].inValidPeriods;
   }
 }

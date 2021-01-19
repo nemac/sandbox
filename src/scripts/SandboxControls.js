@@ -1,5 +1,5 @@
 //  TODO
-//    add json config for limits of data/variable combos
+//    add json config for limits of data/variable combos - added but not limiting yet
 //    better file names
 //    moving average vs period average
 //    when switching areas we probably need to zero out chart...
@@ -49,29 +49,29 @@ const useStyles = makeStyles((theme) => ({
     border: `1px solid ${darkGrey}`,
     borderRadius: '4px',
     [theme.breakpoints.down('xs')]: {
-      height: '550px',
-      minHeight: '550px'
+      height: '575px',
+      minHeight: '575px'
     }
   },
   sandboxSelectionAreaHolder: {
     margin: '6px',
     [theme.breakpoints.down('xs')]: {
       height: '100vh',
-      maxHeight: '550px'
+      maxHeight: '575px'
     }
   },
   sandboxChartRegion: {
     height: 'calc(100% - 205px)',
     maxHeight: 'calc(100% - 205px)',
     [theme.breakpoints.down('xs')]: {
-      height: '550px',
-      maxHeight: '550px'
+      height: '575px',
+      maxHeight: '575px'
     }
   },
   sandboxChartRegionBox: {
     height: 'calc(100% - 10px)',
     [theme.breakpoints.down('xs')]: {
-      height: '550px'
+      height: '575px'
     }
   },
   sandboxExports: {
@@ -431,6 +431,27 @@ export default function SandboxControls() {
 
         // get the charts data formated for plotly
         const plotData = new SandboxGeneratePlotData(plotInfo);
+
+        // get configuration for defaults and invalid varriables/periods
+        const configLimitData = { chartDataLocation };
+        const sandboxConfig = new SandboxConfig();
+
+        // get default period for the location
+        const defaultPeriod = sandboxConfig.getDefaultPeriod(configLimitData);
+        const inValidClimateVariables = sandboxConfig.getInValidClimateVariables(configLimitData);
+        const inValidPeriods = sandboxConfig.getInValidPeriods(configLimitData);
+
+        if (defaultPeriod) {
+          // do nothing for now
+        }
+
+        if (inValidClimateVariables) {
+          // do nothing for now
+        }
+
+        if (inValidPeriods) {
+          // do nothing for now
+        }
 
         // check if region or location has data if not display
         // no data available for location and clear the chart
@@ -958,7 +979,7 @@ export default function SandboxControls() {
 
           <Box display='flex' flexDirection='row' m={1} width={1} justifyContent='center' flex={1} flexGrow={3}>
               <SandboxAlert
-                openError={openError}
+                shouldOpenAlert={openError}
                 errorType={errorType}
                 chartErrorTitle={chartErrorTitle}
                 chartErrorMessage={chartErrorMessage}

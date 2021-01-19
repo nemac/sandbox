@@ -11,11 +11,13 @@ const useStyles = makeStyles((theme) => ({
   sandboxAlertBox: {
     color: '#000000',
     position: 'absolute',
-    zIndex: '1000'
+    zIndex: '1000',
+    width: '100%'
   },
   sandboxAlertCollapse: {
     position: 'relative',
-    width: '100%'
+    width: 'calc(100% - 30px)',
+    marginLeft: '-39px'
   }
 }));
 
@@ -24,7 +26,7 @@ export default function Alert(props) {
   const { chartErrorTitle } = props;
   const { chartErrorMessage } = props;
   const { errorType } = props;
-  const { openError } = props;
+  const { shouldOpenAlert } = props;
 
   const errorBgColor = red[500];
   const errorBorderColor = red[900];
@@ -56,7 +58,7 @@ export default function Alert(props) {
   };
 
   return (
-    <Collapse className={classes.sandboxAlertCollapse} in={openError} >
+    <Collapse className={classes.sandboxAlertCollapse} in={shouldOpenAlert} >
       <Box className={classes.sandboxAlertBox} bgcolor={backgroundColor(errorType)} color='text.primary' p={1} mr={2} borderRadius={4} border={1} borderColor={borderColor(errorType)} >
         <Box fontWeight="fontWeightBold" py={1} display='flex'>
           <div className={'sandbox-alert-icon'} ><ErrorOutlineIcon /></div>
@@ -72,5 +74,5 @@ Alert.propTypes = {
   chartErrorTitle: PropTypes.string,
   chartErrorMessage: PropTypes.string,
   errorType: PropTypes.string,
-  openError: PropTypes.string
+  shouldOpenAlert: PropTypes.bool
 };
