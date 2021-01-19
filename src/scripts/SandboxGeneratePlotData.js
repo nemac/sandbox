@@ -409,6 +409,7 @@ class SandboxGeneratePlotData {
         shape: 'linear',
         simplify: true
       },
+      connectgaps: true,
       hoverinfo: 'x+y',
       hovertemplate: ` There were %{y:0.2f} <br> ${this.climatevariable.toLowerCase().replace('with', 'with the').replace('precipitation ', 'precipitation <br> ').replace('temperature ', 'temperature <br> ')} <br> for the year %{x}  <extra></extra>`
     };
@@ -460,6 +461,7 @@ class SandboxGeneratePlotData {
         shape: 'spline',
         simplify: true
       },
+      connectgaps: true,
       customdata: this.xValsMovingAverage.map((val) => `${val} - ${val + this.AverageMovingPeriod}`),
       hoverinfo: 'x+y',
       visible: 'legendonly',
@@ -483,6 +485,7 @@ class SandboxGeneratePlotData {
         shape: 'spline',
         simplify: true
       },
+      connectgaps: true,
       customdata: this.xValsPeriod.map((val) => `${val} - ${val + this.periodGroups - 1}`),
       hoverinfo: 'x+y',
       hovertemplate: ` On average, there were %{y:0.2f} <br> ${this.climatevariable.toLowerCase().replace('with', 'with the')} <br> between the years %{customdata} <br><extra></extra>`
