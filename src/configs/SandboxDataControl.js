@@ -1,4 +1,4 @@
-export default class SandboxConfig {
+export default class SandboxDataControl {
   constructor(props) {
     this.config = [
       {
