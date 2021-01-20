@@ -318,16 +318,23 @@ class SandboxGeneratePlotData {
     return ret;
   }
 
+  // there are cases when the chart data needs to be zero out
+  zeroOutChartData() {
+    const zeroValue = 0;
+    this.yvals = [zeroValue];
+    this.yValsSumByPeriod = [zeroValue];
+    this.yValsAvgByPeriod = [zeroValue];
+    this.yRange = [0, 4];
+    this.yValsSumAll = 0.00000001;
+    this.yValsAvgAll = 0.00000001;
+  }
+
   getData() {
     // remove bad data so chart resets to all zeros
-    if (!this.hasData()) {
-      this.yvals = this.yvals.map((v) => (Number.isNaN(v) ? 0 : v));
-      this.yValsSumByPeriod = this.yValsSumByPeriod.map((v) => (Number.isNaN(v) ? 0 : v));
-      this.yValsAvgByPeriod = this.yValsAvgByPeriod.map((v) => (Number.isNaN(v) ? 0 : v));
-      this.yRange = this.yRange.map((v) => (Number.isNaN(v) ? 0 : v));
-      this.yValsSumAll = 0;
-      this.yValsAvgAll = 0;
+    if (!this.hasData() || this.isAllZeros()) {
+      this.zeroOutChartData();
     }
+
     if (this.maxVal === -Infinity) return [{}];
 
     // is average is the bar and yearly the line chart

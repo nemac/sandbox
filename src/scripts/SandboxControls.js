@@ -1,5 +1,4 @@
 //  TODO
-//    x-axis labels better and flip 180deg and axis labels
 //    when switching areas we probably need to zero out chart...
 //    when selecting non need zero out charts...
 //    moving average vs period average
@@ -336,6 +335,14 @@ export default function SandboxControls() {
         const humandReadablPeriodRange =
           sandboxHumanReadable.getPeriodRange(chartDataPeriod);
 
+        // if no data mark as data missing so we can handle required fields and error messaging
+        let dataMissing = false;
+        if (!climateDataFilesJSONFile) dataMissing = true;
+        if (!chartDataRegion) dataMissing = true;
+        if (chartDataRegion !== 'National' && !chartDataLocation) dataMissing = true;
+        if (!chartDataClimatevariable) dataMissing = true;
+        if (!chartDataPeriod) dataMissing = true;
+
         // create the plotly input so the chart is created based on users seletion
         const plotInfo = {
           xvals: chartDataFromFile[0],
@@ -346,18 +353,17 @@ export default function SandboxControls() {
           legnedText: chartType,
           chartType,
           climatevariable: humandReadablechartDataClimatevariable,
-          chartUseAvgBar
+          chartUseAvgBar,
+          dataMissing
         };
-
-        // if no data will returned than do not proceed to plotly
-        if (!climateDataFilesJSONFile) return null;
-        if (!chartDataRegion) return null;
-        if (chartDataRegion !== 'National' && !chartDataLocation) return null;
-        if (!chartDataClimatevariable) return null;
-        if (!chartDataPeriod) return null;
 
         // get the charts data formated for plotly
         const plotData = new SandboxGeneratePlotData(plotInfo);
+
+        // if data is missing then zero out chart
+        if (dataMissing) {
+          plotData.zeroOutChartData();
+        }
 
         // get configuration for defaults and invalid varriables/periods
         const locationLimit = chartDataRegion === 'National' ? 'National' : chartDataLocation;
@@ -387,8 +393,8 @@ export default function SandboxControls() {
 
         // check if region or location has data if not display
         // no data available for location and clear the chart
-        //  TODO needs check for you need more data....
-        if (!plotData.hasData()) {
+        // if data missing for combo field level errors will handle messaging
+        if (!plotData.hasData() && !dataMissing) {
           setOpenError(true);
           setErrorType('Error');
           setChartErrorTitle('Error data not available');
@@ -397,7 +403,7 @@ export default function SandboxControls() {
             1) Change the location.
             2) Change the climate variable.
             3) Change the time period`);
-        } else if (plotData.isAllZeros()) {
+        } else if (plotData.isAllZeros() && !dataMissing) {
           setOpenError(true);
           setErrorType('Warning');
           setChartErrorTitle('Warning data is all zeros');
@@ -505,6 +511,7 @@ export default function SandboxControls() {
   // handle state change for region
   const handleRegionChange = (newValue) => {
     setRegion(newValue);
+
     switch (newValue) {
       case 'National':
         // National data set the location items to none since there are none
@@ -560,7 +567,7 @@ export default function SandboxControls() {
     }
     getChartData({
       chartDataRegion: newValue,
-      chartDataLocation: location,
+      chartDataLocation: '', // make sure location is blank
       chartDataClimatevariable: climatevariable,
       chartDataPeriod: period,
       climateDataFilesJSONFile: climateDataFilesJSON,
@@ -843,6 +850,7 @@ export default function SandboxControls() {
                   onChange={handleRegionChange}
                   value={region}
                   disabled={false}
+                  missing={(!region)}
                   replaceClimatevariableType={replaceClimatevariableType}
                   />
               </Box>
@@ -855,6 +863,7 @@ export default function SandboxControls() {
                   onChange={handleLocationChange}
                   value={location}
                   disabled={locationDisabled}
+                  missing={(region !== 'National' && !location)}
                   replaceClimatevariableType={replaceClimatevariableType}
                   replaceLocationAbbreviation={replaceLocationAbbreviation}
                   />
@@ -868,6 +877,7 @@ export default function SandboxControls() {
                   onChange={handleClimatevariableChange}
                   value={climatevariable}
                   disabled={climatevariableDisabled}
+                  missing={(!climatevariable)}
                   replaceClimatevariableType={replaceClimatevariableType}
                   />
               </Box>
@@ -880,6 +890,7 @@ export default function SandboxControls() {
                   onChange={handlePeriodChange}
                   value={period}
                   disabled={periodDisabled}
+                  missing={(!period)}
                   replaceClimatevariableType={replaceClimatevariableType}
                   replacePeriodType={replacePeriodType}
                   />
