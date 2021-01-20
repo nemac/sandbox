@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
 import Select from '@material-ui/core/Select';
 
 const useStyles = makeStyles((theme) => ({
@@ -17,6 +18,11 @@ const useStyles = makeStyles((theme) => ({
   },
   sandboxInputLabel: {
     color: '#5C5C5C'
+  },
+  sandboxErrorText: {
+    backgroundColor: '#FBFCFE',
+    margin: '0px',
+    paddingTop: '3px'
   }
 }));
 
@@ -26,11 +32,17 @@ export default function Selector(props) {
   const { controlName } = props;
   const { value } = props;
   const { disabled } = props;
+  const { missing } = props;
   const { onChange } = props;
   const replaceClimatevariableType = controlName === 'Select a Climate Variable' ? props.replaceClimatevariableType : (name) => name;
   const replaceLocationAbbreviation = controlName === 'Select a Location' ? props.replaceLocationAbbreviation : (name) => name;
   const replacePeriodType = controlName === 'Select a Time Period' ? props.replacePeriodType : (name) => name;
 
+  // missing data validation message
+  const selectorError = (missing && !disabled);
+  const errorLabel = (selectorError) ? <FormHelperText className={classes.sandboxErrorText}>{controlName} is required</FormHelperText> : '';
+
+  // replace regional
   const replaceRegional = (regionalValue) => {
     let returnValue = regionalValue;
     if (regionalValue.toUpperCase() === 'REGIONAL') returnValue = 'NCA Region';
@@ -57,7 +69,7 @@ export default function Selector(props) {
   };
 
   return (
-    <FormControl variant='outlined' className={classes.formControl} fullWidth={true} disabled={disabled}>
+    <FormControl variant='outlined' className={classes.formControl} fullWidth={true} disabled={disabled} error={selectorError}>
       <InputLabel id='demo-simple-select-outlined-label' className={classes.sandboxInputLabel} >{controlName}</InputLabel>
       <Select
         labelId='demo-simple-select-outlined-label'
@@ -67,14 +79,12 @@ export default function Selector(props) {
         label={controlName}
         className={classes.menuItem}
         >
-        <MenuItem value=''>
-          <em>None</em>
-        </MenuItem>
         {items.map((name) => (
           <MenuItem key={name} value={name} className={classes.menuItem}>
             {replaceWithHumanReadable(controlName, name)}
           </MenuItem>))}
         </Select>
+        {errorLabel}
       </FormControl>
   );
 }
@@ -84,6 +94,7 @@ Selector.propTypes = {
   controlName: PropTypes.string,
   value: PropTypes.string,
   disabled: PropTypes.bool,
+  missing: PropTypes.bool,
   replaceClimatevariableType: PropTypes.func,
   replaceLocationAbbreviation: PropTypes.func,
   replacePeriodType: PropTypes.func,
