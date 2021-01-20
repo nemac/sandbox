@@ -415,28 +415,30 @@ export default class SandboxDataControl {
 
   // check if location + time peroid has data
   getDefaultPeriod(props) {
-    const { chartDataLocation } = props;
-
+    const { locationLimit } = props;
+    if (!locationLimit) return [{}];
     // limit config based on location
-    const config = this.config.filter((data) => data.value === chartDataLocation);
+    const config = this.config.filter((data) => data.value === locationLimit);
     return config[0].defaultPeriod;
   }
 
   // check invalid variables so we can exclude them if needed
   getInValidClimateVariables(props) {
-    const { chartDataLocation } = props;
+    const { locationLimit } = props;
+    if (!locationLimit) return [{}];
 
     // limit config based on location
-    const config = this.config.filter((data) => data.value === chartDataLocation);
+    const config = this.config.filter((data) => data.value === locationLimit);
     return config[0].inValidClimateVariables;
   }
 
   // check invalid pariods so we can exclude them if needed
   getInValidPeriods(props) {
-    const { chartDataLocation } = props;
+    const { locationLimit } = props;
+    if (!locationLimit) return [{}];
 
     // limit config based on location
-    const config = this.config.filter((data) => data.value === chartDataLocation);
+    const config = this.config.filter((data) => data.value === locationLimit);
     return config[0].inValidPeriods;
   }
 }
