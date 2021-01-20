@@ -2,6 +2,7 @@
 //    add json config for limits of data/variable combos - added but not limiting yet
 //    seperate more logic form SandboxControls.js
 //        floating buttons
+//    fix Maximum call stack size exceeded errors think its from useEffect
 //    move all json configs in SandboxHumanReadable.js to seperate file
 //    when switching areas we probably need to zero out chart...
 //    moving average vs period average
@@ -11,18 +12,29 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import InsertChartOutlinedIcon from '@material-ui/icons/InsertChartOutlined';
-import Button from '@material-ui/core/Button';
-import SaveAltIcon from '@material-ui/icons/SaveAlt';
-import SwapHorizontalCircleIcon from '@material-ui/icons/SwapHorizontalCircle';
-import MailOutlineIcon from '@material-ui/icons/MailOutline';
 
+// sandbox conmponents
 import SandboxPlotRegion from './SandboxPlotRegion';
 import SandboxGeneratePlotData from './SandboxGeneratePlotData';
 import SandboxHumanReadable from './SandboxHumanReadable';
-import SandboxConfig from './SandboxConfig';
 import SandboxSelector from './SandboxSelector';
 import SandboxAlert from './SandboxAlert';
+import SandboxActionMenu from './SandboxActionMenu';
+
+// configs
+import SandboxDataControl from '../configs/SandboxDataControl';
+import SandboxRegionItems from '../configs/SandboxRegionItems';
+import SandboxPeriods from '../configs/SandboxPeriods';
+import SandboxLocationRegionalItems from '../configs/SandboxLocationRegionalItems';
+import SandboxLocationStateItems from '../configs/SandboxLocationStateItems';
+
+// css
 import '../css/Sandbox.scss';
+
+const RegionItems = SandboxRegionItems();
+const Periods = SandboxPeriods();
+const LocationRegionalItems = SandboxLocationRegionalItems();
+const LocationStateItems = SandboxLocationStateItems();
 
 const axios = require('axios');
 
@@ -80,103 +92,10 @@ const useStyles = makeStyles((theme) => ({
       maxheight: '260px'
     }
   },
-  sandboxExportsButtonBox: {
-    justifyContent: 'flex-end',
-    [theme.breakpoints.down('xs')]: {
-      justifyContent: 'unset'
-    }
-  },
   extendedIcon: {
     marginRight: theme.spacing(1)
-  },
-  fabsvg: {
-    position: 'relative',
-    margin: theme.spacing(1),
-    zIndex: 1000,
-    [theme.breakpoints.down('xs')]: {
-      width: '100%'
-    }
   }
 }));
-
-const RegionItems = [
-  'National',
-  'Regional',
-  'State'
-];
-
-const Peroids = [
-  '1900-current',
-  '1950-current'
-];
-
-const locationRegionalItems = [
-  'Northeast',
-  'Southeast',
-  'Midwest',
-  'Northern Great Plains',
-  'Northwest',
-  'Southwest',
-  'Southern Great Plains',
-  'Alaska',
-  'Hawaii',
-  'Puerto Rico'
-];
-
-const locationStateItems = [
-  'AK',
-  'AL',
-  'AZ',
-  'AR',
-  'CA',
-  'CO',
-  'CT',
-  'DE',
-  'FL',
-  'GA',
-  'HI',
-  'ID',
-  'IL',
-  'IN',
-  'IA',
-  'KS',
-  'KY',
-  'LA',
-  'ME',
-  'MD',
-  'MA',
-  'MI',
-  'MN',
-  'MS',
-  'MO',
-  'MT',
-  'NE',
-  'NV',
-  'NH',
-  'NJ',
-  'NM',
-  'NY',
-  'NC',
-  'ND',
-  'OH',
-  'OK',
-  'OR',
-  'PA',
-  'PR',
-  'RI',
-  'SC',
-  'SD',
-  'TN',
-  'TX',
-  'UT',
-  'VT',
-  'VA',
-  'VI',
-  'WA',
-  'WV',
-  'WI',
-  'WY'
-];
 
 export default function SandboxControls() {
   // check url parameters frist for values
@@ -213,14 +132,14 @@ export default function SandboxControls() {
       break;
     case 'Regional':
       // National data set the climatevariable pulldown to NOT disabled by changing the state
-      URLLocationItems = locationRegionalItems;
+      URLLocationItems = LocationRegionalItems;
       URLLocationDisabled = false;
       URLClimatevariableDisabled = false;
       URLPeriodDisabled = false;
       break;
     case 'State':
       // National data set the climatevariable pulldown to NOT disabled by changing the state
-      URLLocationItems = locationStateItems;
+      URLLocationItems = LocationStateItems;
       URLLocationDisabled = false;
       URLClimatevariableDisabled = false;
       URLPeriodDisabled = false;
@@ -233,37 +152,49 @@ export default function SandboxControls() {
       break;
   }
 
-  // set React state via React Hooks
   const classes = useStyles();
+
+  // set React state via React Hooks
+  // used to detect the first call - for getting state from url
   const [atStart, setAtStart] = useState(true);
+  // used to oepn or close the alert box
   const [openError, setOpenError] = useState(false);
+  // chart error message
   const [chartErrorMessage, setChartErrorMessage] = useState('Chart Error');
+  // chart error title
   const [chartErrorTitle, setChartErrorTitle] = useState('Error');
+  // chart error type currently Error or Warning
   const [errorType, setErrorType] = useState('Error');
-
+  // the region
   const [region, setRegion] = useState(URLRegion);
+  // the location within region its National when region is National
   const [location, setLocation] = useState(URLLocation);
+  // the climate varriable tmax100F etc
   const [climatevariable, setClimatevariable] = useState(URLClimatevariable);
+  // the period current 1900 - current or 1950 - current
   const [period, setPeriod] = useState(URLPeriod);
-
   // average bars or line
   // when true average is the bars when false average is line
   // when true yearly is the line when false yearly is bars
   const [useAvgBar, setUseAvgBar] = useState(URLUseAvgBar);
-
+  // chart data from files in ../sandboxdata
   const [chartData, setChartData] = useState([{}]);
+  // plotly chart layout defaults
   const layoutDefaults = { yaxis: { rangemode: 'tozero', title: 'Days' }, xaxis: { rangemode: 'tozero' } };
+  // plotly chart layout
   const [chartLayout, setChartLayout] = useState(layoutDefaults);
-
+  // chart data json file
   const [climateDataFilesJSON, setClimateDataFilesJSON] = useState(['']);
-
+  // all the possible location items
   const [locationItems, setLocationItems] = useState(URLLocationItems);
+  // all the possible climate variables
   const [climatevariableItems, setClimatevariableItems] = useState(['']);
-
+  // if no region selected disables location pulldown - helps manage user error
   const [locationDisabled, setlocationDisabled] = useState(URLLocationDisabled);
+  // if no region selected disables climate variable pulldown - helps manage user error
   const [climatevariableDisabled,
     setClimatevariableDisabled] = useState(URLClimatevariableDisabled);
-
+  // if no region selected period pulldown - helps manage user error
   const [periodDisabled, setPeriodDisabled] = useState(URLPeriodDisabled);
 
   // sets climate variable type for precip or temp, this will likely change latter...
@@ -426,19 +357,24 @@ export default function SandboxControls() {
         if (!chartDataRegion) return null;
         if (chartDataRegion !== 'National' && !chartDataLocation) return null;
         if (!chartDataClimatevariable) return null;
+        if (!chartDataPeriod) return null;
 
         // get the charts data formated for plotly
         const plotData = new SandboxGeneratePlotData(plotInfo);
 
         // get configuration for defaults and invalid varriables/periods
         const configLimitData = { chartDataLocation };
-        const sandboxConfig = new SandboxConfig();
+        const sandboxDataControl = new SandboxDataControl();
 
         // get default period for the location
-        const defaultPeriod = sandboxConfig.getDefaultPeriod(configLimitData);
-        const inValidClimateVariables = sandboxConfig.getInValidClimateVariables(configLimitData);
-        const inValidPeriods = sandboxConfig.getInValidPeriods(configLimitData);
+        const defaultPeriod = sandboxDataControl.getDefaultPeriod(configLimitData);
+        // get invalud climate variables for the location
+        const inValidClimateVariables =
+          sandboxDataControl.getInValidClimateVariables(configLimitData);
+        // get invalud periods for the location
+        const inValidPeriods = sandboxDataControl.getInValidPeriods(configLimitData);
 
+        // TODO will fill this in later
         if (defaultPeriod) {
           // do nothing for now
         }
@@ -588,7 +524,7 @@ export default function SandboxControls() {
         break;
       case 'Regional':
         // Regional data set the location items to the regional items
-        setLocationItems(locationRegionalItems);
+        setLocationItems(LocationRegionalItems);
         setLocation('');
 
         // Regional data set the location pulldown to disabled
@@ -603,7 +539,7 @@ export default function SandboxControls() {
         break;
       case 'State':
         // Regional data set the location items to the state items
-        setLocationItems(locationStateItems);
+        setLocationItems(LocationStateItems);
         setLocation('');
 
         // Regional data set the location pulldown to disabled
@@ -941,7 +877,7 @@ export default function SandboxControls() {
             <Grid item xs={12} sm={3} className={'sandbox-varriable-selectors'} >
               <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
-                  items={Peroids}
+                  items={Periods}
                   controlName={'Select a Time Period'}
                   onChange={handlePeriodChange}
                   value={period}
@@ -953,22 +889,12 @@ export default function SandboxControls() {
             </Grid>
 
             <Grid item xs={12} className={classes.sandboxExports} >
-              <Box className={classes.sandboxExportsButtonBox} fontWeight='fontWeightBold' mt={1} display='flex' flexDirection='row' flexWrap='nowrap' >
-                <div className={classes.fabroot}>
-                  <Button onClick={handleSwtichAverageAndYearly} className={classes.fabsvg} variant="contained" color="default" startIcon={<SwapHorizontalCircleIcon />}>
-                    Switch average and yearly
-                  </Button>
-                  <Button onClick={handleDownloadChartAsPNG} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveAltIcon />}>
-                    .PNG
-                  </Button>
-                  <Button onClick={handleDownloadChartAsSVG} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveAltIcon />}>
-                    .SVG
-                  </Button>
-                  <Button onClick={handleMailToTSU} className={classes.fabsvg} variant="contained" color="default" startIcon={<MailOutlineIcon />}>
-                    Send to TSU
-                  </Button>
-                </div>
-              </Box>
+              <SandboxActionMenu
+                handleDownloadChartAsPNGa={handleDownloadChartAsPNG}
+                handleDownloadChartAsSVGa={handleDownloadChartAsSVG}
+                handleSwtichAverageAndYearlya={handleSwtichAverageAndYearly}
+                handleMailToTSUa={handleMailToTSU}
+                />
             </Grid>
           </Grid>
         </Grid>
