@@ -1,10 +1,7 @@
 //  TODO
 //    add json config for limits of data/variable combos - added but not limiting yet
-//    seperate more logic form SandboxControls.js
-//        floating buttons
-//    fix Maximum call stack size exceeded errors think its from useEffect
-//    move all json configs in SandboxHumanReadable.js to seperate file
 //    when switching areas we probably need to zero out chart...
+//    when selecting non need zero out charts...
 //    moving average vs period average
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
@@ -363,7 +360,8 @@ export default function SandboxControls() {
         const plotData = new SandboxGeneratePlotData(plotInfo);
 
         // get configuration for defaults and invalid varriables/periods
-        const configLimitData = { chartDataLocation };
+        const locationLimit = chartDataRegion === 'National' ? 'National' : chartDataLocation;
+        const configLimitData = { locationLimit };
         const sandboxDataControl = new SandboxDataControl();
 
         // get default period for the location
