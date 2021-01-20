@@ -42,7 +42,7 @@ class SandboxGeneratePlotData {
     this.barColor = this.chartType === 'Precipitation' ? this.precipitationColor : this.temperatureColor;
     this.periodGroups = props.periodGroups ? props.periodGroups : 5;
     this.AverageMovingPeriod = 5;
-    this.textAngle = 90;
+    this.textAngle = 0;
     this.yValsSumByPeriod = this.yValsSumByPeriod();
     this.yValsAvgByPeriod = this.yValsAvgByPeriod();
     this.yValsMovingAverage = this.computeMovingAverage();
@@ -363,7 +363,7 @@ class SandboxGeneratePlotData {
     return {
       uid: SandboxGeneratePlotData.uuidv(),
       mode: 'lines',
-      name: 'Average days per year',
+      name: '5-Year Average (days)',
       type: 'histogram',
       histfunc: 'avg',
       xbins: {
@@ -395,7 +395,7 @@ class SandboxGeneratePlotData {
     return {
       uid: SandboxGeneratePlotData.uuidv(),
       mode: 'lines',
-      name: 'Days per year',
+      name: 'Average days per year',
       type: 'scatter',
       x: this.xvals,
       y: this.getYvalues(),
@@ -420,7 +420,7 @@ class SandboxGeneratePlotData {
     return {
       uid: SandboxGeneratePlotData.uuidv(),
       mode: 'lines',
-      name: 'Days per year',
+      name: 'Average days per year',
       type: 'bar',
       x: this.xvals,
       y: this.getYvalues(),
@@ -474,7 +474,7 @@ class SandboxGeneratePlotData {
     return {
       uid: SandboxGeneratePlotData.uuidv(),
       mode: 'lines',
-      name: 'Average days per year',
+      name: '5-Year Average (days)',
       type: 'scatter',
       x: this.xValsPeriod,
       y: this.yValsAvgByPeriod,
@@ -551,7 +551,7 @@ class SandboxGeneratePlotData {
           size: this.fontSizeLabelsSecondary
         },
         title: {
-          text: `${this.periodGroups}-Year Averages`,
+          text: 'Year',
           font: {
             family: this.font,
             size: this.fontSizeLabels

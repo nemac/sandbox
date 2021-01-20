@@ -1,5 +1,5 @@
 //  TODO
-//    add json config for limits of data/variable combos - added but not limiting yet
+//    x-axis labels better and flip 180deg and axis labels
 //    when switching areas we probably need to zero out chart...
 //    when selecting non need zero out charts...
 //    moving average vs period average
