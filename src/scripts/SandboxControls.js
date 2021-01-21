@@ -1,5 +1,4 @@
-//  TODO
-//    moving average vs period average
+// mui and react
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
