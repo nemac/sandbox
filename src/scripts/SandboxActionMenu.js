@@ -29,12 +29,17 @@ const useStyles = makeStyles((theme) => ({
 export default function Selector(props) {
   const classes = useStyles();
   const { handleSwtichAverageAndYearlya } = props;
+  const { handleSwtichMovingAverageAndYearlya } = props;
   const { handleDownloadChartAsPNGa } = props;
   const { handleDownloadChartAsSVGa } = props;
   const { handleMailToTSUa } = props;
 
   const handleSwtichAverageAndYearly = (event) => {
     handleSwtichAverageAndYearlya(event.target.value);
+  };
+
+  const handleSwtichMovingAverageAndYearly = (event) => {
+    handleSwtichMovingAverageAndYearlya(event.target.value);
   };
 
   const handleDownloadChartAsPNG = (event) => {
@@ -52,6 +57,9 @@ export default function Selector(props) {
   return (
     <Box className={classes.sandboxExportsButtonBox} fontWeight='fontWeightBold' mt={1} display='flex' flexDirection='row' flexWrap='nowrap' >
       <div >
+        <Button onClick={handleSwtichMovingAverageAndYearly} className={classes.fabsvg} variant="contained" color="default" startIcon={<SwapHorizontalCircleIcon />}>
+          Switch moving average and yearly
+        </Button>
         <Button onClick={handleSwtichAverageAndYearly} className={classes.fabsvg} variant="contained" color="default" startIcon={<SwapHorizontalCircleIcon />}>
           Switch average and yearly
         </Button>
@@ -71,6 +79,7 @@ export default function Selector(props) {
 
 Selector.propTypes = {
   handleSwtichAverageAndYearlya: PropTypes.func,
+  handleSwtichMovingAverageAndYearlya: PropTypes.func,
   handleDownloadChartAsPNGa: PropTypes.func,
   handleDownloadChartAsSVGa: PropTypes.func,
   handleMailToTSUa: PropTypes.func,
