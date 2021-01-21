@@ -32,7 +32,8 @@ class SandboxGeneratePlotData {
     this.xmax = props.xmax;
     this.xvals = props.xvals;
     this.yvals = props.yvals;
-    this.useAvgBar = props.chartUseAvgBar;
+    this.useAvgLine = props.chartuseAvgLine;
+    this.useMovAvgLine = props.chartUseMovAvgLine;
     this.maxVal = Math.max(...this.yvals);
     this.minVal = Math.min(...this.yvals);
     this.chartTitle = props.chartTitle;
@@ -337,20 +338,24 @@ class SandboxGeneratePlotData {
 
     if (this.maxVal === -Infinity) return [{}];
 
-    // is average is the bar and yearly the line chart
-    if (this.useAvgBar) {
-      return [this.traceAverageBar(), this.traceYearlyLine()];
+    // Average is the line and yearly the bar
+    if (this.useAvgLine) {
+      return [this.traceYearlyBar(), this.traceAverageLine()];
     }
 
-    // is average is the line and yearly the bar
-    return [this.traceYearlyBar(), this.traceAverageLine()];
-    // return [this.traceYearlyBar(), this.traceAverageLine(), this.traceMovingAverageLineBase()];
+    // Moving average is the line and yearly the bar
+    if (this.useMovAvgLine) {
+      return [this.traceYearlyBar(), this.traceMovingAverageLine()];
+    }
+
+    // is average is the bar and yearly the line chart
+    return [this.traceAverageBar(), this.traceYearlyLine()];
   }
 
   // get the chart layout
   getLayout() {
     // layout when average is the bar and yearly the line chart
-    if (this.useAvgBar) {
+    if (this.useAvgLine) {
       return this.layoutAverageBar();
     }
     // layout when average is the line and yearly the bar
@@ -453,11 +458,11 @@ class SandboxGeneratePlotData {
   }
 
   // trace for averages when year is a bar
-  traceMovingAverageLineBase() {
+  traceMovingAverageLine() {
     return {
       uid: SandboxGeneratePlotData.uuidv(),
       mode: 'lines',
-      name: 'Moving Average Days',
+      name: '5-Year Moving Average (days)',
       type: 'scatter',
       x: this.xValsMovingAverage,
       y: this.yValsMovingAverage,
@@ -471,8 +476,7 @@ class SandboxGeneratePlotData {
       connectgaps: true,
       customdata: this.xValsMovingAverage.map((val) => `${val} - ${val + this.AverageMovingPeriod}`),
       hoverinfo: 'x+y',
-      visible: 'legendonly',
-      hovertemplate: ` On average, there were %{y:0.2f} <br> ${this.climatevariable.toLowerCase().replace('with', 'with the')} <br> between the years %{customdata} <br><extra></extra>`
+      hovertemplate: ` On average (moving), there were %{y:0.2f} <br> ${this.climatevariable.toLowerCase().replace('with', 'with the')} <br> between the years %{customdata} <br><extra></extra>`
     };
   }
 
