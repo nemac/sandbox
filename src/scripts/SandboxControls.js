@@ -107,8 +107,8 @@ export default function SandboxControls() {
   const URLPeriod = urlParams.get('period') ? urlParams.get('period') : '1900-current';
 
   // check url parameters for a using average bar true (averages are bar) if blank
-  const URLUseAvgLine = urlParams.get('ual') === null ? true : (urlParams.get('ual') === 'false');
-  const URLUseMovAvgLine = urlParams.get('umal') === null ? true : (urlParams.get('umal') === 'false');
+  const URLUseAvgLine = urlParams.get('ual') === null ? false : (urlParams.get('ual') === 'true');
+  const URLUseMovAvgLine = urlParams.get('umal') === null ? false : (urlParams.get('umal') === 'true');
 
   // set defaults for intial states of ui compnents
   let URLClimatevariableDisabled = true;
