@@ -47,3 +47,27 @@ html, body {
 .sandbox-alert-header {
   padding: 10px 0;
 }
+
+.sandbox-start-icon-selected {
+  background-color: #757575 !important;
+  color: #eeeeee !important;
+  &:hover {
+    background-color: #616161 !important;
+  }
+  .MuiSvgIcon-root {
+    color: #eeeeee;
+  }
+}
+
+.sandbox-start-icon-not-selected {
+  background-color: #e0e0e0 !important;
+  &:hover {
+    background-color: #bdbdbd !important;
+  }
+}
+
+.PlotRegionDiv .plotly text.gtitle {
+  @media screen and (max-width: 1000px) {
+    font-size: 12px !important;
+  }
+}

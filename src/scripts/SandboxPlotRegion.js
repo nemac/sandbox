@@ -15,10 +15,10 @@ class SandboxPlotRegion extends React.Component {
       const el = elREF;
       const { plotlyLayout } = this.props;
       const copiedLayout = { ...plotlyLayout };
-
       copiedLayout.width = el.parentNode.getBoundingClientRect().width;
       copiedLayout.height = el.getBoundingClientRect().height - 24;
-
+      const angle = window.innerWidth <= 1000 ? 90 : 0;
+      copiedLayout.xaxis.tickangle = angle;
       this.setState({
         layout: copiedLayout
       });

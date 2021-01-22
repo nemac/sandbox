@@ -11,7 +11,7 @@ class SandboxGeneratePlotData {
     this.precipitationColor = '#5AB4AC';
     this.temperatureColor = '#FEB24C';
     this.bargap = 0.15;
-    this.legendBarLineX = 0.85;
+    this.legendBarLineX = window.innerWidth <= 768 ? 0.25 : 0.65;
     this.legendBarLineY = 1.125;
     this.font = 'Arial';
     this.zeroLineColor = '#000000';
@@ -25,25 +25,25 @@ class SandboxGeneratePlotData {
     this.AverageWidth = '3';
     this.AverageColor = '#000000';
     this.gridWidth = '1';
-    this.fontSizePrimary = '14pt';
+    this.fontSizePrimary = window.innerWidth <= 768 ? '12px' : '14pt';
     this.fontSizeLabels = '12pt';
     this.fontSizeLabelsSecondary = '12pt';
     this.xmin = props.xmin;
     this.xmax = props.xmax;
     this.xvals = props.xvals;
     this.yvals = props.yvals;
-    this.useAvgLine = props.chartuseAvgLine;
-    this.useMovAvgLine = props.chartUseMovAvgLine;
+    this.lineChart = props.chartLineChart;
     this.maxVal = Math.max(...this.yvals);
     this.minVal = Math.min(...this.yvals);
-    this.chartTitle = props.chartTitle;
+    this.shortTitle = props.chartTitle.substr(0, props.chartTitle.indexOf('(') - 1);
+    this.chartTitle = window.innerWidth <= 768 ? this.shortTitle : props.chartTitle;
     this.legnedText = props.legnedText;
     this.chartType = props.chartType;
     this.climatevariable = props.climatevariable;
     this.barColor = this.chartType === 'Precipitation' ? this.precipitationColor : this.temperatureColor;
     this.periodGroups = props.periodGroups ? props.periodGroups : 5;
     this.AverageMovingPeriod = 5;
-    this.textAngle = 0;
+    this.textAngle = window.innerWidth <= 1000 ? 90 : 0;
     this.yValsSumByPeriod = this.yValsSumByPeriod();
     this.yValsAvgByPeriod = this.yValsAvgByPeriod();
     this.yValsMovingAverage = this.computeMovingAverage();
@@ -338,28 +338,44 @@ class SandboxGeneratePlotData {
 
     if (this.maxVal === -Infinity) return [{}];
 
-    // Average is the line and yearly the bar
-    if (this.useAvgLine) {
-      return [this.traceYearlyBar(), this.traceAverageLine()];
+    // switch for handling which variable is the line chart
+    // for now its yearly, period average (defaults to 5), or
+    // period moving average (defaults to 5).
+    switch (this.lineChart) {
+      case 'year':
+        // yearly the line chart average is the bar chart
+        return [this.traceAverageBar(), this.traceYearlyLine()];
+      case 'avg':
+        // average the line chart yearly is the bar chart
+        return [this.traceYearlyBar(), this.traceAverageLine()];
+      case 'mavg':
+        // moving average the line chart yearly is the bar chart
+        return [this.traceYearlyBar(), this.traceMovingAverageLine()];
+      default:
+        // yearly the line chart average is the bar chart
+        return [this.traceAverageBar(), this.traceYearlyLine()];
     }
-
-    // Moving average is the line and yearly the bar
-    if (this.useMovAvgLine) {
-      return [this.traceYearlyBar(), this.traceMovingAverageLine()];
-    }
-
-    // is average is the bar and yearly the line chart
-    return [this.traceAverageBar(), this.traceYearlyLine()];
   }
 
   // get the chart layout
   getLayout() {
-    // layout when average is the bar and yearly the line chart
-    if (this.useAvgLine) {
-      return this.layoutAverageBar();
+    // switch for handling layout of chart depending on what variable is the line
+    // for now its yearly, period average (defaults to 5), or
+    // period moving average (defaults to 5).
+    switch (this.lineChart) {
+      case 'year':
+        // yearly the line chart average is the bar chart
+        return this.layoutAverageBar();
+      case 'avg':
+        // average the line chart yearly is the bar chart
+        return this.layoutYearBar();
+      case 'mavg':
+        // moving average the line chart yearly is the bar chart
+        return this.layoutYearBar();
+      default:
+        // yearly the line chart average is the bar chart
+        return this.layoutAverageBar();
     }
-    // layout when average is the line and yearly the bar
-    return this.layoutYearBar();
   }
 
   static uuidv() {
@@ -394,7 +410,6 @@ class SandboxGeneratePlotData {
         },
         color: this.barColor
       },
-      hovermode: 'x',
       hoverinfo: 'x+y',
       hovertemplate: ` On average, there were %{y:0.2f} <br> ${this.climatevariable.toLowerCase().replace('with', 'with the')} <br> between the years %{x} <extra></extra>`,
       legendgroup: 1,
@@ -448,7 +463,6 @@ class SandboxGeneratePlotData {
         },
         color: this.barColor
       },
-      hovermode: 'x',
       histfunc: 'sum',
       hoverinfo: 'x+y',
       legendgroup: 1,
@@ -544,7 +558,6 @@ class SandboxGeneratePlotData {
         rangemode: 'tozero',
         zerolinecolor: this.zeroLineColor,
         zerolinewidth: this.zerolinewidth,
-
         dtick: 5,
         tick0: 0,
         tickangle: this.textAngle,
@@ -602,7 +615,6 @@ class SandboxGeneratePlotData {
       template: {
         layout: {
           hovermode: 'closest',
-          hoverinfo: 'x+y',
           plot_bgcolor: this.chartBackgroundColor,
           paper_bgcolor: this.chartBackgroundColor
         }
@@ -620,6 +632,7 @@ class SandboxGeneratePlotData {
         arrowcolor: this.AverageAllColor,
         ay: -100,
         ax: 10,
+        bgcolor: '#ffffff',
         font: {
           family: this.font,
           size: this.AverageAllFontSize,
@@ -718,7 +731,6 @@ class SandboxGeneratePlotData {
         rangemode: 'tozero',
         zerolinecolor: this.zeroLineColor,
         zerolinewidth: this.zerolinewidth,
-
         dtick: 5,
         tick0: 0,
         tickangle: this.textAngle,
@@ -776,7 +788,6 @@ class SandboxGeneratePlotData {
       template: {
         layout: {
           hovermode: 'x',
-          hoverinfo: 'x+y',
           plot_bgcolor: this.chartBackgroundColor,
           paper_bgcolor: this.chartBackgroundColor
         }
@@ -794,6 +805,7 @@ class SandboxGeneratePlotData {
         arrowcolor: this.AverageAllColor,
         ay: -100,
         ax: 10,
+        bgcolor: '#ffffff',
         font: {
           family: this.font,
           size: this.AverageAllFontSize,
