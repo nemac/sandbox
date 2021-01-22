@@ -32,8 +32,7 @@ class SandboxGeneratePlotData {
     this.xmax = props.xmax;
     this.xvals = props.xvals;
     this.yvals = props.yvals;
-    this.useAvgLine = props.chartuseAvgLine;
-    this.useMovAvgLine = props.chartUseMovAvgLine;
+    this.lineChart = props.chartLineChart;
     this.maxVal = Math.max(...this.yvals);
     this.minVal = Math.min(...this.yvals);
     this.chartTitle = props.chartTitle;
@@ -338,28 +337,47 @@ class SandboxGeneratePlotData {
 
     if (this.maxVal === -Infinity) return [{}];
 
-    // Average is the line and yearly the bar
-    if (this.useAvgLine) {
-      return [this.traceYearlyBar(), this.traceAverageLine()];
+    // switch for handling which variable is the line chart
+    // for now its yearly, period average (defaults to 5), or
+    // period moving average (defaults to 5).
+    switch (this.lineChart) {
+      case 'year':
+        // yearly the line chart average is the bar chart
+        return [this.traceAverageBar(), this.traceYearlyLine()];
+      case 'avg':
+        // average the line chart yearly is the bar chart
+        return [this.traceYearlyBar(), this.traceAverageLine()];
+      case 'mavg':
+        // moving average the line chart yearly is the bar chart
+        return [this.traceYearlyBar(), this.traceMovingAverageLine()];
+      default:
+        // yearly the line chart average is the bar chart
+        return [this.traceAverageBar(), this.traceYearlyLine()];
     }
-
-    // Moving average is the line and yearly the bar
-    if (this.useMovAvgLine) {
-      return [this.traceYearlyBar(), this.traceMovingAverageLine()];
-    }
-
-    // is average is the bar and yearly the line chart
-    return [this.traceAverageBar(), this.traceYearlyLine()];
   }
 
   // get the chart layout
   getLayout() {
-    // layout when average is the bar and yearly the line chart
-    if (this.useAvgLine) {
-      return this.layoutAverageBar();
+    // switch for handling layout of chart depending on what variable is the line
+    // for now its yearly, period average (defaults to 5), or
+    // period moving average (defaults to 5).
+    switch (this.lineChart) {
+      case 'year':
+        // yearly the line chart average is the bar chart
+        return this.layoutAverageBar();
+      case 'avg':
+        // average the line chart yearly is the bar chart
+        return this.layoutYearBar();
+      case 'mavg':
+        // moving average the line chart yearly is the bar chart
+        return this.layoutYearBar();
+      default:
+        // yearly the line chart average is the bar chart
+        return this.layoutAverageBar();
     }
-    // layout when average is the line and yearly the bar
-    return this.layoutYearBar();
+
+    // layout when average is the bar and yearly the line
+    return this.layoutAverageBar();
   }
 
   static uuidv() {
@@ -394,7 +412,6 @@ class SandboxGeneratePlotData {
         },
         color: this.barColor
       },
-      hovermode: 'x',
       hoverinfo: 'x+y',
       hovertemplate: ` On average, there were %{y:0.2f} <br> ${this.climatevariable.toLowerCase().replace('with', 'with the')} <br> between the years %{x} <extra></extra>`,
       legendgroup: 1,
@@ -448,7 +465,6 @@ class SandboxGeneratePlotData {
         },
         color: this.barColor
       },
-      hovermode: 'x',
       histfunc: 'sum',
       hoverinfo: 'x+y',
       legendgroup: 1,
@@ -602,7 +618,6 @@ class SandboxGeneratePlotData {
       template: {
         layout: {
           hovermode: 'closest',
-          hoverinfo: 'x+y',
           plot_bgcolor: this.chartBackgroundColor,
           paper_bgcolor: this.chartBackgroundColor
         }
@@ -776,7 +791,6 @@ class SandboxGeneratePlotData {
       template: {
         layout: {
           hovermode: 'x',
-          hoverinfo: 'x+y',
           plot_bgcolor: this.chartBackgroundColor,
           paper_bgcolor: this.chartBackgroundColor
         }

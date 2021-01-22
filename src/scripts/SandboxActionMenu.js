@@ -16,23 +16,116 @@ const useStyles = makeStyles((theme) => ({
       justifyContent: 'unset'
     }
   },
-  fabsvg: {
-    position: 'relative',
-    margin: theme.spacing(1),
-    zIndex: 1000,
+  sandboxExportsButtonBox: {
+    justifyContent: 'flex-end',
     [theme.breakpoints.down('xs')]: {
+      margin: theme.spacing(1),
+      justifyContent: 'unset'
+    }
+  },
+  sandboxSelectedButton: {
+    justifyContent: 'flex-end',
+    [theme.breakpoints.down('xs')]: {
+      justifyContent: 'unset'
+    }
+  },
+  fabsvg: {
+    margin: theme.spacing(1),
+    [theme.breakpoints.down('xs')]: {
+      marginTop: theme.spacing(1),
+      marginBottom: theme.spacing(1),
+      marginLeft: theme.spacing(0),
+      marginRight: theme.spacing(0),
       width: '100%'
     }
+  },
+  fabsvgLeft: {
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(0),
+    borderTopRightRadius: '0px',
+    borderBottomRightRadius: '0px',
+    [theme.breakpoints.down('xs')]: {
+      marginTop: theme.spacing(1),
+      marginBottom: theme.spacing(0),
+      marginLeft: theme.spacing(0),
+      marginRight: theme.spacing(0),
+      width: '100%'
+    }
+  },
+  fabsvgCenter: {
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
+    marginLeft: theme.spacing(0),
+    marginRight: theme.spacing(0),
+    borderRadius: '0px',
+    [theme.breakpoints.down('xs')]: {
+      marginTop: theme.spacing(0),
+      marginBottom: theme.spacing(0),
+      marginLeft: theme.spacing(0),
+      marginRight: theme.spacing(0),
+      width: '100%'
+    }
+  },
+  fabsvgRight: {
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
+    marginLeft: theme.spacing(0),
+    marginRight: theme.spacing(1),
+    borderTopLeftRadius: '0px',
+    borderBottomLeftRadius: '0px',
+    [theme.breakpoints.down('xs')]: {
+      marginTop: theme.spacing(0),
+      marginBottom: theme.spacing(1),
+      marginLeft: theme.spacing(0),
+      marginRight: theme.spacing(0),
+      width: '100%'
+    }
+  },
+  MenuItem: {
+    textDecoration: 'underline'
   }
 }));
 
 export default function Selector(props) {
   const classes = useStyles();
+  const { handleSwtichYearlyToLinea } = props;
   const { handleSwtichAverageAndYearlya } = props;
   const { handleSwtichMovingAverageAndYearlya } = props;
   const { handleDownloadChartAsPNGa } = props;
   const { handleDownloadChartAsSVGa } = props;
   const { handleMailToTSUa } = props;
+  const { lineChart } = props;
+
+  const setSelected = (whichchart, me) => {
+    switch (lineChart) {
+      case 'year':
+        // yearly the line chart average is the bar chart
+        if (me === lineChart) {
+          return 'sandbox-start-icon-selected';
+        }
+        return 'sandbox-start-icon-not-selected';
+      case 'avg':
+        // average the line chart yearly is the bar chart
+        if (me === lineChart) {
+          return 'sandbox-start-icon-selected';
+        }
+        return 'sandbox-start-icon-not-selected';
+      case 'mavg':
+        // moving average the line chart yearly is the bar chart
+        if (me === lineChart) {
+          return 'sandbox-start-icon-selected';
+        }
+        return 'sandbox-start-icon-not-selected';
+      default:
+        // yearly the line chart average is the bar chart
+        if (me === lineChart) {
+          return 'sandbox-start-icon-selected';
+        }
+        return 'sandbox-start-icon-not-selected';
+    }
+  }
 
   const handleSwtichAverageAndYearly = (event) => {
     handleSwtichAverageAndYearlya(event.target.value);
@@ -40,6 +133,10 @@ export default function Selector(props) {
 
   const handleSwtichMovingAverageAndYearly = (event) => {
     handleSwtichMovingAverageAndYearlya(event.target.value);
+  };
+
+  const handleSwtichYearlyToLine = (event) => {
+    handleSwtichYearlyToLinea(event.target.value);
   };
 
   const handleDownloadChartAsPNG = (event) => {
@@ -54,14 +151,23 @@ export default function Selector(props) {
     handleMailToTSUa();
   };
 
+  const [alignment, setAlignment] = React.useState('left');
+
+  const handleAlignment = (event, newAlignment) => {
+   setAlignment(newAlignment);
+  };
+
   return (
     <Box className={classes.sandboxExportsButtonBox} fontWeight='fontWeightBold' mt={1} display='flex' flexDirection='row' flexWrap='nowrap' >
       <div >
-        <Button onClick={handleSwtichMovingAverageAndYearly} className={classes.fabsvg} variant="contained" color="default" startIcon={<SwapHorizontalCircleIcon />}>
-          Switch moving average and yearly
+        <Button onClick={handleSwtichYearlyToLine} classes={{ root: `${setSelected(lineChart, 'year')}`}} className={classes.fabsvgLeft} variant="contained" color="default" startIcon={<SwapHorizontalCircleIcon />}>
+          Yearly as Line
         </Button>
-        <Button onClick={handleSwtichAverageAndYearly} className={classes.fabsvg} variant="contained" color="default" startIcon={<SwapHorizontalCircleIcon />}>
-          Switch average and yearly
+        <Button onClick={handleSwtichMovingAverageAndYearly} classes={{ root: `${setSelected(lineChart, 'mavg')}`}} className={classes.fabsvgCenter} variant="contained" color="default" startIcon={<SwapHorizontalCircleIcon />}>
+          Moving Average as Line
+        </Button>
+        <Button onClick={handleSwtichAverageAndYearly} classes={{ root: `${setSelected(lineChart, 'avg')}`}} className={classes.fabsvgRight} variant="contained" color="default" startIcon={<SwapHorizontalCircleIcon />}>
+          Average as Line
         </Button>
         <Button onClick={handleDownloadChartAsPNG} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveAltIcon />}>
           .PNG
@@ -83,5 +189,6 @@ Selector.propTypes = {
   handleDownloadChartAsPNGa: PropTypes.func,
   handleDownloadChartAsSVGa: PropTypes.func,
   handleMailToTSUa: PropTypes.func,
+  lineChart: PropTypes.string,
   onChange: PropTypes.func
 };

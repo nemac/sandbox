@@ -52,15 +52,15 @@ const useStyles = makeStyles((theme) => ({
     border: `1px solid ${darkGrey}`,
     borderRadius: '4px',
     [theme.breakpoints.down('xs')]: {
-      height: '575px',
-      minHeight: '575px'
+      height: '675px',
+      minHeight: '675px'
     }
   },
   sandboxSelectionAreaHolder: {
     margin: '6px',
     [theme.breakpoints.down('xs')]: {
       height: '100vh',
-      maxHeight: '575px'
+      maxHeight: '675px'
     }
   },
   sandboxChartRegion: {
@@ -81,8 +81,8 @@ const useStyles = makeStyles((theme) => ({
     height: '70px',
     maxheight: '70px',
     [theme.breakpoints.down('xs')]: {
-      height: '260px',
-      maxheight: '260px'
+      height: '300px',
+      maxheight: '300px'
     }
   },
   extendedIcon: {
@@ -107,8 +107,7 @@ export default function SandboxControls() {
   const URLPeriod = urlParams.get('period') ? urlParams.get('period') : '1900-current';
 
   // check url parameters for a using average bar true (averages are bar) if blank
-  const URLUseAvgLine = urlParams.get('ual') === null ? false : (urlParams.get('ual') === 'true');
-  const URLUseMovAvgLine = urlParams.get('umal') === null ? false : (urlParams.get('umal') === 'true');
+  const URLLineChart = urlParams.get('line') ? urlParams.get('line') : 'year';
 
   // set defaults for intial states of ui compnents
   let URLClimatevariableDisabled = true;
@@ -170,8 +169,8 @@ export default function SandboxControls() {
   // average bars or line
   // when false average is the bars when false average is line
   // when true yearly is the line when false yearly is bars
-  const [useAvgLine, setuseAvgLine] = useState(URLUseAvgLine);
-  const [useMovAvgLine, setUseMovAvgLine] = useState(URLUseMovAvgLine);
+  const [lineChart, setLineChart] = useState(URLLineChart);
+
   // chart data from files in ../sandboxdata
   const [chartData, setChartData] = useState([{}]);
   // plotly chart layout defaults
@@ -212,8 +211,7 @@ export default function SandboxControls() {
     const { chartDataLocation } = props;
     const { chartDataClimatevariable } = props;
     const { chartDataPeriod } = props;
-    const { chartuseAvgLine } = props;
-    const { chartUseMovAvgLine } = props;
+    const { chartLineChart } = props;
 
     // create new URL parameter object
     const searchParams = new URLSearchParams();
@@ -223,8 +221,7 @@ export default function SandboxControls() {
     searchParams.set('location', chartDataLocation);
     searchParams.set('climatevariable', chartDataClimatevariable);
     searchParams.set('period', chartDataPeriod);
-    searchParams.set('ual', chartuseAvgLine);
-    searchParams.set('umal', chartUseMovAvgLine);
+    searchParams.set('line', chartLineChart);
 
     // convert url parameters to a string and add the leading ? so it we can add it
     // to browser history (back button works)
@@ -279,8 +276,7 @@ export default function SandboxControls() {
     const { chartDataClimatevariable } = props;
     const { chartDataPeriod } = props;
     const { climateDataFilesJSONFile } = props;
-    const { chartuseAvgLine } = props;
-    const { chartUseMovAvgLine } = props;
+    const { chartLineChart } = props;
 
     // update url history this is the point at which we will need to make sure
     // the graph looks the same when shared via url
@@ -289,8 +285,7 @@ export default function SandboxControls() {
       chartDataLocation,
       chartDataClimatevariable,
       chartDataPeriod,
-      chartuseAvgLine,
-      chartUseMovAvgLine
+      chartLineChart
     });
 
     // limit the possible data file to period
@@ -356,8 +351,7 @@ export default function SandboxControls() {
           legnedText: chartType,
           chartType,
           climatevariable: humandReadablechartDataClimatevariable,
-          chartuseAvgLine,
-          chartUseMovAvgLine,
+          chartLineChart,
           dataMissing
         };
 
@@ -480,11 +474,9 @@ export default function SandboxControls() {
             chartDataClimatevariable: climatevariable,
             chartDataPeriod: period,
             climateDataFilesJSONFile: responseData,
-            chartuseAvgLine: useAvgLine,
-            chartUseMovAvgLine: useMovAvgLine
+            chartLineChart: lineChart
           });
         }
-
         return responseData;
       })
       .catch((error) => {
@@ -576,8 +568,7 @@ export default function SandboxControls() {
       chartDataClimatevariable: climatevariable,
       chartDataPeriod: period,
       climateDataFilesJSONFile: climateDataFilesJSON,
-      chartuseAvgLine: useAvgLine,
-      chartUseMovAvgLine: useMovAvgLine
+      chartLineChart: lineChart
     });
   };
 
@@ -590,8 +581,7 @@ export default function SandboxControls() {
       chartDataClimatevariable: climatevariable,
       chartDataPeriod: period,
       climateDataFilesJSONFile: climateDataFilesJSON,
-      chartuseAvgLine: useAvgLine,
-      chartUseMovAvgLine: useMovAvgLine
+      chartLineChart: lineChart
     });
   };
 
@@ -604,8 +594,7 @@ export default function SandboxControls() {
       chartDataClimatevariable: newValue,
       chartDataPeriod: period,
       climateDataFilesJSONFile: climateDataFilesJSON,
-      chartuseAvgLine: useAvgLine,
-      chartUseMovAvgLine: useMovAvgLine
+      chartLineChart: lineChart
     });
     return null;
   };
@@ -619,8 +608,7 @@ export default function SandboxControls() {
       chartDataClimatevariable: climatevariable,
       chartDataPeriod: newValue,
       climateDataFilesJSONFile: climateDataFilesJSON,
-      chartuseAvgLine: useAvgLine,
-      chartUseMovAvgLine: useMovAvgLine
+      chartLineChart: lineChart
     });
     return null;
   };
@@ -629,18 +617,14 @@ export default function SandboxControls() {
   // avg as bars and yearly as line - default
   // yearly as bars and avg as line
   const handleSwtichAverageAndYearly = () => {
-    // do something
-    const bool = !useAvgLine;
-    setuseAvgLine(bool);
-    setUseMovAvgLine(false);
+    setLineChart('avg');
     getChartData({
       chartDataRegion: region,
       chartDataLocation: location,
       chartDataClimatevariable: climatevariable,
       chartDataPeriod: period,
       climateDataFilesJSONFile: climateDataFilesJSON,
-      chartuseAvgLine: bool,
-      chartUseMovAvgLine: false
+      chartLineChart: 'avg'
     });
     return null;
   };
@@ -649,18 +633,31 @@ export default function SandboxControls() {
   // avg as bars and yearly as line - default
   // yearly as bars and avg as line
   const handleSwtichMovingAverageAndYearly = () => {
-    // do something
-    const bool = !useMovAvgLine;
-    setuseAvgLine(false);
-    setUseMovAvgLine(bool);
+    setLineChart('mavg');
     getChartData({
       chartDataRegion: region,
       chartDataLocation: location,
       chartDataClimatevariable: climatevariable,
       chartDataPeriod: period,
       climateDataFilesJSONFile: climateDataFilesJSON,
-      chartuseAvgLine: false,
-      chartUseMovAvgLine: bool
+      chartLineChart: 'mavg'
+    });
+    return null;
+  };
+
+  // handles switching of yearly and average in chart
+  // avg as bars and yearly as line - default
+  // yearly as bars and avg as line
+  const handleSwtichYearlyToLine = () => {
+    // do something
+    setLineChart('year');
+    getChartData({
+      chartDataRegion: region,
+      chartDataLocation: location,
+      chartDataClimatevariable: climatevariable,
+      chartDataPeriod: period,
+      climateDataFilesJSONFile: climateDataFilesJSON,
+      chartLineChart: 'year'
     });
     return null;
   };
@@ -934,7 +931,9 @@ export default function SandboxControls() {
                 handleDownloadChartAsSVGa={handleDownloadChartAsSVG}
                 handleSwtichAverageAndYearlya={handleSwtichAverageAndYearly}
                 handleSwtichMovingAverageAndYearlya={handleSwtichMovingAverageAndYearly}
+                handleSwtichYearlyToLinea={handleSwtichYearlyToLine}
                 handleMailToTSUa={handleMailToTSU}
+                lineChart={lineChart}
                 />
             </Grid>
           </Grid>
@@ -970,6 +969,5 @@ SandboxControls.propTypes = {
   chartDataClimatevariable: PropTypes.string,
   chartDataPeriod: PropTypes.string,
   climateDataFilesJSONFile: PropTypes.object,
-  chartuseAvgLine: PropTypes.string,
-  chartUseMovAvgLine: PropTypes.string
+  chartLineChart: PropTypes.string
 };
