@@ -65,3 +65,9 @@ html, body {
     background-color: #bdbdbd !important;
   }
 }
+
+.PlotRegionDiv .plotly text.gtitle {
+  @media screen and (max-width: 1000px) {
+    font-size: 12px !important;
+  }
+}
