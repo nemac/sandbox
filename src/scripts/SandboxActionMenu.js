@@ -6,16 +6,10 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
-import SwapHorizontalCircleIcon from '@material-ui/icons/SwapHorizontalCircle';
+import TimelineIcon from '@material-ui/icons/Timeline';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
 
 const useStyles = makeStyles((theme) => ({
-  sandboxExportsButtonBox: {
-    justifyContent: 'flex-end',
-    [theme.breakpoints.down('xs')]: {
-      justifyContent: 'unset'
-    }
-  },
   sandboxExportsButtonBox: {
     justifyContent: 'flex-end',
     [theme.breakpoints.down('xs')]: {
@@ -125,7 +119,7 @@ export default function Selector(props) {
         }
         return 'sandbox-start-icon-not-selected';
     }
-  }
+  };
 
   const handleSwtichAverageAndYearly = (event) => {
     handleSwtichAverageAndYearlya(event.target.value);
@@ -151,23 +145,17 @@ export default function Selector(props) {
     handleMailToTSUa();
   };
 
-  const [alignment, setAlignment] = React.useState('left');
-
-  const handleAlignment = (event, newAlignment) => {
-   setAlignment(newAlignment);
-  };
-
   return (
     <Box className={classes.sandboxExportsButtonBox} fontWeight='fontWeightBold' mt={1} display='flex' flexDirection='row' flexWrap='nowrap' >
       <div >
-        <Button onClick={handleSwtichYearlyToLine} classes={{ root: `${setSelected(lineChart, 'year')}`}} className={classes.fabsvgLeft} variant="contained" color="default" startIcon={<SwapHorizontalCircleIcon />}>
-          Yearly as Line
+        <Button onClick={handleSwtichYearlyToLine} classes={{ root: `${setSelected(lineChart, 'year')}` }} className={classes.fabsvgLeft} variant="contained" color="default" startIcon={<TimelineIcon />}>
+          Yearly
         </Button>
-        <Button onClick={handleSwtichMovingAverageAndYearly} classes={{ root: `${setSelected(lineChart, 'mavg')}`}} className={classes.fabsvgCenter} variant="contained" color="default" startIcon={<SwapHorizontalCircleIcon />}>
-          Moving Average as Line
+        <Button onClick={handleSwtichAverageAndYearly} classes={{ root: `${setSelected(lineChart, 'avg')}` }} className={classes.fabsvgCenter} variant="contained" color="default" startIcon={<TimelineIcon />}>
+          Average
         </Button>
-        <Button onClick={handleSwtichAverageAndYearly} classes={{ root: `${setSelected(lineChart, 'avg')}`}} className={classes.fabsvgRight} variant="contained" color="default" startIcon={<SwapHorizontalCircleIcon />}>
-          Average as Line
+        <Button onClick={handleSwtichMovingAverageAndYearly} classes={{ root: `${setSelected(lineChart, 'mavg')}` }} className={classes.fabsvgRight} variant="contained" color="default" startIcon={<TimelineIcon />}>
+          Moving Average
         </Button>
         <Button onClick={handleDownloadChartAsPNG} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveAltIcon />}>
           .PNG
@@ -184,6 +172,7 @@ export default function Selector(props) {
 }
 
 Selector.propTypes = {
+  handleSwtichYearlyToLinea: PropTypes.func,
   handleSwtichAverageAndYearlya: PropTypes.func,
   handleSwtichMovingAverageAndYearlya: PropTypes.func,
   handleDownloadChartAsPNGa: PropTypes.func,

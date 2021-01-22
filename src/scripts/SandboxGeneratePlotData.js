@@ -11,7 +11,7 @@ class SandboxGeneratePlotData {
     this.precipitationColor = '#5AB4AC';
     this.temperatureColor = '#FEB24C';
     this.bargap = 0.15;
-    this.legendBarLineX = 0.85;
+    this.legendBarLineX = 0.65;
     this.legendBarLineY = 1.125;
     this.font = 'Arial';
     this.zeroLineColor = '#000000';
@@ -375,9 +375,6 @@ class SandboxGeneratePlotData {
         // yearly the line chart average is the bar chart
         return this.layoutAverageBar();
     }
-
-    // layout when average is the bar and yearly the line
-    return this.layoutAverageBar();
   }
 
   static uuidv() {
@@ -560,7 +557,6 @@ class SandboxGeneratePlotData {
         rangemode: 'tozero',
         zerolinecolor: this.zeroLineColor,
         zerolinewidth: this.zerolinewidth,
-
         dtick: 5,
         tick0: 0,
         tickangle: this.textAngle,
@@ -635,6 +631,7 @@ class SandboxGeneratePlotData {
         arrowcolor: this.AverageAllColor,
         ay: -100,
         ax: 10,
+        bgcolor: '#ffffff',
         font: {
           family: this.font,
           size: this.AverageAllFontSize,
@@ -733,7 +730,6 @@ class SandboxGeneratePlotData {
         rangemode: 'tozero',
         zerolinecolor: this.zeroLineColor,
         zerolinewidth: this.zerolinewidth,
-
         dtick: 5,
         tick0: 0,
         tickangle: this.textAngle,
@@ -808,6 +804,7 @@ class SandboxGeneratePlotData {
         arrowcolor: this.AverageAllColor,
         ay: -100,
         ax: 10,
+        bgcolor: '#ffffff',
         font: {
           family: this.font,
           size: this.AverageAllFontSize,
