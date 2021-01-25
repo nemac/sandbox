@@ -1,3 +1,9 @@
+// TODO:
+//    make chart only view
+//    need to figur out small screen issues with chart
+//    seems on normal screens the veritical space is to big some
+//      O.S's might be putting scroll bars in
+//    sandbox download csv
 // mui and react
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
@@ -40,13 +46,12 @@ const useStyles = makeStyles((theme) => ({
   sandboxRoot: {
     backgroundColor: white,
     color: fontColor,
-    height: 'calc(100vh - 10px)',
+    height: 'calc(100vh - 20px)',
     [theme.breakpoints.down('xs')]: {
       overflow: 'scroll'
     }
   },
   sandboxSelectionArea: {
-    height: '200px',
     maxHeight: '200px',
     backgroundColor: pullDownBackground,
     border: `1px solid ${darkGrey}`,
@@ -57,6 +62,7 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   sandboxSelectionAreaHolder: {
+    display: (chartOnly) => (chartOnly.chartOnly === 'yes' ? 'none' : 'inherit'),
     margin: '6px',
     [theme.breakpoints.down('xs')]: {
       height: '100vh',
@@ -64,8 +70,8 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   sandboxChartRegion: {
-    height: 'calc(100% - 205px)',
-    maxHeight: 'calc(100% - 205px)',
+    height: (chartOnly) => (chartOnly.chartOnly === 'yes' ? '100%' : 'calc(100% - 210px)'),
+    maxHeight: (chartOnly) => (chartOnly.chartOnly === 'yes' ? '100%' : 'calc(100% - 210px)'),
     [theme.breakpoints.down('xs')]: {
       height: '575px',
       maxHeight: '575px'
@@ -109,6 +115,9 @@ export default function SandboxControls() {
   // check url parameters for a using average bar true (averages are bar) if blank
   const URLLineChart = urlParams.get('line') ? urlParams.get('line') : 'year';
 
+  // check url parameters for showing chart only
+  const URLChartOnly = urlParams.get('chartonly') ? urlParams.get('chartonly') : 'no';
+
   // set defaults for intial states of ui compnents
   let URLClimatevariableDisabled = true;
   let URLLocationDisabled = true;
@@ -145,8 +154,6 @@ export default function SandboxControls() {
       break;
   }
 
-  const classes = useStyles();
-
   // set React state via React Hooks
   // used to detect the first call - for getting state from url
   const [atStart, setAtStart] = useState(true);
@@ -171,6 +178,10 @@ export default function SandboxControls() {
   // when true yearly is the line when false yearly is bars
   const [lineChart, setLineChart] = useState(URLLineChart);
 
+  // The chart only option is not something in the ui  but a URL prarmater
+  // so the the same interactive chart can be imbeded in a website
+  const [chartOnly, setChartOnly] = useState(URLChartOnly);
+
   // chart data from files in ../sandboxdata
   const [chartData, setChartData] = useState([{}]);
   // plotly chart layout defaults
@@ -190,6 +201,8 @@ export default function SandboxControls() {
     setClimatevariableDisabled] = useState(URLClimatevariableDisabled);
   // if no region selected period pulldown - helps manage user error
   const [periodDisabled, setPeriodDisabled] = useState(URLPeriodDisabled);
+
+  const classes = useStyles({ chartOnly });
 
   // sets climate variable type for precip or temp, this will likely change latter...
   const getClimatevariableType = (switchClimatevariable) => {
@@ -212,6 +225,7 @@ export default function SandboxControls() {
     const { chartDataClimatevariable } = props;
     const { chartDataPeriod } = props;
     const { chartLineChart } = props;
+    const { chartOnlyProp } = props;
 
     // create new URL parameter object
     const searchParams = new URLSearchParams();
@@ -222,6 +236,7 @@ export default function SandboxControls() {
     searchParams.set('climatevariable', chartDataClimatevariable);
     searchParams.set('period', chartDataPeriod);
     searchParams.set('line', chartLineChart);
+    searchParams.set('chartonly', chartOnlyProp);
 
     // convert url parameters to a string and add the leading ? so it we can add it
     // to browser history (back button works)
@@ -277,6 +292,7 @@ export default function SandboxControls() {
     const { chartDataPeriod } = props;
     const { climateDataFilesJSONFile } = props;
     const { chartLineChart } = props;
+    const { chartOnlyProp } = props;
 
     // update url history this is the point at which we will need to make sure
     // the graph looks the same when shared via url
@@ -285,7 +301,8 @@ export default function SandboxControls() {
       chartDataLocation,
       chartDataClimatevariable,
       chartDataPeriod,
-      chartLineChart
+      chartLineChart,
+      chartOnlyProp
     });
 
     // limit the possible data file to period
@@ -474,7 +491,8 @@ export default function SandboxControls() {
             chartDataClimatevariable: climatevariable,
             chartDataPeriod: period,
             climateDataFilesJSONFile: responseData,
-            chartLineChart: lineChart
+            chartLineChart: lineChart,
+            chartOnlyProp: chartOnly
           });
         }
         return responseData;
@@ -562,39 +580,45 @@ export default function SandboxControls() {
         setPeriodDisabled(true);
         break;
     }
+    setChartOnly('no');
     getChartData({
       chartDataRegion: newValue,
       chartDataLocation: '', // make sure location is blank
       chartDataClimatevariable: climatevariable,
       chartDataPeriod: period,
       climateDataFilesJSONFile: climateDataFilesJSON,
-      chartLineChart: lineChart
+      chartLineChart: lineChart,
+      chartOnlyProp: 'no'
     });
   };
 
   // handle state change for location within the region
   const handleLocationChange = (newValue) => {
     setLocation(newValue);
+    setChartOnly('no');
     getChartData({
       chartDataRegion: region,
       chartDataLocation: newValue,
       chartDataClimatevariable: climatevariable,
       chartDataPeriod: period,
       climateDataFilesJSONFile: climateDataFilesJSON,
-      chartLineChart: lineChart
+      chartLineChart: lineChart,
+      chartOnlyProp: 'no'
     });
   };
 
   // handle state change for climate variable
   const handleClimatevariableChange = (newValue) => {
     setClimatevariable(newValue);
+    setChartOnly('no');
     getChartData({
       chartDataRegion: region,
       chartDataLocation: location,
       chartDataClimatevariable: newValue,
       chartDataPeriod: period,
       climateDataFilesJSONFile: climateDataFilesJSON,
-      chartLineChart: lineChart
+      chartLineChart: lineChart,
+      chartOnlyProp: 'no'
     });
     return null;
   };
@@ -602,13 +626,15 @@ export default function SandboxControls() {
   // handle state change for climate variable
   const handlePeriodChange = (newValue) => {
     setPeriod(newValue);
+    setChartOnly('no');
     getChartData({
       chartDataRegion: region,
       chartDataLocation: location,
       chartDataClimatevariable: climatevariable,
       chartDataPeriod: newValue,
       climateDataFilesJSONFile: climateDataFilesJSON,
-      chartLineChart: lineChart
+      chartLineChart: lineChart,
+      chartOnlyProp: 'no'
     });
     return null;
   };
@@ -618,13 +644,15 @@ export default function SandboxControls() {
   // yearly as bars and avg as line
   const handleSwtichAverageAndYearly = () => {
     setLineChart('avg');
+    setChartOnly('no');
     getChartData({
       chartDataRegion: region,
       chartDataLocation: location,
       chartDataClimatevariable: climatevariable,
       chartDataPeriod: period,
       climateDataFilesJSONFile: climateDataFilesJSON,
-      chartLineChart: 'avg'
+      chartLineChart: 'avg',
+      chartOnlyProp: 'no'
     });
     return null;
   };
@@ -634,13 +662,15 @@ export default function SandboxControls() {
   // yearly as bars and avg as line
   const handleSwtichMovingAverageAndYearly = () => {
     setLineChart('mavg');
+    setChartOnly('no');
     getChartData({
       chartDataRegion: region,
       chartDataLocation: location,
       chartDataClimatevariable: climatevariable,
       chartDataPeriod: period,
       climateDataFilesJSONFile: climateDataFilesJSON,
-      chartLineChart: 'mavg'
+      chartLineChart: 'mavg',
+      chartOnlyProp: 'no'
     });
     return null;
   };
@@ -651,13 +681,15 @@ export default function SandboxControls() {
   const handleSwtichYearlyToLine = () => {
     // do something
     setLineChart('year');
+    setChartOnly('no');
     getChartData({
       chartDataRegion: region,
       chartDataLocation: location,
       chartDataClimatevariable: climatevariable,
       chartDataPeriod: period,
       climateDataFilesJSONFile: climateDataFilesJSON,
-      chartLineChart: 'year'
+      chartLineChart: 'year',
+      chartOnlyProp: 'no'
     });
     return null;
   };
@@ -969,5 +1001,6 @@ SandboxControls.propTypes = {
   chartDataClimatevariable: PropTypes.string,
   chartDataPeriod: PropTypes.string,
   climateDataFilesJSONFile: PropTypes.object,
-  chartLineChart: PropTypes.string
+  chartLineChart: PropTypes.string,
+  chartOnlyProp: PropTypes.string
 };
