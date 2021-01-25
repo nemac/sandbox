@@ -1,3 +1,9 @@
+// TODO:
+//    make chart only view
+//    need to figur out small screen issues with chart
+//    seems on normal screens the veritical space is to big some
+//      O.S's might be putting scroll bars in
+//    sandbox download csv
 // mui and react
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
@@ -40,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
   sandboxRoot: {
     backgroundColor: white,
     color: fontColor,
-    height: 'calc(100vh - 10px)',
+    height: 'calc(100vh - 20px)',
     [theme.breakpoints.down('xs')]: {
       overflow: 'scroll'
     }
@@ -64,8 +70,8 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   sandboxChartRegion: {
-    height: 'calc(100% - 205px)',
-    maxHeight: 'calc(100% - 205px)',
+    height: 'calc(100% - 210px)',
+    maxHeight: 'calc(100% - 210px)',
     [theme.breakpoints.down('xs')]: {
       height: '575px',
       maxHeight: '575px'
