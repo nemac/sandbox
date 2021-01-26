@@ -1,6 +1,3 @@
-// TODO:
-//    sandbox download csv
-
 // mui and react
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
