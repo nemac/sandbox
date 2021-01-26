@@ -1,9 +1,10 @@
 // TODO:
-//    need to figur out small screen issues with chart
 //    sandbox download csv
+
 // mui and react
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import FileSaver from 'file-saver';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
@@ -39,6 +40,37 @@ const darkGrey = '#E6E6E6';
 const pullDownBackground = '#FBFCFE';
 const fontColor = '#5C5C5C';
 
+// heights for buttons
+const exportButtons = 7;
+const exportButtonHeight = 50;
+const exportAreaHeight = 75;
+const exportButtonsSmallScreenHeight = exportButtons * exportButtonHeight;
+const exportButtonsMeduimlScreenHeight = exportAreaHeight;
+
+// heights for selectors - pullldowns
+const selectors = 4;
+const selectorHeight = 75;
+const selectorAreaSmallScreenHeight = selectors * selectorHeight;
+const selectorAreaMediumScreenHeight = 1.5 * selectorHeight;
+
+// heights for header - title
+const headerTitleHeight = 50;
+const headerTitleSmallScreenHeight = 75;
+
+// heights for entire header with buttons, pulldowns, and header
+const actionAreaSmallScreenHeight =
+  headerTitleSmallScreenHeight +
+  selectorAreaSmallScreenHeight +
+  exportButtonsSmallScreenHeight;
+const actionAreaMediumScreenHeight =
+  headerTitleSmallScreenHeight +
+  selectorAreaMediumScreenHeight +
+  exportButtonsMeduimlScreenHeight;
+
+const chartRegionMinHeight = 400;
+
+const sandboxChartRegionSmallScreenHeight = 575;
+
 const useStyles = makeStyles((theme) => ({
   sandboxRoot: {
     backgroundColor: white,
@@ -49,12 +81,12 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   sandboxHeader: {
-    height: '50px',
-    maxHeight: '50px',
+    height: `${headerTitleHeight}px`,
+    maxHeight: `${headerTitleHeight}px`,
     color: fontColor,
     [theme.breakpoints.down('xs')]: {
-      height: '75px',
-      maxHeight: '75px'
+      height: `${headerTitleSmallScreenHeight}px`,
+      maxHeight: `${headerTitleSmallScreenHeight}px`
     }
   },
   sandboxSelectionArea: {
@@ -62,26 +94,34 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: pullDownBackground,
     border: `1px solid ${darkGrey}`,
     borderRadius: '4px',
+    [theme.breakpoints.down('sm')]: {
+      height: `${actionAreaMediumScreenHeight}px`,
+      maxHeight: `${actionAreaMediumScreenHeight}px`
+    },
     [theme.breakpoints.down('xs')]: {
-      height: '675px',
-      minHeight: '675px'
+      height: `${actionAreaSmallScreenHeight}px`,
+      minHeight: `${actionAreaSmallScreenHeight}px`
     }
   },
   sandboxSelectionAreaHolder: {
     display: (chartOnly) => (chartOnly.chartOnly === 'yes' ? 'none' : 'inherit'),
     margin: '6px',
+    [theme.breakpoints.down('sm')]: {
+      height: `${actionAreaMediumScreenHeight}px`,
+      maxHeight: `${actionAreaMediumScreenHeight}px`
+    },
     [theme.breakpoints.down('xs')]: {
-      height: '100vh',
-      maxHeight: '675px'
+      height: `${actionAreaSmallScreenHeight}px`,
+      maxHeight: `${actionAreaSmallScreenHeight}px`
     }
   },
   sandboxChartRegion: {
     height: (chartOnly) => (chartOnly.chartOnly === 'yes' ? '100%' : 'calc(100% - 210px)'),
     maxHeight: (chartOnly) => (chartOnly.chartOnly === 'yes' ? '100%' : 'calc(100% - 210px)'),
-    minHeight: '400px',
+    minHeight: `${chartRegionMinHeight}px`,
     [theme.breakpoints.down('sm')]: {
-      height: '575px',
-      maxHeight: '575px'
+      height: `${sandboxChartRegionSmallScreenHeight}px !important`,
+      maxHeight: `${sandboxChartRegionSmallScreenHeight}px !important`
     }
   },
   sandboxChartRegionBox: {
@@ -90,12 +130,17 @@ const useStyles = makeStyles((theme) => ({
       height: '575px'
     }
   },
+
   sandboxExports: {
-    height: '70px',
-    maxheight: '70px',
+    height: `${exportAreaHeight}px`,
+    maxHeight: `${exportAreaHeight}px`,
+    [theme.breakpoints.down('sm')]: {
+      height: `${exportAreaHeight * 2}px`,
+      maxHeight: `${exportAreaHeight * 2}px`
+    },
     [theme.breakpoints.down('xs')]: {
-      height: '300px',
-      maxheight: '300px'
+      height: `${exportButtonsSmallScreenHeight}px`,
+      maxHeight: `${exportButtonsSmallScreenHeight}px`
     }
   },
   extendedIcon: {
@@ -890,9 +935,51 @@ export default function SandboxControls() {
     return null;
   };
 
-  // handles downloads chart as SVG
+  // handles downloads chart as PNG
   const handleDownloadChartAsPNG = () => {
     convertToPng('.js-plotly-plot .main-svg');
+  };
+
+  // convert json data to csv
+  const convertDataToCSV = (data) => {
+    const items = data;
+    const replacer = (key, value) => (value === null ? '' : value);
+    const header = Object.keys(items[0]);
+    let csv = items.map((row) => (header.map((fieldName) => (JSON.stringify(row[fieldName], replacer).replace(/\\"/g, '""'))).join(',')));
+
+    // push header to begining of array
+    csv.unshift(header.join(','));
+    csv = csv.join('\r\n');
+    return csv;
+  };
+
+  // This is what actually creates and saves the file.
+  const saveFile = (content, filename, filetype) => {
+    const blob = new Blob(content, { type: filetype });
+    FileSaver.saveAs(blob, filename);
+  };
+
+  // converts chart data json from x,y to a pair key
+  // chart data has years in one array and values in another
+  // csv conversion makes it {year: value} so its easier to convert to csv
+  const convertChartDataToJSON = () => {
+    const years = chartData[0].x;
+    const values = chartData[0].y;
+
+    // merge arrays into the new object
+    const JSONContent = years.map((value, index) => {
+      const val = { year: value, value: values[index] };
+      return val;
+    });
+    return JSONContent;
+  };
+
+  // handles downloads chart as CSV
+  const handleDownloadChartAsCSV = () => {
+    const fileContent = [convertDataToCSV(convertChartDataToJSON())];
+    const fileName = `${region}-${location}-${climatevariable}-${period}.csv`;
+    const fileType = 'text/csv;charset=utf-8';
+    saveFile(fileContent, fileName, fileType);
   };
 
   return (
@@ -966,6 +1053,7 @@ export default function SandboxControls() {
 
             <Grid item xs={12} className={classes.sandboxExports} >
               <SandboxActionMenu
+                handleDownloadChartAsCSVa={handleDownloadChartAsCSV}
                 handleDownloadChartAsPNGa={handleDownloadChartAsPNG}
                 handleDownloadChartAsSVGa={handleDownloadChartAsSVG}
                 handleSwtichAverageAndYearlya={handleSwtichAverageAndYearly}

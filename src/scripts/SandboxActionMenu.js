@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 
@@ -24,7 +25,11 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   fabsvg: {
+    minWidth: '75px',
     margin: theme.spacing(1),
+    [theme.breakpoints.down('md')]: {
+      fontSize: '.80rem'
+    },
     [theme.breakpoints.down('xs')]: {
       marginTop: theme.spacing(1),
       marginBottom: theme.spacing(1),
@@ -34,46 +39,64 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   fabsvgLeft: {
+    minWidth: '150px',
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(1),
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(0),
     borderTopRightRadius: '0px',
     borderBottomRightRadius: '0px',
+    [theme.breakpoints.down('md')]: {
+      minWidth: '135px',
+      fontSize: '.85rem'
+    },
     [theme.breakpoints.down('xs')]: {
+      minWidth: 'unset',
       marginTop: theme.spacing(1),
       marginBottom: theme.spacing(0),
       marginLeft: theme.spacing(0),
-      marginRight: theme.spacing(0),
+      marginRight: theme.spacing(1),
       width: '100%'
     }
   },
   fabsvgCenter: {
+    minWidth: '150px',
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(1),
     marginLeft: theme.spacing(0),
     marginRight: theme.spacing(0),
     borderRadius: '0px',
+    [theme.breakpoints.down('md')]: {
+      minWidth: '135px',
+      fontSize: '.85rem'
+    },
     [theme.breakpoints.down('xs')]: {
+      minWidth: 'unset',
       marginTop: theme.spacing(0),
       marginBottom: theme.spacing(0),
       marginLeft: theme.spacing(0),
-      marginRight: theme.spacing(0),
+      marginRight: theme.spacing(1),
       width: '100%'
     }
   },
   fabsvgRight: {
+    minWidth: '150px',
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(1),
     marginLeft: theme.spacing(0),
     marginRight: theme.spacing(1),
     borderTopLeftRadius: '0px',
     borderBottomLeftRadius: '0px',
+    [theme.breakpoints.down('md')]: {
+      minWidth: '135px',
+      fontSize: '.85rem'
+    },
     [theme.breakpoints.down('xs')]: {
+      minWidth: 'unset',
       marginTop: theme.spacing(0),
       marginBottom: theme.spacing(1),
       marginLeft: theme.spacing(0),
-      marginRight: theme.spacing(0),
+      marginRight: theme.spacing(1),
       width: '100%'
     }
   },
@@ -87,6 +110,7 @@ export default function Selector(props) {
   const { handleSwtichYearlyToLinea } = props;
   const { handleSwtichAverageAndYearlya } = props;
   const { handleSwtichMovingAverageAndYearlya } = props;
+  const { handleDownloadChartAsCSVa } = props;
   const { handleDownloadChartAsPNGa } = props;
   const { handleDownloadChartAsSVGa } = props;
   const { handleMailToTSUa } = props;
@@ -137,6 +161,10 @@ export default function Selector(props) {
     handleDownloadChartAsPNGa();
   };
 
+  const handleDownloadChartAsCSV = (event) => {
+    handleDownloadChartAsCSVa();
+  };
+
   const handleDownloadChartAsSVG = (event) => {
     handleDownloadChartAsSVGa();
   };
@@ -146,28 +174,37 @@ export default function Selector(props) {
   };
 
   return (
-    <Box className={classes.sandboxExportsButtonBox} fontWeight='fontWeightBold' mt={1} display='flex' flexDirection='row' flexWrap='nowrap' >
-      <div >
-        <Button onClick={handleSwtichYearlyToLine} classes={{ root: `${setSelected(lineChart, 'year')}` }} className={classes.fabsvgLeft} variant="contained" color="default" startIcon={<TimelineIcon />}>
-          Yearly
-        </Button>
-        <Button onClick={handleSwtichAverageAndYearly} classes={{ root: `${setSelected(lineChart, 'avg')}` }} className={classes.fabsvgCenter} variant="contained" color="default" startIcon={<TimelineIcon />}>
-          Average
-        </Button>
-        <Button onClick={handleSwtichMovingAverageAndYearly} classes={{ root: `${setSelected(lineChart, 'mavg')}` }} className={classes.fabsvgRight} variant="contained" color="default" startIcon={<TimelineIcon />}>
-          Moving Average
-        </Button>
-        <Button onClick={handleDownloadChartAsPNG} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveAltIcon />}>
-          .PNG
-        </Button>
-        <Button onClick={handleDownloadChartAsSVG} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveAltIcon />}>
-          .SVG
-        </Button>
-        <Button onClick={handleMailToTSU} className={classes.fabsvg} variant="contained" color="default" startIcon={<MailOutlineIcon />}>
-          Send to TSU
-        </Button>
-      </div>
-    </Box>
+      <Grid container spacing={0} justify='flex-end' direction={'row'} >
+        <Grid item xs={12} sm={12} md={6} width='100%' justify='flex-end' >
+          <Box className={classes.sandboxExportsButtonBox} fontWeight='fontWeightBold' mt={1} display='flex' flexDirection='row' flexWrap='wrap' >
+            <Button onClick={handleSwtichYearlyToLine} classes={{ root: `${setSelected(lineChart, 'year')}` }} className={classes.fabsvgLeft} variant="contained" color="default" startIcon={<TimelineIcon />}>
+              Yearly
+            </Button>
+            <Button onClick={handleSwtichAverageAndYearly} classes={{ root: `${setSelected(lineChart, 'avg')}` }} className={classes.fabsvgCenter} variant="contained" color="default" startIcon={<TimelineIcon />}>
+              Average
+            </Button>
+            <Button onClick={handleSwtichMovingAverageAndYearly} classes={{ root: `${setSelected(lineChart, 'mavg')}` }} className={classes.fabsvgRight} variant="contained" color="default" startIcon={<TimelineIcon />}>
+              Moving Average
+            </Button>
+          </Box>
+        </Grid>
+        <Grid item xs={12} sm={12} md={6} width='100%' >
+          <Box className={classes.sandboxExportsButtonBox} fontWeight='fontWeightBold' mt={1} display='flex' flexDirection='row' flexWrap='wrap' >
+            <Button onClick={handleDownloadChartAsCSV} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveAltIcon />}>
+              .CSV
+            </Button>
+            <Button onClick={handleDownloadChartAsPNG} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveAltIcon />}>
+              .PNG
+            </Button>
+            <Button onClick={handleDownloadChartAsSVG} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveAltIcon />}>
+              .SVG
+            </Button>
+            <Button onClick={handleMailToTSU} className={classes.fabsvg} variant="contained" color="default" startIcon={<MailOutlineIcon />}>
+              To TSU
+            </Button>
+          </Box>
+        </Grid>
+      </Grid>
   );
 }
 
@@ -175,6 +212,7 @@ Selector.propTypes = {
   handleSwtichYearlyToLinea: PropTypes.func,
   handleSwtichAverageAndYearlya: PropTypes.func,
   handleSwtichMovingAverageAndYearlya: PropTypes.func,
+  handleDownloadChartAsCSVa: PropTypes.func,
   handleDownloadChartAsPNGa: PropTypes.func,
   handleDownloadChartAsSVGa: PropTypes.func,
   handleMailToTSUa: PropTypes.func,
