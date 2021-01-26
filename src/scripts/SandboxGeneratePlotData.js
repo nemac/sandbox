@@ -2,6 +2,8 @@ class SandboxGeneratePlotData {
   constructor(props) {
     // style guide driven colors, fonts, ticks may need expanding
     //  https://docs.google.com/document/d/1_zO39hdlGL9uY0Y0Vf57ncYNYXuACUAIM0fKCUo3spc/edit?ts=5fa547dd#
+
+    this.smallScreen = 768;
     this.blue = '4, 90, 141';
     this.red = '189, 0, 38';
     this.green = '127, 188, 65';
@@ -11,8 +13,9 @@ class SandboxGeneratePlotData {
     this.precipitationColor = '#5AB4AC';
     this.temperatureColor = '#FEB24C';
     this.bargap = 0.15;
-    this.legendBarLineX = window.innerWidth <= 768 ? 0.25 : 0.65;
-    this.legendBarLineY = 1.125;
+    this.showLegend = true;
+    this.legendBarLineX = window.innerWidth <= this.smallScreen ? 0 : 0.65;
+    this.legendBarLineY = window.innerWidth <= this.smallScreen ? -0.15 : 1.125;
     this.font = 'Arial';
     this.zeroLineColor = '#000000';
     this.zerolinewidth = '1.25';
@@ -25,7 +28,7 @@ class SandboxGeneratePlotData {
     this.AverageWidth = '3';
     this.AverageColor = '#000000';
     this.gridWidth = '1';
-    this.fontSizePrimary = window.innerWidth <= 768 ? '12px' : '14pt';
+    this.fontSizePrimary = '14pt';
     this.fontSizeLabels = '12pt';
     this.fontSizeLabelsSecondary = '12pt';
     this.xmin = props.xmin;
@@ -35,8 +38,9 @@ class SandboxGeneratePlotData {
     this.lineChart = props.chartLineChart;
     this.maxVal = Math.max(...this.yvals);
     this.minVal = Math.min(...this.yvals);
-    this.shortTitle = props.chartTitle.substr(0, props.chartTitle.indexOf('(') - 1);
-    this.chartTitle = window.innerWidth <= 768 ? this.shortTitle : props.chartTitle;
+    this.shortTitle = SandboxGeneratePlotData.splitTitle(props.chartTitle);
+    this.chartTitle = window.innerWidth <= this.smallScreen ? this.shortTitle : props.chartTitle;
+    this.chartTitleX = window.innerWidth <= this.smallScreen ? 0.5 : 0.4;
     this.legnedText = props.legnedText;
     this.chartType = props.chartType;
     this.climatevariable = props.climatevariable;
@@ -44,6 +48,7 @@ class SandboxGeneratePlotData {
     this.periodGroups = props.periodGroups ? props.periodGroups : 5;
     this.AverageMovingPeriod = 5;
     this.textAngle = window.innerWidth <= 1000 ? 90 : 0;
+    this.dtick = window.innerWidth <= this.smallScreen ? 10 : 5;
     this.yValsSumByPeriod = this.yValsSumByPeriod();
     this.yValsAvgByPeriod = this.yValsAvgByPeriod();
     this.yValsMovingAverage = this.computeMovingAverage();
@@ -57,6 +62,22 @@ class SandboxGeneratePlotData {
     const min = this.minVal < 0 ? 0 : this.minVal;
     this.prettyRange = SandboxGeneratePlotData.pretty([min, this.maxVal]);
     this.yRange = [this.prettyRange[0], this.prettyRange[this.prettyRange.length - 1]];
+  }
+
+  // splits chart title string into parts so its truncated
+  // on small screens
+  static splitTitle(title) {
+    const longestLength = 25;
+    const titleLength = title.length;
+
+    let newTitle = title;
+    for (let pos = longestLength; pos < titleLength; pos = (pos + 5) + longestLength) {
+      const sepPos = newTitle.indexOf(' ', pos);
+      if (sepPos > 0) {
+        newTitle = `${newTitle.substring(0, sepPos)}<br>${newTitle.substring(sepPos + 1)}`;
+      }
+    }
+    return newTitle;
   }
 
   // some regions-locations have 0 for all data and that is okay but we need to warn
@@ -521,6 +542,7 @@ class SandboxGeneratePlotData {
   layoutAverageBar() {
     return {
       displayModeBar: false,
+      showlegend: this.showLegend,
       autosize: true,
       height: 1,
       bargap: this.bargap,
@@ -543,7 +565,7 @@ class SandboxGeneratePlotData {
           family: this.font,
           size: this.fontSizePrimary
         },
-        x: 0.4
+        x: this.chartTitleX
       },
       xaxis: {
         type: 'linear',
@@ -558,15 +580,12 @@ class SandboxGeneratePlotData {
         rangemode: 'tozero',
         zerolinecolor: this.zeroLineColor,
         zerolinewidth: this.zerolinewidth,
-        dtick: 5,
+        dtick: this.dtick,
         tick0: 0,
         tickangle: this.textAngle,
         tickformat: '',
         tickprefix: '',
         nticks: this.periodGroups,
-        // tickmode: 'array',
-        // tickvals: this.xValsPeriod,
-        // ticktext: this.xValsPeriodLabel,
         ticks: 'outside',
         tickcolor: this.zeroLineColor,
         tickwidth: this.zerolinewidth,
@@ -694,6 +713,7 @@ class SandboxGeneratePlotData {
   layoutYearBar() {
     return {
       displayModeBar: false,
+      showlegend: this.showLegend,
       autosize: true,
       height: 1,
       bargap: this.bargap,
@@ -716,7 +736,7 @@ class SandboxGeneratePlotData {
           family: this.font,
           size: this.fontSizePrimary
         },
-        x: 0.4
+        x: this.chartTitleX
       },
       xaxis: {
         type: 'linear',
@@ -731,15 +751,12 @@ class SandboxGeneratePlotData {
         rangemode: 'tozero',
         zerolinecolor: this.zeroLineColor,
         zerolinewidth: this.zerolinewidth,
-        dtick: 5,
+        dtick: this.dtick,
         tick0: 0,
         tickangle: this.textAngle,
         tickformat: '',
         tickprefix: '',
         nticks: this.periodGroups,
-        // tickmode: 'array',
-        // tickvals: this.xValsPeriod,
-        // ticktext: this.xValsPeriodLabel,
         ticks: 'outside',
         tickcolor: this.zeroLineColor,
         tickwidth: this.zerolinewidth,
