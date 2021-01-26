@@ -175,7 +175,7 @@ export default function Selector(props) {
 
   return (
       <Grid container spacing={0} justify='flex-end' direction={'row'} >
-        <Grid item xs={12} sm={12} md={6} width='100%' justify='flex-end' >
+        <Grid item xs={12} sm={12} md={6} width='100%' >
           <Box className={classes.sandboxExportsButtonBox} fontWeight='fontWeightBold' mt={1} display='flex' flexDirection='row' flexWrap='wrap' >
             <Button onClick={handleSwtichYearlyToLine} classes={{ root: `${setSelected(lineChart, 'year')}` }} className={classes.fabsvgLeft} variant="contained" color="default" startIcon={<TimelineIcon />}>
               Yearly
