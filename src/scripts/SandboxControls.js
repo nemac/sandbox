@@ -1,8 +1,5 @@
 // TODO:
-//    make chart only view
 //    need to figur out small screen issues with chart
-//    seems on normal screens the veritical space is to big some
-//      O.S's might be putting scroll bars in
 //    sandbox download csv
 // mui and react
 import React, { useEffect, useState } from 'react';
@@ -51,6 +48,15 @@ const useStyles = makeStyles((theme) => ({
       overflow: 'scroll'
     }
   },
+  sandboxHeader: {
+    height: '50px',
+    maxHeight: '50px',
+    color: fontColor,
+    [theme.breakpoints.down('xs')]: {
+      height: '75px',
+      maxHeight: '75px'
+    }
+  },
   sandboxSelectionArea: {
     maxHeight: '200px',
     backgroundColor: pullDownBackground,
@@ -72,14 +78,15 @@ const useStyles = makeStyles((theme) => ({
   sandboxChartRegion: {
     height: (chartOnly) => (chartOnly.chartOnly === 'yes' ? '100%' : 'calc(100% - 210px)'),
     maxHeight: (chartOnly) => (chartOnly.chartOnly === 'yes' ? '100%' : 'calc(100% - 210px)'),
-    [theme.breakpoints.down('xs')]: {
+    minHeight: '400px',
+    [theme.breakpoints.down('sm')]: {
       height: '575px',
       maxHeight: '575px'
     }
   },
   sandboxChartRegionBox: {
     height: 'calc(100% - 10px)',
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down('sm')]: {
       height: '575px'
     }
   },
@@ -893,7 +900,7 @@ export default function SandboxControls() {
       <Grid container spacing={0} justify='flex-start' direction={'row'} className={classes.sandboxRoot}>
         <Grid item xs={12} width='100%' className={classes.sandboxSelectionAreaHolder} >
           <Grid container spacing={0} justify='flex-start' direction={'row'} className={classes.sandboxSelectionArea}>
-            <Grid item xs={12} className={'sandbox-header'} width='100%' >
+            <Grid item xs={12} className={classes.sandboxHeader} width='100%' >
               <Box fontWeight='fontWeightBold' mt={1} p={0} display='flex' flexWrap='nowrap' justifyContent='flex-start'>
                 <Box px={1} fontSize='h4.fontSize' >
                   <InsertChartOutlinedIcon fontSize='large' className={'sandbox-header-icon'} />
