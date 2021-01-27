@@ -757,6 +757,27 @@ export default function SandboxControls() {
     return sandboxHumanReadable.getPeriodPullDownText(replacePeriod);
   };
 
+  // removes <br> from title atttribute (in SVG) so images are exported without error
+  //  used on small screens to create line breaks in chart tittle
+  //  the < and > is not allowed on svg to image so it needs to be removed
+  //  to allow for export
+  const removeBreaks = (node) => {
+    const titleSelector = '.infolayer .g-gtitle .gtitle';
+    const nodeTitle = node.querySelector(titleSelector);
+    if (nodeTitle) {
+      const nodeAttribute = nodeTitle.getAttribute('data-unformatted');
+      const newNodeAttribute = nodeAttribute.replace('<br>', '')
+        .replace('<br>', '')
+        .replace('<br>', '')
+        .replace('<br>', '')
+        .replace('<br>', '')
+        .replace('<br>', '');
+      node.querySelector(titleSelector).setAttribute('data-unformatted', newNodeAttribute);
+      return node;
+    }
+    return node;
+  };
+
   // hack to export svg, not using using pure JS
   const convertToOneSvg = (svgSelector) => {
     // fiond and covnert html all plotly chart nodes
@@ -789,7 +810,8 @@ export default function SandboxControls() {
         // in svg data that will require manipulation of data.
         if (!svgele.classList.contains('draglayer')) {
           const node = svgele.cloneNode(true);
-          mergedSVG.appendChild(node);
+          const newNode = removeBreaks(node);
+          mergedSVG.appendChild(newNode);
         }
       });
     });
@@ -877,7 +899,8 @@ export default function SandboxControls() {
       const content = Array.from(svgnode.childNodes);
       content.forEach((svgele) => {
         const node = svgele.cloneNode(true);
-        mergedSVG.appendChild(node);
+        const newNode = removeBreaks(node);
+        mergedSVG.appendChild(newNode);
       });
     });
 
