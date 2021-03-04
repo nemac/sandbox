@@ -179,9 +179,10 @@ class SandboxGeneratePlotData {
   movingAverageXValues() {
     const data = this.xvals;
     const period = this.AverageMovingPeriod;
+    const halfPeriod = Math.floor(this.periodGroups / 2);
     const movingAveragesX = [];
 
-    for (let x = 0; x - period - 1 < data.length; x += 1) {
+    for (let x = (period - halfPeriod) - 1; x - period - 1 < data.length; x += 1) {
       movingAveragesX.push(data[x]);
     }
     return movingAveragesX;
@@ -214,14 +215,15 @@ class SandboxGeneratePlotData {
   // creates the y values for each period
   xValsPeriod() {
     let count = 0;
+    const halfPeriod = Math.floor(this.periodGroups / 2);
     const yValsPeriodAll = this.xvals.map((value, index) => { // eslint-disable-line
       // return value
       if (index === 0) {
-        return value <= -50 ? undefined : value;
+        return value <= -50 ? undefined : value + halfPeriod;
       }
       if (count === (this.periodGroups - 1)) {
         count = 0;
-        return value <= -50 ? undefined : value;
+        return value <= -50 ? undefined : value + halfPeriod;
       }
       count += 1;
     });
@@ -509,7 +511,7 @@ class SandboxGeneratePlotData {
         simplify: true
       },
       connectgaps: true,
-      customdata: this.xValsMovingAverage.map((val) => `${val} - ${val + this.AverageMovingPeriod}`),
+      customdata: this.xValsMovingAverage.map((val) => `${val - Math.floor(this.periodGroups / 2)} - ${(val - Math.floor(this.periodGroups / 2)) + this.AverageMovingPeriod}`),
       hoverinfo: 'x+y',
       hovertemplate: ` On average (moving), there were %{y:0.2f} <br> ${this.climatevariable.toLowerCase().replace('with', 'with the')} <br> between the years %{customdata} <br><extra></extra>`
     };
@@ -532,7 +534,7 @@ class SandboxGeneratePlotData {
         simplify: true
       },
       connectgaps: true,
-      customdata: this.xValsPeriod.map((val) => `${val} - ${val + this.periodGroups - 1}`),
+      customdata: this.xValsPeriod.map((val) => `${val - Math.floor(this.periodGroups / 2)} - ${(val - Math.floor(this.periodGroups / 2)) + this.periodGroups - 1}`),
       hoverinfo: 'x+y',
       hovertemplate: ` On average, there were %{y:0.2f} <br> ${this.climatevariable.toLowerCase().replace('with', 'with the')} <br> between the years %{customdata} <br><extra></extra>`
     };
