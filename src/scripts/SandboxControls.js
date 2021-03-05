@@ -305,13 +305,14 @@ export default function SandboxControls() {
     for (let h = 0; h < headers.length; h += 1) {
       headers[h] = headers[h].trim();
     }
+
     let colIndex = undefined; // eslint-disable-line no-undef-init
 
     if (type === 'national') {
       colIndex = 1;
     } else if (type === 'regional' || type === 'state') {
-      for (let h = 1; h < headers.length; h += 2) {
-        if (headers[h] === parseRegion) {
+      for (let h = 1; h < headers.length; h += 1) {
+        if (headers[h].toUpperCase() === parseRegion.toUpperCase()) {
           colIndex = h;
           break;
         }
@@ -364,6 +365,7 @@ export default function SandboxControls() {
 
     // get the data file name
     const dataFile = data.map((json) => json.name);
+
     // define the data file location should always be the current url and public folder
     const path = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
     axios.get(`${path}/sandboxdata/TSU_Sandbox_Datafiles/${dataFile}`)
@@ -504,7 +506,6 @@ export default function SandboxControls() {
         // handle success
         let responseData = {};
         let data = {};
-
         // Regions change the file and how the object is refrenced
         //  TODO might be better to fix this in the future
         switch (loadRegion) {
