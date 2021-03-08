@@ -1,593 +1,1304 @@
 {
-	"national": [{
-		"name": "national1inch_1900_2018_Sandbox.txt",
-		"type": "1inch",
-		"robust": false,
-		"period": "1900-current",
-		"start": 1900,
-		"end": 2018
-	}, {
-		"name": "national1inch_1950_2018_Sandbox.txt",
-		"type": "1inch",
-		"robust": true,
-		"period": "1950-current",
-		"start": 1950,
-		"end": 2018
-	}, {
-		"name": "national2inch_1900_2018_Sandbox.txt",
-		"type": "2inch",
-		"robust": false,
-		"period": "1900-current",
-		"start": 1900,
-		"end": 2018
-	}, {
-		"name": "national2inch_1950_2018_Sandbox.txt",
-		"type": "2inch",
-		"robust": true,
-		"period": "1950-current",
-		"start": 1950,
-		"end": 2018
-	}, {
-		"name": "national3inch_1900_2018_Sandbox.txt",
-		"type": "3inch",
-		"robust": false,
-		"period": "1900-current",
-		"start": 1900,
-		"end": 2018
-	}, {
-		"name": "national3inch_1950_2018_Sandbox.txt",
-		"type": "3inch",
-		"robust": true,
-		"period": "1950-current",
-		"start": 1950,
-		"end": 2018
-	}, {
-		"name": "national4inch_1900_2018_Sandbox.txt",
-		"type": "4inch",
-		"robust": false,
-		"period": "1900-current",
-		"start": 1900,
-		"end": 2018
-	}, {
-		"name": "national4inch_1950_2018_Sandbox.txt",
-		"type": "4inch",
-		"robust": true,
-		"period": "1950-current",
-		"start": 1950,
-		"end": 2018
-	}, {
-		"name": "nationaltmax0F_1900_2018_Sandbox.txt",
-		"type": "tmax0F",
-		"robust": false,
-		"period": "1900-current",
-		"start": 1900,
-		"end": 2018
-	}, {
-		"name": "nationaltmax0F_1950_2018_Sandbox.txt",
-		"type": "tmax0F",
-		"robust": true,
-		"period": "1950-current",
-		"start": 1950,
-		"end": 2018
-	},{
-		"name": "nationaltmax32F_1900_2018_Sandbox.txt",
-		"type": "tmax32F",
-		"robust": false,
-		"period": "1900-current",
-		"start": 1900,
-		"end": 2018
-	}, {
-		"name": "nationaltmax32F_1950_2018_Sandbox.txt",
-		"type": "tmax32F",
-		"robust": true,
-		"period": "1950-current",
-		"start": 1950,
-		"end": 2018
-	}, {
-		"name": "nationaltmax90F_1900_2018_Sandbox.txt",
-		"type": "tmax90F",
-		"robust": false,
-		"period": "1900-current",
-		"start": 1900,
-		"end": 2018
-	}, {
-		"name": "nationaltmax90F_1950_2018_Sandbox.txt",
-		"type": "tmax90F",
-		"robust": true,
-		"period": "1950-current",
-		"start": 1950,
-		"end": 2018
-	}, {
-		"name": "nationaltmax95F_1900_2018_Sandbox.txt",
-		"type": "tmax95F",
-		"robust": false,
-		"period": "1900-current",
-		"start": 1900,
-		"end": 2018
-	}, {
-		"name": "nationaltmax95F_1950_2018_Sandbox.txt",
-		"type": "tmax95F",
-		"robust": true,
-		"period": "1950-current",
-		"start": 1950,
-		"end": 2018
-	},  {
-		"name": "nationaltmax100F_1900_2018_Sandbox.txt",
-		"type": "tmax100F",
-		"robust": false,
-		"period": "1900-current",
-		"start": 1900,
-		"end": 2018
-	}, {
-		"name": "nationaltmax100F_1950_2018_Sandbox.txt",
-		"type": "tmax100F",
-		"robust": true,
-		"period": "1950-current",
-		"start": 1950,
-		"end": 2018
-	}, {
-		"name": "nationaltmin0F_1900_2018_Sandbox.txt",
-		"type": "tmin0F",
-		"robust": false,
-		"period": "1900-current",
-		"start": 1900,
-		"end": 2018
-	}, {
-		"name": "nationaltmin0F_1950_2018_Sandbox.txt",
-		"type": "tmin0F",
-		"robust": true,
-		"period": "1950-current",
-		"start": 1950,
-		"end": 2018
-	}, {
-		"name": "nationaltmin32F_1900_2018_Sandbox.txt",
-		"type": "tmin32F",
-		"robust": false,
-		"period": "1900-current",
-		"start": 1900,
-		"end": 2018
-	}, {
-		"name": "nationaltmin32F_1950_2018_Sandbox.txt",
-		"type": "tmin32F",
-		"robust": true,
-		"period": "1950-current",
-		"start": 1950,
-		"end": 2018
-	}, {
-		"name": "nationaltmin70F_1900_2018_Sandbox.txt",
-		"type": "tmin70F",
-		"robust": false,
-		"period": "1900-current",
-		"start": 1900,
-		"end": 2018
-	}, {
-		"name": "nationaltmin70F_1950_2018_Sandbox.txt",
-		"type": "tmin70F",
-		"robust": true,
-		"period": "1950-current",
-		"start": 1950,
-		"end": 2018
-	}, {
-		"name": "nationaltmin75F_1900_2018_Sandbox.txt",
-		"type": "tmin75F",
-		"robust": false,
-		"period": "1900-current",
-		"start": 1900,
-		"end": 2018
-	}, {
-		"name": "nationaltmin75F_1950_2018_Sandbox.txt",
-		"type": "tmin75F",
-		"robust": true,
-		"period": "1950-current",
-		"start": 1950,
-		"end": 2018
-	}, {
-		"name": "nationaltmin80F_1900_2018_Sandbox.txt",
-		"type": "tmin80F",
-		"robust": false,
-		"period": "1900-current",
-		"start": 1900,
-		"end": 2018
-	}, {
-		"name": "nationaltmin80F_1950_2018_Sandbox.txt",
-		"type": "tmin80F",
-		"robust": true,
-		"period": "1950-current",
-		"start": 1950,
-		"end": 2018
-	}],
-	"regional": [{
-		"name": "regions1inch_1900_2018_Sandbox.txt",
-		"type": "1inch",
-		"robust": false,
-		"period": "1900-current",
-		"start": 1900,
-		"end": 2018
-	}, {
-		"name": "regions1inch_1950_2018_Sandbox.txt",
-		"type": "1inch",
-		"robust": true,
-		"period": "1950-current",
-		"start": 1950,
-		"end": 2018
-	}, {
-		"name": "regions2inch_1900_2018_Sandbox.txt",
-		"type": "2inch",
-		"robust": false,
-		"period": "1900-current",
-		"start": 1900,
-		"end": 2018
-	}, {
-		"name": "regions2inch_1950_2018_Sandbox.txt",
-		"type": "2inch",
-		"robust": true,
-		"period": "1950-current",
-		"start": 1950,
-		"end": 2018
-	}, {
-		"name": "regions3inch_1900_2018_Sandbox.txt",
-		"type": "3inch",
-		"robust": false,
-		"period": "1900-current",
-		"start": 1900,
-		"end": 2018
-	}, {
-		"name": "regions3inch_1950_2018_Sandbox.txt",
-		"type": "3inch",
-		"robust": true,
-		"period": "1950-current",
-		"start": 1950,
-		"end": 2018
-	}, {
-		"name": "regions4inch_1900_2018_Sandbox.txt",
-		"type": "4inch",
-		"robust": false,
-		"period": "1900-current",
-		"start": 1900,
-		"end": 2018
-	}, {
-		"name": "regions4inch_1950_2018_Sandbox.txt",
-		"type": "4inch",
-		"robust": true,
-		"period": "1950-current",
-		"start": 1950,
-		"end": 2018
-	}, {
-		"name": "regionstmax0F_1900_2018_Sandbox.txt",
-		"type": "tmax0F",
-		"robust": false,
-		"period": "1900-current",
-		"start": 1900,
-		"end": 2018
-	}, {
-		"name": "regionstmax0F_1950_2018_Sandbox.txt",
-		"type": "tmax0F",
-		"robust": true,
-		"period": "1950-current",
-		"start": 1950,
-		"end": 2018
-	}, {
-		"name": "regionstmax32F_1900_2018_Sandbox.txt",
-		"type": "tmax32F",
-		"robust": false,
-		"period": "1900-current",
-		"start": 1900,
-		"end": 2018
-	}, {
-		"name": "regionstmax32F_1950_2018_Sandbox.txt",
-		"type": "tmax32F",
-		"robust": true,
-		"period": "1950-current",
-		"start": 1950,
-		"end": 2018
-	}, {
-		"name": "regionstmax90F_1900_2018_Sandbox.txt",
-		"type": "tmax90F",
-		"robust": false,
-		"period": "1900-current",
-		"start": 1900,
-		"end": 2018
-	}, {
-		"name": "regionstmax90F_1950_2018_Sandbox.txt",
-		"type": "tmax90F",
-		"robust": true,
-		"period": "1950-current",
-		"start": 1950,
-		"end": 2018
-	}, {
-		"name": "regionstmax95F_1900_2018_Sandbox.txt",
-		"type": "tmax95F",
-		"robust": false,
-		"period": "1900-current",
-		"start": 1900,
-		"end": 2018
-	}, {
-		"name": "regionstmax95F_1950_2018_Sandbox.txt",
-		"type": "tmax95F",
-		"robust": true,
-		"period": "1950-current",
-		"start": 1950,
-		"end": 2018
-	}, {
-		"name": "regionstmax100F_1900_2018_Sandbox.txt",
-		"type": "tmax100F",
-		"robust": false,
-		"period": "1900-current",
-		"start": 1900,
-		"end": 2018
-	}, {
-		"name": "regionstmax100F_1950_2018_Sandbox.txt",
-		"type": "tmax100F",
-		"robust": true,
-		"period": "1950-current",
-		"start": 1950,
-		"end": 2018
-	}, {
-		"name": "regionstmin0F_1900_2018_Sandbox.txt",
-		"type": "tmin0F",
-		"robust": false,
-		"period": "1900-current",
-		"start": 1900,
-		"end": 2018
-	}, {
-		"name": "regionstmin0F_1950_2018_Sandbox.txt",
-		"type": "tmin0F",
-		"robust": true,
-		"period": "1950-current",
-		"start": 1950,
-		"end": 2018
-	}, {
-		"name": "regionstmin32F_1900_2018_Sandbox.txt",
-		"type": "tmin32F",
-		"robust": false,
-		"period": "1900-current",
-		"start": 1900,
-		"end": 2018
-	}, {
-		"name": "regionstmin32F_1950_2018_Sandbox.txt",
-		"type": "tmin32F",
-		"robust": true,
-		"period": "1950-current",
-		"start": 1950,
-		"end": 2018
-	}, {
-		"name": "regionstmin70F_1900_2018_Sandbox.txt",
-		"type": "tmin70F",
-		"robust": false,
-		"period": "1900-current",
-		"start": 1900,
-		"end": 2018
-	}, {
-		"name": "regionstmin70F_1950_2018_Sandbox.txt",
-		"type": "tmin70F",
-		"robust": true,
-		"period": "1950-current",
-		"start": 1950,
-		"end": 2018
-	}, {
-		"name": "regionstmin75F_1900_2018_Sandbox.txt",
-		"type": "tmin75F",
-		"robust": false,
-		"period": "1900-current",
-		"start": 1900,
-		"end": 2018
-	}, {
-		"name": "regionstmin75F_1950_2018_Sandbox.txt",
-		"type": "tmin75F",
-		"robust": true,
-		"period": "1950-current",
-		"start": 1950,
-		"end": 2018
-	}, {
-		"name": "regionstmin80F_1900_2018_Sandbox.txt",
-		"type": "tmin80F",
-		"robust": false,
-		"period": "1900-current",
-		"start": 1900,
-		"end": 2018
-	}, {
-		"name": "regionstmin80F_1950_2018_Sandbox.txt",
-		"type": "tmin80F",
-		"robust": true,
-		"period": "1950-current",
-		"start": 1950,
-		"end": 2018
-	}],
-	"state": [{
-		"name": "state1inch_1900_2018_Sandbox.txt",
-		"type": "1inch",
-		"robust": false,
-		"period": "1900-current",
-		"start": 1900,
-		"end": 2018
-	}, {
-		"name": "state1inch_1950_2018_Sandbox.txt",
-		"type": "1inch",
-		"robust": true,
-		"period": "1950-current",
-		"start": 1950,
-		"end": 2018
-	}, {
-		"name": "state2inch_1900_2018_Sandbox.txt",
-		"type": "2inch",
-		"robust": false,
-		"period": "1900-current",
-		"start": 1900,
-		"end": 2018
-	}, {
-		"name": "state2inch_1950_2018_Sandbox.txt",
-		"type": "2inch",
-		"robust": true,
-		"period": "1950-current",
-		"start": 1950,
-		"end": 2018
-	}, {
-		"name": "state3inch_1900_2018_Sandbox.txt",
-		"type": "3inch",
-		"robust": false,
-		"period": "1900-current",
-		"start": 1900,
-		"end": 2018
-	}, {
-		"name": "state3inch_1950_2018_Sandbox.txt",
-		"type": "3inch",
-		"robust": true,
-		"period": "1950-current",
-		"start": 1950,
-		"end": 2018
-	}, {
-		"name": "state4inch_1900_2018_Sandbox.txt",
-		"type": "4inch",
-		"robust": false,
-		"period": "1900-current",
-		"start": 1900,
-		"end": 2018
-	}, {
-		"name": "state4inch_1950_2018_Sandbox.txt",
-		"type": "4inch",
-		"robust": true,
-		"period": "1950-current",
-		"start": 1950,
-		"end": 2018
-	}, {
-		"name": "statetmax0F_1900_2018_Sandbox.txt",
-		"type": "tmax0F",
-		"robust": false,
-		"period": "1900-current",
-		"start": 1900,
-		"end": 2018
-	}, {
-		"name": "statetmax0F_1950_2018_Sandbox.txt",
-		"type": "tmax0F",
-		"robust": true,
-		"period": "1950-current",
-		"start": 1950,
-		"end": 2018
-	}, {
-		"name": "statetmax32F_1900_2018_Sandbox.txt",
-		"type": "tmax32F",
-		"robust": false,
-		"period": "1900-current",
-		"start": 1900,
-		"end": 2018
-	}, {
-		"name": "statetmax32F_1950_2018_Sandbox.txt",
-		"type": "tmax32F",
-		"robust": true,
-		"period": "1950-current",
-		"start": 1950,
-		"end": 2018
-	}, {
-		"name": "statetmax90F_1900_2018_Sandbox.txt",
-		"type": "tmax90F",
-		"robust": false,
-		"period": "1900-current",
-		"start": 1900,
-		"end": 2018
-	}, {
-		"name": "statetmax90F_1950_2018_Sandbox.txt",
-		"type": "tmax90F",
-		"robust": true,
-		"period": "1950-current",
-		"start": 1950,
-		"end": 2018
-	}, {
-		"name": "statetmax95F_1900_2018_Sandbox.txt",
-		"type": "tmax95F",
-		"robust": false,
-		"period": "1900-current",
-		"start": 1900,
-		"end": 2018
-	}, {
-		"name": "statetmax95F_1950_2018_Sandbox.txt",
-		"type": "tmax95F",
-		"robust": true,
-		"period": "1950-current",
-		"start": 1950,
-		"end": 2018
-	}, {
-		"name": "statetmax100F_1900_2018_Sandbox.txt",
-		"type": "tmax100F",
-		"robust": false,
-		"period": "1900-current",
-		"start": 1900,
-		"end": 2018
-	}, {
-		"name": "statetmax100F_1950_2018_Sandbox.txt",
-		"type": "tmax100F",
-		"robust": true,
-		"period": "1950-current",
-		"start": 1950,
-		"end": 2018
-	}, {
-		"name": "statetmin0F_1900_2018_Sandbox.txt",
-		"type": "tmin0F",
-		"robust": false,
-		"period": "1900-current",
-		"start": 1900,
-		"end": 2018
-	}, {
-		"name": "statetmin0F_1950_2018_Sandbox.txt",
-		"type": "tmin0F",
-		"robust": true,
-		"period": "1950-current",
-		"start": 1950,
-		"end": 2018
-	}, {
-		"name": "statetmin32F_1900_2018_Sandbox.txt",
-		"type": "tmin32F",
-		"robust": false,
-		"period": "1900-current",
-		"start": 1900,
-		"end": 2018
-	}, {
-		"name": "statetmin32F_1950_2018_Sandbox.txt",
-		"type": "tmin32F",
-		"robust": true,
-		"period": "1950-current",
-		"start": 1950,
-		"end": 2018
-	}, {
-		"name": "statetmin70F_1900_2018_Sandbox.txt",
-		"type": "tmin70F",
-		"robust": false,
-		"period": "1900-current",
-		"start": 1900,
-		"end": 2018
-	}, {
-		"name": "statetmin70F_1950_2018_Sandbox.txt",
-		"type": "tmin70F",
-		"robust": true,
-		"period": "1950-current",
-		"start": 1950,
-		"end": 2018
-	}, {
-		"name": "statetmin75F_1900_2018_Sandbox.txt",
-		"type": "tmin75F",
-		"robust": false,
-		"period": "1900-current",
-		"start": 1900,
-		"end": 2018
-	}, {
-		"name": "statetmin75F_1950_2018_Sandbox.txt",
-		"type": "tmin75F",
-		"robust": true,
-		"period": "1950-current",
-		"start": 1950,
-		"end": 2018
-	}, {
-		"name": "statetmin80F_1900_2018_Sandbox.txt",
-		"type": "tmin80F",
-		"robust": false,
-		"period": "1900-current",
-		"start": 1900,
-		"end": 2018
-	}, {
-		"name": "statetmin80F_1950_2018_Sandbox.txt",
-		"type": "tmin80F",
-		"robust": true,
-		"period": "1950-current",
-		"start": 1950,
-		"end": 2018
-	}]
+    "national": [
+        {
+            "end": 2020,
+            "name": "national1inch_1900_2020_Sandbox2020.txt",
+            "period": "1900-current",
+            "robust": false,
+            "season": "yearly",
+            "start": 1900,
+            "type": "1inch"
+        },
+        {
+            "end": 2020,
+            "name": "national1inch_1950_2020_Sandbox2020.txt",
+            "period": "1950-current",
+            "robust": true,
+            "season": "yearly",
+            "start": 1950,
+            "type": "1inch"
+        },
+        {
+            "end": 2020,
+            "name": "national2inch_1900_2020_Sandbox2020.txt",
+            "period": "1900-current",
+            "robust": false,
+            "season": "yearly",
+            "start": 1900,
+            "type": "2inch"
+        },
+        {
+            "end": 2020,
+            "name": "national2inch_1950_2020_Sandbox2020.txt",
+            "period": "1950-current",
+            "robust": true,
+            "season": "yearly",
+            "start": 1950,
+            "type": "2inch"
+        },
+        {
+            "end": 2020,
+            "name": "national3inch_1900_2020_Sandbox2020.txt",
+            "period": "1900-current",
+            "robust": false,
+            "season": "yearly",
+            "start": 1900,
+            "type": "3inch"
+        },
+        {
+            "end": 2020,
+            "name": "national3inch_1950_2020_Sandbox2020.txt",
+            "period": "1950-current",
+            "robust": true,
+            "season": "yearly",
+            "start": 1950,
+            "type": "3inch"
+        },
+        {
+            "end": 2020,
+            "name": "national4inch_1900_2020_Sandbox2020.txt",
+            "period": "1900-current",
+            "robust": false,
+            "season": "yearly",
+            "start": 1900,
+            "type": "4inch"
+        },
+        {
+            "end": 2020,
+            "name": "national4inch_1950_2020_Sandbox2020.txt",
+            "period": "1950-current",
+            "robust": true,
+            "season": "yearly",
+            "start": 1950,
+            "type": "4inch"
+        },
+        {
+            "end": 2020,
+            "name": "nationalpcpn_ann_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "ann",
+            "start": 1895,
+            "type": "pcpn"
+        },
+        {
+            "end": 2020,
+            "name": "nationalpcpn_djf_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "djf",
+            "start": 1895,
+            "type": "pcpn"
+        },
+        {
+            "end": 2020,
+            "name": "nationalpcpn_jja_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "jja",
+            "start": 1895,
+            "type": "pcpn"
+        },
+        {
+            "end": 2020,
+            "name": "nationalpcpn_mam_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "mam",
+            "start": 1895,
+            "type": "pcpn"
+        },
+        {
+            "end": 2020,
+            "name": "nationalpcpn_son_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "son",
+            "start": 1895,
+            "type": "pcpn"
+        },
+        {
+            "end": 2020,
+            "name": "nationaltmax0F_1900_2020_Sandbox2020.txt",
+            "period": "1900-current",
+            "robust": false,
+            "season": "yearly",
+            "start": 1900,
+            "type": "tmax0F"
+        },
+        {
+            "end": 2020,
+            "name": "nationaltmax0F_1950_2020_Sandbox2020.txt",
+            "period": "1950-current",
+            "robust": true,
+            "season": "yearly",
+            "start": 1950,
+            "type": "tmax0F"
+        },
+        {
+            "end": 2020,
+            "name": "nationaltmax100F_1900_2020_Sandbox2020.txt",
+            "period": "1900-current",
+            "robust": false,
+            "season": "yearly",
+            "start": 1900,
+            "type": "tmax100F"
+        },
+        {
+            "end": 2020,
+            "name": "nationaltmax100F_1950_2020_Sandbox2020.txt",
+            "period": "1950-current",
+            "robust": true,
+            "season": "yearly",
+            "start": 1950,
+            "type": "tmax100F"
+        },
+        {
+            "end": 2020,
+            "name": "nationaltmax32F_1900_2020_Sandbox2020.txt",
+            "period": "1900-current",
+            "robust": false,
+            "season": "yearly",
+            "start": 1900,
+            "type": "tmax32F"
+        },
+        {
+            "end": 2020,
+            "name": "nationaltmax32F_1950_2020_Sandbox2020.txt",
+            "period": "1950-current",
+            "robust": true,
+            "season": "yearly",
+            "start": 1950,
+            "type": "tmax32F"
+        },
+        {
+            "end": 2020,
+            "name": "nationaltmax90F_1900_2020_Sandbox2020.txt",
+            "period": "1900-current",
+            "robust": false,
+            "season": "yearly",
+            "start": 1900,
+            "type": "tmax90F"
+        },
+        {
+            "end": 2020,
+            "name": "nationaltmax90F_1950_2020_Sandbox2020.txt",
+            "period": "1950-current",
+            "robust": true,
+            "season": "yearly",
+            "start": 1950,
+            "type": "tmax90F"
+        },
+        {
+            "end": 2020,
+            "name": "nationaltmax95F_1900_2020_Sandbox2020.txt",
+            "period": "1900-current",
+            "robust": false,
+            "season": "yearly",
+            "start": 1900,
+            "type": "tmax95F"
+        },
+        {
+            "end": 2020,
+            "name": "nationaltmax95F_1950_2020_Sandbox2020.txt",
+            "period": "1950-current",
+            "robust": true,
+            "season": "yearly",
+            "start": 1950,
+            "type": "tmax95F"
+        },
+        {
+            "end": 2020,
+            "name": "nationaltmax_ann_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "ann",
+            "start": 1895,
+            "type": "tmax"
+        },
+        {
+            "end": 2020,
+            "name": "nationaltmax_djf_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "djf",
+            "start": 1895,
+            "type": "tmax"
+        },
+        {
+            "end": 2020,
+            "name": "nationaltmax_jja_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "jja",
+            "start": 1895,
+            "type": "tmax"
+        },
+        {
+            "end": 2020,
+            "name": "nationaltmax_mam_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "mam",
+            "start": 1895,
+            "type": "tmax"
+        },
+        {
+            "end": 2020,
+            "name": "nationaltmax_son_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "son",
+            "start": 1895,
+            "type": "tmax"
+        },
+        {
+            "end": 2020,
+            "name": "nationaltmin0F_1900_2020_Sandbox2020.txt",
+            "period": "1900-current",
+            "robust": false,
+            "season": "yearly",
+            "start": 1900,
+            "type": "tmin0F"
+        },
+        {
+            "end": 2020,
+            "name": "nationaltmin0F_1950_2020_Sandbox2020.txt",
+            "period": "1950-current",
+            "robust": true,
+            "season": "yearly",
+            "start": 1950,
+            "type": "tmin0F"
+        },
+        {
+            "end": 2020,
+            "name": "nationaltmin32F_1900_2020_Sandbox2020.txt",
+            "period": "1900-current",
+            "robust": false,
+            "season": "yearly",
+            "start": 1900,
+            "type": "tmin32F"
+        },
+        {
+            "end": 2020,
+            "name": "nationaltmin32F_1950_2020_Sandbox2020.txt",
+            "period": "1950-current",
+            "robust": true,
+            "season": "yearly",
+            "start": 1950,
+            "type": "tmin32F"
+        },
+        {
+            "end": 2020,
+            "name": "nationaltmin70F_1900_2020_Sandbox2020.txt",
+            "period": "1900-current",
+            "robust": false,
+            "season": "yearly",
+            "start": 1900,
+            "type": "tmin70F"
+        },
+        {
+            "end": 2020,
+            "name": "nationaltmin70F_1950_2020_Sandbox2020.txt",
+            "period": "1950-current",
+            "robust": true,
+            "season": "yearly",
+            "start": 1950,
+            "type": "tmin70F"
+        },
+        {
+            "end": 2020,
+            "name": "nationaltmin75F_1900_2020_Sandbox2020.txt",
+            "period": "1900-current",
+            "robust": false,
+            "season": "yearly",
+            "start": 1900,
+            "type": "tmin75F"
+        },
+        {
+            "end": 2020,
+            "name": "nationaltmin75F_1950_2020_Sandbox2020.txt",
+            "period": "1950-current",
+            "robust": true,
+            "season": "yearly",
+            "start": 1950,
+            "type": "tmin75F"
+        },
+        {
+            "end": 2020,
+            "name": "nationaltmin80F_1900_2020_Sandbox2020.txt",
+            "period": "1900-current",
+            "robust": false,
+            "season": "yearly",
+            "start": 1900,
+            "type": "tmin80F"
+        },
+        {
+            "end": 2020,
+            "name": "nationaltmin80F_1950_2020_Sandbox2020.txt",
+            "period": "1950-current",
+            "robust": true,
+            "season": "yearly",
+            "start": 1950,
+            "type": "tmin80F"
+        },
+        {
+            "end": 2020,
+            "name": "nationaltmin_ann_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "ann",
+            "start": 1895,
+            "type": "tmin"
+        },
+        {
+            "end": 2020,
+            "name": "nationaltmin_djf_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "djf",
+            "start": 1895,
+            "type": "tmin"
+        },
+        {
+            "end": 2020,
+            "name": "nationaltmin_jja_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "jja",
+            "start": 1895,
+            "type": "tmin"
+        },
+        {
+            "end": 2020,
+            "name": "nationaltmin_mam_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "mam",
+            "start": 1895,
+            "type": "tmin"
+        },
+        {
+            "end": 2020,
+            "name": "nationaltmin_son_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "son",
+            "start": 1895,
+            "type": "tmin"
+        },
+        {
+            "end": 2020,
+            "name": "nationaltmpc_ann_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "ann",
+            "start": 1895,
+            "type": "tmpc"
+        },
+        {
+            "end": 2020,
+            "name": "nationaltmpc_djf_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "djf",
+            "start": 1895,
+            "type": "tmpc"
+        },
+        {
+            "end": 2020,
+            "name": "nationaltmpc_jja_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "jja",
+            "start": 1895,
+            "type": "tmpc"
+        },
+        {
+            "end": 2020,
+            "name": "nationaltmpc_mam_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "mam",
+            "start": 1895,
+            "type": "tmpc"
+        },
+        {
+            "end": 2020,
+            "name": "nationaltmpc_son_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "son",
+            "start": 1895,
+            "type": "tmpc"
+        }
+    ],
+    "regional": [
+        {
+            "end": 2020,
+            "name": "regions1inch_1900_2020_Sandbox2020.txt",
+            "period": "1900-current",
+            "robust": false,
+            "season": "yearly",
+            "start": 1900,
+            "type": "1inch"
+        },
+        {
+            "end": 2020,
+            "name": "regions1inch_1950_Sandbox2020.txt",
+            "period": "1950-current",
+            "robust": true,
+            "season": "yearly",
+            "start": 1950,
+            "type": "1inch"
+        },
+        {
+            "end": 2020,
+            "name": "regions2inch_1900_2020_Sandbox2020.txt",
+            "period": "1900-current",
+            "robust": false,
+            "season": "yearly",
+            "start": 1900,
+            "type": "2inch"
+        },
+        {
+            "end": 2020,
+            "name": "regions2inch_1950_Sandbox2020.txt",
+            "period": "1950-current",
+            "robust": true,
+            "season": "yearly",
+            "start": 1950,
+            "type": "2inch"
+        },
+        {
+            "end": 2020,
+            "name": "regions3inch_1900_2020_Sandbox2020.txt",
+            "period": "1900-current",
+            "robust": false,
+            "season": "yearly",
+            "start": 1900,
+            "type": "3inch"
+        },
+        {
+            "end": 2020,
+            "name": "regions3inch_1950_Sandbox2020.txt",
+            "period": "1950-current",
+            "robust": true,
+            "season": "yearly",
+            "start": 1950,
+            "type": "3inch"
+        },
+        {
+            "end": 2020,
+            "name": "regions4inch_1900_2020_Sandbox2020.txt",
+            "period": "1900-current",
+            "robust": false,
+            "season": "yearly",
+            "start": 1900,
+            "type": "4inch"
+        },
+        {
+            "end": 2020,
+            "name": "regions4inch_1950_Sandbox2020.txt",
+            "period": "1950-current",
+            "robust": true,
+            "season": "yearly",
+            "start": 1950,
+            "type": "4inch"
+        },
+        {
+            "end": 2020,
+            "name": "regionspcpn_ann_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "ann",
+            "start": 1895,
+            "type": "pcpn"
+        },
+        {
+            "end": 2020,
+            "name": "regionspcpn_djf_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "djf",
+            "start": 1895,
+            "type": "pcpn"
+        },
+        {
+            "end": 2020,
+            "name": "regionspcpn_jja_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "jja",
+            "start": 1895,
+            "type": "pcpn"
+        },
+        {
+            "end": 2020,
+            "name": "regionspcpn_mam_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "mam",
+            "start": 1895,
+            "type": "pcpn"
+        },
+        {
+            "end": 2020,
+            "name": "regionspcpn_son_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "son",
+            "start": 1895,
+            "type": "pcpn"
+        },
+        {
+            "end": 2020,
+            "name": "regionstmax0F_1900_2020_Sandbox2020.txt",
+            "period": "1900-current",
+            "robust": false,
+            "season": "yearly",
+            "start": 1900,
+            "type": "tmax0F"
+        },
+        {
+            "end": 2020,
+            "name": "regionstmax0F_1950_2020_Sandbox2020.txt",
+            "period": "1950-current",
+            "robust": true,
+            "season": "yearly",
+            "start": 1950,
+            "type": "tmax0F"
+        },
+        {
+            "end": 2020,
+            "name": "regionstmax100F_1900_2020_Sandbox2020.txt",
+            "period": "1900-current",
+            "robust": false,
+            "season": "yearly",
+            "start": 1900,
+            "type": "tmax100F"
+        },
+        {
+            "end": 2020,
+            "name": "regionstmax100F_1950_2020_Sandbox2020.txt",
+            "period": "1950-current",
+            "robust": true,
+            "season": "yearly",
+            "start": 1950,
+            "type": "tmax100F"
+        },
+        {
+            "end": 2020,
+            "name": "regionstmax32F_1900_2020_Sandbox2020.txt",
+            "period": "1900-current",
+            "robust": false,
+            "season": "yearly",
+            "start": 1900,
+            "type": "tmax32F"
+        },
+        {
+            "end": 2020,
+            "name": "regionstmax32F_1950_2020_Sandbox2020.txt",
+            "period": "1950-current",
+            "robust": true,
+            "season": "yearly",
+            "start": 1950,
+            "type": "tmax32F"
+        },
+        {
+            "end": 2020,
+            "name": "regionstmax90F_1900_2020_Sandbox2020.txt",
+            "period": "1900-current",
+            "robust": false,
+            "season": "yearly",
+            "start": 1900,
+            "type": "tmax90F"
+        },
+        {
+            "end": 2020,
+            "name": "regionstmax90F_1950_2020_Sandbox2020.txt",
+            "period": "1950-current",
+            "robust": true,
+            "season": "yearly",
+            "start": 1950,
+            "type": "tmax90F"
+        },
+        {
+            "end": 2020,
+            "name": "regionstmax95F_1900_2020_Sandbox2020.txt",
+            "period": "1900-current",
+            "robust": false,
+            "season": "yearly",
+            "start": 1900,
+            "type": "tmax95F"
+        },
+        {
+            "end": 2020,
+            "name": "regionstmax95F_1950_2020_Sandbox2020.txt",
+            "period": "1950-current",
+            "robust": true,
+            "season": "yearly",
+            "start": 1950,
+            "type": "tmax95F"
+        },
+        {
+            "end": 2020,
+            "name": "regionstmax_ann_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "ann",
+            "start": 1895,
+            "type": "tmax"
+        },
+        {
+            "end": 2020,
+            "name": "regionstmax_djf_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "djf",
+            "start": 1895,
+            "type": "tmax"
+        },
+        {
+            "end": 2020,
+            "name": "regionstmax_jja_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "jja",
+            "start": 1895,
+            "type": "tmax"
+        },
+        {
+            "end": 2020,
+            "name": "regionstmax_mam_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "mam",
+            "start": 1895,
+            "type": "tmax"
+        },
+        {
+            "end": 2020,
+            "name": "regionstmax_son_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "son",
+            "start": 1895,
+            "type": "tmax"
+        },
+        {
+            "end": 2020,
+            "name": "regionstmin0F_1900_2020_Sandbox2020.txt",
+            "period": "1900-current",
+            "robust": false,
+            "season": "yearly",
+            "start": 1900,
+            "type": "tmin0F"
+        },
+        {
+            "end": 2020,
+            "name": "regionstmin0F_1950_2020_Sandbox2020.txt",
+            "period": "1950-current",
+            "robust": true,
+            "season": "yearly",
+            "start": 1950,
+            "type": "tmin0F"
+        },
+        {
+            "end": 2020,
+            "name": "regionstmin32F_1900_2020_Sandbox2020.txt",
+            "period": "1900-current",
+            "robust": false,
+            "season": "yearly",
+            "start": 1900,
+            "type": "tmin32F"
+        },
+        {
+            "end": 2020,
+            "name": "regionstmin32F_1950_2020_Sandbox2020.txt",
+            "period": "1950-current",
+            "robust": true,
+            "season": "yearly",
+            "start": 1950,
+            "type": "tmin32F"
+        },
+        {
+            "end": 2020,
+            "name": "regionstmin70F_1900_2020_Sandbox2020.txt",
+            "period": "1900-current",
+            "robust": false,
+            "season": "yearly",
+            "start": 1900,
+            "type": "tmin70F"
+        },
+        {
+            "end": 2020,
+            "name": "regionstmin70F_1950_2020_Sandbox2020.txt",
+            "period": "1950-current",
+            "robust": true,
+            "season": "yearly",
+            "start": 1950,
+            "type": "tmin70F"
+        },
+        {
+            "end": 2020,
+            "name": "regionstmin75F_1900_2020_Sandbox2020.txt",
+            "period": "1900-current",
+            "robust": false,
+            "season": "yearly",
+            "start": 1900,
+            "type": "tmin75F"
+        },
+        {
+            "end": 2020,
+            "name": "regionstmin75F_1950_2020_Sandbox2020.txt",
+            "period": "1950-current",
+            "robust": true,
+            "season": "yearly",
+            "start": 1950,
+            "type": "tmin75F"
+        },
+        {
+            "end": 2020,
+            "name": "regionstmin80F_1900_2020_Sandbox2020.txt",
+            "period": "1900-current",
+            "robust": false,
+            "season": "yearly",
+            "start": 1900,
+            "type": "tmin80F"
+        },
+        {
+            "end": 2020,
+            "name": "regionstmin80F_1950_2020_Sandbox2020.txt",
+            "period": "1950-current",
+            "robust": true,
+            "season": "yearly",
+            "start": 1950,
+            "type": "tmin80F"
+        },
+        {
+            "end": 2020,
+            "name": "regionstmin_ann_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "ann",
+            "start": 1895,
+            "type": "tmin"
+        },
+        {
+            "end": 2020,
+            "name": "regionstmin_djf_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "djf",
+            "start": 1895,
+            "type": "tmin"
+        },
+        {
+            "end": 2020,
+            "name": "regionstmin_jja_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "jja",
+            "start": 1895,
+            "type": "tmin"
+        },
+        {
+            "end": 2020,
+            "name": "regionstmin_mam_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "mam",
+            "start": 1895,
+            "type": "tmin"
+        },
+        {
+            "end": 2020,
+            "name": "regionstmin_son_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "son",
+            "start": 1895,
+            "type": "tmin"
+        },
+        {
+            "end": 2020,
+            "name": "regionstmpc_ann_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "ann",
+            "start": 1895,
+            "type": "tmpc"
+        },
+        {
+            "end": 2020,
+            "name": "regionstmpc_djf_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "djf",
+            "start": 1895,
+            "type": "tmpc"
+        },
+        {
+            "end": 2020,
+            "name": "regionstmpc_jja_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "jja",
+            "start": 1895,
+            "type": "tmpc"
+        },
+        {
+            "end": 2020,
+            "name": "regionstmpc_mam_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "mam",
+            "start": 1895,
+            "type": "tmpc"
+        },
+        {
+            "end": 2020,
+            "name": "regionstmpc_son_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "son",
+            "start": 1895,
+            "type": "tmpc"
+        }
+    ],
+    "state": [
+        {
+            "end": 2020,
+            "name": "state1inch_1900_Sandbox2020.txt",
+            "period": "1900-current",
+            "robust": false,
+            "season": "yearly",
+            "start": 1900,
+            "type": "1inch"
+        },
+        {
+            "end": 2020,
+            "name": "state1inch_1950_Sandbox2020.txt",
+            "period": "1950-current",
+            "robust": true,
+            "season": "yearly",
+            "start": 1950,
+            "type": "1inch"
+        },
+        {
+            "end": 2020,
+            "name": "state2inch_1900_Sandbox2020.txt",
+            "period": "1900-current",
+            "robust": false,
+            "season": "yearly",
+            "start": 1900,
+            "type": "2inch"
+        },
+        {
+            "end": 2020,
+            "name": "state2inch_1950_Sandbox2020.txt",
+            "period": "1950-current",
+            "robust": true,
+            "season": "yearly",
+            "start": 1950,
+            "type": "2inch"
+        },
+        {
+            "end": 2020,
+            "name": "state3inch_1900_Sandbox2020.txt",
+            "period": "1900-current",
+            "robust": false,
+            "season": "yearly",
+            "start": 1900,
+            "type": "3inch"
+        },
+        {
+            "end": 2020,
+            "name": "state3inch_1950_Sandbox2020.txt",
+            "period": "1950-current",
+            "robust": true,
+            "season": "yearly",
+            "start": 1950,
+            "type": "3inch"
+        },
+        {
+            "end": 2020,
+            "name": "state4inch_1900_Sandbox2020.txt",
+            "period": "1900-current",
+            "robust": false,
+            "season": "yearly",
+            "start": 1900,
+            "type": "4inch"
+        },
+        {
+            "end": 2020,
+            "name": "state4inch_1950_Sandbox2020.txt",
+            "period": "1950-current",
+            "robust": true,
+            "season": "yearly",
+            "start": 1950,
+            "type": "4inch"
+        },
+        {
+            "end": 2020,
+            "name": "statepcpn_ann_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "ann",
+            "start": 1895,
+            "type": "pcpn"
+        },
+        {
+            "end": 2020,
+            "name": "statepcpn_djf_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "djf",
+            "start": 1895,
+            "type": "pcpn"
+        },
+        {
+            "end": 2020,
+            "name": "statepcpn_jja_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "jja",
+            "start": 1895,
+            "type": "pcpn"
+        },
+        {
+            "end": 2020,
+            "name": "statepcpn_mam_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "mam",
+            "start": 1895,
+            "type": "pcpn"
+        },
+        {
+            "end": 2020,
+            "name": "statepcpn_son_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "son",
+            "start": 1895,
+            "type": "pcpn"
+        },
+        {
+            "end": 2020,
+            "name": "statetmax0F_1900_2020_Sandbox2020.txt",
+            "period": "1900-current",
+            "robust": false,
+            "season": "yearly",
+            "start": 1900,
+            "type": "tmax0F"
+        },
+        {
+            "end": 2020,
+            "name": "statetmax0F_1950_2020_Sandbox2020.txt",
+            "period": "1950-current",
+            "robust": true,
+            "season": "yearly",
+            "start": 1950,
+            "type": "tmax0F"
+        },
+        {
+            "end": 2020,
+            "name": "statetmax100F_1900_2020_Sandbox2020.txt",
+            "period": "1900-current",
+            "robust": false,
+            "season": "yearly",
+            "start": 1900,
+            "type": "tmax100F"
+        },
+        {
+            "end": 2020,
+            "name": "statetmax100F_1950_2020_Sandbox2020.txt",
+            "period": "1950-current",
+            "robust": true,
+            "season": "yearly",
+            "start": 1950,
+            "type": "tmax100F"
+        },
+        {
+            "end": 2020,
+            "name": "statetmax32F_1900_2020_Sandbox2020.txt",
+            "period": "1900-current",
+            "robust": false,
+            "season": "yearly",
+            "start": 1900,
+            "type": "tmax32F"
+        },
+        {
+            "end": 2020,
+            "name": "statetmax32F_1950_2020_Sandbox2020.txt",
+            "period": "1950-current",
+            "robust": true,
+            "season": "yearly",
+            "start": 1950,
+            "type": "tmax32F"
+        },
+        {
+            "end": 2020,
+            "name": "statetmax90F_1900_2020_Sandbox2020.txt",
+            "period": "1900-current",
+            "robust": false,
+            "season": "yearly",
+            "start": 1900,
+            "type": "tmax90F"
+        },
+        {
+            "end": 2020,
+            "name": "statetmax90F_1950_2020_Sandbox2020.txt",
+            "period": "1950-current",
+            "robust": true,
+            "season": "yearly",
+            "start": 1950,
+            "type": "tmax90F"
+        },
+        {
+            "end": 2020,
+            "name": "statetmax95F_1900_2020_Sandbox2020.txt",
+            "period": "1900-current",
+            "robust": false,
+            "season": "yearly",
+            "start": 1900,
+            "type": "tmax95F"
+        },
+        {
+            "end": 2020,
+            "name": "statetmax95F_1950_2020_Sandbox2020.txt",
+            "period": "1950-current",
+            "robust": true,
+            "season": "yearly",
+            "start": 1950,
+            "type": "tmax95F"
+        },
+        {
+            "end": 2020,
+            "name": "statetmax_ann_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "ann",
+            "start": 1895,
+            "type": "tmax"
+        },
+        {
+            "end": 2020,
+            "name": "statetmax_djf_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "djf",
+            "start": 1895,
+            "type": "tmax"
+        },
+        {
+            "end": 2020,
+            "name": "statetmax_jja_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "jja",
+            "start": 1895,
+            "type": "tmax"
+        },
+        {
+            "end": 2020,
+            "name": "statetmax_mam_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "mam",
+            "start": 1895,
+            "type": "tmax"
+        },
+        {
+            "end": 2020,
+            "name": "statetmax_son_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "son",
+            "start": 1895,
+            "type": "tmax"
+        },
+        {
+            "end": 2020,
+            "name": "statetmin0F_1900_2020_Sandbox2020.txt",
+            "period": "1900-current",
+            "robust": false,
+            "season": "yearly",
+            "start": 1900,
+            "type": "tmin0F"
+        },
+        {
+            "end": 2020,
+            "name": "statetmin0F_1950_2020_Sandbox2020.txt",
+            "period": "1950-current",
+            "robust": true,
+            "season": "yearly",
+            "start": 1950,
+            "type": "tmin0F"
+        },
+        {
+            "end": 2020,
+            "name": "statetmin32F_1900_2020_Sandbox2020.txt",
+            "period": "1900-current",
+            "robust": false,
+            "season": "yearly",
+            "start": 1900,
+            "type": "tmin32F"
+        },
+        {
+            "end": 2020,
+            "name": "statetmin32F_1950_2020_Sandbox2020.txt",
+            "period": "1950-current",
+            "robust": true,
+            "season": "yearly",
+            "start": 1950,
+            "type": "tmin32F"
+        },
+        {
+            "end": 2020,
+            "name": "statetmin70F_1900_2020_Sandbox2020.txt",
+            "period": "1900-current",
+            "robust": false,
+            "season": "yearly",
+            "start": 1900,
+            "type": "tmin70F"
+        },
+        {
+            "end": 2020,
+            "name": "statetmin70F_1950_2020_Sandbox2020.txt",
+            "period": "1950-current",
+            "robust": true,
+            "season": "yearly",
+            "start": 1950,
+            "type": "tmin70F"
+        },
+        {
+            "end": 2020,
+            "name": "statetmin75F_1900_2020_Sandbox2020.txt",
+            "period": "1900-current",
+            "robust": false,
+            "season": "yearly",
+            "start": 1900,
+            "type": "tmin75F"
+        },
+        {
+            "end": 2020,
+            "name": "statetmin75F_1950_2020_Sandbox2020.txt",
+            "period": "1950-current",
+            "robust": true,
+            "season": "yearly",
+            "start": 1950,
+            "type": "tmin75F"
+        },
+        {
+            "end": 2020,
+            "name": "statetmin80F_1900_2020_Sandbox2020.txt",
+            "period": "1900-current",
+            "robust": false,
+            "season": "yearly",
+            "start": 1900,
+            "type": "tmin80F"
+        },
+        {
+            "end": 2020,
+            "name": "statetmin80F_1950_2020_Sandbox2020.txt",
+            "period": "1950-current",
+            "robust": true,
+            "season": "yearly",
+            "start": 1950,
+            "type": "tmin80F"
+        },
+        {
+            "end": 2020,
+            "name": "statetmin_ann_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "ann",
+            "start": 1895,
+            "type": "tmin"
+        },
+        {
+            "end": 2020,
+            "name": "statetmin_djf_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "djf",
+            "start": 1895,
+            "type": "tmin"
+        },
+        {
+            "end": 2020,
+            "name": "statetmin_jja_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "jja",
+            "start": 1895,
+            "type": "tmin"
+        },
+        {
+            "end": 2020,
+            "name": "statetmin_mam_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "mam",
+            "start": 1895,
+            "type": "tmin"
+        },
+        {
+            "end": 2020,
+            "name": "statetmin_son_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "son",
+            "start": 1895,
+            "type": "tmin"
+        },
+        {
+            "end": 2020,
+            "name": "statetmpc_ann_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "ann",
+            "start": 1895,
+            "type": "tmpc"
+        },
+        {
+            "end": 2020,
+            "name": "statetmpc_djf_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "djf",
+            "start": 1895,
+            "type": "tmpc"
+        },
+        {
+            "end": 2020,
+            "name": "statetmpc_jja_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "jja",
+            "start": 1895,
+            "type": "tmpc"
+        },
+        {
+            "end": 2020,
+            "name": "statetmpc_mam_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "mam",
+            "start": 1895,
+            "type": "tmpc"
+        },
+        {
+            "end": 2020,
+            "name": "statetmpc_son_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "son",
+            "start": 1895,
+            "type": "tmpc"
+        }
+    ]
 }
