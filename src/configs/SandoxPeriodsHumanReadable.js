@@ -1,5 +1,5 @@
 const theDate = new Date();
-const thisYear = theDate.getFullYear();
+const thisYear = (theDate.getFullYear() - 1);
 
 const SandoxPeriodsHumanReadable = () => ([
   {
