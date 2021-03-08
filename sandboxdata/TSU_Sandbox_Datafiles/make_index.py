@@ -1,69 +1,90 @@
 #!/usr/bin/env python3
-""" Build index from directory listing
+jsonFile = 'index.json'
+processingFile =  'make_index.py'
+htmlFile =  'index.html'
+dsStore = '.DS_Store'
 
-make_index.py 
-Ref: https://stackoverflow.com/questions/39048654/how-to-enable-directory-indexing-on-github-pages
-"""
+EXCLUDED = [htmlFile, processingFile, jsonFile, dsStore]
 
-INDEX_TEMPLATE = r"""
-<html>
-<body>
-<p>
-% for name in names:
-    <li><a href="${name}">${name}</a></li>
-% endfor
-</p>
-</body>
-</html>
-"""
+removeFields = ['#grids']
 
-JSON_TEMPLATE = r"""
-{
-[
-% for name in names:
-   { "name":"${name}" },
-% endfor
-]
-"""
-
-EXCLUDED = ['index.html', 'make_index.py', 'index.json']
-
-import os
+import os, glob
+import pandas as pd
 import argparse
 
 # May need to do "pip install mako"
 from mako.template import Template
 import json
 
-
 def main():
-    fnames = [fname for fname in sorted(os.listdir("."))
-              if fname not in EXCLUDED]
-    with open('index.html', 'w+') as fd:
-        fd.write(Template(INDEX_TEMPLATE).render(names=fnames))
+    fnames = [fname for fname in sorted(os.listdir('.')) if fname not in EXCLUDED]
+    for fn in fnames:
+       oldbase = os.path.splitext(fn)
+       newname = fn.replace('.csv', '.txt')
+       os.rename(fn, newname)
+       df = pd.read_csv(newname)
+
+       # make file headers consistent
+       for colName in df.columns:
+           df.rename(columns={' Year': 'Year', 'year': 'Year'}, inplace=True)
+           if 'regions' in newname:
+               df.rename(columns={'AK': 'Alaska', 'HI': 'Hawaii', 'MW': 'Midwest', 'NE': 'Northeast', 'NGP': 'Northern Great Plains', 'NW': 'Northwest', 'SE': 'Southeast', 'SGP': 'Southern Great Plains', 'SW': 'Southwest'}, inplace=True)
+
+           for deleteField in removeFields:
+               if deleteField in colName:
+                   df.drop(columns = [colName], inplace= True)
+
+       df.to_csv(newname, index=False)
 
     data = {
         'national' : [],
         'regions' : [],
         'state' : [],
     }
+
     for fn in fnames:
         parts = fn.split('_')
         for ft in data.keys():
             if fn.startswith(ft):
                 parts[0] = parts[0].replace(ft,'')
+                robust = False
+                startYear = 1900
+
+                if parts[1].isnumeric():
+                    startYear = int(parts[1])
+
+                    if parts[2].isnumeric():
+                        endYear = int(parts[2])
+                    else:
+                        tempStr = parts[2]
+                        tempStr = tempStr.split('.')
+                        tempStr = tempStr[0]
+                        endYear = int(tempStr[-4:])
+
+                    season = 'yearly'
+                    if startYear == 1950:
+                        robust = True
+                else:
+                    startYear = int(parts[2])
+                    endYear = int(parts[3])
+                    season = parts[1]
+                    if startYear == 1950:
+                        robust = True
+
                 data[ft].append({
                     "name": fn,
                     "type": parts[0],
-                    "start": int(parts[1]),
-                    "end": int(parts[2]),
+                    "start": startYear,
+                    "end": endYear,
+                    "robust": robust,
+                    "period": str(startYear) + '-current',
+                    "season": season,
                 })
                 break;
-        
 
-    with open('index.json', 'w+') as fd:
-        #fd.write(Template(JSON_TEMPLATE).render(names=fnames))
-        fd.write(json.dumps(data))
+    data['regional'] = data.pop('regions')
+    with open(jsonFile, 'w+') as fd:
+        fd.write(json.dumps(data, sort_keys=True, indent=4))
 
 
 if __name__ == '__main__':
