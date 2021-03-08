@@ -288,8 +288,7 @@ class SandboxGeneratePlotData {
 
       // make last bar if its not full period
       if (index === yvalsCount) {
-        peroidSum += value;
-        returnAvg = peroidSum / this.periodGroups;
+        returnAvg = peroidSum / count;
         return Number(Number(returnAvg).toFixed(4));
       }
     });
