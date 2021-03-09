@@ -1,6 +1,7 @@
 import SandoxPeriodsHumanReadable from '../configs/SandoxPeriodsHumanReadable';
 import SandoxClimateVariableValueNamesHumanReadable from '../configs/SandoxClimateVariableValueNamesHumanReadable';
 import SandoxLocationNamesHumanReadable from '../configs/SandoxLocationNamesHumanReadable';
+import SandoxSeasonHumanReadable from '../configs/SandoxSeasonHumanReadable';
 
 export default class SandboxHumanReadable {
   constructor(props) {
@@ -8,6 +9,8 @@ export default class SandboxHumanReadable {
     this.peroids = SandoxPeriodsHumanReadable();
     this.climateVariableValueNames = SandoxClimateVariableValueNamesHumanReadable();
     this.LocationNames = SandoxLocationNamesHumanReadable();
+    this.seasons = SandoxSeasonHumanReadable();
+
   }
 
   getChartTitle(props) {
@@ -23,21 +26,55 @@ export default class SandboxHumanReadable {
     return chartTitle;
   }
 
-  getClimateVariablePullDownText(value) {
+  getClimateVariablePullDownText(value, season) {
     if (!value) return '';
+    if (!season) return '';
     const climateVariableValueNames = this.climateVariableValueNames;
-    const newValue = climateVariableValueNames.filter(
-      (variables) => variables.value === value
-    );
+
+    // find matching climate variables
+    const newValue = climateVariableValueNames.filter((variables) => {
+      const returnValue = variables.value === value &&
+        variables.season === season;
+      return returnValue;
+    });
+
+    // if nothing found matching the climate variable then use the first climate variable
+    // this happens when the season is changed between yearly and not yearly
+    if (newValue.length === 0) {
+      const defaultValue = climateVariableValueNames.filter((variables) => {
+        const returnValue = variables.season === season;
+        return returnValue;
+      });
+      return defaultValue[0].pullDownText
+    }
+
     return newValue[0].pullDownText;
   }
 
-  getPeriodPullDownText(value) {
+  getPeriodPullDownText(value, season) {
     if (!value) return '';
+    if (!season) return '';
+    console.log('getPeriodRange', value, season)
     const periodValueNames = this.peroids;
-    const newValue = periodValueNames.filter(
-      (variables) => variables.value === value
-    );
+    // find matching periods
+    const newValue = periodValueNames.filter((variables) => {
+      const returnValue = variables.value === value &&
+        variables.season === season;
+      return returnValue;
+    });
+
+    // if nothing found matching the period then use the first period
+    // this happens when the season is changed between yearly and not yearly
+    if (newValue.length === 0) {
+      const defaultValue = periodValueNames.filter((variables) => {
+        const returnValue = variables.season === season;
+        return returnValue;
+      });
+      return defaultValue[0].pullDownText
+    }
+    // const newValue = periodValueNames.filter(
+    //   (variables) => variables.value === value
+    // );
     return newValue[0].pullDownText;
   }
 
@@ -49,6 +86,16 @@ export default class SandboxHumanReadable {
     );
     return newValue[0].range;
   }
+
+  getSeasonPullDownText(value) {
+    if (!value) return '';
+    const seasonValueNames = this.seasons;
+    const newValue = seasonValueNames.filter(
+      (variables) => variables.value === value
+    );
+    return newValue[0].pullDownText;
+  }
+
 
   getLocationDownText(value) {
     if (!value) return '';

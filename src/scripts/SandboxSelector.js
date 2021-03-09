@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -33,12 +33,12 @@ export default function Selector(props) {
   const { value } = props;
   const { disabled } = props;
   const { missing } = props;
+  const { season } = props;
   const { onChange } = props;
   const replaceClimatevariableType = controlName === 'Select a Climate Variable' ? props.replaceClimatevariableType : (name) => name;
   const replaceLocationAbbreviation = controlName === 'Select a Location' ? props.replaceLocationAbbreviation : (name) => name;
   const replacePeriodType = controlName === 'Select a Time Period' ? props.replacePeriodType : (name) => name;
-
-  // missing data validation message
+  const replaceSeasonType = controlName === 'Select the Season' ? props.replaceSeasonType : (name) => name;
   const selectorError = (missing && !disabled);
   const errorLabel = (selectorError) ? <FormHelperText className={classes.sandboxErrorText}>{controlName} is required</FormHelperText> : '';
 
@@ -53,18 +53,20 @@ export default function Selector(props) {
     onChange(event.target.value);
   };
 
-  const replaceWithHumanReadable = (theControlName, val) => {
+  const replaceWithHumanReadable = (theControlName, val, season) => {
     switch (theControlName) {
       case 'Select a Climate Variable':
-        return replaceClimatevariableType(val);
+        return replaceClimatevariableType(val, season);
       case 'Select a Location':
         return replaceLocationAbbreviation(val);
       case 'Select a Region':
         return replaceRegional(val);
       case 'Select a Time Period':
-        return replacePeriodType(val);
+        return replacePeriodType(val, season);
+      case 'Select the Season':
+        return replaceSeasonType(val);
       default:
-        return replaceClimatevariableType(val);
+        return replaceClimatevariableType(val, season);
     }
   };
 
@@ -81,7 +83,7 @@ export default function Selector(props) {
         >
         {items.map((name) => (
           <MenuItem key={name} value={name} className={classes.menuItem}>
-            {replaceWithHumanReadable(controlName, name)}
+            {replaceWithHumanReadable(controlName, name, season)}
           </MenuItem>))}
         </Select>
         {errorLabel}
