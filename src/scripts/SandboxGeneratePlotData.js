@@ -68,21 +68,112 @@ class SandboxGeneratePlotData {
     this.yAxisText = this.createYAxisText();
     this.legendPerText = this.createlegendPerText();
     this.legendEllapsedText = this.legendEllapsedText();
+    this.averageTextUnits = this.averageTextUnits()
   }
+
+  // default season text
+  hoverTemplateSeasonText() {
+    const sandboxHumanReadable = new SandboxHumanReadable();
+    const seasonHumanReadable = sandboxHumanReadable.getSeasonPullDownText(this.season);
+    if (this.season !== 'yearly') {
+      if (this.season === 'ann') return '';
+      return seasonHumanReadable.toLowerCase().split(' ')[0];
+    }
+    return 'year';
+  }
+
+  // default climate variable text
+  hoverTemplateClimateVariableText() {
+    if (this.season !== 'yearly') return  this.climatevariable.toLowerCase();
+    return this.climatevariable.toLowerCase().replace('precipitation', 'precipitation')
+                                  .replace('minimum', 'the minimum')
+                                  .replace('maximum', 'the maximum');
+  }
+
+  hoverTemplateSeasonTextPrefix() {
+    if (this.season !== 'yearly') {
+      if (this.season === 'ann') return '';
+      return 'during the'
+    };
+    return 'for the'
+  }
+
+  // creates units days, °F, " for annotation on Average line
+  averageTextUnits() {
+    if (this.season !== 'yearly') {
+      console.log('averageTextUnits', this.chartType)
+      return this.chartType === 'Precipitation' ? '"' : '°F';
+    }
+
+    if (this.season === 'yearly') {
+      return ' days'
+    }
+
+    return ' days';
+  }
+
+  yearLineText(x, y) {
+    const seasonTextPrefix = this.hoverTemplateSeasonTextPrefix();
+    const seasonText = this.hoverTemplateSeasonText();
+    const climateVariableText = this.hoverTemplateClimateVariableText();
+    const unitText = this.averageTextUnits;
+
+    if (this.season !== 'yearly') return ` In %{x} the ${climateVariableText} was %{y:0.2f}${unitText} ${seasonTextPrefix} ${seasonText} <extra></extra>`;
+    return ` In %{x} there was an average of %{y:0.2f} ${climateVariableText} <extra></extra>`;
+  }
+
+  yearBarText(x, y) {
+    const seasonTextPrefix = this.hoverTemplateSeasonTextPrefix();
+    const seasonText = this.hoverTemplateSeasonText();
+    const climateVariableText = this.hoverTemplateClimateVariableText();
+    const unitText = this.averageTextUnits;
+
+    if (this.season !== 'yearly') return ` In %{x} the ${climateVariableText} was %{y:0.2f}${unitText} ${seasonTextPrefix} ${seasonText}   <extra></extra>`;
+    return ` In %{x} there was an average of %{y:0.2f} ${climateVariableText} <extra></extra>`;
+  }
+
+  averageBarText(x, y) {
+    const seasonTextPrefix = this.hoverTemplateSeasonTextPrefix();
+    const seasonText = this.hoverTemplateSeasonText();
+    const climateVariableText = this.hoverTemplateClimateVariableText();
+    const unitText = this.averageTextUnits;
+
+    if (this.season !== 'yearly') return  ` Between %{x} the ${climateVariableText} was %{y:0.2f}${unitText} ${seasonTextPrefix} ${seasonText} <extra></extra>`;
+    return ` Between the years %{x} there was %{y:0.2f} ${climateVariableText} <extra></extra>`;
+  }
+
+  averageLineText(x, y, customdata) {
+    const seasonTextPrefix = this.hoverTemplateSeasonTextPrefix();
+    const seasonText = this.hoverTemplateSeasonText();
+    const climateVariableText = this.hoverTemplateClimateVariableText();
+    const unitText = this.averageTextUnits;
+
+    if (this.season !== 'yearly') return  ` Between %{customdata} the ${climateVariableText} was %{y:0.2f}${unitText} ${seasonTextPrefix} ${seasonText} <extra></extra>`
+    return ` Between %{customdata} there was %{y:0.2f} ${climateVariableText} ${seasonTextPrefix} ${seasonText} <extra></extra>`;
+  }
+
+  movingAverageLineText(x, y, customdata) {
+    const seasonTextPrefix = this.hoverTemplateSeasonTextPrefix();
+    const seasonText = this.hoverTemplateSeasonText();
+    const climateVariableText = this.hoverTemplateClimateVariableText();
+    const unitText = this.averageTextUnits;
+
+    if (this.season !== 'yearly') return  ` Between %{customdata} the ${climateVariableText} was %{y:0.2f}${unitText} ${seasonTextPrefix} ${seasonText} <extra></extra>`
+    return ` Between %{customdata} there was %{y:0.2f} ${climateVariableText} ${seasonTextPrefix} ${seasonText} <extra></extra>`;
+  }
+
+
 
   // creates legend text in parentheses
   legendEllapsedText() {
     if (this.season !== 'yearly') {
-      const sandboxHumanReadable = new SandboxHumanReadable();
-      const seasonHumanReadable = sandboxHumanReadable.getSeasonPullDownText(this.season);
-      const legendPerText = `days - ${seasonHumanReadable.split(' ')[0].toLowerCase()}`;
-      this.chartType = legendPerText;
+      const seasonText = this.hoverTemplateSeasonText();
+      const legendPerText = `days - ${seasonText.split(' ')[0].toLowerCase()}`;
       return legendPerText
     }
 
     if (this.season === 'yearly') {
       const legendPerText = 'days';
-      this.chartType = legendPerText;
       return legendPerText;
     }
 
@@ -93,20 +184,18 @@ class SandboxGeneratePlotData {
   //  this is the per year or per season
   createlegendPerText() {
     if (this.season !== 'yearly') {
-      const sandboxHumanReadable = new SandboxHumanReadable();
-      const seasonHumanReadable = sandboxHumanReadable.getSeasonPullDownText(this.season);
+      const seasonText = this.hoverTemplateSeasonText();
+
       let fortext = 'for ';
       if (this.season === 'ann') {
         fortext = ''
       }
-      const legendPerText = `${fortext}${seasonHumanReadable.split(' ')[0].toLowerCase()}`;
-      this.chartType = legendPerText;
+      const legendPerText = `${fortext}${seasonText.split(' ')[0].toLowerCase()}`;
       return legendPerText
     }
 
     if (this.season === 'yearly') {
       const legendPerText = 'per year';
-      this.chartType = legendPerText;
       return legendPerText;
     }
 
@@ -117,17 +206,15 @@ class SandboxGeneratePlotData {
   createYAxisText() {
     if (this.season !== 'yearly') {
        const axisText = this.chartType === 'Precipitation' ? 'Inches' : 'Temperature (°F)';
-       this.chartType = axisText;
        return axisText
     }
 
     if (this.season === 'yearly') {
-      const axisText = 'year';
-      this.chartType = axisText;
+      const axisText = 'Days';
       return axisText
     }
 
-    return 'year';
+    return 'Days';
   }
 
   // splits chart title string into parts so its truncated
@@ -500,7 +587,7 @@ class SandboxGeneratePlotData {
         color: this.barColor
       },
       hoverinfo: 'x+y',
-      hovertemplate: ` On average, there were %{y:0.2f} <br> ${this.climatevariable.toLowerCase().replace('with', 'with the')} <br> between the years %{x} <extra></extra>`,
+      hovertemplate: this.averageBarText(),
       legendgroup: 1,
       orientation: 'v'
     };
@@ -527,7 +614,7 @@ class SandboxGeneratePlotData {
       },
       connectgaps: true,
       hoverinfo: 'x+y',
-      hovertemplate: ` There were %{y:0.2f} <br> ${this.climatevariable.toLowerCase().replace('with', 'with the').replace('precipitation ', 'precipitation <br> ').replace('temperature ', 'temperature <br> ')} <br> for the year %{x}  <extra></extra>`
+      hovertemplate: this.yearLineText()
     };
   }
 
@@ -556,7 +643,7 @@ class SandboxGeneratePlotData {
       hoverinfo: 'x+y',
       legendgroup: 1,
       orientation: 'v',
-      hovertemplate: ` There were %{y:0.2f} <br> ${this.climatevariable.toLowerCase().replace('with', 'with the').replace('precipitation ', 'precipitation <br> ').replace('temperature ', 'temperature <br> ')} <br> for the year %{x}  <extra></extra>`
+      hovertemplate: this.yearBarText()
     };
   }
 
@@ -579,7 +666,7 @@ class SandboxGeneratePlotData {
       connectgaps: true,
       customdata: this.xValsMovingAverage.map((val) => `${val - Math.floor(this.periodGroups / 2)} - ${(val - Math.floor(this.periodGroups / 2)) + this.AverageMovingPeriod}`),
       hoverinfo: 'x+y',
-      hovertemplate: ` On average (moving), there were %{y:0.2f} <br> ${this.climatevariable.toLowerCase().replace('with', 'with the')} <br> between the years %{customdata} <br><extra></extra>`
+      hovertemplate: this.movingAverageLineText()
     };
   }
 
@@ -602,7 +689,7 @@ class SandboxGeneratePlotData {
       connectgaps: true,
       customdata: this.xValsPeriod.map((val) => `${val - Math.floor(this.periodGroups / 2)} - ${(val - Math.floor(this.periodGroups / 2)) + this.periodGroups - 1}`),
       hoverinfo: 'x+y',
-      hovertemplate: ` On average, there were %{y:0.2f} <br> ${this.climatevariable.toLowerCase().replace('with', 'with the')} <br> between the years %{customdata} <br><extra></extra>`
+      hovertemplate: this.averageLineText()
     };
   }
 
@@ -882,14 +969,14 @@ class SandboxGeneratePlotData {
         yref: 'y',
         x: this.xmax + 2.5,
         y: this.yValsAvgAll.toFixed(1),
-        text: `Average days ${this.yValsAvgAll.toFixed(1)}`,
+        text: `Average ${this.yValsAvgAll.toFixed(1)}${this.averageTextUnits}`,
         showarrow: true,
         arrowhead: 7,
         arrowsize: 2,
         arrowwidth: 2,
         arrowcolor: this.AverageAllColor,
         ay: -100,
-        ax: 10,
+        ax: 35,
         bgcolor: '#ffffff',
         font: {
           family: this.font,

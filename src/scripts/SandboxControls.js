@@ -520,10 +520,10 @@ export default function SandboxControls() {
         setChartLayout(plotData.getLayout());
         return plotData;
       })
-      // // handle errors
-      // .catch((error) => {
-      //   console.error(`SanboxControls.updatePlotData() error=${error}`); // eslint-disable-line no-console
-      // });
+      // handle errors
+      .catch((error) => {
+        console.error(`SanboxControls.updatePlotData() error=${error}`); // eslint-disable-line no-console
+      });
   };
 
   // function loads the index.json file to find the correct data.txt file based on the varriables
@@ -936,7 +936,8 @@ export default function SandboxControls() {
     const chartTitle = sandboxHumanReadable.getChartTitle({
       climatevariable,
       region,
-      titleLocation: replaceLocationAbbreviation(location)
+      titleLocation: replaceLocationAbbreviation(location),
+      chartDataSeason: season
     });
 
     // format file name
@@ -1037,7 +1038,8 @@ export default function SandboxControls() {
     const chartTitle = sandboxHumanReadable.getChartTitle({
       climatevariable,
       region,
-      titleLocation: location
+      titleLocation: location,
+      chartDataSeason: season
     });
 
     // email subject
