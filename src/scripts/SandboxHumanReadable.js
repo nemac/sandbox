@@ -17,7 +17,7 @@ export default class SandboxHumanReadable {
     if (!props.climatevariable) return '';
     const climateVariableValueNames = this.climateVariableValueNames;
     const newValue = climateVariableValueNames.filter(
-      (variables) => variables.value === props.climatevariable
+      (variables) => variables.value === props.climatevariable && variables.season === props.chartDataSeason
     );
     let chartTitle = newValue[0].chartTitle;
     if (props.region === 'National') chartTitle = `${chartTitle} (National)`;
@@ -54,7 +54,6 @@ export default class SandboxHumanReadable {
   getPeriodPullDownText(value, season) {
     if (!value) return '';
     if (!season) return '';
-    console.log('getPeriodRange', value, season)
     const periodValueNames = this.peroids;
     // find matching periods
     const newValue = periodValueNames.filter((variables) => {
@@ -72,9 +71,6 @@ export default class SandboxHumanReadable {
       });
       return defaultValue[0].pullDownText
     }
-    // const newValue = periodValueNames.filter(
-    //   (variables) => variables.value === value
-    // );
     return newValue[0].pullDownText;
   }
 

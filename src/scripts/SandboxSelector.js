@@ -6,6 +6,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Select from '@material-ui/core/Select';
+import SandoxPeriodsHumanReadable from '../configs/SandoxPeriodsHumanReadable';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -28,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Selector(props) {
   const classes = useStyles();
-  const { items } = props;
+  let { items } = props;
   const { controlName } = props;
   const { value } = props;
   const { disabled } = props;
@@ -41,6 +42,28 @@ export default function Selector(props) {
   const replaceSeasonType = controlName === 'Select the Season' ? props.replaceSeasonType : (name) => name;
   const selectorError = (missing && !disabled);
   const errorLabel = (selectorError) ? <FormHelperText className={classes.sandboxErrorText}>{controlName} is required</FormHelperText> : '';
+
+  // limit period based on season
+  // not all periods are valid for seasons
+  const limitPeriods = (periodARG, seasonARG) => {
+    const periodsHumanReadable = SandoxPeriodsHumanReadable();
+    const seasonFull = periodsHumanReadable.filter((v) => v.season === seasonARG);
+
+    // limit period array based on season limited array
+    //  uses the humad readable...
+    const seasonLimitedPeriods = periodARG.filter((el) => {
+      return seasonFull.some((f) => {
+        return f.value === el;
+      });
+    });
+
+    return seasonLimitedPeriods;
+  }
+
+  // only limit items when in period
+  if (controlName === 'Select a Time Period') {
+    items = limitPeriods(items, season);
+  }
 
   // replace regional
   const replaceRegional = (regionalValue) => {

@@ -85,122 +85,122 @@ const SandoxClimateVariableValueNamesHumanReadable = () => ([
   },
   {
     value: 'pcpn',
-    pullDownText: 'Total Precipitation pcpn',
-    chartTitle: 'total Precipitation pcpn',
+    pullDownText: 'Total Precipitation',
+    chartTitle: 'Annual (Jan - Dec) total Precipitation pcpn',
     season: 'ann'
   },
   {
     value: 'tmpc',
     pullDownText: 'Average temperature',
-    chartTitle: 'average temperature',
+    chartTitle: 'Annual (Jan - Dec) average temperature',
     season: 'ann'
   },
   {
     value: 'tmin',
     pullDownText: 'Average minimum temperature',
-    chartTitle: 'average minimum temperature',
+    chartTitle: 'Annual (Jan - Dec) average minimum temperature',
     season: 'ann'
   },
   {
     value: 'tmax',
     pullDownText: 'Average maximum temperature',
-    chartTitle: 'average maximum temperature',
+    chartTitle: 'Annual (Jan - Dec) average maximum temperature',
     season: 'ann'
   },
   {
     value: 'pcpn',
     pullDownText: 'Total Precipitation',
-    chartTitle: 'total Precipitation',
+    chartTitle: 'Winter (Dec, Jan, Feb) total Precipitation',
     season: 'djf'
   },
   {
     value: 'tmpc',
     pullDownText: 'Average temperature',
-    chartTitle: 'average temperature',
+    chartTitle: 'Winter (Dec, Jan, Feb) average temperature',
     season: 'djf'
   },
   {
     value: 'tmin',
     pullDownText: 'Average minimum temperature',
-    chartTitle: 'average minimum temperature',
+    chartTitle: 'Winter (Dec, Jan, Feb) average minimum temperature',
     season: 'djf'
   },
   {
     value: 'tmax',
     pullDownText: 'Average maximum temperature',
-    chartTitle: 'average maximum temperature',
+    chartTitle: 'Winter (Dec, Jan, Feb) average maximum temperature',
     season: 'djf'
   },
   {
     value: 'pcpn',
     pullDownText: 'Total Precipitation',
-    chartTitle: 'total Precipitation',
+    chartTitle: 'Spring (Mar, Apr, May) total Precipitation',
     season: 'mam'
   },
   {
     value: 'tmpc',
     pullDownText: 'Average temperature',
-    chartTitle: 'average temperature',
+    chartTitle: 'Spring (Mar, Apr, May) average temperature',
     season: 'mam'
   },
   {
     value: 'tmin',
     pullDownText: 'Average minimum temperature',
-    chartTitle: 'average minimum temperature',
+    chartTitle: 'Spring (Mar, Apr, May) average minimum temperature',
     season: 'mam'
   },
   {
     value: 'tmax',
     pullDownText: 'Average maximum temperature',
-    chartTitle: 'average maximum temperature',
+    chartTitle: 'Spring (Mar, Apr, May) average maximum temperature',
     season: 'mam'
   },
   {
     value: 'pcpn',
     pullDownText: 'Total Precipitation',
-    chartTitle: 'total Precipitation',
+    chartTitle: 'Summer (Jun, Jul, Aug) total Precipitation',
     season: 'jja'
   },
   {
     value: 'tmpc',
     pullDownText: 'Average temperature',
-    chartTitle: 'average temperature',
+    chartTitle: 'Summer (Jun, Jul, Aug) average temperature',
     season: 'jja'
   },
   {
     value: 'tmin',
     pullDownText: 'Average minimum temperature',
-    chartTitle: 'average minimum temperature',
+    chartTitle: 'Summer (Jun, Jul, Aug) average minimum temperature',
     season: 'jja'
   },
   {
     value: 'tmax',
     pullDownText: 'Average maximum temperature',
-    chartTitle: 'average maximum temperature',
+    chartTitle: 'Summer (Jun, Jul, Aug) average maximum temperature',
     season: 'jja'
   },
   {
     value: 'pcpn',
     pullDownText: 'Total Precipitation',
-    chartTitle: 'total Precipitation',
+    chartTitle: 'Fall (Sep, Oct, Nov) total Precipitation',
     season: 'son'
   },
   {
     value: 'tmpc',
     pullDownText: 'Average temperature',
-    chartTitle: 'average temperature',
+    chartTitle: 'Fall (Sep, Oct, Nov) average temperature',
     season: 'son'
   },
   {
     value: 'tmin',
     pullDownText: 'Average minimum temperature',
-    chartTitle: 'average minimum temperature',
+    chartTitle: 'Fall (Sep, Oct, Nov) average minimum temperature',
     season: 'son'
   },
   {
     value: 'tmax',
     pullDownText: 'Average maximum temperature',
-    chartTitle: 'average maximum temperature',
+    chartTitle: 'Fall (Sep, Oct, Nov) average maximum temperature',
     season: 'son'
   }
 ]);

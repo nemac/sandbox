@@ -263,23 +263,11 @@ export default function SandboxControls() {
     setClimatevariableDisabled] = useState(URLClimatevariableDisabled);
   // if no region selected period pulldown - helps manage user error
   const [periodDisabled, setPeriodDisabled] = useState(URLPeriodDisabled);
+  // set periods will need
+  const [periods, setPeriods] = useState(PeriodsFull);
 
   const classes = useStyles({ chartOnly });
 
-
-  const limitPeriods = (PeriodsFull, season) => {
-    const periodsHumanReadable = SandoxPeriodsHumanReadable();
-    const seasonFull = periodsHumanReadable.filter((v) => v.season === season);
-
-    const seasonLimitedPeriods = periodsFull.filter((el) => {
-      return seasonFull.some((f) => {
-        return f.value === e;
-      });
-    });
-
-    return seasonLimitedPeriods;
-  }
-  
   // sets climate variable type for precip or temp, this will likely change latter...
   const getClimatevariableType = (switchClimatevariable) => {
     const returnValue = switchClimatevariable.includes('inch') ? 'Precipitation' : switchClimatevariable.includes('pcpn') ?  'Precipitation' : 'Temperature';
@@ -292,8 +280,6 @@ export default function SandboxControls() {
     const sandboxHumanReadable = new SandboxHumanReadable();
     return sandboxHumanReadable.getLocationDownText(replaceAbbreviationLocation);
   };
-
-
 
   // function to set URL parameters based on state and user seletions
   const sandBoxURL = (props) => {
@@ -395,7 +381,6 @@ export default function SandboxControls() {
       return returnValue;
     });
 
-    console.log('data climateDataFilesJSONFile', data, chartDataClimatevariable)
     // get the data file name
     const dataFile = data.map((json) => json.name);
 
@@ -423,7 +408,8 @@ export default function SandboxControls() {
         const chartTitle = sandboxHumanReadable.getChartTitle({
           climatevariable: chartDataClimatevariable,
           region: chartDataRegion,
-          titleLocation
+          titleLocation,
+          chartDataSeason
         });
 
         // get climate varriable human readable format
@@ -598,7 +584,7 @@ export default function SandboxControls() {
 
   // use the react effect to control when season changes
   useEffect(() => {
-    // call loadData when region changes
+    // call loadData when season changes
     loadData(region, period, season, atStart);
   }, [season]);
 
