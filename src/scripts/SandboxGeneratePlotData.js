@@ -133,6 +133,7 @@ class SandboxGeneratePlotData {
   // splits chart title string into parts so its truncated
   // on small screens
   static splitTitle(title) {
+    if (!title) return '';
     const longestLength = 25;
     const titleLength = title.length;
 

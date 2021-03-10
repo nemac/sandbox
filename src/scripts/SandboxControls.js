@@ -386,6 +386,14 @@ export default function SandboxControls() {
 
     // define the data file location should always be the current url and public folder
     const path = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
+
+    // do not proceed of pulldowns not set not set
+    if ( !chartDataRegion ||
+        (chartDataRegion !== 'National' && !chartDataLocation) ||
+        !chartDataClimatevariable ||
+        !chartDataPeriod ||
+        !chartDataSeason) return null;
+
     axios.get(`${path}/sandboxdata/TSU_Sandbox_Datafiles/${dataFile}`)
       .then((response) => {
         // parse the csv text file
@@ -512,10 +520,10 @@ export default function SandboxControls() {
         setChartLayout(plotData.getLayout());
         return plotData;
       })
-      // handle errors
-      .catch((error) => {
-        console.error(`SanboxControls.updatePlotData() error=${error}`); // eslint-disable-line no-console
-      });
+      // // handle errors
+      // .catch((error) => {
+      //   console.error(`SanboxControls.updatePlotData() error=${error}`); // eslint-disable-line no-console
+      // });
   };
 
   // function loads the index.json file to find the correct data.txt file based on the varriables
