@@ -8,7 +8,7 @@ const SandoxSeasonsHumanReadable = () => ([
   },
   {
     value: 'ann',
-    pullDownText: 'Annual (Jan - Dec)'
+    pullDownText: 'Annually (Jan - Dec)'
   },
   {
     value: 'djf',

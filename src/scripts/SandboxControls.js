@@ -440,7 +440,8 @@ export default function SandboxControls() {
           chartType,
           climatevariable: humandReadablechartDataClimatevariable,
           chartLineChart,
-          dataMissing
+          dataMissing,
+          season: chartDataSeason
         };
 
         // get the charts data formated for plotly

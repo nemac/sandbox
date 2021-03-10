@@ -1,3 +1,5 @@
+import SandboxHumanReadable from './SandboxHumanReadable';
+
 class SandboxGeneratePlotData {
   constructor(props) {
     // style guide driven colors, fonts, ticks may need expanding
@@ -44,6 +46,7 @@ class SandboxGeneratePlotData {
     this.legnedText = props.legnedText;
     this.chartType = props.chartType;
     this.climatevariable = props.climatevariable;
+    this.season = props.season;
     this.barColor = this.chartType === 'Precipitation' ? this.precipitationColor : this.temperatureColor;
     this.periodGroups = props.periodGroups ? props.periodGroups : 5;
     this.AverageMovingPeriod = 5;
@@ -62,6 +65,69 @@ class SandboxGeneratePlotData {
     const min = this.minVal < 0 ? 0 : this.minVal;
     this.prettyRange = SandboxGeneratePlotData.pretty([min, this.maxVal]);
     this.yRange = [this.prettyRange[0], this.prettyRange[this.prettyRange.length - 1]];
+    this.yAxisText = this.createYAxisText();
+    this.legendPerText = this.createlegendPerText();
+    this.legendEllapsedText = this.legendEllapsedText();
+  }
+
+  // creates legend text in parentheses
+  legendEllapsedText() {
+    if (this.season !== 'yearly') {
+      const sandboxHumanReadable = new SandboxHumanReadable();
+      const seasonHumanReadable = sandboxHumanReadable.getSeasonPullDownText(this.season);
+      const legendPerText = `days - ${seasonHumanReadable.split(' ')[0].toLowerCase()}`;
+      this.chartType = legendPerText;
+      return legendPerText
+    }
+
+    if (this.season === 'yearly') {
+      const legendPerText = 'days';
+      this.chartType = legendPerText;
+      return legendPerText;
+    }
+
+    return 'days';
+  }
+
+  // creates legend per text
+  //  this is the per year or per season
+  createlegendPerText() {
+    if (this.season !== 'yearly') {
+      const sandboxHumanReadable = new SandboxHumanReadable();
+      const seasonHumanReadable = sandboxHumanReadable.getSeasonPullDownText(this.season);
+      let fortext = 'for ';
+      if (this.season === 'ann') {
+        fortext = ''
+      }
+      const legendPerText = `${fortext}${seasonHumanReadable.split(' ')[0].toLowerCase()}`;
+      this.chartType = legendPerText;
+      return legendPerText
+    }
+
+    if (this.season === 'yearly') {
+      const legendPerText = 'per year';
+      this.chartType = legendPerText;
+      return legendPerText;
+    }
+
+    return 'per year';
+  }
+
+  // creates y axis text
+  createYAxisText() {
+    if (this.season !== 'yearly') {
+       const axisText = this.chartType === 'Precipitation' ? 'Inches' : 'Temperature (°F)';
+       this.chartType = axisText;
+       return axisText
+    }
+
+    if (this.season === 'yearly') {
+      const axisText = 'year';
+      this.chartType = axisText;
+      return axisText
+    }
+
+    return 'year';
   }
 
   // splits chart title string into parts so its truncated
@@ -413,7 +479,7 @@ class SandboxGeneratePlotData {
     return {
       uid: SandboxGeneratePlotData.uuidv(),
       mode: 'lines',
-      name: '5-Year Average (days)',
+      name: `5-Year Average (${this.legendEllapsedText})`,
       type: 'histogram',
       histfunc: 'avg',
       xbins: {
@@ -444,7 +510,7 @@ class SandboxGeneratePlotData {
     return {
       uid: SandboxGeneratePlotData.uuidv(),
       mode: 'lines',
-      name: 'Average days per year',
+      name: `Average days ${this.legendPerText}`,
       type: 'scatter',
       x: this.xvals,
       y: this.getYvalues(),
@@ -469,7 +535,7 @@ class SandboxGeneratePlotData {
     return {
       uid: SandboxGeneratePlotData.uuidv(),
       mode: 'lines',
-      name: 'Average days per year',
+      name: `Average days ${this.legendPerText}`,
       type: 'bar',
       x: this.xvals,
       y: this.getYvalues(),
@@ -498,7 +564,7 @@ class SandboxGeneratePlotData {
     return {
       uid: SandboxGeneratePlotData.uuidv(),
       mode: 'lines',
-      name: '5-Year Moving Average (days)',
+      name: `5-Year moving average (${this.legendEllapsedText})`,
       type: 'scatter',
       x: this.xValsMovingAverage,
       y: this.yValsMovingAverage,
@@ -521,7 +587,7 @@ class SandboxGeneratePlotData {
     return {
       uid: SandboxGeneratePlotData.uuidv(),
       mode: 'lines',
-      name: '5-Year Average (days)',
+      name: `5-Year average (${this.legendEllapsedText})`,
       type: 'scatter',
       x: this.xValsPeriod,
       y: this.yValsAvgByPeriod,
@@ -608,7 +674,7 @@ class SandboxGeneratePlotData {
       },
       yaxis: {
         title: {
-          text: 'Days',
+          text: this.yAxisText,
           font: {
             family: this.font,
             size: this.fontSizeLabels
@@ -779,7 +845,7 @@ class SandboxGeneratePlotData {
       },
       yaxis: {
         title: {
-          text: 'Days',
+          text: this.yAxisText,
           font: {
             family: this.font,
             size: this.fontSizeLabels
