@@ -69,7 +69,7 @@ class SandboxGeneratePlotData {
     this.yAxisText = this.createYAxisText();
     this.legendPerText = this.createlegendPerText();
     this.legendEllapsedText = this.legendEllapsedText();
-    this.averageTextUnits = this.averageTextUnits()
+    this.averageTextUnits = this.averageTextUnits();
   }
 
   // default season text
@@ -86,10 +86,10 @@ class SandboxGeneratePlotData {
   // default climate variable text
   hoverTemplateClimateVariableText() {
     // changes threshold wording to make more sense
-    if (this.season !== 'yearly') return  this.climatevariable.toLowerCase();
+    if (this.season !== 'yearly') return this.climatevariable.toLowerCase();
     return this.climatevariable.toLowerCase().replace('precipitation', 'precipitation')
-                                  .replace('minimum', 'the minimum')
-                                  .replace('maximum', 'the maximum');
+      .replace('minimum', 'the minimum')
+      .replace('maximum', 'the maximum');
   }
 
   // creaete prefix for hover text to deal with seasonal data
@@ -100,10 +100,10 @@ class SandboxGeneratePlotData {
     if (this.season !== 'yearly') {
       // annual season data
       if (this.season === 'ann') return '';
-      return 'during the'
-    };
+      return 'during the';
+    }
     // default
-    return 'for the'
+    return 'for the';
   }
 
   // creates units days, °F, " for annotation on Average line
@@ -114,7 +114,7 @@ class SandboxGeneratePlotData {
     }
     // threshold which is days in the regions locatipon
     if (this.season === 'yearly') {
-      return ' days'
+      return ' days';
     }
     // deault to days
     return ' days';
@@ -151,7 +151,7 @@ class SandboxGeneratePlotData {
     const climateVariableText = this.hoverTemplateClimateVariableText();
     const unitText = this.averageTextUnits;
     // season sentence
-    if (this.season !== 'yearly') return  ` Between %{x} the ${climateVariableText} ${this.SmallScreenBreak} was %{y:0.2f}${unitText} ${seasonTextPrefix} ${seasonText} <extra></extra>`;
+    if (this.season !== 'yearly') return ` Between %{x} the ${climateVariableText} ${this.SmallScreenBreak} was %{y:0.2f}${unitText} ${seasonTextPrefix} ${seasonText} <extra></extra>`;
     // threshold and default sentence
     return ` Between the years %{x} there was %{y:0.2f} ${this.SmallScreenBreak} ${climateVariableText} <extra></extra>`;
   }
@@ -163,7 +163,7 @@ class SandboxGeneratePlotData {
     const climateVariableText = this.hoverTemplateClimateVariableText();
     const unitText = this.averageTextUnits;
     // season sentence
-    if (this.season !== 'yearly') return  ` Between %{customdata} the ${climateVariableText} ${this.SmallScreenBreak} was %{y:0.2f}${unitText} ${seasonTextPrefix} ${seasonText} <extra></extra>`
+    if (this.season !== 'yearly') return ` Between %{customdata} the ${climateVariableText} ${this.SmallScreenBreak} was %{y:0.2f}${unitText} ${seasonTextPrefix} ${seasonText} <extra></extra>`;
     return ` Between %{customdata} there was %{y:0.2f} ${this.SmallScreenBreak} ${climateVariableText} ${seasonTextPrefix} ${seasonText} <extra></extra>`;
   }
 
@@ -174,7 +174,7 @@ class SandboxGeneratePlotData {
     const climateVariableText = this.hoverTemplateClimateVariableText();
     const unitText = this.averageTextUnits;
     // season sentence
-    if (this.season !== 'yearly') return  ` Between %{customdata} the ${climateVariableText} ${this.SmallScreenBreak} was %{y:0.2f}${unitText} ${seasonTextPrefix} ${seasonText} <extra></extra>`
+    if (this.season !== 'yearly') return ` Between %{customdata} the ${climateVariableText} ${this.SmallScreenBreak} was %{y:0.2f}${unitText} ${seasonTextPrefix} ${seasonText} <extra></extra>`;
     return ` Between %{customdata} there was %{y:0.2f} ${this.SmallScreenBreak} ${climateVariableText} ${seasonTextPrefix} ${seasonText} <extra></extra>`;
   }
 
@@ -184,7 +184,7 @@ class SandboxGeneratePlotData {
     if (this.season !== 'yearly') {
       const seasonText = this.hoverTemplateSeasonText();
       const legendPerText = `days - ${seasonText.split(' ')[0].toLowerCase()}`;
-      return legendPerText
+      return legendPerText;
     }
     // threshold legend text
     if (this.season === 'yearly') {
@@ -204,10 +204,10 @@ class SandboxGeneratePlotData {
       let fortext = 'for ';
       // seasonal when annual prefix legend text
       if (this.season === 'ann') {
-        fortext = ''
+        fortext = '';
       }
       const legendPerText = `${fortext}${seasonText.split(' ')[0].toLowerCase()}`;
-      return legendPerText
+      return legendPerText;
     }
     // threshold prefix legend text
     if (this.season === 'yearly') {
@@ -222,13 +222,13 @@ class SandboxGeneratePlotData {
   createYAxisText() {
     // seasonal y axis text
     if (this.season !== 'yearly') {
-       const axisText = this.chartType === 'Precipitation' ? 'Inches' : 'Temperature (°F)';
-       return axisText
+      const axisText = this.chartType === 'Precipitation' ? 'Inches' : 'Temperature (°F)';
+      return axisText;
     }
     // threshold y axis text
     if (this.season === 'yearly') {
       const axisText = 'Days';
-      return axisText
+      return axisText;
     }
     // default y axis text
     return 'Days';

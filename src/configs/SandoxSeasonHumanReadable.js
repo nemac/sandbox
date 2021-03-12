@@ -1,6 +1,3 @@
-const theDate = new Date();
-const thisYear = (theDate.getFullYear() - 1);
-
 const SandoxSeasonsHumanReadable = () => ([
   {
     value: 'yearly',

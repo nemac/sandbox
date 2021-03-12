@@ -10,14 +10,15 @@ export default class SandboxHumanReadable {
     this.climateVariableValueNames = SandoxClimateVariableValueNamesHumanReadable();
     this.LocationNames = SandoxLocationNamesHumanReadable();
     this.seasons = SandoxSeasonHumanReadable();
-
   }
 
+  // creates chart title
   getChartTitle(props) {
     if (!props.climatevariable) return '';
     const climateVariableValueNames = this.climateVariableValueNames;
     const newValue = climateVariableValueNames.filter(
-      (variables) => variables.value === props.climatevariable && variables.season === props.chartDataSeason
+      (variables) => variables.value ===
+        props.climatevariable && variables.season === props.chartDataSeason
     );
     let chartTitle = newValue[0].chartTitle;
     if (props.region === 'National') chartTitle = `${chartTitle} (National)`;
@@ -26,6 +27,8 @@ export default class SandboxHumanReadable {
     return chartTitle;
   }
 
+  // creates pulldown text for climate variables in a format that makes more
+  // sense for a human rather than 1inch
   getClimateVariablePullDownText(value, season) {
     if (!value) return '';
     if (!season) return '';
@@ -45,12 +48,13 @@ export default class SandboxHumanReadable {
         const returnValue = variables.season === season;
         return returnValue;
       });
-      return defaultValue[0].pullDownText
+      return defaultValue[0].pullDownText;
     }
 
     return newValue[0].pullDownText;
   }
 
+  // makes period pulldown text more consistent and readable
   getPeriodPullDownText(value, season) {
     if (!value) return '';
     if (!season) return '';
@@ -69,11 +73,13 @@ export default class SandboxHumanReadable {
         const returnValue = variables.season === season;
         return returnValue;
       });
-      return defaultValue[0].pullDownText
+      return defaultValue[0].pullDownText;
     }
     return newValue[0].pullDownText;
   }
 
+  // creates the range for the period bassed on whats actually in data files
+  // this is used in the plotly charting library
   getPeriodRange(value) {
     if (!value) return '';
     const periodValueNames = this.peroids;
@@ -83,6 +89,8 @@ export default class SandboxHumanReadable {
     return newValue[0].range;
   }
 
+  // creates pulldown text for season in a format that makes more
+  // sense for a human rather than djf or winer december janruary february
   getSeasonPullDownText(value) {
     if (!value) return '';
     const seasonValueNames = this.seasons;
@@ -92,7 +100,8 @@ export default class SandboxHumanReadable {
     return newValue[0].pullDownText;
   }
 
-
+  // creates pulldown text for lcoation in a format that makes more
+  // sense for a human rather than NC we show north carolina
   getLocationDownText(value) {
     if (!value) return '';
     const locationValueNames = this.LocationNames;

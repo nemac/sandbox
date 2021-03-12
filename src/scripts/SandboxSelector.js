@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -51,14 +51,10 @@ export default function Selector(props) {
 
     // limit period array based on season limited array
     //  uses the humad readable...
-    const seasonLimitedPeriods = periodARG.filter((el) => {
-      return seasonFull.some((f) => {
-        return f.value === el;
-      });
-    });
-
+    const seasonLimitedPeriods =
+      periodARG.filter((el) => (seasonFull.some((f) => (f.value === el))));
     return seasonLimitedPeriods;
-  }
+  };
 
   // only limit items when in period
   if (controlName === 'Select a Time Period') {
@@ -76,20 +72,20 @@ export default function Selector(props) {
     onChange(event.target.value);
   };
 
-  const replaceWithHumanReadable = (theControlName, val, season) => {
+  const replaceWithHumanReadable = (theControlName, val, seasonHR) => {
     switch (theControlName) {
       case 'Select a Climate Variable':
-        return replaceClimatevariableType(val, season);
+        return replaceClimatevariableType(val, seasonHR);
       case 'Select a Location':
         return replaceLocationAbbreviation(val);
       case 'Select a Region':
         return replaceRegional(val);
       case 'Select a Time Period':
-        return replacePeriodType(val, season);
+        return replacePeriodType(val, seasonHR);
       case 'Select the Season':
         return replaceSeasonType(val);
       default:
-        return replaceClimatevariableType(val, season);
+        return replaceClimatevariableType(val, seasonHR);
     }
   };
 
@@ -119,9 +115,11 @@ Selector.propTypes = {
   controlName: PropTypes.string,
   value: PropTypes.string,
   disabled: PropTypes.bool,
+  season: PropTypes.string,
   missing: PropTypes.bool,
   replaceClimatevariableType: PropTypes.func,
   replaceLocationAbbreviation: PropTypes.func,
   replacePeriodType: PropTypes.func,
+  replaceSeasonType: PropTypes.func,
   onChange: PropTypes.func
 };

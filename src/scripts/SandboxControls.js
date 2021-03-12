@@ -11,7 +11,6 @@ import InsertChartOutlinedIcon from '@material-ui/icons/InsertChartOutlined';
 import SandboxPlotRegion from './SandboxPlotRegion';
 import SandboxGeneratePlotData from './SandboxGeneratePlotData';
 import SandboxHumanReadable from './SandboxHumanReadable';
-import SandoxPeriodsHumanReadable from '../configs/SandoxPeriodsHumanReadable';
 import SandboxSelector from './SandboxSelector';
 import SandboxAlert from './SandboxAlert';
 import SandboxActionMenu from './SandboxActionMenu';
@@ -66,9 +65,7 @@ const actionAreaMediumScreenHeight =
   headerTitleSmallScreenHeight +
   selectorAreaMediumScreenHeight +
   exportButtonsMeduimlScreenHeight;
-
 const chartRegionMinHeight = 400;
-
 const sandboxChartRegionSmallScreenHeight = 575;
 
 const useStyles = makeStyles((theme) => ({
@@ -263,14 +260,13 @@ export default function SandboxControls() {
     setClimatevariableDisabled] = useState(URLClimatevariableDisabled);
   // if no region selected period pulldown - helps manage user error
   const [periodDisabled, setPeriodDisabled] = useState(URLPeriodDisabled);
-  // set periods will need
-  const [periods, setPeriods] = useState(PeriodsFull);
+  const [seasonDisabled, setSeasonDisabled] = useState(URLSeasonDisabled);
 
   const classes = useStyles({ chartOnly });
 
   // sets climate variable type for precip or temp, this will likely change latter...
   const getClimatevariableType = (switchClimatevariable) => {
-    const returnValue = switchClimatevariable.includes('inch') ? 'Precipitation' : switchClimatevariable.includes('pcpn') ?  'Precipitation' : 'Temperature';
+    const returnValue = ['inch', 'pcpn'].some((type) => (switchClimatevariable.indexOf(type) >= 0)) ? 'Precipitation' : 'Temperature';
     return returnValue;
   };
 
@@ -319,12 +315,16 @@ export default function SandboxControls() {
     const yvals = [];
     const lines = data.split(/\r?\n/);
     const headers = lines[0].split(',');
+    // puts all the headers into an array
     for (let h = 0; h < headers.length; h += 1) {
       headers[h] = headers[h].trim();
     }
 
     let colIndex = undefined; // eslint-disable-line no-undef-init
 
+    // not sure this is needed anymore the python script that creates the JSON
+    // config from all the txt files now cleans up extra columns aka #grids and #grid
+    // columns. Think its handling no location name in national file
     if (type === 'national') {
       colIndex = 1;
     } else if (type === 'regional' || type === 'state') {
@@ -336,17 +336,19 @@ export default function SandboxControls() {
       }
     }
 
+    // gets all the rows into an arrays
     for (let i = 1; i < lines.length; i += 1) {
       const elements = lines[i].split(',');
       if (elements.length <= 1) {
         break;
       }
+      // creates x and y value arrays for use in ploty chart library
+      // could be modififed for any charting library
       const xval = parseInt(elements[0], 10);
       const yval = parseFloat(elements[colIndex]);
       xvals.push(xval);
       yvals.push(yval);
     }
-
     return [xvals, yvals];
   };
 
@@ -388,7 +390,7 @@ export default function SandboxControls() {
     const path = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
 
     // do not proceed of pulldowns not set not set
-    if ( !chartDataRegion ||
+    if (!chartDataRegion ||
         (chartDataRegion !== 'National' && !chartDataLocation) ||
         !chartDataClimatevariable ||
         !chartDataPeriod ||
@@ -422,7 +424,8 @@ export default function SandboxControls() {
 
         // get climate varriable human readable format
         const humandReadablechartDataClimatevariable =
-          sandboxHumanReadable.getClimateVariablePullDownText(chartDataClimatevariable, chartDataSeason);
+          sandboxHumanReadable.getClimateVariablePullDownText(chartDataClimatevariable,
+            chartDataSeason);
 
         // get period range
         const humandReadablPeriodRange =
@@ -524,6 +527,7 @@ export default function SandboxControls() {
       .catch((error) => {
         console.error(`SanboxControls.updatePlotData() error=${error}`); // eslint-disable-line no-console
       });
+    return null;
   };
 
   // function loads the index.json file to find the correct data.txt file based on the varriables
@@ -554,16 +558,17 @@ export default function SandboxControls() {
 
         // set climate data json data file
         setClimateDataFilesJSON(responseData);
-        // filter data for period
+        // filter data for period and season
         data = responseData.filter((type) => {
           const returnValue = type.period === argPeriod &&
             type.season === argSeason;
-          return returnValue
+          return returnValue;
         });
 
-        const types = data.map((json) => {
-          return json.type
-        })
+        // return climate variables available for all data
+        //  this would limit by both period and season since they
+        //  have different climate varriables
+        const types = data.map((json) => (json.type));
 
         // set climate variable items
         setClimatevariableItems(types);
@@ -634,6 +639,9 @@ export default function SandboxControls() {
 
         // National data set the period pulldown to NOT disabled by changing the state
         setPeriodDisabled(false);
+
+        // National data set the season pulldown to NOT disabled by changing the state
+        setSeasonDisabled(false);
         break;
       case 'Regional':
         // Regional data set the location items to the regional items
@@ -649,6 +657,9 @@ export default function SandboxControls() {
 
         // Regional data set the period pulldown to NOT disabled by changing the state
         setPeriodDisabled(false);
+
+        // National data set the season pulldown to NOT disabled by changing the state
+        setSeasonDisabled(false);
         break;
       case 'State':
         // Regional data set the location items to the state items
@@ -664,6 +675,9 @@ export default function SandboxControls() {
 
         // Regional data set the period pulldown to NOT disabled by changing the state
         setPeriodDisabled(false);
+
+        // National data set the season pulldown to NOT disabled by changing the state
+        setSeasonDisabled(false);
         break;
       default:
         setLocationItems(['']);
@@ -671,6 +685,7 @@ export default function SandboxControls() {
         setlocationDisabled(true);
         setClimatevariableDisabled(true);
         setPeriodDisabled(true);
+        setSeasonDisabled(true);
         break;
     }
     setChartOnly('no');
@@ -743,27 +758,29 @@ export default function SandboxControls() {
     let newPeriod = period;
     let newClimatevariable = climatevariable;
 
-    //  Just to get it working this needs to be data driven
-    if (newValue != 'yearly' && period === '1900-current') {
+    //  set period when changing from thresholds to seasonal data
+    if (newValue !== 'yearly' && (period === '1900-current' || period === '1950-current')) {
       setPeriod('1895-current');
       newPeriod = '1895-current';
     }
 
+    //  set period when changing from seasonal data to thresholds
     if (newValue === 'yearly' && period === '1895-current') {
       setPeriod('1900-current');
       newPeriod = '1900-current';
     }
 
+    //  set climate variable when changing from seasonal data to thresholds
     if (oldValue === 'yearly' && newValue !== 'yearly') {
       setClimatevariable('tmpc');
       newClimatevariable = 'tmpc';
     }
 
+    //  set climate variable when changing from thresholds to seasonal data
     if (oldValue !== 'yearly' && newValue === 'yearly') {
       setClimatevariable('1inch');
       newClimatevariable = '1inch';
     }
-
 
     setChartOnly('no');
     getChartData({
@@ -839,16 +856,16 @@ export default function SandboxControls() {
 
   // repalce the climate variable with human readable climate variable
   // tmax100F beceomes Days with Maximum Temperature Above 100°F
-  const replaceClimatevariableType = (replaceClimatevariable, season) => {
+  const replaceClimatevariableType = (replaceClimatevariable, seasonHR) => {
     const sandboxHumanReadable = new SandboxHumanReadable();
-    return sandboxHumanReadable.getClimateVariablePullDownText(replaceClimatevariable, season);
+    return sandboxHumanReadable.getClimateVariablePullDownText(replaceClimatevariable, seasonHR);
   };
 
   // repalce the period variable with human readable period variable
   // 1900-current beceomes 1900 - X year in YYYY format - 2021
-  const replacePeriodType = (replacePeriod, season) => {
+  const replacePeriodType = (replacePeriod, seasonHR) => {
     const sandboxHumanReadable = new SandboxHumanReadable();
-    return sandboxHumanReadable.getPeriodPullDownText(replacePeriod, season);
+    return sandboxHumanReadable.getPeriodPullDownText(replacePeriod, seasonHR);
   };
 
   // repalce the season variable with human readable period variable
@@ -1147,7 +1164,7 @@ export default function SandboxControls() {
                   />
               </Box>
             </Grid>
-            <Grid item xs={12} sm={6} md={4}  className={'sandbox-varriable-selectors'} >
+            <Grid item xs={12} sm={6} md={4} className={'sandbox-varriable-selectors'} >
               <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
                   items={climatevariableItems}
@@ -1161,14 +1178,14 @@ export default function SandboxControls() {
                   />
               </Box>
             </Grid>
-            <Grid item xs={12} sm={3} md={2}  className={'sandbox-varriable-selectors'} >
+            <Grid item xs={12} sm={3} md={2} className={'sandbox-varriable-selectors'} >
               <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
                   items={Seasons}
                   controlName={'Select the Season'}
                   onChange={handleSeasonChange}
                   value={season}
-                  disabled={periodDisabled}
+                  disabled={seasonDisabled}
                   missing={(!season)}
                   season={season}
                   replaceClimatevariableType={replaceClimatevariableType}
