@@ -42,6 +42,7 @@ class SandboxGeneratePlotData {
     this.minVal = Math.min(...this.yvals);
     this.shortTitle = SandboxGeneratePlotData.splitTitle(props.chartTitle);
     this.chartTitle = window.innerWidth <= this.smallScreen ? this.shortTitle : props.chartTitle;
+    this.SmallScreenBreak = window.innerWidth <= this.smallScreen ? '<br>' : '';
     this.chartTitleX = window.innerWidth <= this.smallScreen ? 0.5 : 0.4;
     this.legnedText = props.legnedText;
     this.chartType = props.chartType;
@@ -84,99 +85,113 @@ class SandboxGeneratePlotData {
 
   // default climate variable text
   hoverTemplateClimateVariableText() {
+    // changes threshold wording to make more sense
     if (this.season !== 'yearly') return  this.climatevariable.toLowerCase();
     return this.climatevariable.toLowerCase().replace('precipitation', 'precipitation')
                                   .replace('minimum', 'the minimum')
                                   .replace('maximum', 'the maximum');
   }
 
+  // creaete prefix for hover text to deal with seasonal data
+  //  seasonal data also has annual data so the wording is hard to deal with
+  //  and one word to work for it all was not working
   hoverTemplateSeasonTextPrefix() {
+    // seasonal data
     if (this.season !== 'yearly') {
+      // annual season data
       if (this.season === 'ann') return '';
       return 'during the'
     };
+    // default
     return 'for the'
   }
 
   // creates units days, °F, " for annotation on Average line
   averageTextUnits() {
+    // seasonal units for inches of precip and degrees farhnheit
     if (this.season !== 'yearly') {
-      console.log('averageTextUnits', this.chartType)
       return this.chartType === 'Precipitation' ? '"' : '°F';
     }
-
+    // threshold which is days in the regions locatipon
     if (this.season === 'yearly') {
       return ' days'
     }
-
+    // deault to days
     return ' days';
   }
 
+  // hover text for the yearly line
   yearLineText(x, y) {
     const seasonTextPrefix = this.hoverTemplateSeasonTextPrefix();
     const seasonText = this.hoverTemplateSeasonText();
     const climateVariableText = this.hoverTemplateClimateVariableText();
     const unitText = this.averageTextUnits;
-
-    if (this.season !== 'yearly') return ` In %{x} the ${climateVariableText} was %{y:0.2f}${unitText} ${seasonTextPrefix} ${seasonText} <extra></extra>`;
-    return ` In %{x} there was an average of %{y:0.2f} ${climateVariableText} <extra></extra>`;
+    // season sentence
+    if (this.season !== 'yearly') return ` In %{x} the ${climateVariableText} ${this.SmallScreenBreak} was %{y:0.2f}${unitText} ${seasonTextPrefix} ${seasonText} <extra></extra>`;
+    // threshold and default sentence
+    return ` In %{x} there was an average of %{y:0.2f} ${this.SmallScreenBreak} ${climateVariableText} <extra></extra>`;
   }
 
+  // hover text for year bar
   yearBarText(x, y) {
     const seasonTextPrefix = this.hoverTemplateSeasonTextPrefix();
     const seasonText = this.hoverTemplateSeasonText();
     const climateVariableText = this.hoverTemplateClimateVariableText();
     const unitText = this.averageTextUnits;
-
-    if (this.season !== 'yearly') return ` In %{x} the ${climateVariableText} was %{y:0.2f}${unitText} ${seasonTextPrefix} ${seasonText}   <extra></extra>`;
-    return ` In %{x} there was an average of %{y:0.2f} ${climateVariableText} <extra></extra>`;
+    // season sentence
+    if (this.season !== 'yearly') return ` In %{x} the ${climateVariableText} ${this.SmallScreenBreak} was %{y:0.2f}${unitText} ${seasonTextPrefix} ${seasonText}   <extra></extra>`;
+    // threshold and default sentence
+    return ` In %{x} there was an average of %{y:0.2f} ${this.SmallScreenBreak} ${climateVariableText} <extra></extra>`;
   }
 
+  // hover text for average bar
   averageBarText(x, y) {
     const seasonTextPrefix = this.hoverTemplateSeasonTextPrefix();
     const seasonText = this.hoverTemplateSeasonText();
     const climateVariableText = this.hoverTemplateClimateVariableText();
     const unitText = this.averageTextUnits;
-
-    if (this.season !== 'yearly') return  ` Between %{x} the ${climateVariableText} was %{y:0.2f}${unitText} ${seasonTextPrefix} ${seasonText} <extra></extra>`;
-    return ` Between the years %{x} there was %{y:0.2f} ${climateVariableText} <extra></extra>`;
+    // season sentence
+    if (this.season !== 'yearly') return  ` Between %{x} the ${climateVariableText} ${this.SmallScreenBreak} was %{y:0.2f}${unitText} ${seasonTextPrefix} ${seasonText} <extra></extra>`;
+    // threshold and default sentence
+    return ` Between the years %{x} there was %{y:0.2f} ${this.SmallScreenBreak} ${climateVariableText} <extra></extra>`;
   }
 
+  // hover text for average line
   averageLineText(x, y, customdata) {
     const seasonTextPrefix = this.hoverTemplateSeasonTextPrefix();
     const seasonText = this.hoverTemplateSeasonText();
     const climateVariableText = this.hoverTemplateClimateVariableText();
     const unitText = this.averageTextUnits;
-
-    if (this.season !== 'yearly') return  ` Between %{customdata} the ${climateVariableText} was %{y:0.2f}${unitText} ${seasonTextPrefix} ${seasonText} <extra></extra>`
-    return ` Between %{customdata} there was %{y:0.2f} ${climateVariableText} ${seasonTextPrefix} ${seasonText} <extra></extra>`;
+    // season sentence
+    if (this.season !== 'yearly') return  ` Between %{customdata} the ${climateVariableText} ${this.SmallScreenBreak} was %{y:0.2f}${unitText} ${seasonTextPrefix} ${seasonText} <extra></extra>`
+    return ` Between %{customdata} there was %{y:0.2f} ${this.SmallScreenBreak} ${climateVariableText} ${seasonTextPrefix} ${seasonText} <extra></extra>`;
   }
 
+  // hover text for moving average line
   movingAverageLineText(x, y, customdata) {
     const seasonTextPrefix = this.hoverTemplateSeasonTextPrefix();
     const seasonText = this.hoverTemplateSeasonText();
     const climateVariableText = this.hoverTemplateClimateVariableText();
     const unitText = this.averageTextUnits;
-
-    if (this.season !== 'yearly') return  ` Between %{customdata} the ${climateVariableText} was %{y:0.2f}${unitText} ${seasonTextPrefix} ${seasonText} <extra></extra>`
-    return ` Between %{customdata} there was %{y:0.2f} ${climateVariableText} ${seasonTextPrefix} ${seasonText} <extra></extra>`;
+    // season sentence
+    if (this.season !== 'yearly') return  ` Between %{customdata} the ${climateVariableText} ${this.SmallScreenBreak} was %{y:0.2f}${unitText} ${seasonTextPrefix} ${seasonText} <extra></extra>`
+    return ` Between %{customdata} there was %{y:0.2f} ${this.SmallScreenBreak} ${climateVariableText} ${seasonTextPrefix} ${seasonText} <extra></extra>`;
   }
-
-
 
   // creates legend text in parentheses
   legendEllapsedText() {
+    // seasonal legend text
     if (this.season !== 'yearly') {
       const seasonText = this.hoverTemplateSeasonText();
       const legendPerText = `days - ${seasonText.split(' ')[0].toLowerCase()}`;
       return legendPerText
     }
-
+    // threshold legend text
     if (this.season === 'yearly') {
       const legendPerText = 'days';
       return legendPerText;
     }
-
+    // default legend text
     return 'days';
   }
 
@@ -185,35 +200,37 @@ class SandboxGeneratePlotData {
   createlegendPerText() {
     if (this.season !== 'yearly') {
       const seasonText = this.hoverTemplateSeasonText();
-
+      // seasonal prefix legend text
       let fortext = 'for ';
+      // seasonal when annual prefix legend text
       if (this.season === 'ann') {
         fortext = ''
       }
       const legendPerText = `${fortext}${seasonText.split(' ')[0].toLowerCase()}`;
       return legendPerText
     }
-
+    // threshold prefix legend text
     if (this.season === 'yearly') {
       const legendPerText = 'per year';
       return legendPerText;
     }
-
+    // default prefix legend text
     return 'per year';
   }
 
   // creates y axis text
   createYAxisText() {
+    // seasonal y axis text
     if (this.season !== 'yearly') {
        const axisText = this.chartType === 'Precipitation' ? 'Inches' : 'Temperature (°F)';
        return axisText
     }
-
+    // threshold y axis text
     if (this.season === 'yearly') {
       const axisText = 'Days';
       return axisText
     }
-
+    // default y axis text
     return 'Days';
   }
 
