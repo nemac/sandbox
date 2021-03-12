@@ -51,7 +51,7 @@ const exportButtonsMeduimlScreenHeight = exportAreaHeight;
 const selectors = 5;
 const selectorHeight = 75;
 const selectorAreaSmallScreenHeight = selectors * selectorHeight;
-const selectorAreaMediumScreenHeight = 1.5 * selectorHeight;
+const selectorAreaMediumScreenHeight = 2.5 * selectorHeight;
 
 // heights for header - title
 const headerTitleHeight = 50;
@@ -1118,7 +1118,7 @@ export default function SandboxControls() {
                 <Box px={1} fontSize='h5.fontSize' >NCA Sandbox - Climate Charts</Box>
               </Box>
             </Grid>
-            <Grid item xs={12} sm={2} className={'sandbox-varriable-selectors'}>
+            <Grid item xs={12} sm={3} md={2} className={'sandbox-varriable-selectors'}>
               <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
                   items={RegionItems}
@@ -1132,7 +1132,7 @@ export default function SandboxControls() {
                   />
               </Box>
             </Grid>
-            <Grid item xs={12} sm={2} className={'sandbox-varriable-selectors'}>
+            <Grid item xs={12} sm={3} md={2} className={'sandbox-varriable-selectors'}>
               <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
                   items={locationItems}
@@ -1147,7 +1147,7 @@ export default function SandboxControls() {
                   />
               </Box>
             </Grid>
-            <Grid item xs={12} sm={4} className={'sandbox-varriable-selectors'} >
+            <Grid item xs={12} sm={6} md={4}  className={'sandbox-varriable-selectors'} >
               <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
                   items={climatevariableItems}
@@ -1161,7 +1161,7 @@ export default function SandboxControls() {
                   />
               </Box>
             </Grid>
-            <Grid item xs={12} sm={2} className={'sandbox-varriable-selectors'} >
+            <Grid item xs={12} sm={3} md={2}  className={'sandbox-varriable-selectors'} >
               <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
                   items={Seasons}
@@ -1176,7 +1176,7 @@ export default function SandboxControls() {
                   />
               </Box>
             </Grid>
-            <Grid item xs={12} sm={2} className={'sandbox-varriable-selectors'} >
+            <Grid item xs={12} sm={3} md={2} className={'sandbox-varriable-selectors'} >
               <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
                   items={PeriodsFull}
