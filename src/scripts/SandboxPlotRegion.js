@@ -40,7 +40,7 @@ class SandboxPlotRegion extends React.Component {
       const angle = window.innerWidth <= 1000 ? 90 : 0;
       const dtick = window.innerWidth <= 768 ? 10 : 5;
       const titleX = window.innerWidth <= 768 ? 0.5 : 0.4;
-      const chartTitle = unSplitTitle(copiedLayout.title.text);
+      const chartTitle = copiedLayout ? unSplitTitle(copiedLayout.title.text) : '';
       const shortTitle = splitTitle(chartTitle);
       copiedLayout.xaxis.tickangle = angle;
       copiedLayout.xaxis.dtick = dtick;

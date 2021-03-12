@@ -19,6 +19,7 @@ import SandboxActionMenu from './SandboxActionMenu';
 import SandboxDataControl from '../configs/SandboxDataControl';
 import SandboxRegionItems from '../configs/SandboxRegionItems';
 import SandboxPeriods from '../configs/SandboxPeriods';
+import SandboxSeasons from '../configs/SandboxSeasons';
 import SandboxLocationRegionalItems from '../configs/SandboxLocationRegionalItems';
 import SandboxLocationStateItems from '../configs/SandboxLocationStateItems';
 
@@ -26,7 +27,8 @@ import SandboxLocationStateItems from '../configs/SandboxLocationStateItems';
 import '../css/Sandbox.scss';
 
 const RegionItems = SandboxRegionItems();
-const Periods = SandboxPeriods();
+const PeriodsFull = SandboxPeriods();
+const Seasons = SandboxSeasons();
 const LocationRegionalItems = SandboxLocationRegionalItems();
 const LocationStateItems = SandboxLocationStateItems();
 
@@ -45,10 +47,10 @@ const exportButtonsSmallScreenHeight = exportButtons * exportButtonHeight;
 const exportButtonsMeduimlScreenHeight = exportAreaHeight;
 
 // heights for selectors - pullldowns
-const selectors = 4;
+const selectors = 5;
 const selectorHeight = 75;
 const selectorAreaSmallScreenHeight = selectors * selectorHeight;
-const selectorAreaMediumScreenHeight = 1.5 * selectorHeight;
+const selectorAreaMediumScreenHeight = 2.5 * selectorHeight;
 
 // heights for header - title
 const headerTitleHeight = 50;
@@ -63,9 +65,7 @@ const actionAreaMediumScreenHeight =
   headerTitleSmallScreenHeight +
   selectorAreaMediumScreenHeight +
   exportButtonsMeduimlScreenHeight;
-
 const chartRegionMinHeight = 400;
-
 const sandboxChartRegionSmallScreenHeight = 575;
 
 const useStyles = makeStyles((theme) => ({
@@ -164,6 +164,9 @@ export default function SandboxControls() {
   // check url parameters for a using average bar true (averages are bar) if blank
   const URLLineChart = urlParams.get('line') ? urlParams.get('line') : 'year';
 
+  // check url parameters for season data it blank make yearly
+  const URLSeason = urlParams.get('season') ? urlParams.get('season') : 'yearly';
+
   // check url parameters for showing chart only
   const URLChartOnly = urlParams.get('chartonly') ? urlParams.get('chartonly') : 'no';
 
@@ -171,6 +174,7 @@ export default function SandboxControls() {
   let URLClimatevariableDisabled = true;
   let URLLocationDisabled = true;
   let URLPeriodDisabled = true;
+  let URLSeasonDisabled = true;
   let URLLocationItems = [''];
 
   // the region determines some of the inital states, so if the URl contains a region
@@ -180,6 +184,7 @@ export default function SandboxControls() {
       // National data set the climatevariable pulldown to NOT disabled by changing the state
       URLClimatevariableDisabled = false;
       URLPeriodDisabled = false;
+      URLSeasonDisabled = false;
       break;
     case 'Regional':
       // National data set the climatevariable pulldown to NOT disabled by changing the state
@@ -187,6 +192,7 @@ export default function SandboxControls() {
       URLLocationDisabled = false;
       URLClimatevariableDisabled = false;
       URLPeriodDisabled = false;
+      URLSeasonDisabled = false;
       break;
     case 'State':
       // National data set the climatevariable pulldown to NOT disabled by changing the state
@@ -194,12 +200,14 @@ export default function SandboxControls() {
       URLLocationDisabled = false;
       URLClimatevariableDisabled = false;
       URLPeriodDisabled = false;
+      URLSeasonDisabled = false;
       break;
     default:
       // default state
       URLClimatevariableDisabled = true;
       URLLocationDisabled = true;
       URLPeriodDisabled = true;
+      URLSeasonDisabled = true;
       break;
   }
 
@@ -222,6 +230,8 @@ export default function SandboxControls() {
   const [climatevariable, setClimatevariable] = useState(URLClimatevariable);
   // the period current 1900 - current or 1950 - current
   const [period, setPeriod] = useState(URLPeriod);
+  // the season yearly, or spring mam, summer jja, fal son, winter djf
+  const [season, setSeason] = useState(URLSeason);
   // average bars or line
   // when false average is the bars when false average is line
   // when true yearly is the line when false yearly is bars
@@ -250,12 +260,13 @@ export default function SandboxControls() {
     setClimatevariableDisabled] = useState(URLClimatevariableDisabled);
   // if no region selected period pulldown - helps manage user error
   const [periodDisabled, setPeriodDisabled] = useState(URLPeriodDisabled);
+  const [seasonDisabled, setSeasonDisabled] = useState(URLSeasonDisabled);
 
   const classes = useStyles({ chartOnly });
 
   // sets climate variable type for precip or temp, this will likely change latter...
   const getClimatevariableType = (switchClimatevariable) => {
-    const returnValue = switchClimatevariable.includes('inch') ? 'Precipitation' : 'Temperature';
+    const returnValue = ['inch', 'pcpn'].some((type) => (switchClimatevariable.indexOf(type) >= 0)) ? 'Precipitation' : 'Temperature';
     return returnValue;
   };
 
@@ -273,6 +284,7 @@ export default function SandboxControls() {
     const { chartDataLocation } = props;
     const { chartDataClimatevariable } = props;
     const { chartDataPeriod } = props;
+    const { chartDataSeason } = props;
     const { chartLineChart } = props;
     const { chartOnlyProp } = props;
 
@@ -284,6 +296,7 @@ export default function SandboxControls() {
     searchParams.set('location', chartDataLocation);
     searchParams.set('climatevariable', chartDataClimatevariable);
     searchParams.set('period', chartDataPeriod);
+    searchParams.set('season', chartDataSeason);
     searchParams.set('line', chartLineChart);
     searchParams.set('chartonly', chartOnlyProp);
 
@@ -302,12 +315,16 @@ export default function SandboxControls() {
     const yvals = [];
     const lines = data.split(/\r?\n/);
     const headers = lines[0].split(',');
+    // puts all the headers into an array
     for (let h = 0; h < headers.length; h += 1) {
       headers[h] = headers[h].trim();
     }
 
     let colIndex = undefined; // eslint-disable-line no-undef-init
 
+    // not sure this is needed anymore the python script that creates the JSON
+    // config from all the txt files now cleans up extra columns aka #grids and #grid
+    // columns. Think its handling no location name in national file
     if (type === 'national') {
       colIndex = 1;
     } else if (type === 'regional' || type === 'state') {
@@ -319,17 +336,19 @@ export default function SandboxControls() {
       }
     }
 
+    // gets all the rows into an arrays
     for (let i = 1; i < lines.length; i += 1) {
       const elements = lines[i].split(',');
       if (elements.length <= 1) {
         break;
       }
+      // creates x and y value arrays for use in ploty chart library
+      // could be modififed for any charting library
       const xval = parseInt(elements[0], 10);
       const yval = parseFloat(elements[colIndex]);
       xvals.push(xval);
       yvals.push(yval);
     }
-
     return [xvals, yvals];
   };
 
@@ -340,10 +359,10 @@ export default function SandboxControls() {
     const { chartDataLocation } = props;
     const { chartDataClimatevariable } = props;
     const { chartDataPeriod } = props;
+    const { chartDataSeason } = props;
     const { climateDataFilesJSONFile } = props;
     const { chartLineChart } = props;
     const { chartOnlyProp } = props;
-
     // update url history this is the point at which we will need to make sure
     // the graph looks the same when shared via url
     sandBoxURL({
@@ -351,6 +370,7 @@ export default function SandboxControls() {
       chartDataLocation,
       chartDataClimatevariable,
       chartDataPeriod,
+      chartDataSeason,
       chartLineChart,
       chartOnlyProp
     });
@@ -359,7 +379,7 @@ export default function SandboxControls() {
     // (years aka 1900 - current 1950 - current) and the climate variable (should be one)
     const data = climateDataFilesJSONFile.filter((json) => {
       const returnValue = json.period === chartDataPeriod &&
-        json.type === chartDataClimatevariable;
+        json.type === chartDataClimatevariable && json.season === chartDataSeason;
       return returnValue;
     });
 
@@ -368,6 +388,14 @@ export default function SandboxControls() {
 
     // define the data file location should always be the current url and public folder
     const path = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
+
+    // do not proceed of pulldowns not set not set
+    if (!chartDataRegion ||
+        (chartDataRegion !== 'National' && !chartDataLocation) ||
+        !chartDataClimatevariable ||
+        !chartDataPeriod ||
+        !chartDataSeason) return null;
+
     axios.get(`${path}/sandboxdata/TSU_Sandbox_Datafiles/${dataFile}`)
       .then((response) => {
         // parse the csv text file
@@ -390,12 +418,14 @@ export default function SandboxControls() {
         const chartTitle = sandboxHumanReadable.getChartTitle({
           climatevariable: chartDataClimatevariable,
           region: chartDataRegion,
-          titleLocation
+          titleLocation,
+          chartDataSeason
         });
 
         // get climate varriable human readable format
         const humandReadablechartDataClimatevariable =
-          sandboxHumanReadable.getClimateVariablePullDownText(chartDataClimatevariable);
+          sandboxHumanReadable.getClimateVariablePullDownText(chartDataClimatevariable,
+            chartDataSeason);
 
         // get period range
         const humandReadablPeriodRange =
@@ -408,6 +438,7 @@ export default function SandboxControls() {
         if (chartDataRegion !== 'National' && !chartDataLocation) dataMissing = true;
         if (!chartDataClimatevariable) dataMissing = true;
         if (!chartDataPeriod) dataMissing = true;
+        if (!chartDataSeason) dataMissing = true;
 
         // create the plotly input so the chart is created based on users seletion
         const plotInfo = {
@@ -420,7 +451,8 @@ export default function SandboxControls() {
           chartType,
           climatevariable: humandReadablechartDataClimatevariable,
           chartLineChart,
-          dataMissing
+          dataMissing,
+          season: chartDataSeason
         };
 
         // get the charts data formated for plotly
@@ -438,10 +470,10 @@ export default function SandboxControls() {
 
         // get default period for the location
         const defaultPeriod = sandboxDataControl.getDefaultPeriod(configLimitData);
-        // get invalud climate variables for the location
+        // get invalid climate variables for the location
         const inValidClimateVariables =
           sandboxDataControl.getInValidClimateVariables(configLimitData);
-        // get invalud periods for the location
+        // get invalid periods for the location
         const inValidPeriods = sandboxDataControl.getInValidPeriods(configLimitData);
 
         // TODO will fill this in later
@@ -495,11 +527,12 @@ export default function SandboxControls() {
       .catch((error) => {
         console.error(`SanboxControls.updatePlotData() error=${error}`); // eslint-disable-line no-console
       });
+    return null;
   };
 
   // function loads the index.json file to find the correct data.txt file based on the varriables
   // the user chooses or from URL parameters
-  const loadData = async (loadRegion, argPeriod) => {
+  const loadData = async (loadRegion, argPeriod, argSeason) => {
     const path = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
     await axios.get(`${path}/sandboxdata/TSU_Sandbox_Datafiles/index.json`)
       .then((response) => {
@@ -525,12 +558,20 @@ export default function SandboxControls() {
 
         // set climate data json data file
         setClimateDataFilesJSON(responseData);
+        // filter data for period and season
+        data = responseData.filter((type) => {
+          const returnValue = type.period === argPeriod &&
+            type.season === argSeason;
+          return returnValue;
+        });
 
-        // filter data for period
-        data = responseData.filter((type) => type.period === argPeriod);
+        // return climate variables available for all data
+        //  this would limit by both period and season since they
+        //  have different climate varriables
+        const types = data.map((json) => (json.type));
 
-        // get climate variable items
-        setClimatevariableItems(data.map((json) => json.type));
+        // set climate variable items
+        setClimatevariableItems(types);
 
         // only send chart data if at the intializing of the app aka the first time
         // this is here for when URL parameters are passed
@@ -540,6 +581,7 @@ export default function SandboxControls() {
             chartDataLocation: location,
             chartDataClimatevariable: climatevariable,
             chartDataPeriod: period,
+            chartDataSeason: season,
             climateDataFilesJSONFile: responseData,
             chartLineChart: lineChart,
             chartOnlyProp: chartOnly
@@ -554,11 +596,17 @@ export default function SandboxControls() {
       });
   };
 
+  // use the react effect to control when season changes
+  useEffect(() => {
+    // call loadData when season changes
+    loadData(region, period, season, atStart);
+  }, [season]);
+
   // use the react effect to control when location and
   // regions change to repopulate the climate variable pulldown
   useEffect(() => {
     // call loadData when region changes
-    loadData(region, period, atStart);
+    loadData(region, period, season, atStart);
   }, [region]);
 
   // use the react effect to control when loading state from URL
@@ -566,7 +614,7 @@ export default function SandboxControls() {
   useEffect(() => {
     // call loadData when at start changes, meaning only call this
     // when the site fist starts and intializes
-    loadData(region, period, atStart);
+    loadData(region, period, season, atStart);
 
     // make sure the start state is no false and this will never run again
     // the loadData function will only update chartdata the first timei t runs
@@ -591,6 +639,9 @@ export default function SandboxControls() {
 
         // National data set the period pulldown to NOT disabled by changing the state
         setPeriodDisabled(false);
+
+        // National data set the season pulldown to NOT disabled by changing the state
+        setSeasonDisabled(false);
         break;
       case 'Regional':
         // Regional data set the location items to the regional items
@@ -606,6 +657,9 @@ export default function SandboxControls() {
 
         // Regional data set the period pulldown to NOT disabled by changing the state
         setPeriodDisabled(false);
+
+        // National data set the season pulldown to NOT disabled by changing the state
+        setSeasonDisabled(false);
         break;
       case 'State':
         // Regional data set the location items to the state items
@@ -621,6 +675,9 @@ export default function SandboxControls() {
 
         // Regional data set the period pulldown to NOT disabled by changing the state
         setPeriodDisabled(false);
+
+        // National data set the season pulldown to NOT disabled by changing the state
+        setSeasonDisabled(false);
         break;
       default:
         setLocationItems(['']);
@@ -628,6 +685,7 @@ export default function SandboxControls() {
         setlocationDisabled(true);
         setClimatevariableDisabled(true);
         setPeriodDisabled(true);
+        setSeasonDisabled(true);
         break;
     }
     setChartOnly('no');
@@ -636,6 +694,7 @@ export default function SandboxControls() {
       chartDataLocation: '', // make sure location is blank
       chartDataClimatevariable: climatevariable,
       chartDataPeriod: period,
+      chartDataSeason: season,
       climateDataFilesJSONFile: climateDataFilesJSON,
       chartLineChart: lineChart,
       chartOnlyProp: 'no'
@@ -651,6 +710,7 @@ export default function SandboxControls() {
       chartDataLocation: newValue,
       chartDataClimatevariable: climatevariable,
       chartDataPeriod: period,
+      chartDataSeason: season,
       climateDataFilesJSONFile: climateDataFilesJSON,
       chartLineChart: lineChart,
       chartOnlyProp: 'no'
@@ -666,6 +726,7 @@ export default function SandboxControls() {
       chartDataLocation: location,
       chartDataClimatevariable: newValue,
       chartDataPeriod: period,
+      chartDataSeason: season,
       climateDataFilesJSONFile: climateDataFilesJSON,
       chartLineChart: lineChart,
       chartOnlyProp: 'no'
@@ -673,7 +734,7 @@ export default function SandboxControls() {
     return null;
   };
 
-  // handle state change for climate variable
+  // handle state change for period
   const handlePeriodChange = (newValue) => {
     setPeriod(newValue);
     setChartOnly('no');
@@ -682,6 +743,52 @@ export default function SandboxControls() {
       chartDataLocation: location,
       chartDataClimatevariable: climatevariable,
       chartDataPeriod: newValue,
+      chartDataSeason: season,
+      climateDataFilesJSONFile: climateDataFilesJSON,
+      chartLineChart: lineChart,
+      chartOnlyProp: 'no'
+    });
+    return null;
+  };
+
+  // handle state change for season
+  const handleSeasonChange = (newValue) => {
+    const oldValue = season;
+    setSeason(newValue);
+    let newPeriod = period;
+    let newClimatevariable = climatevariable;
+
+    //  set period when changing from thresholds to seasonal data
+    if (newValue !== 'yearly' && (period === '1900-current' || period === '1950-current')) {
+      setPeriod('1895-current');
+      newPeriod = '1895-current';
+    }
+
+    //  set period when changing from seasonal data to thresholds
+    if (newValue === 'yearly' && period === '1895-current') {
+      setPeriod('1900-current');
+      newPeriod = '1900-current';
+    }
+
+    //  set climate variable when changing from seasonal data to thresholds
+    if (oldValue === 'yearly' && newValue !== 'yearly') {
+      setClimatevariable('tmpc');
+      newClimatevariable = 'tmpc';
+    }
+
+    //  set climate variable when changing from thresholds to seasonal data
+    if (oldValue !== 'yearly' && newValue === 'yearly') {
+      setClimatevariable('1inch');
+      newClimatevariable = '1inch';
+    }
+
+    setChartOnly('no');
+    getChartData({
+      chartDataRegion: region,
+      chartDataLocation: location,
+      chartDataClimatevariable: newClimatevariable,
+      chartDataPeriod: newPeriod,
+      chartDataSeason: newValue,
       climateDataFilesJSONFile: climateDataFilesJSON,
       chartLineChart: lineChart,
       chartOnlyProp: 'no'
@@ -700,6 +807,7 @@ export default function SandboxControls() {
       chartDataLocation: location,
       chartDataClimatevariable: climatevariable,
       chartDataPeriod: period,
+      chartDataSeason: season,
       climateDataFilesJSONFile: climateDataFilesJSON,
       chartLineChart: 'avg',
       chartOnlyProp: 'no'
@@ -718,6 +826,7 @@ export default function SandboxControls() {
       chartDataLocation: location,
       chartDataClimatevariable: climatevariable,
       chartDataPeriod: period,
+      chartDataSeason: season,
       climateDataFilesJSONFile: climateDataFilesJSON,
       chartLineChart: 'mavg',
       chartOnlyProp: 'no'
@@ -737,6 +846,7 @@ export default function SandboxControls() {
       chartDataLocation: location,
       chartDataClimatevariable: climatevariable,
       chartDataPeriod: period,
+      chartDataSeason: season,
       climateDataFilesJSONFile: climateDataFilesJSON,
       chartLineChart: 'year',
       chartOnlyProp: 'no'
@@ -746,16 +856,23 @@ export default function SandboxControls() {
 
   // repalce the climate variable with human readable climate variable
   // tmax100F beceomes Days with Maximum Temperature Above 100°F
-  const replaceClimatevariableType = (replaceClimatevariable) => {
+  const replaceClimatevariableType = (replaceClimatevariable, seasonHR) => {
     const sandboxHumanReadable = new SandboxHumanReadable();
-    return sandboxHumanReadable.getClimateVariablePullDownText(replaceClimatevariable);
+    return sandboxHumanReadable.getClimateVariablePullDownText(replaceClimatevariable, seasonHR);
   };
 
   // repalce the period variable with human readable period variable
   // 1900-current beceomes 1900 - X year in YYYY format - 2021
-  const replacePeriodType = (replacePeriod) => {
+  const replacePeriodType = (replacePeriod, seasonHR) => {
     const sandboxHumanReadable = new SandboxHumanReadable();
-    return sandboxHumanReadable.getPeriodPullDownText(replacePeriod);
+    return sandboxHumanReadable.getPeriodPullDownText(replacePeriod, seasonHR);
+  };
+
+  // repalce the season variable with human readable period variable
+  // djf beceomes  Winter (Dec, Jan, Feb)
+  const replaceSeasonType = (replaceSeason) => {
+    const sandboxHumanReadable = new SandboxHumanReadable();
+    return sandboxHumanReadable.getSeasonPullDownText(replaceSeason);
   };
 
   // removes <br> from title atttribute (in SVG) so images are exported without error
@@ -836,7 +953,8 @@ export default function SandboxControls() {
     const chartTitle = sandboxHumanReadable.getChartTitle({
       climatevariable,
       region,
-      titleLocation: replaceLocationAbbreviation(location)
+      titleLocation: replaceLocationAbbreviation(location),
+      chartDataSeason: season
     });
 
     // format file name
@@ -937,7 +1055,8 @@ export default function SandboxControls() {
     const chartTitle = sandboxHumanReadable.getChartTitle({
       climatevariable,
       region,
-      titleLocation: location
+      titleLocation: location,
+      chartDataSeason: season
     });
 
     // email subject
@@ -1016,8 +1135,7 @@ export default function SandboxControls() {
                 <Box px={1} fontSize='h5.fontSize' >NCA Sandbox - Climate Charts</Box>
               </Box>
             </Grid>
-
-            <Grid item xs={12} sm={3} className={'sandbox-varriable-selectors'}>
+            <Grid item xs={12} sm={3} md={2} className={'sandbox-varriable-selectors'}>
               <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
                   items={RegionItems}
@@ -1025,18 +1143,20 @@ export default function SandboxControls() {
                   onChange={handleRegionChange}
                   value={region}
                   disabled={false}
+                  season={season}
                   missing={(!region)}
                   replaceClimatevariableType={replaceClimatevariableType}
                   />
               </Box>
             </Grid>
-            <Grid item xs={12} sm={3} className={'sandbox-varriable-selectors'}>
+            <Grid item xs={12} sm={3} md={2} className={'sandbox-varriable-selectors'}>
               <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
                   items={locationItems}
                   controlName={'Select a Location'}
                   onChange={handleLocationChange}
                   value={location}
+                  season={season}
                   disabled={locationDisabled}
                   missing={(region !== 'National' && !location)}
                   replaceClimatevariableType={replaceClimatevariableType}
@@ -1044,34 +1164,50 @@ export default function SandboxControls() {
                   />
               </Box>
             </Grid>
-            <Grid item xs={12} sm={3} className={'sandbox-varriable-selectors'} >
+            <Grid item xs={12} sm={6} md={4} className={'sandbox-varriable-selectors'} >
               <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
                   items={climatevariableItems}
                   controlName={'Select a Climate Variable'}
                   onChange={handleClimatevariableChange}
                   value={climatevariable}
+                  season={season}
                   disabled={climatevariableDisabled}
                   missing={(!climatevariable)}
                   replaceClimatevariableType={replaceClimatevariableType}
                   />
               </Box>
             </Grid>
-            <Grid item xs={12} sm={3} className={'sandbox-varriable-selectors'} >
+            <Grid item xs={12} sm={3} md={2} className={'sandbox-varriable-selectors'} >
               <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
-                  items={Periods}
+                  items={Seasons}
+                  controlName={'Select the Season'}
+                  onChange={handleSeasonChange}
+                  value={season}
+                  disabled={seasonDisabled}
+                  missing={(!season)}
+                  season={season}
+                  replaceClimatevariableType={replaceClimatevariableType}
+                  replaceSeasonType={replaceSeasonType}
+                  />
+              </Box>
+            </Grid>
+            <Grid item xs={12} sm={3} md={2} className={'sandbox-varriable-selectors'} >
+              <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
+                <SandboxSelector
+                  items={PeriodsFull}
                   controlName={'Select a Time Period'}
                   onChange={handlePeriodChange}
                   value={period}
                   disabled={periodDisabled}
                   missing={(!period)}
+                  season={season}
                   replaceClimatevariableType={replaceClimatevariableType}
                   replacePeriodType={replacePeriodType}
                   />
               </Box>
             </Grid>
-
             <Grid item xs={12} className={classes.sandboxExports} >
               <SandboxActionMenu
                 handleDownloadChartAsCSVa={handleDownloadChartAsCSV}
@@ -1116,6 +1252,7 @@ SandboxControls.propTypes = {
   chartDataLocation: PropTypes.string,
   chartDataClimatevariable: PropTypes.string,
   chartDataPeriod: PropTypes.string,
+  chartDataSeason: PropTypes.string,
   climateDataFilesJSONFile: PropTypes.object,
   chartLineChart: PropTypes.string,
   chartOnlyProp: PropTypes.string

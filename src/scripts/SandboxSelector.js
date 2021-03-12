@@ -6,6 +6,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Select from '@material-ui/core/Select';
+import SandoxPeriodsHumanReadable from '../configs/SandoxPeriodsHumanReadable';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -28,19 +29,37 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Selector(props) {
   const classes = useStyles();
-  const { items } = props;
+  let { items } = props;
   const { controlName } = props;
   const { value } = props;
   const { disabled } = props;
   const { missing } = props;
+  const { season } = props;
   const { onChange } = props;
   const replaceClimatevariableType = controlName === 'Select a Climate Variable' ? props.replaceClimatevariableType : (name) => name;
   const replaceLocationAbbreviation = controlName === 'Select a Location' ? props.replaceLocationAbbreviation : (name) => name;
   const replacePeriodType = controlName === 'Select a Time Period' ? props.replacePeriodType : (name) => name;
-
-  // missing data validation message
+  const replaceSeasonType = controlName === 'Select the Season' ? props.replaceSeasonType : (name) => name;
   const selectorError = (missing && !disabled);
   const errorLabel = (selectorError) ? <FormHelperText className={classes.sandboxErrorText}>{controlName} is required</FormHelperText> : '';
+
+  // limit period based on season
+  // not all periods are valid for seasons
+  const limitPeriods = (periodARG, seasonARG) => {
+    const periodsHumanReadable = SandoxPeriodsHumanReadable();
+    const seasonFull = periodsHumanReadable.filter((v) => v.season === seasonARG);
+
+    // limit period array based on season limited array
+    //  uses the humad readable...
+    const seasonLimitedPeriods =
+      periodARG.filter((el) => (seasonFull.some((f) => (f.value === el))));
+    return seasonLimitedPeriods;
+  };
+
+  // only limit items when in period
+  if (controlName === 'Select a Time Period') {
+    items = limitPeriods(items, season);
+  }
 
   // replace regional
   const replaceRegional = (regionalValue) => {
@@ -53,18 +72,20 @@ export default function Selector(props) {
     onChange(event.target.value);
   };
 
-  const replaceWithHumanReadable = (theControlName, val) => {
+  const replaceWithHumanReadable = (theControlName, val, seasonHR) => {
     switch (theControlName) {
       case 'Select a Climate Variable':
-        return replaceClimatevariableType(val);
+        return replaceClimatevariableType(val, seasonHR);
       case 'Select a Location':
         return replaceLocationAbbreviation(val);
       case 'Select a Region':
         return replaceRegional(val);
       case 'Select a Time Period':
-        return replacePeriodType(val);
+        return replacePeriodType(val, seasonHR);
+      case 'Select the Season':
+        return replaceSeasonType(val);
       default:
-        return replaceClimatevariableType(val);
+        return replaceClimatevariableType(val, seasonHR);
     }
   };
 
@@ -81,7 +102,7 @@ export default function Selector(props) {
         >
         {items.map((name) => (
           <MenuItem key={name} value={name} className={classes.menuItem}>
-            {replaceWithHumanReadable(controlName, name)}
+            {replaceWithHumanReadable(controlName, name, season)}
           </MenuItem>))}
         </Select>
         {errorLabel}
@@ -94,9 +115,11 @@ Selector.propTypes = {
   controlName: PropTypes.string,
   value: PropTypes.string,
   disabled: PropTypes.bool,
+  season: PropTypes.string,
   missing: PropTypes.bool,
   replaceClimatevariableType: PropTypes.func,
   replaceLocationAbbreviation: PropTypes.func,
   replacePeriodType: PropTypes.func,
+  replaceSeasonType: PropTypes.func,
   onChange: PropTypes.func
 };
