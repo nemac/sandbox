@@ -896,9 +896,53 @@ export default function SandboxControls() {
     return node;
   };
 
+  // forces chart resize so custom width and heigh svg works correctly
+  const fixedSVG = (svgSelector, widthARG = 1000, heightARG = 500) => {
+    // get ploltly div
+    const plotHolderDiv = document.querySelector('.makeStyles-sandboxChartRegionBox-6');
+    const plotRegionDiv = document.querySelector('.user-select-none.svg-container');
+
+    // get default for heights and widths
+    const originalHolderWidth = plotHolderDiv.getAttribute('width');
+    const originalHolderHeight= plotHolderDiv.getAttribute('height');
+    const originalWidth = plotRegionDiv.getAttribute('width');
+    const originalHeight= plotRegionDiv.getAttribute('height');
+
+    // set width to fixed width
+    if (widthARG > 0 && heightARG > 0) {
+
+      // set divs to fixed width for standard or custom suze
+      plotHolderDiv.style.width = `${widthARG}px`;
+      plotRegionDiv.style.width = `${widthARG}px`;
+      plotHolderDiv.style.height = `${heightARG}px`;
+      plotRegionDiv.style.height = `${heightARG}px`
+
+      // force window reszize so plotly re-renders the chart at fixed dimensions
+      window.dispatchEvent(new Event('resize'));
+
+      // delay creation of svg export while resize happens
+      setTimeout(() => {
+        // create download file
+        const base64doc = convertToOneSvg(svgSelector);
+        donwloadFile(base64doc);
+
+        // reset dimensions back to orginal dimensions
+        plotHolderDiv.style.width = originalHolderWidth;
+        plotRegionDiv.style.width = originalWidth;
+        plotHolderDiv.style.height = originalHolderHeight;
+        plotRegionDiv.style.height = originalHeight;
+        
+        // force window reszize so plotly re-renders the chart at fixed dimensions
+        window.dispatchEvent(new Event('resize'));
+        return
+      }, 500);
+    }
+    return
+  }
+
   // hack to export svg, not using using pure JS
   const convertToOneSvg = (svgSelector) => {
-    // fiond and covnert html all plotly chart nodes
+    // find and covnert html all plotly chart nodes
     // (plotly puts legends and the chart in seperate nodes)
     // to an JS array
     const svgs = Array.from(document.querySelectorAll(svgSelector));
@@ -908,12 +952,16 @@ export default function SandboxControls() {
     // create a new svg element
     const mergedSVG = document.createElement('svg');
 
+    // set default for height and width
+    const SVGWidth = svgs[0].getAttribute('width');
+    const SVGHeight= svgs[0].getAttribute('height');
+
     // set new svg element getAttributes to match the first plotly svg element
     // this will ensure width/height style and all the other settings match in the export
     mergedSVG.setAttribute('xmlns', svgs[0].getAttribute('xmlns'));
     mergedSVG.setAttribute('xmlns:xlink', svgs[0].getAttribute('xmlns:xlink'));
-    mergedSVG.setAttribute('width', svgs[0].getAttribute('width'));
-    mergedSVG.setAttribute('height', svgs[0].getAttribute('height'));
+    mergedSVG.setAttribute('width', SVGWidth);
+    mergedSVG.setAttribute('height', SVGHeight);
     mergedSVG.setAttribute('style', svgs[0].getAttribute('style'));
 
     // append the svg to the div - this is needed to export the svg tet properly
@@ -1046,6 +1094,11 @@ export default function SandboxControls() {
     donwloadFile(base64doc);
   };
 
+  // handles downloads chart as SVG with fixed size
+  const handleDownloadChartAsSVGFixedSize = () => {
+    fixedSVG('.js-plotly-plot .main-svg', 1250, 600)
+    };
+
   // handles mail to TSU
   const handleMailToTSU = () => {
     const sandboxHumanReadable = new SandboxHumanReadable();
@@ -1129,7 +1182,7 @@ export default function SandboxControls() {
           <Grid container spacing={0} justify='flex-start' direction={'row'} className={classes.sandboxSelectionArea}>
             <Grid item xs={12} className={classes.sandboxHeader} width='100%' >
               <Box fontWeight='fontWeightBold' mt={1} p={0} display='flex' flexWrap='nowrap' justifyContent='flex-start'>
-                <Box px={1} fontSize='h4.fontSize' >
+                <Box onClick={handleDownloadChartAsSVGFixedSize} px={1} fontSize='h4.fontSize' >
                   <InsertChartOutlinedIcon fontSize='large' className={'sandbox-header-icon'} />
                 </Box>
                 <Box px={1} fontSize='h5.fontSize' >NCA Sandbox - Climate Charts</Box>

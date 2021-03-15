@@ -52,6 +52,7 @@ class SandboxPlotRegion extends React.Component {
       this.setState({
         layout: copiedLayout
       });
+      window.dispatchEvent(new Event('resizedone'));
     });
   }
 
