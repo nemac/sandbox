@@ -115,7 +115,6 @@ export default function Selector(props) {
   const { handleDownloadChartAsCSVa } = props;
   const { handleDownloadChartAsPNGa } = props;
   const { handleDownloadChartAsSVGa } = props;
-  const { handleDownloadChartAsSVGFixedSizea } = props;
   const { handleMailToTSUa } = props;
   const { lineChart } = props;
 
@@ -171,7 +170,7 @@ export default function Selector(props) {
   };
 
   const andleDownloadChartAsSVGFixed = (svgSelector, width, height) => {
-    handleDownloadChartAsSVGFixedSizea(svgSelector, width, height);
+    handleDownloadChartAsSVGa(svgSelector, width, height);
   };
 
   const handleMailToTSU = (event) => {
@@ -240,7 +239,6 @@ Selector.propTypes = {
   handleDownloadChartAsCSVa: PropTypes.func,
   handleDownloadChartAsPNGa: PropTypes.func,
   handleDownloadChartAsSVGa: PropTypes.func,
-  handleDownloadChartAsSVGFixedSizea: PropTypes.func,
   handleMailToTSUa: PropTypes.func,
   lineChart: PropTypes.string,
   onChange: PropTypes.func

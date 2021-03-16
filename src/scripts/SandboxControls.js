@@ -897,7 +897,7 @@ export default function SandboxControls() {
   };
 
   // create svg and although for custom size
-  const fixedSVG = (svgSelector = '.js-plotly-plot .main-svg', widthARG = 1000, heightARG = 500) => {
+  const exportSVG = (svgSelector = '.js-plotly-plot .main-svg', widthARG = 1000, heightARG = 500) => {
     // do not change width if dimensions changed by user default setting
     const svgElem = document.querySelector(svgSelector);
     if (svgElem) {
@@ -909,7 +909,7 @@ export default function SandboxControls() {
         return null;
       }
     }
-    
+
     // get ploltly div
     const plotHolderDiv = document.querySelector('.makeStyles-sandboxChartRegionBox-6');
     const plotRegionDiv = document.querySelector('.user-select-none.svg-container');
@@ -947,9 +947,9 @@ export default function SandboxControls() {
         // force window reszize so plotly re-renders the chart at fixed dimensions
         window.dispatchEvent(new Event('resize'));
         return null;
-      }, 1000);
+      }, 500);
     }
-    return
+    return null;
   }
 
   // hack to export svg, not using using pure JS
@@ -1100,15 +1100,9 @@ export default function SandboxControls() {
     image.src = blobURL;
   };
 
-  // handles downloads chart as SVG
-  const handleDownloadChartAsSVG = () => {
-    const base64doc = convertToOneSvg('.js-plotly-plot .main-svg');
-    donwloadFile(base64doc);
-  };
-
   // handles downloads chart as SVG with fixed size
-  const handleDownloadChartAsSVGFixedSize = (svgSelector, width, height) => {
-    fixedSVG(svgSelector, width, height)
+  const handleDownloadChartAsSVG = (svgSelector, width, height) => {
+    exportSVG(svgSelector, width, height)
   };
 
   // handles mail to TSU
@@ -1194,7 +1188,7 @@ export default function SandboxControls() {
           <Grid container spacing={0} justify='flex-start' direction={'row'} className={classes.sandboxSelectionArea}>
             <Grid item xs={12} className={classes.sandboxHeader} width='100%' >
               <Box fontWeight='fontWeightBold' mt={1} p={0} display='flex' flexWrap='nowrap' justifyContent='flex-start'>
-                <Box onClick={handleDownloadChartAsSVGFixedSize} px={1} fontSize='h4.fontSize' >
+                <Box onClick={handleDownloadChartAsSVG} px={1} fontSize='h4.fontSize' >
                   <InsertChartOutlinedIcon fontSize='large' className={'sandbox-header-icon'} />
                 </Box>
                 <Box px={1} fontSize='h5.fontSize' >NCA Sandbox - Climate Charts</Box>
@@ -1278,7 +1272,6 @@ export default function SandboxControls() {
                 handleDownloadChartAsCSVa={handleDownloadChartAsCSV}
                 handleDownloadChartAsPNGa={handleDownloadChartAsPNG}
                 handleDownloadChartAsSVGa={handleDownloadChartAsSVG}
-                handleDownloadChartAsSVGFixedSizea={handleDownloadChartAsSVGFixedSize}
                 handleSwtichAverageAndYearlya={handleSwtichAverageAndYearly}
                 handleSwtichMovingAverageAndYearlya={handleSwtichMovingAverageAndYearly}
                 handleSwtichYearlyToLinea={handleSwtichYearlyToLine}

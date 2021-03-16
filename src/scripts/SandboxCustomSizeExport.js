@@ -9,6 +9,8 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import CancelIcon from '@material-ui/icons/Cancel';
 
+import SandboxDefaultExportSizes from '../configs/SandboxDefaultExportSizes';
+
 const darkGrey = '#E6E6E6';
 
 const useStyles = makeStyles((theme) => ({
@@ -18,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
       justifyContent: 'center'
     },
     exportModalDiv: {
-      width: '50%',
+      width: '400px',
       [theme.breakpoints.down('sm')]: {
         width: '80%'
       },
@@ -45,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
       display: 'flex'
     },
     exportDescriptionText: {
-      marginBottom: theme.spacing(1),
+      marginBottom: theme.spacing(2),
       [theme.breakpoints.down('sm')]: {
         fontSize: '.75em'
       }
@@ -64,10 +66,7 @@ const useStyles = makeStyles((theme) => ({
     },
     exportInput: {
       marginTop: theme.spacing(3),
-      width: '50%',
-      [theme.breakpoints.down('sm')]: {
-        width: '100%'
-      }
+      width: '100%'
     }
 }));
 
@@ -86,12 +85,16 @@ export default function SandboxCustomSizeExport(props) {
   //  so we can set the custom dimensions
   const svgSelector = '.js-plotly-plot .main-svg';
 
+  //  get default dimensions from config
+  const sandboxDefaultExportSizes = new SandboxDefaultExportSizes();
+  const defaultSizes = sandboxDefaultExportSizes.filter((value) => (value.name === 'Default'));
+
   // get the dimensions of the chart currently
   // if none than use the default 1250x300
   const defaultDimensions = () => {
     const svgElem = document.querySelector(svgSelector);
-    let width = 1250;
-    let height = 300;
+    let width = defaultSizes.width;
+    let height = defaultSizes.height;
     if (svgElem) {
       width = svgElem.getAttribute('width');
       height = svgElem.getAttribute('height');
@@ -107,14 +110,13 @@ export default function SandboxCustomSizeExport(props) {
   // only run when the compnent mounts
   React.useEffect(() => {
     // on resize re calc dimensions
-    window.addEventListener("resize", () => {
+    window.addEventListener('resize', () => {
       const dimensions = defaultDimensions();
       setExportWidth(dimensions.width);
       setExportHeight(dimensions.height);
     });
-    /* passing an empty array as the dependencies of the effect will cause this
-       effect to only run when the component mounts, and not each time it updates.
-       We only want the listener to be added once */
+    // passing an empty array as the dependencies of the effect will cause it to run
+    //   the listener to be added only one time
   }, []);
 
   // handle export modal open event
@@ -130,7 +132,25 @@ export default function SandboxCustomSizeExport(props) {
   // handle export modal expor the chart event
   const handleExportClick= () => {
     exportFunc(svgSelector, exportWidth, exportHeight);
-    handleClose();
+    // adds timeout for resizeing of image.
+    //  without the time and the mouse could be over the graph
+    //  and result on hover text shpwing up on exprt
+    setTimeout(() => {handleClose();}, 650);
+  };
+
+  // handle default dimension click
+  const handlePresetDimensionsClick= (event) => {
+    // Wysiwyg - dimensions will be the same as the website.
+    if (event.currentTarget.value === 'Default') {
+      const dimensions = defaultDimensions();
+      setExportWidth(dimensions.width);
+      setExportHeight(dimensions.height);
+      // dimensions will match a default from config - ../configs/SandboxDefaultExportSizes
+    } else {
+      const dimensionFromButton = sandboxDefaultExportSizes.filter((value) => (value.name === event.currentTarget.value));
+      setExportWidth(dimensionFromButton[0].dimensions.width);
+      setExportHeight(dimensionFromButton[0].dimensions.height);
+    }
   };
 
   return (
@@ -138,24 +158,28 @@ export default function SandboxCustomSizeExport(props) {
         <div className={classes.exportModalDiv}>
           <h2 id='simple-modal-title' className={classes.exportHeaderText}>{exportHeading}</h2>
           <p id='simple-modal-description' className={classes.exportDescriptionText}>
-            {exportDescription}
+            Change the dimensions to export a custom size or use one of the predetermined dimensions. Default Dimensions will be the same as the website (wysiwyg).
           </p>
+
+          <Button className={classes.exportButtons} onClick={handlePresetDimensionsClick} variant='contained' color='primary' value='Default'>Default</Button>
+          <Button className={classes.exportButtons} onClick={handlePresetDimensionsClick}  variant='outlined' color='primary' value='NCA'>NCA</Button>
+
           <FormControl className={classes.exportForm}>
             <TextField className={classes.exportInput} id='outlined-number-width' variant='outlined' label='Width' type='number'
-              defaultValue={exportWidth}
+              value={exportWidth}
               InputLabelProps={{ shrink: true, }}
-              InputProps={{endAdornment: <InputAdornment position="end">PX</InputAdornment>,inputProps: { min: 250, max: 5000 }}}/>
+              InputProps={{endAdornment: <InputAdornment position='end'>PX</InputAdornment>,inputProps: { min: 250, max: 5000 }}}/>
             <TextField className={classes.exportInput} id='outlined-number-height' variant='outlined' label='Height' type='number'
-              defaultValue={exportHeight}
+              value={exportHeight}
               InputLabelProps={{ shrink: true, }}
-              InputProps={{endAdornment: <InputAdornment position="end">PX</InputAdornment>,inputProps: { min: 250, max: 5000 }}} />
+              InputProps={{endAdornment: <InputAdornment position='end'>PX</InputAdornment>,inputProps: { min: 250, max: 5000 }}} />
           </FormControl>
           <div className={classes.exportContainer}>
             <div className={classes.exportStart}>
               <Button className={classes.exportButtons} onClick={handleExportClick} color='primary' variant='contained' startIcon={<SaveAltIcon />}>Export {exportType}</Button>
             </div>
             <div className={classes.exportEnd}>
-              <Button className={classes.exportButtons} onClick={handleClose} color='default' variant='contained' startIcon={<CancelIcon />}>Close</Button>
+              <Button className={classes.exportButtons} onClick={handleClose} color='default' variant='contained' >Cancel</Button>
             </div>
           </div>
         </div>
