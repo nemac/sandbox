@@ -896,8 +896,20 @@ export default function SandboxControls() {
     return node;
   };
 
-  // forces chart resize so custom width and heigh svg works correctly
-  const fixedSVG = (svgSelector, widthARG = 1000, heightARG = 500) => {
+  // create svg and although for custom size
+  const fixedSVG = (svgSelector = '.js-plotly-plot .main-svg', widthARG = 1000, heightARG = 500) => {
+    // do not change width if dimensions changed by user default setting
+    const svgElem = document.querySelector(svgSelector);
+    if (svgElem) {
+      const svgwidth = svgElem.getAttribute('width');
+      const svgheight = svgElem.getAttribute('height');
+      if (svgwidth === widthARG && svgheight === heightARG) {
+        const base64doc = convertToOneSvg(svgSelector);
+        donwloadFile(base64doc);
+        return null;
+      }
+    }
+    
     // get ploltly div
     const plotHolderDiv = document.querySelector('.makeStyles-sandboxChartRegionBox-6');
     const plotRegionDiv = document.querySelector('.user-select-none.svg-container');
@@ -931,11 +943,11 @@ export default function SandboxControls() {
         plotRegionDiv.style.width = originalWidth;
         plotHolderDiv.style.height = originalHolderHeight;
         plotRegionDiv.style.height = originalHeight;
-        
+
         // force window reszize so plotly re-renders the chart at fixed dimensions
         window.dispatchEvent(new Event('resize'));
-        return
-      }, 500);
+        return null;
+      }, 1000);
     }
     return
   }
@@ -1095,9 +1107,9 @@ export default function SandboxControls() {
   };
 
   // handles downloads chart as SVG with fixed size
-  const handleDownloadChartAsSVGFixedSize = () => {
-    fixedSVG('.js-plotly-plot .main-svg', 1250, 600)
-    };
+  const handleDownloadChartAsSVGFixedSize = (svgSelector, width, height) => {
+    fixedSVG(svgSelector, width, height)
+  };
 
   // handles mail to TSU
   const handleMailToTSU = () => {
@@ -1266,6 +1278,7 @@ export default function SandboxControls() {
                 handleDownloadChartAsCSVa={handleDownloadChartAsCSV}
                 handleDownloadChartAsPNGa={handleDownloadChartAsPNG}
                 handleDownloadChartAsSVGa={handleDownloadChartAsSVG}
+                handleDownloadChartAsSVGFixedSizea={handleDownloadChartAsSVGFixedSize}
                 handleSwtichAverageAndYearlya={handleSwtichAverageAndYearly}
                 handleSwtichMovingAverageAndYearlya={handleSwtichMovingAverageAndYearly}
                 handleSwtichYearlyToLinea={handleSwtichYearlyToLine}

@@ -6,6 +6,8 @@ import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 
+import SandboxCustomSizeExport from './SandboxCustomSizeExport';
+
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import TimelineIcon from '@material-ui/icons/Timeline';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
@@ -113,8 +115,11 @@ export default function Selector(props) {
   const { handleDownloadChartAsCSVa } = props;
   const { handleDownloadChartAsPNGa } = props;
   const { handleDownloadChartAsSVGa } = props;
+  const { handleDownloadChartAsSVGFixedSizea } = props;
   const { handleMailToTSUa } = props;
   const { lineChart } = props;
+
+  const [openCustomSize, setOpenCustomSize] = React.useState(false);
 
   const setSelected = (whichchart, me) => {
     switch (lineChart) {
@@ -165,12 +170,23 @@ export default function Selector(props) {
     handleDownloadChartAsCSVa();
   };
 
-  const handleDownloadChartAsSVG = (event) => {
-    handleDownloadChartAsSVGa();
+  const andleDownloadChartAsSVGFixed = (svgSelector, width, height) => {
+    handleDownloadChartAsSVGFixedSizea(svgSelector, width, height);
   };
 
   const handleMailToTSU = (event) => {
     handleMailToTSUa();
+  };
+
+  // handles open of custom size export
+  const handleCustomSizeOpen = () => {
+    window.dispatchEvent(new Event('resize'));
+    setOpenCustomSize(true);
+  };
+
+  // handles close of custom size export
+  const handleCustomSizeClose = () => {
+    setOpenCustomSize(false);
   };
 
   return (
@@ -196,9 +212,18 @@ export default function Selector(props) {
             <Button onClick={handleDownloadChartAsPNG} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveAltIcon />}>
               .PNG
             </Button>
-            <Button onClick={handleDownloadChartAsSVG} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveAltIcon />}>
+            <Button onClick={handleCustomSizeOpen} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveAltIcon />}>
               .SVG
             </Button>
+            <SandboxCustomSizeExport
+              open={openCustomSize}
+              handleCustomSizeOpen={handleCustomSizeOpen}
+              handleCustomSizeClose={handleCustomSizeClose}
+              exportType={'SVG'}
+              exportHeading={'Export graph to SVG'}
+              exportDescription={'Change the dimensions to export a custom size.'}
+              exportFunc={andleDownloadChartAsSVGFixed}
+              />
             <Button onClick={handleMailToTSU} className={classes.fabsvg} variant="contained" color="default" startIcon={<MailOutlineIcon />}>
               To TSU
             </Button>
@@ -215,6 +240,7 @@ Selector.propTypes = {
   handleDownloadChartAsCSVa: PropTypes.func,
   handleDownloadChartAsPNGa: PropTypes.func,
   handleDownloadChartAsSVGa: PropTypes.func,
+  handleDownloadChartAsSVGFixedSizea: PropTypes.func,
   handleMailToTSUa: PropTypes.func,
   lineChart: PropTypes.string,
   onChange: PropTypes.func
