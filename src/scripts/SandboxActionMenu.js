@@ -118,7 +118,8 @@ export default function Selector(props) {
   const { handleMailToTSUa } = props;
   const { lineChart } = props;
 
-  const [openCustomSize, setOpenCustomSize] = React.useState(false);
+  const [openCustomSizeSVG, setOpenCustomSizeSVG] = React.useState(false);
+  const [openCustomSizePNG, setOpenCustomSizePNG] = React.useState(false);
 
   const setSelected = (whichchart, me) => {
     switch (lineChart) {
@@ -161,15 +162,15 @@ export default function Selector(props) {
     handleSwtichYearlyToLinea(event.target.value);
   };
 
-  const handleDownloadChartAsPNG = (event) => {
-    handleDownloadChartAsPNGa();
+  const handleDownloadChartAsPNG = (svgSelector, width, height) => {
+    handleDownloadChartAsPNGa(svgSelector, width, height);
   };
 
   const handleDownloadChartAsCSV = (event) => {
     handleDownloadChartAsCSVa();
   };
 
-  const andleDownloadChartAsSVGFixed = (svgSelector, width, height) => {
+  const handleDownloadChartAsSVG = (svgSelector, width, height) => {
     handleDownloadChartAsSVGa(svgSelector, width, height);
   };
 
@@ -178,14 +179,25 @@ export default function Selector(props) {
   };
 
   // handles open of custom size export
-  const handleCustomSizeOpen = () => {
+  const handleCustomSizeOpenSVG = () => {
     window.dispatchEvent(new Event('resize'));
-    setOpenCustomSize(true);
+    setOpenCustomSizeSVG(true);
   };
 
   // handles close of custom size export
-  const handleCustomSizeClose = () => {
-    setOpenCustomSize(false);
+  const handleCustomSizeCloseSVG = () => {
+    setOpenCustomSizeSVG(false);
+  };
+
+  // handles close of custom size export
+  const handleCustomSizeOpenPNG = () => {
+    window.dispatchEvent(new Event('resize'));
+    setOpenCustomSizePNG(true);
+  };
+
+  // handles close of custom size export
+  const handleCustomSizeClosePNG = () => {
+    setOpenCustomSizePNG(false);
   };
 
   return (
@@ -208,20 +220,27 @@ export default function Selector(props) {
             <Button onClick={handleDownloadChartAsCSV} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveAltIcon />}>
               .CSV
             </Button>
-            <Button onClick={handleDownloadChartAsPNG} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveAltIcon />}>
+            <Button onClick={handleCustomSizeOpenPNG} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveAltIcon />}>
               .PNG
             </Button>
-            <Button onClick={handleCustomSizeOpen} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveAltIcon />}>
+            <SandboxCustomSizeExport
+              open={openCustomSizePNG}
+              handleCustomSizeOpen={handleCustomSizeOpenPNG}
+              handleCustomSizeClose={handleCustomSizeClosePNG}
+              exportType={'PNG'}
+              exportHeading={'Export graph to PNG'}
+              exportFunc={handleDownloadChartAsPNG}
+              />
+            <Button onClick={handleCustomSizeOpenSVG} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveAltIcon />}>
               .SVG
             </Button>
             <SandboxCustomSizeExport
-              open={openCustomSize}
-              handleCustomSizeOpen={handleCustomSizeOpen}
-              handleCustomSizeClose={handleCustomSizeClose}
+              open={openCustomSizeSVG}
+              handleCustomSizeOpen={handleCustomSizeOpenSVG}
+              handleCustomSizeClose={handleCustomSizeCloseSVG}
               exportType={'SVG'}
               exportHeading={'Export graph to SVG'}
-              exportDescription={'Change the dimensions to export a custom size.'}
-              exportFunc={andleDownloadChartAsSVGFixed}
+              exportFunc={handleDownloadChartAsSVG}
               />
             <Button onClick={handleMailToTSU} className={classes.fabsvg} variant="contained" color="default" startIcon={<MailOutlineIcon />}>
               To TSU

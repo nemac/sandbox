@@ -77,7 +77,6 @@ export default function SandboxCustomSizeExport(props) {
   const { handleCustomSizeClose } = props;
   const { exportFunc } = props;
   const { exportHeading } = props;
-  const { exportDescription } = props;
   const { exportType } = props;
 
   // set constant for svg selector - this is html element that holds the chart
@@ -112,8 +111,8 @@ export default function SandboxCustomSizeExport(props) {
     // on resize re calc dimensions
     window.addEventListener('resize', () => {
       const dimensions = defaultDimensions();
-      setExportWidth(dimensions.width);
-      setExportHeight(dimensions.height);
+      setExportWidth(parseInt(dimensions.width, 10));
+      setExportHeight(parseInt(dimensions.height, 10));
     });
     // passing an empty array as the dependencies of the effect will cause it to run
     //   the listener to be added only one time
@@ -138,18 +137,28 @@ export default function SandboxCustomSizeExport(props) {
     setTimeout(() => {handleClose();}, 650);
   };
 
+  // handle default dimension change
+  const handlePresetDimensionsWidthChange = (event) => {
+    setExportWidth(parseInt(event.currentTarget.value, 10));
+  }
+
+  // handle default dimension change
+  const handlePresetDimensionsHeightChange = (event) => {
+    setExportHeight(parseInt(event.currentTarget.value, 10));
+  }
+
   // handle default dimension click
-  const handlePresetDimensionsClick= (event) => {
+  const handlePresetDimensionsClick = (event) => {
     // Wysiwyg - dimensions will be the same as the website.
     if (event.currentTarget.value === 'Default') {
       const dimensions = defaultDimensions();
-      setExportWidth(dimensions.width);
-      setExportHeight(dimensions.height);
+      setExportWidth(parseInt(dimensions.width, 10));
+      setExportHeight(parseInt(dimensions.height, 10));
       // dimensions will match a default from config - ../configs/SandboxDefaultExportSizes
     } else {
       const dimensionFromButton = sandboxDefaultExportSizes.filter((value) => (value.name === event.currentTarget.value));
-      setExportWidth(dimensionFromButton[0].dimensions.width);
-      setExportHeight(dimensionFromButton[0].dimensions.height);
+      setExportWidth(parseInt(dimensionFromButton[0].dimensions.width, 10));
+      setExportHeight(parseInt(dimensionFromButton[0].dimensions.height, 10));
     }
   };
 
@@ -165,11 +174,11 @@ export default function SandboxCustomSizeExport(props) {
           <Button className={classes.exportButtons} onClick={handlePresetDimensionsClick}  variant='outlined' color='primary' value='NCA'>NCA</Button>
 
           <FormControl className={classes.exportForm}>
-            <TextField className={classes.exportInput} id='outlined-number-width' variant='outlined' label='Width' type='number'
+            <TextField className={classes.exportInput} onChange={handlePresetDimensionsWidthChange} id='outlined-number-width' variant='outlined' label='Width' type='number'
               value={exportWidth}
               InputLabelProps={{ shrink: true, }}
               InputProps={{endAdornment: <InputAdornment position='end'>PX</InputAdornment>,inputProps: { min: 250, max: 5000 }}}/>
-            <TextField className={classes.exportInput} id='outlined-number-height' variant='outlined' label='Height' type='number'
+            <TextField className={classes.exportInput} onChange={handlePresetDimensionsHeightChange} id='outlined-number-height' variant='outlined' label='Height' type='number'
               value={exportHeight}
               InputLabelProps={{ shrink: true, }}
               InputProps={{endAdornment: <InputAdornment position='end'>PX</InputAdornment>,inputProps: { min: 250, max: 5000 }}} />
@@ -193,6 +202,5 @@ SandboxCustomSizeExport.propTypes = {
   exportFunc: PropTypes.func,
   exportHeading: PropTypes.string,
   exportType: PropTypes.string,
-  exportDescription: PropTypes.string,
   open: PropTypes.bool
 };
