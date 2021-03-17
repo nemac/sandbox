@@ -15,6 +15,7 @@ const paths = {
 module.exports = {
     entry: {
       index: path.join(paths.SRC, 'index.js'),
+      SandboxPlotRegion: './src/scripts/SandboxPlotRegion.js',
     },
     performance: {
        hints: "warning",
@@ -28,8 +29,16 @@ module.exports = {
         publicPath: ''
     },
     optimization: {
+      moduleIds: 'size',
+      runtimeChunk: 'single',
       splitChunks: {
-        chunks: 'all'
+        cacheGroups: {
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            chunks: 'all',
+          },
+        },
       }
     },
     resolve: {
