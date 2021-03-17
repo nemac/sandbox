@@ -58,6 +58,10 @@ const useStyles = makeStyles((theme) => ({
     },
     exportForm: {
       display: 'flex',
+      flexDirection: 'row',
+      [theme.breakpoints.down('sm')]: {
+        flexDirection: 'column',
+      },
       alignItems: 'flex-start',
       justifyContent: 'flex-start',
       width: '100%',
@@ -66,7 +70,18 @@ const useStyles = makeStyles((theme) => ({
     },
     exportInput: {
       marginTop: theme.spacing(3),
-      width: '100%'
+      marginRight: theme.spacing(2),
+      width: '45%',
+      [theme.breakpoints.down('sm')]: {
+        width: '100%'
+      }
+    },
+    exportSmallButtonText: {
+      marginLeft: theme.spacing(1)
+    },
+    exportHeaderIcon: {
+      fontSize: '1.65rem',
+      marginBottom: theme.spacing(-.3)
     }
 }));
 
@@ -106,6 +121,10 @@ export default function SandboxCustomSizeExport(props) {
   const [ exportWidth, setExportWidth] = useState(dimensions.width);
   const [ exportHeight, setExportHeight] = useState(dimensions.height);
 
+  const [ wysiwygWidth, setWysiwygWidth] = useState(dimensions.width);
+  const [ wysiwygHeight, setWysiwygHeight] = useState(dimensions.height);
+
+
   // only run when the compnent mounts
   React.useEffect(() => {
     // on resize re calc dimensions
@@ -113,6 +132,8 @@ export default function SandboxCustomSizeExport(props) {
       const dimensions = defaultDimensions();
       setExportWidth(parseInt(dimensions.width, 10));
       setExportHeight(parseInt(dimensions.height, 10));
+      setWysiwygWidth(parseInt(dimensions.width, 10));
+      setWysiwygHeight(parseInt(dimensions.height, 10));
     });
     // passing an empty array as the dependencies of the effect will cause it to run
     //   the listener to be added only one time
@@ -147,6 +168,12 @@ export default function SandboxCustomSizeExport(props) {
     setExportHeight(parseInt(event.currentTarget.value, 10));
   }
 
+  // get dimension from config
+  const getDimensions = (name) => {
+    const dimensionFromButton = sandboxDefaultExportSizes.filter((value) => (value.name === name));
+    return dimensionFromButton[0].dimensions;
+  }
+
   // handle default dimension click
   const handlePresetDimensionsClick = (event) => {
     // Wysiwyg - dimensions will be the same as the website.
@@ -156,22 +183,22 @@ export default function SandboxCustomSizeExport(props) {
       setExportHeight(parseInt(dimensions.height, 10));
       // dimensions will match a default from config - ../configs/SandboxDefaultExportSizes
     } else {
-      const dimensionFromButton = sandboxDefaultExportSizes.filter((value) => (value.name === event.currentTarget.value));
-      setExportWidth(parseInt(dimensionFromButton[0].dimensions.width, 10));
-      setExportHeight(parseInt(dimensionFromButton[0].dimensions.height, 10));
+      const dimensions = getDimensions(event.currentTarget.value);
+      setExportWidth(parseInt(dimensions.width, 10));
+      setExportHeight(parseInt(dimensions.height, 10));
     }
   };
 
   return (
       <Modal disableBackdropClick disableEscapeKeyDown className={classes.exportModal} classes={{ focused: classes.exportModal }} open={open} onClose={handleClose} aria-labelledby='simple-modal-title' aria-describedby='simple-modal-description' >
         <div className={classes.exportModalDiv}>
-          <h2 id='simple-modal-title' className={classes.exportHeaderText}>{exportHeading}</h2>
+          <h2 id='simple-modal-title' className={classes.exportHeaderText}><SaveAltIcon className={classes.exportHeaderIcon}/> {exportHeading}</h2>
           <p id='simple-modal-description' className={classes.exportDescriptionText}>
-            Change the dimensions to export a custom size or use one of the predetermined dimensions. Default Dimensions will be the same as the website (wysiwyg).
+            Export the chart to a custom size or use one of the predetermined dimensions. The default option will match the what the
+            dimensions you see on the page (WYSIWYG).
           </p>
-
-          <Button className={classes.exportButtons} onClick={handlePresetDimensionsClick} variant='contained' color='primary' value='Default'>Default</Button>
-          <Button className={classes.exportButtons} onClick={handlePresetDimensionsClick}  variant='outlined' color='primary' value='NCA'>NCA</Button>
+          <Button className={classes.exportButtons} onClick={handlePresetDimensionsClick} variant='contained' color='primary' value='Default'>Default <small className={classes.exportSmallButtonText}>({wysiwygWidth} x {wysiwygHeight})</small></Button>
+          <Button className={classes.exportButtons} onClick={handlePresetDimensionsClick}  variant='outlined' color='primary' value='NCA'>NCA <small className={classes.exportSmallButtonText}>({getDimensions('NCA').width} x {getDimensions('NCA').height})</small></Button>
 
           <FormControl className={classes.exportForm}>
             <TextField className={classes.exportInput} onChange={handlePresetDimensionsWidthChange} id='outlined-number-width' variant='outlined' label='Width' type='number'

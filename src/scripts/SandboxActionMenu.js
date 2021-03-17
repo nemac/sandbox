@@ -228,7 +228,7 @@ export default function Selector(props) {
               handleCustomSizeOpen={handleCustomSizeOpenPNG}
               handleCustomSizeClose={handleCustomSizeClosePNG}
               exportType={'PNG'}
-              exportHeading={'Export graph to PNG'}
+              exportHeading={'Export chart to PNG'}
               exportFunc={handleDownloadChartAsPNG}
               />
             <Button onClick={handleCustomSizeOpenSVG} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveAltIcon />}>
@@ -239,7 +239,7 @@ export default function Selector(props) {
               handleCustomSizeOpen={handleCustomSizeOpenSVG}
               handleCustomSizeClose={handleCustomSizeCloseSVG}
               exportType={'SVG'}
-              exportHeading={'Export graph to SVG'}
+              exportHeading={'Export chart to SVG'}
               exportFunc={handleDownloadChartAsSVG}
               />
             <Button onClick={handleMailToTSU} className={classes.fabsvg} variant="contained" color="default" startIcon={<MailOutlineIcon />}>
