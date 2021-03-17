@@ -77,7 +77,7 @@ class SandboxGeneratePlotData {
     const sandboxHumanReadable = new SandboxHumanReadable();
     const seasonHumanReadable = sandboxHumanReadable.getSeasonPullDownText(this.season);
     if (this.season !== 'yearly') {
-      if (this.season === 'ann') return '';
+      if (this.season === 'ann') return 'annually';
       return seasonHumanReadable.toLowerCase().split(' ')[0];
     }
     return 'year';
@@ -104,6 +104,20 @@ class SandboxGeneratePlotData {
     }
     // default
     return 'for the';
+  }
+
+  // creates units days, °F, " for annotation on Average line
+  textUnitsWords() {
+    // seasonal units for inches of precip and degrees farhnheit
+    if (this.season !== 'yearly') {
+      return this.chartType === 'Precipitation' ? 'inches' : '°F';
+    }
+    // threshold which is days in the regions locatipon
+    if (this.season === 'yearly') {
+      return ' days';
+    }
+    // deault to days
+    return ' days';
   }
 
   // creates units days, °F, " for annotation on Average line
@@ -183,7 +197,8 @@ class SandboxGeneratePlotData {
     // seasonal legend text
     if (this.season !== 'yearly') {
       const seasonText = this.hoverTemplateSeasonText();
-      const legendPerText = `days - ${seasonText.split(' ')[0].toLowerCase()}`;
+      const unitText = this.textUnitsWords();
+      const legendPerText = `${unitText} - ${seasonText.split(' ')[0].toLowerCase()}`;
       return legendPerText;
     }
     // threshold legend text
@@ -615,7 +630,7 @@ class SandboxGeneratePlotData {
     return {
       uid: SandboxGeneratePlotData.uuidv(),
       mode: 'lines',
-      name: `Average days ${this.legendPerText}`,
+      name: `Average ${this.textUnitsWords()} ${this.legendPerText}`,
       type: 'scatter',
       x: this.xvals,
       y: this.getYvalues(),
@@ -640,7 +655,7 @@ class SandboxGeneratePlotData {
     return {
       uid: SandboxGeneratePlotData.uuidv(),
       mode: 'lines',
-      name: `Average days ${this.legendPerText}`,
+      name: `Average ${this.textUnitsWords()} ${this.legendPerText}`,
       type: 'bar',
       x: this.xvals,
       y: this.getYvalues(),

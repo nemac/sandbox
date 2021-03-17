@@ -5,10 +5,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
-
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import TimelineIcon from '@material-ui/icons/Timeline';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
+
+import SandboxCustomSizeExport from './SandboxCustomSizeExport';
 
 const useStyles = makeStyles((theme) => ({
   sandboxExportsButtonBox: {
@@ -116,6 +117,9 @@ export default function Selector(props) {
   const { handleMailToTSUa } = props;
   const { lineChart } = props;
 
+  const [openCustomSizeSVG, setOpenCustomSizeSVG] = React.useState(false);
+  const [openCustomSizePNG, setOpenCustomSizePNG] = React.useState(false);
+
   const setSelected = (whichchart, me) => {
     switch (lineChart) {
       case 'year':
@@ -157,20 +161,42 @@ export default function Selector(props) {
     handleSwtichYearlyToLinea(event.target.value);
   };
 
-  const handleDownloadChartAsPNG = (event) => {
-    handleDownloadChartAsPNGa();
+  const handleDownloadChartAsPNG = (svgSelector, width, height) => {
+    handleDownloadChartAsPNGa(svgSelector, width, height);
   };
 
   const handleDownloadChartAsCSV = (event) => {
     handleDownloadChartAsCSVa();
   };
 
-  const handleDownloadChartAsSVG = (event) => {
-    handleDownloadChartAsSVGa();
+  const handleDownloadChartAsSVG = (svgSelector, width, height) => {
+    handleDownloadChartAsSVGa(svgSelector, width, height);
   };
 
   const handleMailToTSU = (event) => {
     handleMailToTSUa();
+  };
+
+  // handles open of custom size export
+  const handleCustomSizeOpenSVG = () => {
+    window.dispatchEvent(new Event('resize'));
+    setOpenCustomSizeSVG(true);
+  };
+
+  // handles close of custom size export
+  const handleCustomSizeCloseSVG = () => {
+    setOpenCustomSizeSVG(false);
+  };
+
+  // handles close of custom size export
+  const handleCustomSizeOpenPNG = () => {
+    window.dispatchEvent(new Event('resize'));
+    setOpenCustomSizePNG(true);
+  };
+
+  // handles close of custom size export
+  const handleCustomSizeClosePNG = () => {
+    setOpenCustomSizePNG(false);
   };
 
   return (
@@ -193,12 +219,26 @@ export default function Selector(props) {
             <Button onClick={handleDownloadChartAsCSV} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveAltIcon />}>
               .CSV
             </Button>
-            <Button onClick={handleDownloadChartAsPNG} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveAltIcon />}>
+            <Button onClick={handleCustomSizeOpenPNG} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveAltIcon />}>
               .PNG
             </Button>
-            <Button onClick={handleDownloadChartAsSVG} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveAltIcon />}>
+            <SandboxCustomSizeExport
+              open={openCustomSizePNG}
+              handleCustomSizeClose={handleCustomSizeClosePNG}
+              exportType={'PNG'}
+              exportHeading={'Export chart to PNG'}
+              exportFunc={handleDownloadChartAsPNG}
+              />
+            <Button onClick={handleCustomSizeOpenSVG} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveAltIcon />}>
               .SVG
             </Button>
+            <SandboxCustomSizeExport
+              open={openCustomSizeSVG}
+              handleCustomSizeClose={handleCustomSizeCloseSVG}
+              exportType={'SVG'}
+              exportHeading={'Export chart to SVG'}
+              exportFunc={handleDownloadChartAsSVG}
+              />
             <Button onClick={handleMailToTSU} className={classes.fabsvg} variant="contained" color="default" startIcon={<MailOutlineIcon />}>
               To TSU
             </Button>

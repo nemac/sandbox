@@ -896,50 +896,6 @@ export default function SandboxControls() {
     return node;
   };
 
-  // forces chart resize so custom width and heigh svg works correctly
-  const fixedSVG = (svgSelector, widthARG = 1000, heightARG = 500) => {
-    // get ploltly div
-    const plotHolderDiv = document.querySelector('.makeStyles-sandboxChartRegionBox-6');
-    const plotRegionDiv = document.querySelector('.user-select-none.svg-container');
-
-    // get default for heights and widths
-    const originalHolderWidth = plotHolderDiv.getAttribute('width');
-    const originalHolderHeight= plotHolderDiv.getAttribute('height');
-    const originalWidth = plotRegionDiv.getAttribute('width');
-    const originalHeight= plotRegionDiv.getAttribute('height');
-
-    // set width to fixed width
-    if (widthARG > 0 && heightARG > 0) {
-
-      // set divs to fixed width for standard or custom suze
-      plotHolderDiv.style.width = `${widthARG}px`;
-      plotRegionDiv.style.width = `${widthARG}px`;
-      plotHolderDiv.style.height = `${heightARG}px`;
-      plotRegionDiv.style.height = `${heightARG}px`
-
-      // force window reszize so plotly re-renders the chart at fixed dimensions
-      window.dispatchEvent(new Event('resize'));
-
-      // delay creation of svg export while resize happens
-      setTimeout(() => {
-        // create download file
-        const base64doc = convertToOneSvg(svgSelector);
-        donwloadFile(base64doc);
-
-        // reset dimensions back to orginal dimensions
-        plotHolderDiv.style.width = originalHolderWidth;
-        plotRegionDiv.style.width = originalWidth;
-        plotHolderDiv.style.height = originalHolderHeight;
-        plotRegionDiv.style.height = originalHeight;
-        
-        // force window reszize so plotly re-renders the chart at fixed dimensions
-        window.dispatchEvent(new Event('resize'));
-        return
-      }, 500);
-    }
-    return
-  }
-
   // hack to export svg, not using using pure JS
   const convertToOneSvg = (svgSelector) => {
     // find and covnert html all plotly chart nodes
@@ -954,7 +910,7 @@ export default function SandboxControls() {
 
     // set default for height and width
     const SVGWidth = svgs[0].getAttribute('width');
-    const SVGHeight= svgs[0].getAttribute('height');
+    const SVGHeight = svgs[0].getAttribute('height');
 
     // set new svg element getAttributes to match the first plotly svg element
     // this will ensure width/height style and all the other settings match in the export
@@ -1036,68 +992,152 @@ export default function SandboxControls() {
     return null;
   };
 
-  // convert svg base64 data to png
-  const convertToPng = (svgSelector) => {
-    // fiond and covnert html all plotly chart nodes
-    // (plotly puts legends and the chart in seperate nodes)
-    // to an JS array
-    const svgs = Array.from(document.querySelectorAll(svgSelector));
-    const width = svgs[0].getAttribute('width');
-    const height = svgs[0].getAttribute('height');
-    const mergedDiv = document.createElement('div');
-    mergedDiv.setAttribute('id', 'merged-div');
+  // create svg and although for custom size
+  const exportSVG = (svgSelector = '.js-plotly-plot .main-svg', widthARG = 1000, heightARG = 500) => {
+    // do not change width if dimensions changed by user default setting
+    const svgElem = document.querySelector(svgSelector);
+    if (svgElem) {
+      const svgwidth = svgElem.getAttribute('width');
+      const svgheight = svgElem.getAttribute('height');
+      if (svgwidth === widthARG && svgheight === heightARG) {
+        const base64doc = convertToOneSvg(svgSelector);
+        donwloadFile(base64doc);
+        return null;
+      }
+    }
 
-    // create a new svg element
-    const mergedSVG = document.createElement('svg');
+    // get ploltly div
+    const plotHolderDiv = document.querySelector('.makeStyles-sandboxChartRegionBox-6');
+    const plotRegionDiv = document.querySelector('.user-select-none.svg-container');
 
-    // set new svg element getAttributes to match the first plotly svg element
-    // this will ensure width/height style and all the other settings match in the export
-    mergedSVG.setAttribute('xmlns', svgs[0].getAttribute('xmlns'));
-    mergedSVG.setAttribute('xmlns:xlink', svgs[0].getAttribute('xmlns:xlink'));
-    mergedSVG.setAttribute('width', width);
-    mergedSVG.setAttribute('height', height);
-    mergedSVG.setAttribute('style', svgs[0].getAttribute('style'));
-    // append the svg to the div - this is needed to export the svg tet properly
-    mergedDiv.appendChild(mergedSVG);
+    // get default for heights and widths
+    const originalHolderWidth = plotHolderDiv.getAttribute('width');
+    const originalHolderHeight = plotHolderDiv.getAttribute('height');
+    const originalWidth = plotRegionDiv.getAttribute('width');
+    const originalHeight = plotRegionDiv.getAttribute('height');
 
-    // iterate all the plotly nodes and merge them into the same svg node
-    // this forces all the svg into one dom element to export correctly
-    svgs.forEach((svgnode) => {
-      const content = Array.from(svgnode.childNodes);
-      content.forEach((svgele) => {
-        const node = svgele.cloneNode(true);
-        const newNode = removeBreaks(node);
-        mergedSVG.appendChild(newNode);
-      });
-    });
+    // set width to fixed width
+    if (widthARG > 0 && heightARG > 0) {
+      // set divs to fixed width for standard or custom suze
+      plotHolderDiv.style.width = `${widthARG}px`;
+      plotRegionDiv.style.width = `${widthARG}px`;
+      plotHolderDiv.style.height = `${heightARG}px`;
+      plotRegionDiv.style.height = `${heightARG}px`;
 
-    const blob = new Blob([mergedSVG.outerHTML], { type: 'image/svg+xml;charset=utf-8' });
-    const URL = window.URL || window.webkitURL || window;
-    const blobURL = URL.createObjectURL(blob);
-    const image = new Image();
+      // force window reszize so plotly re-renders the chart at fixed dimensions
+      window.dispatchEvent(new Event('resize'));
 
-    image.onload = () => {
-      const canvas = document.createElement('canvas');
-      canvas.width = width;
-      canvas.height = height;
-      const context = canvas.getContext('2d');
-      context.drawImage(image, 0, 0, width, height);
-      const png = canvas.toDataURL();
-      donwloadFile(png, 'png');
-    };
-    image.src = blobURL;
+      // delay creation of svg export while resize happens
+      setTimeout(() => {
+        // create download file
+        const base64doc = convertToOneSvg(svgSelector);
+        donwloadFile(base64doc);
+
+        // reset dimensions back to orginal dimensions
+        plotHolderDiv.style.width = originalHolderWidth;
+        plotRegionDiv.style.width = originalWidth;
+        plotHolderDiv.style.height = originalHolderHeight;
+        plotRegionDiv.style.height = originalHeight;
+
+        // force window reszize so plotly re-renders the chart at fixed dimensions
+        window.dispatchEvent(new Event('resize'));
+        return null;
+      }, 500);
+    }
+    return null;
   };
 
-  // handles downloads chart as SVG
-  const handleDownloadChartAsSVG = () => {
-    const base64doc = convertToOneSvg('.js-plotly-plot .main-svg');
-    donwloadFile(base64doc);
+  // convert svg base64 data to png
+  const convertToPng = (svgSelector = '.js-plotly-plot .main-svg', widthARG = 1000, heightARG = 500) => {
+    // get ploltly div
+    const plotHolderDiv = document.querySelector('.makeStyles-sandboxChartRegionBox-6');
+    const plotRegionDiv = document.querySelector('.user-select-none.svg-container');
+
+    // get default for heights and widths
+    const originalHolderWidth = plotHolderDiv.getAttribute('width');
+    const originalHolderHeight = plotHolderDiv.getAttribute('height');
+    const originalWidth = plotRegionDiv.getAttribute('width');
+    const originalHeight = plotRegionDiv.getAttribute('height');
+
+    // only do this of dimensions are different
+    if (widthARG > 0 && heightARG > 0) {
+      // set divs to fixed width for standard or custom suze
+      plotHolderDiv.style.width = `${widthARG}px`;
+      plotRegionDiv.style.width = `${widthARG}px`;
+      plotHolderDiv.style.height = `${heightARG}px`;
+      plotRegionDiv.style.height = `${heightARG}px`;
+
+      // force window reszize so plotly re-renders the chart at fixed dimensions
+      window.dispatchEvent(new Event('resize'));
+    }
+
+    // delay creation of svg export while resize happens
+    setTimeout(() => {
+      // find and covnert html all plotly chart nodes
+      // (plotly puts legends and the chart in seperate nodes)
+      // to an JS array
+      const svgs = Array.from(document.querySelectorAll(svgSelector));
+      const width = svgs[0].getAttribute('width');
+      const height = svgs[0].getAttribute('height');
+
+      const mergedDiv = document.createElement('div');
+      mergedDiv.setAttribute('id', 'merged-div');
+
+      // create a new svg element
+      const mergedSVG = document.createElement('svg');
+
+      // set new svg element getAttributes to match the first plotly svg element
+      // this will ensure width/height style and all the other settings match in the export
+      mergedSVG.setAttribute('xmlns', svgs[0].getAttribute('xmlns'));
+      mergedSVG.setAttribute('xmlns:xlink', svgs[0].getAttribute('xmlns:xlink'));
+      mergedSVG.setAttribute('width', width);
+      mergedSVG.setAttribute('height', height);
+      mergedSVG.setAttribute('style', svgs[0].getAttribute('style'));
+      // append the svg to the div - this is needed to export the svg tet properly
+      mergedDiv.appendChild(mergedSVG);
+
+      // iterate all the plotly nodes and merge them into the same svg node
+      // this forces all the svg into one dom element to export correctly
+      svgs.forEach((svgnode) => {
+        const content = Array.from(svgnode.childNodes);
+        content.forEach((svgele) => {
+          const node = svgele.cloneNode(true);
+          const newNode = removeBreaks(node);
+          mergedSVG.appendChild(newNode);
+        });
+      });
+
+      const blob = new Blob([mergedSVG.outerHTML], { type: 'image/svg+xml;charset=utf-8' });
+      const URL = window.URL || window.webkitURL || window;
+      const blobURL = URL.createObjectURL(blob);
+
+      const image = new Image();
+      image.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const context = canvas.getContext('2d');
+        context.drawImage(image, 0, 0, width, height);
+        const png = canvas.toDataURL();
+        donwloadFile(png, 'png');
+
+        // reset dimensions back to orginal dimensions
+        plotHolderDiv.style.width = originalHolderWidth;
+        plotRegionDiv.style.width = originalWidth;
+        plotHolderDiv.style.height = originalHolderHeight;
+        plotRegionDiv.style.height = originalHeight;
+
+        // force window reszize so plotly re-renders the chart at fixed dimensions
+        window.dispatchEvent(new Event('resize'));
+      };
+      image.src = blobURL;
+    }, 500);
   };
 
   // handles downloads chart as SVG with fixed size
-  const handleDownloadChartAsSVGFixedSize = () => {
-    fixedSVG('.js-plotly-plot .main-svg', 1250, 600)
-    };
+  const handleDownloadChartAsSVG = (svgSelector, width, height) => {
+    exportSVG(svgSelector, width, height);
+  };
 
   // handles mail to TSU
   const handleMailToTSU = () => {
@@ -1129,8 +1169,8 @@ export default function SandboxControls() {
   };
 
   // handles downloads chart as PNG
-  const handleDownloadChartAsPNG = () => {
-    convertToPng('.js-plotly-plot .main-svg');
+  const handleDownloadChartAsPNG = (svgSelector, width, height) => {
+    convertToPng(svgSelector, width, height);
   };
 
   // convert json data to csv
@@ -1182,7 +1222,7 @@ export default function SandboxControls() {
           <Grid container spacing={0} justify='flex-start' direction={'row'} className={classes.sandboxSelectionArea}>
             <Grid item xs={12} className={classes.sandboxHeader} width='100%' >
               <Box fontWeight='fontWeightBold' mt={1} p={0} display='flex' flexWrap='nowrap' justifyContent='flex-start'>
-                <Box onClick={handleDownloadChartAsSVGFixedSize} px={1} fontSize='h4.fontSize' >
+                <Box onClick={handleDownloadChartAsSVG} px={1} fontSize='h4.fontSize' >
                   <InsertChartOutlinedIcon fontSize='large' className={'sandbox-header-icon'} />
                 </Box>
                 <Box px={1} fontSize='h5.fontSize' >NCA Sandbox - Climate Charts</Box>
