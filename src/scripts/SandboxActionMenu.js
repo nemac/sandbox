@@ -5,12 +5,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
-
-import SandboxCustomSizeExport from './SandboxCustomSizeExport';
-
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import TimelineIcon from '@material-ui/icons/Timeline';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
+
+import SandboxCustomSizeExport from './SandboxCustomSizeExport';
 
 const useStyles = makeStyles((theme) => ({
   sandboxExportsButtonBox: {
@@ -225,7 +224,6 @@ export default function Selector(props) {
             </Button>
             <SandboxCustomSizeExport
               open={openCustomSizePNG}
-              handleCustomSizeOpen={handleCustomSizeOpenPNG}
               handleCustomSizeClose={handleCustomSizeClosePNG}
               exportType={'PNG'}
               exportHeading={'Export chart to PNG'}
@@ -236,7 +234,6 @@ export default function Selector(props) {
             </Button>
             <SandboxCustomSizeExport
               open={openCustomSizeSVG}
-              handleCustomSizeOpen={handleCustomSizeOpenSVG}
               handleCustomSizeClose={handleCustomSizeCloseSVG}
               exportType={'SVG'}
               exportHeading={'Export chart to SVG'}

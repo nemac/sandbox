@@ -7,88 +7,86 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
-import CancelIcon from '@material-ui/icons/Cancel';
 
 import SandboxDefaultExportSizes from '../configs/SandboxDefaultExportSizes';
 
 const darkGrey = '#E6E6E6';
 
 const useStyles = makeStyles((theme) => ({
-    exportModal: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center'
+  exportModal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  exportModalDiv: {
+    width: '400px',
+    [theme.breakpoints.down('sm')]: {
+      width: '80%'
     },
-    exportModalDiv: {
-      width: '400px',
-      [theme.breakpoints.down('sm')]: {
-        width: '80%'
-      },
-      backgroundColor: theme.palette.background.paper,
-      border: '0px solid transparent',
-      outline: 'unset',
-      borderRadius: '4px',
-      padding: theme.spacing(2, 4, 3),
-    },
-    exportHeaderText: {
-      paddingBottom: theme.spacing(1),
-      borderBottom: `1px solid ${darkGrey}`,
-    },
-    exportContainer: {
-      paddingTop: theme.spacing(2),
-      display: 'flex',
-      justifyContent: 'flex-end'
-    },
-    exportStart: {
-      display: 'flex',
-      marginRight: 'auto'
-    },
-    exportEnd: {
-      display: 'flex'
-    },
-    exportDescriptionText: {
-      marginBottom: theme.spacing(2),
-      [theme.breakpoints.down('sm')]: {
-        fontSize: '.75em'
-      }
-    },
-    exportButtons: {
-      marginLeft: theme.spacing(1),
-      marginRight: theme.spacing(1),
-    },
-    exportForm: {
-      display: 'flex',
-      flexDirection: 'row',
-      [theme.breakpoints.down('sm')]: {
-        flexDirection: 'column',
-      },
-      alignItems: 'flex-start',
-      justifyContent: 'flex-start',
-      width: '100%',
-      marginTop: theme.spacing(2),
-      marginBottom: theme.spacing(2),
-    },
-    exportInput: {
-      marginTop: theme.spacing(3),
-      marginRight: theme.spacing(2),
-      width: '45%',
-      [theme.breakpoints.down('sm')]: {
-        width: '100%'
-      }
-    },
-    exportSmallButtonText: {
-      marginLeft: theme.spacing(1)
-    },
-    exportHeaderIcon: {
-      fontSize: '1.65rem',
-      marginBottom: theme.spacing(-.3)
+    backgroundColor: theme.palette.background.paper,
+    border: '0px solid transparent',
+    outline: 'unset',
+    borderRadius: '4px',
+    padding: theme.spacing(2, 4, 3)
+  },
+  exportHeaderText: {
+    paddingBottom: theme.spacing(1),
+    borderBottom: `1px solid ${darkGrey}`
+  },
+  exportContainer: {
+    paddingTop: theme.spacing(2),
+    display: 'flex',
+    justifyContent: 'flex-end'
+  },
+  exportStart: {
+    display: 'flex',
+    marginRight: 'auto'
+  },
+  exportEnd: {
+    display: 'flex'
+  },
+  exportDescriptionText: {
+    marginBottom: theme.spacing(2),
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '.75em'
     }
+  },
+  exportButtons: {
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1)
+  },
+  exportForm: {
+    display: 'flex',
+    flexDirection: 'row',
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column'
+    },
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    width: '100%',
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2)
+  },
+  exportInput: {
+    marginTop: theme.spacing(3),
+    marginRight: theme.spacing(2),
+    width: '45%',
+    [theme.breakpoints.down('sm')]: {
+      width: '100%'
+    }
+  },
+  exportSmallButtonText: {
+    marginLeft: theme.spacing(1)
+  },
+  exportHeaderIcon: {
+    fontSize: '1.65rem',
+    marginBottom: theme.spacing(-0.3)
+  }
 }));
 
 export default function SandboxCustomSizeExport(props) {
   const classes = useStyles();
   const { open } = props;
-  const { handleCustomSizeOpen } = props;
   const { handleCustomSizeClose } = props;
   const { exportFunc } = props;
   const { exportHeading } = props;
@@ -118,31 +116,25 @@ export default function SandboxCustomSizeExport(props) {
 
   // set the default state
   const dimensions = defaultDimensions();
-  const [ exportWidth, setExportWidth] = useState(dimensions.width);
-  const [ exportHeight, setExportHeight] = useState(dimensions.height);
+  const [exportWidth, setExportWidth] = useState(dimensions.width);
+  const [exportHeight, setExportHeight] = useState(dimensions.height);
 
-  const [ wysiwygWidth, setWysiwygWidth] = useState(dimensions.width);
-  const [ wysiwygHeight, setWysiwygHeight] = useState(dimensions.height);
-
+  const [wysiwygWidth, setWysiwygWidth] = useState(dimensions.width);
+  const [wysiwygHeight, setWysiwygHeight] = useState(dimensions.height);
 
   // only run when the compnent mounts
-  React.useEffect(() => {
+  useEffect(() => {
     // on resize re calc dimensions
     window.addEventListener('resize', () => {
-      const dimensions = defaultDimensions();
-      setExportWidth(parseInt(dimensions.width, 10));
-      setExportHeight(parseInt(dimensions.height, 10));
-      setWysiwygWidth(parseInt(dimensions.width, 10));
-      setWysiwygHeight(parseInt(dimensions.height, 10));
+      const currentDimensions = defaultDimensions();
+      setExportWidth(parseInt(currentDimensions.width, 10));
+      setExportHeight(parseInt(currentDimensions.height, 10));
+      setWysiwygWidth(parseInt(currentDimensions.width, 10));
+      setWysiwygHeight(parseInt(currentDimensions.height, 10));
     });
     // passing an empty array as the dependencies of the effect will cause it to run
     //   the listener to be added only one time
   }, []);
-
-  // handle export modal open event
-  const handleOpen = (event) => {
-    handleCustomSizeOpen(true);
-  };
 
   // handle export modal close event
   const handleClose = (event) => {
@@ -150,72 +142,126 @@ export default function SandboxCustomSizeExport(props) {
   };
 
   // handle export modal expor the chart event
-  const handleExportClick= () => {
+  const handleExportClick = () => {
     exportFunc(svgSelector, exportWidth, exportHeight);
     // adds timeout for resizeing of image.
     //  without the time and the mouse could be over the graph
     //  and result on hover text shpwing up on exprt
-    setTimeout(() => {handleClose();}, 650);
+    setTimeout(() => { handleClose(); }, 650);
   };
 
   // handle default dimension change
   const handlePresetDimensionsWidthChange = (event) => {
     setExportWidth(parseInt(event.currentTarget.value, 10));
-  }
+  };
 
   // handle default dimension change
   const handlePresetDimensionsHeightChange = (event) => {
     setExportHeight(parseInt(event.currentTarget.value, 10));
-  }
+  };
 
   // get dimension from config
   const getDimensions = (name) => {
     const dimensionFromButton = sandboxDefaultExportSizes.filter((value) => (value.name === name));
     return dimensionFromButton[0].dimensions;
-  }
+  };
 
   // handle default dimension click
   const handlePresetDimensionsClick = (event) => {
     // Wysiwyg - dimensions will be the same as the website.
     if (event.currentTarget.value === 'Default') {
-      const dimensions = defaultDimensions();
-      setExportWidth(parseInt(dimensions.width, 10));
-      setExportHeight(parseInt(dimensions.height, 10));
+      const defaultDimensionswysiwyg = defaultDimensions();
+      setExportWidth(parseInt(defaultDimensionswysiwyg.width, 10));
+      setExportHeight(parseInt(defaultDimensionswysiwyg.height, 10));
       // dimensions will match a default from config - ../configs/SandboxDefaultExportSizes
     } else {
-      const dimensions = getDimensions(event.currentTarget.value);
-      setExportWidth(parseInt(dimensions.width, 10));
-      setExportHeight(parseInt(dimensions.height, 10));
+      const configDimensions = getDimensions(event.currentTarget.value);
+      setExportWidth(parseInt(configDimensions.width, 10));
+      setExportHeight(parseInt(configDimensions.height, 10));
     }
   };
 
   return (
-      <Modal disableBackdropClick disableEscapeKeyDown className={classes.exportModal} classes={{ focused: classes.exportModal }} open={open} onClose={handleClose} aria-labelledby='simple-modal-title' aria-describedby='simple-modal-description' >
+      <Modal
+        disableBackdropClick
+        disableEscapeKeyDown
+        className={classes.exportModal}
+        classes={{ focused: classes.exportModal }}
+        open={open}
+        onClose={handleClose}
+        aria-labelledby='simple-modal-title'
+        aria-describedby='simple-modal-description' >
         <div className={classes.exportModalDiv}>
-          <h2 id='simple-modal-title' className={classes.exportHeaderText}><SaveAltIcon className={classes.exportHeaderIcon}/> {exportHeading}</h2>
+          <h2 id='simple-modal-title' className={classes.exportHeaderText}>
+            <SaveAltIcon className={classes.exportHeaderIcon}/> {exportHeading}
+          </h2>
           <p id='simple-modal-description' className={classes.exportDescriptionText}>
-            Export the chart to a custom size or use one of the predetermined dimensions. The default option will match the what the
-            dimensions you see on the page (WYSIWYG).
+            Export the chart to a custom size or use one of the
+            predetermined dimensions. The default option will match the
+            what the dimensions you see on the page (WYSIWYG).
           </p>
-          <Button className={classes.exportButtons} onClick={handlePresetDimensionsClick} variant='contained' color='primary' value='Default'>Default <small className={classes.exportSmallButtonText}>({wysiwygWidth} x {wysiwygHeight})</small></Button>
-          <Button className={classes.exportButtons} onClick={handlePresetDimensionsClick}  variant='outlined' color='primary' value='NCA'>NCA <small className={classes.exportSmallButtonText}>({getDimensions('NCA').width} x {getDimensions('NCA').height})</small></Button>
+          <Button
+            className={classes.exportButtons}
+            onClick={handlePresetDimensionsClick}
+            variant='contained'
+            color='primary'
+            value='Default'>
+              Default
+              <small className={classes.exportSmallButtonText}>
+                ({wysiwygWidth} x {wysiwygHeight})
+              </small>
+          </Button>
+          <Button
+            className={classes.exportButtons}
+            onClick={handlePresetDimensionsClick}
+            variant='outlined'
+            color='primary'
+            value='NCA'>
+              NCA
+              <small className={classes.exportSmallButtonText}>
+                ({getDimensions('NCA').width} x {getDimensions('NCA').height})
+              </small>
+          </Button>
 
           <FormControl className={classes.exportForm}>
-            <TextField className={classes.exportInput} onChange={handlePresetDimensionsWidthChange} id='outlined-number-width' variant='outlined' label='Width' type='number'
+            <TextField
+              className={classes.exportInput}
+              onChange={handlePresetDimensionsWidthChange}
+              id='outlined-number-width'
+              variant='outlined'
+              label='Width'
+              type='number'
               value={exportWidth}
-              InputLabelProps={{ shrink: true, }}
-              InputProps={{endAdornment: <InputAdornment position='end'>PX</InputAdornment>,inputProps: { min: 250, max: 5000 }}}/>
-            <TextField className={classes.exportInput} onChange={handlePresetDimensionsHeightChange} id='outlined-number-height' variant='outlined' label='Height' type='number'
+              InputLabelProps={{ shrink: true }}
+              InputProps={{ endAdornment: <InputAdornment position='end'>PX</InputAdornment>, inputProps: { min: 250, max: 5000 } }}/>
+            <TextField
+              className={classes.exportInput}
+              onChange={handlePresetDimensionsHeightChange}
+              id='outlined-number-height'
+              variant='outlined'
+              label='Height'
+              type='number'
               value={exportHeight}
-              InputLabelProps={{ shrink: true, }}
-              InputProps={{endAdornment: <InputAdornment position='end'>PX</InputAdornment>,inputProps: { min: 250, max: 5000 }}} />
+              InputLabelProps={{ shrink: true }}
+              InputProps={{ endAdornment: <InputAdornment position='end'>PX</InputAdornment>, inputProps: { min: 250, max: 5000 } }} />
           </FormControl>
           <div className={classes.exportContainer}>
             <div className={classes.exportStart}>
-              <Button className={classes.exportButtons} onClick={handleExportClick} color='primary' variant='contained' startIcon={<SaveAltIcon />}>Export {exportType}</Button>
+              <Button
+                className={classes.exportButtons}
+                onClick={handleExportClick}
+                color='primary'
+                variant='contained'
+                startIcon={<SaveAltIcon />}>Export {exportType}
+              </Button>
             </div>
             <div className={classes.exportEnd}>
-              <Button className={classes.exportButtons} onClick={handleClose} color='default' variant='contained' >Cancel</Button>
+              <Button
+                className={classes.exportButtons}
+                onClick={handleClose}
+                color='default'
+                variant='contained' >Cancel
+              </Button>
             </div>
           </div>
         </div>
@@ -224,7 +270,6 @@ export default function SandboxCustomSizeExport(props) {
 }
 
 SandboxCustomSizeExport.propTypes = {
-  handleCustomSizeOpen: PropTypes.func,
   handleCustomSizeClose: PropTypes.func,
   exportFunc: PropTypes.func,
   exportHeading: PropTypes.string,

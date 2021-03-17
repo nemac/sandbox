@@ -896,62 +896,6 @@ export default function SandboxControls() {
     return node;
   };
 
-  // create svg and although for custom size
-  const exportSVG = (svgSelector = '.js-plotly-plot .main-svg', widthARG = 1000, heightARG = 500) => {
-    // do not change width if dimensions changed by user default setting
-    const svgElem = document.querySelector(svgSelector);
-    if (svgElem) {
-      const svgwidth = svgElem.getAttribute('width');
-      const svgheight = svgElem.getAttribute('height');
-      if (svgwidth === widthARG && svgheight === heightARG) {
-        const base64doc = convertToOneSvg(svgSelector);
-        donwloadFile(base64doc);
-        return null;
-      }
-    }
-
-    // get ploltly div
-    const plotHolderDiv = document.querySelector('.makeStyles-sandboxChartRegionBox-6');
-    const plotRegionDiv = document.querySelector('.user-select-none.svg-container');
-
-    // get default for heights and widths
-    const originalHolderWidth = plotHolderDiv.getAttribute('width');
-    const originalHolderHeight= plotHolderDiv.getAttribute('height');
-    const originalWidth = plotRegionDiv.getAttribute('width');
-    const originalHeight= plotRegionDiv.getAttribute('height');
-
-    // set width to fixed width
-    if (widthARG > 0 && heightARG > 0) {
-
-      // set divs to fixed width for standard or custom suze
-      plotHolderDiv.style.width = `${widthARG}px`;
-      plotRegionDiv.style.width = `${widthARG}px`;
-      plotHolderDiv.style.height = `${heightARG}px`;
-      plotRegionDiv.style.height = `${heightARG}px`
-
-      // force window reszize so plotly re-renders the chart at fixed dimensions
-      window.dispatchEvent(new Event('resize'));
-
-      // delay creation of svg export while resize happens
-      setTimeout(() => {
-        // create download file
-        const base64doc = convertToOneSvg(svgSelector);
-        donwloadFile(base64doc);
-
-        // reset dimensions back to orginal dimensions
-        plotHolderDiv.style.width = originalHolderWidth;
-        plotRegionDiv.style.width = originalWidth;
-        plotHolderDiv.style.height = originalHolderHeight;
-        plotRegionDiv.style.height = originalHeight;
-
-        // force window reszize so plotly re-renders the chart at fixed dimensions
-        window.dispatchEvent(new Event('resize'));
-        return null;
-      }, 500);
-    }
-    return null;
-  }
-
   // hack to export svg, not using using pure JS
   const convertToOneSvg = (svgSelector) => {
     // find and covnert html all plotly chart nodes
@@ -966,7 +910,7 @@ export default function SandboxControls() {
 
     // set default for height and width
     const SVGWidth = svgs[0].getAttribute('width');
-    const SVGHeight= svgs[0].getAttribute('height');
+    const SVGHeight = svgs[0].getAttribute('height');
 
     // set new svg element getAttributes to match the first plotly svg element
     // this will ensure width/height style and all the other settings match in the export
@@ -1048,6 +992,61 @@ export default function SandboxControls() {
     return null;
   };
 
+  // create svg and although for custom size
+  const exportSVG = (svgSelector = '.js-plotly-plot .main-svg', widthARG = 1000, heightARG = 500) => {
+    // do not change width if dimensions changed by user default setting
+    const svgElem = document.querySelector(svgSelector);
+    if (svgElem) {
+      const svgwidth = svgElem.getAttribute('width');
+      const svgheight = svgElem.getAttribute('height');
+      if (svgwidth === widthARG && svgheight === heightARG) {
+        const base64doc = convertToOneSvg(svgSelector);
+        donwloadFile(base64doc);
+        return null;
+      }
+    }
+
+    // get ploltly div
+    const plotHolderDiv = document.querySelector('.makeStyles-sandboxChartRegionBox-6');
+    const plotRegionDiv = document.querySelector('.user-select-none.svg-container');
+
+    // get default for heights and widths
+    const originalHolderWidth = plotHolderDiv.getAttribute('width');
+    const originalHolderHeight = plotHolderDiv.getAttribute('height');
+    const originalWidth = plotRegionDiv.getAttribute('width');
+    const originalHeight = plotRegionDiv.getAttribute('height');
+
+    // set width to fixed width
+    if (widthARG > 0 && heightARG > 0) {
+      // set divs to fixed width for standard or custom suze
+      plotHolderDiv.style.width = `${widthARG}px`;
+      plotRegionDiv.style.width = `${widthARG}px`;
+      plotHolderDiv.style.height = `${heightARG}px`;
+      plotRegionDiv.style.height = `${heightARG}px`;
+
+      // force window reszize so plotly re-renders the chart at fixed dimensions
+      window.dispatchEvent(new Event('resize'));
+
+      // delay creation of svg export while resize happens
+      setTimeout(() => {
+        // create download file
+        const base64doc = convertToOneSvg(svgSelector);
+        donwloadFile(base64doc);
+
+        // reset dimensions back to orginal dimensions
+        plotHolderDiv.style.width = originalHolderWidth;
+        plotRegionDiv.style.width = originalWidth;
+        plotHolderDiv.style.height = originalHolderHeight;
+        plotRegionDiv.style.height = originalHeight;
+
+        // force window reszize so plotly re-renders the chart at fixed dimensions
+        window.dispatchEvent(new Event('resize'));
+        return null;
+      }, 500);
+    }
+    return null;
+  };
+
   // convert svg base64 data to png
   const convertToPng = (svgSelector = '.js-plotly-plot .main-svg', widthARG = 1000, heightARG = 500) => {
     // get ploltly div
@@ -1056,9 +1055,9 @@ export default function SandboxControls() {
 
     // get default for heights and widths
     const originalHolderWidth = plotHolderDiv.getAttribute('width');
-    const originalHolderHeight= plotHolderDiv.getAttribute('height');
+    const originalHolderHeight = plotHolderDiv.getAttribute('height');
     const originalWidth = plotRegionDiv.getAttribute('width');
-    const originalHeight= plotRegionDiv.getAttribute('height');
+    const originalHeight = plotRegionDiv.getAttribute('height');
 
     // only do this of dimensions are different
     if (widthARG > 0 && heightARG > 0) {
@@ -1066,7 +1065,7 @@ export default function SandboxControls() {
       plotHolderDiv.style.width = `${widthARG}px`;
       plotRegionDiv.style.width = `${widthARG}px`;
       plotHolderDiv.style.height = `${heightARG}px`;
-      plotRegionDiv.style.height = `${heightARG}px`
+      plotRegionDiv.style.height = `${heightARG}px`;
 
       // force window reszize so plotly re-renders the chart at fixed dimensions
       window.dispatchEvent(new Event('resize'));
@@ -1137,7 +1136,7 @@ export default function SandboxControls() {
 
   // handles downloads chart as SVG with fixed size
   const handleDownloadChartAsSVG = (svgSelector, width, height) => {
-    exportSVG(svgSelector, width, height)
+    exportSVG(svgSelector, width, height);
   };
 
   // handles mail to TSU

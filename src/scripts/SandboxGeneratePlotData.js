@@ -120,7 +120,6 @@ class SandboxGeneratePlotData {
     return ' days';
   }
 
-
   // creates units days, °F, " for annotation on Average line
   averageTextUnits() {
     // seasonal units for inches of precip and degrees farhnheit
