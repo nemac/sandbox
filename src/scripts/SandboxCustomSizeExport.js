@@ -203,11 +203,7 @@ export default function SandboxCustomSizeExport(props) {
           <h2 id='simple-modal-title' className={classes.exportHeaderText}>
             <SaveAltIcon className={classes.exportHeaderIcon}/> {exportHeading}
           </h2>
-          <p id='simple-modal-description' className={classes.exportDescriptionText}>
-            Export the chart to a custom size or use one of the
-            predetermined dimensions. The default option will match the
-            what the dimensions you see on the page (WYSIWYG).
-          </p>
+          <div className={classes.exportDescriptionText}>Change the dimensions of the exported chart</div>
           <Button
             className={classes.exportButtons}
             onClick={handlePresetDimensionsClick}
