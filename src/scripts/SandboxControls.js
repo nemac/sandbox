@@ -14,6 +14,7 @@ import SandboxHumanReadable from './SandboxHumanReadable';
 import SandboxSelector from './SandboxSelector';
 import SandboxAlert from './SandboxAlert';
 import SandboxActionMenu from './SandboxActionMenu';
+import SandboxParseDataFiles from './SandboxParseDataFiles';
 
 // configs
 import SandboxDataControl from '../configs/SandboxDataControl';
@@ -309,49 +310,6 @@ export default function SandboxControls() {
     return urlParameters;
   };
 
-  // parse data file which is in CSV format
-  const parseNCAFile = (data, type, parseRegion) => {
-    const xvals = [];
-    const yvals = [];
-    const lines = data.split(/\r?\n/);
-    const headers = lines[0].split(',');
-    // puts all the headers into an array
-    for (let h = 0; h < headers.length; h += 1) {
-      headers[h] = headers[h].trim();
-    }
-
-    let colIndex = undefined; // eslint-disable-line no-undef-init
-
-    // not sure this is needed anymore the python script that creates the JSON
-    // config from all the txt files now cleans up extra columns aka #grids and #grid
-    // columns. Think its handling no location name in national file
-    if (type === 'national') {
-      colIndex = 1;
-    } else if (type === 'regional' || type === 'state') {
-      for (let h = 1; h < headers.length; h += 1) {
-        if (headers[h].toUpperCase() === parseRegion.toUpperCase()) {
-          colIndex = h;
-          break;
-        }
-      }
-    }
-
-    // gets all the rows into an arrays
-    for (let i = 1; i < lines.length; i += 1) {
-      const elements = lines[i].split(',');
-      if (elements.length <= 1) {
-        break;
-      }
-      // creates x and y value arrays for use in ploty chart library
-      // could be modififed for any charting library
-      const xval = parseInt(elements[0], 10);
-      const yval = parseFloat(elements[colIndex]);
-      xvals.push(xval);
-      yvals.push(yval);
-    }
-    return [xvals, yvals];
-  };
-
   // get chart data from current state = which should include
   const getChartData = (props) => {
     // get argument keys
@@ -399,8 +357,9 @@ export default function SandboxControls() {
     axios.get(`${path}/sandboxdata/TSU_Sandbox_Datafiles/${dataFile}`)
       .then((response) => {
         // parse the csv text file
+        const sandboxParseDataFiles = new SandboxParseDataFiles();
         const chartDataFromFile =
-          parseNCAFile(response.data, chartDataRegion.toLowerCase(), chartDataLocation);
+          sandboxParseDataFiles.parseFile(response.data, chartDataRegion.toLowerCase(), chartDataLocation);
 
         // get the chart type which is the climate variable
         const chartType = getClimatevariableType(chartDataClimatevariable);
@@ -992,14 +951,23 @@ export default function SandboxControls() {
     return null;
   };
 
-  // create svg and although for custom size
-  const exportSVG = (svgSelector = '.js-plotly-plot .main-svg', widthARG = 1000, heightARG = 500) => {
-    // do not change width if dimensions changed by user default setting
+  const checkSVGForSizeChange = (svgSelector, widthARG, heightARG) => {
     const svgElem = document.querySelector(svgSelector);
     if (svgElem) {
       const svgwidth = svgElem.getAttribute('width');
       const svgheight = svgElem.getAttribute('height');
-      if (svgwidth === widthARG && svgheight === heightARG) {
+      if (Number(svgwidth) === Number(widthARG) && Number(svgheight) === Number(heightARG)) return false;
+    }
+    return true;
+  }
+
+  // create svg and although for custom size
+  const exportSVG = (svgSelector = '.js-plotly-plot .main-svg', widthARG = 1000, heightARG = 500) => {
+    const svgElem = document.querySelector(svgSelector);
+    if (svgElem) {
+      // do not change dimensions if not changed by user aka default setting
+      const sizeChanged = checkSVGForSizeChange(svgSelector, widthARG, heightARG);
+      if (!sizeChanged) {
         const base64doc = convertToOneSvg(svgSelector);
         donwloadFile(base64doc);
         return null;
@@ -1007,7 +975,7 @@ export default function SandboxControls() {
     }
 
     // get ploltly div
-    const plotHolderDiv = document.querySelector('.makeStyles-sandboxChartRegionBox-6');
+    const plotHolderDiv = document.querySelector('.PlotRegionDiv').parentElement;
     const plotRegionDiv = document.querySelector('.user-select-none.svg-container');
 
     // get default for heights and widths
@@ -1050,8 +1018,9 @@ export default function SandboxControls() {
   // convert svg base64 data to png
   const convertToPng = (svgSelector = '.js-plotly-plot .main-svg', widthARG = 1000, heightARG = 500) => {
     // get ploltly div
-    const plotHolderDiv = document.querySelector('.makeStyles-sandboxChartRegionBox-6');
+    const plotHolderDiv = document.querySelector('.PlotRegionDiv').parentElement;
     const plotRegionDiv = document.querySelector('.user-select-none.svg-container');
+    const sizeChanged = checkSVGForSizeChange(svgSelector, widthARG, heightARG);
 
     // get default for heights and widths
     const originalHolderWidth = plotHolderDiv.getAttribute('width');
@@ -1060,7 +1029,7 @@ export default function SandboxControls() {
     const originalHeight = plotRegionDiv.getAttribute('height');
 
     // only do this of dimensions are different
-    if (widthARG > 0 && heightARG > 0) {
+    if (sizeChanged) {
       // set divs to fixed width for standard or custom suze
       plotHolderDiv.style.width = `${widthARG}px`;
       plotRegionDiv.style.width = `${widthARG}px`;
@@ -1071,7 +1040,6 @@ export default function SandboxControls() {
       window.dispatchEvent(new Event('resize'));
     }
 
-    // delay creation of svg export while resize happens
     setTimeout(() => {
       // find and covnert html all plotly chart nodes
       // (plotly puts legends and the chart in seperate nodes)
@@ -1113,24 +1081,25 @@ export default function SandboxControls() {
 
       const image = new Image();
       image.onload = () => {
-        const canvas = document.createElement('canvas');
-        canvas.width = width;
-        canvas.height = height;
-        const context = canvas.getContext('2d');
-        context.drawImage(image, 0, 0, width, height);
-        const png = canvas.toDataURL();
-        donwloadFile(png, 'png');
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const context = canvas.getContext('2d');
+          context.drawImage(image, 0, 0, width, height);
+          const png = canvas.toDataURL();
+          donwloadFile(png, 'png');
 
-        // reset dimensions back to orginal dimensions
-        plotHolderDiv.style.width = originalHolderWidth;
-        plotRegionDiv.style.width = originalWidth;
-        plotHolderDiv.style.height = originalHolderHeight;
-        plotRegionDiv.style.height = originalHeight;
-
-        // force window reszize so plotly re-renders the chart at fixed dimensions
-        window.dispatchEvent(new Event('resize'));
+          if (sizeChanged) {
+            // reset dimensions back to orginal dimensions
+            plotHolderDiv.style.width = originalHolderWidth;
+            plotRegionDiv.style.width = originalWidth;
+            plotHolderDiv.style.height = originalHolderHeight;
+            plotRegionDiv.style.height = originalHeight;
+            // force window reszize so plotly re-renders the chart at fixed dimensions
+            window.dispatchEvent(new Event('resize'));
+          }
       };
-      image.src = blobURL;
+        image.src = blobURL;
     }, 500);
   };
 

@@ -1,6 +1,9 @@
 import React from 'react';
-import Plot from 'react-plotly.js';
+import Plotly from "plotly.js-cartesian-dist-min";
+import createPlotlyComponent from "react-plotly.js/factory";
 import PropTypes from 'prop-types';
+
+const Plot = createPlotlyComponent(Plotly);
 
 class SandboxPlotRegion extends React.Component {
   constructor(props) {

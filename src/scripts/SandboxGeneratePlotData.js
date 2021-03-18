@@ -4,7 +4,6 @@ class SandboxGeneratePlotData {
   constructor(props) {
     // style guide driven colors, fonts, ticks may need expanding
     //  https://docs.google.com/document/d/1_zO39hdlGL9uY0Y0Vf57ncYNYXuACUAIM0fKCUo3spc/edit?ts=5fa547dd#
-
     this.smallScreen = 768;
     this.blue = '4, 90, 141';
     this.red = '189, 0, 38';

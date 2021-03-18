@@ -122,6 +122,8 @@ export default function SandboxCustomSizeExport(props) {
   const [wysiwygWidth, setWysiwygWidth] = useState(dimensions.width);
   const [wysiwygHeight, setWysiwygHeight] = useState(dimensions.height);
 
+  const [whichDimension, setWhichDimension] = useState('Default');
+
   // only run when the compnent mounts
   useEffect(() => {
     // on resize re calc dimensions
@@ -166,8 +168,14 @@ export default function SandboxCustomSizeExport(props) {
     return dimensionFromButton[0].dimensions;
   };
 
+  // dimension button switch color between outlined and "contained" filled
+  const swithDimensionActive = (name) => {
+    return whichDimension === name ? 'contained' : 'outlined';
+  }
+
   // handle default dimension click
   const handlePresetDimensionsClick = (event) => {
+    setWhichDimension(event.currentTarget.value);
     // Wysiwyg - dimensions will be the same as the website.
     if (event.currentTarget.value === 'Default') {
       const defaultDimensionswysiwyg = defaultDimensions();
@@ -203,7 +211,7 @@ export default function SandboxCustomSizeExport(props) {
           <Button
             className={classes.exportButtons}
             onClick={handlePresetDimensionsClick}
-            variant='contained'
+            variant={swithDimensionActive('Default')}
             color='primary'
             value='Default'>
               Default
@@ -214,7 +222,7 @@ export default function SandboxCustomSizeExport(props) {
           <Button
             className={classes.exportButtons}
             onClick={handlePresetDimensionsClick}
-            variant='outlined'
+            variant={swithDimensionActive('NCA')}
             color='primary'
             value='NCA'>
               NCA

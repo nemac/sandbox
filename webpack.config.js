@@ -15,6 +15,7 @@ const paths = {
 module.exports = {
     entry: {
       index: path.join(paths.SRC, 'index.js'),
+      SandboxPlotRegion: './src/scripts/SandboxPlotRegion.js',
     },
     performance: {
        hints: "warning",
@@ -24,12 +25,20 @@ module.exports = {
     output: {
         // path: paths.DISTSCRIPTS,
         filename: 'scripts/[name].app.bundle.js',
-        chunkFilename: 'scripts/[id].js',
+        chunkFilename: 'scripts/[name].js',
         publicPath: ''
     },
     optimization: {
+      moduleIds: 'size',
+      runtimeChunk: 'single',
       splitChunks: {
-        chunks: 'all'
+        cacheGroups: {
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            // name: 'vendors',
+            chunks: 'all',
+          },
+        },
       }
     },
     resolve: {
@@ -59,8 +68,8 @@ module.exports = {
     },
     plugins: [
         new MiniCssExtractPlugin({
-          filename:  path.join('css/style.[contenthash].css'),
-          chunkFilename: "[id].css"
+          filename:  path.join('css/style.[name].css'),
+          chunkFilename: "[name].css"
         }),
         new HtmlWebpackPlugin({
           hash: true,
