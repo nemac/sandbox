@@ -1,16 +1,21 @@
 class SandboxParseDataFiles {
+  constructor(props) {
+    this.undefined = undefined;
+  }
+
   // parse data file which is in CSV format
-  parseFile(data, type, parseRegion){
+  parseFile(data, type, parseRegion) {
     const xvals = [];
     const yvals = [];
     const lines = data.split(/\r?\n/);
     const headers = lines[0].split(',');
+
     // puts all the headers into an array
     for (let h = 0; h < headers.length; h += 1) {
       headers[h] = headers[h].trim();
     }
 
-    let colIndex = undefined; // eslint-disable-line no-undef-init
+    let colIndex = this.undefined; // eslint-disable-line no-undef-init
 
     // not sure this is needed anymore the python script that creates the JSON
     // config from all the txt files now cleans up extra columns aka #grids and #grid
@@ -40,7 +45,7 @@ class SandboxParseDataFiles {
       yvals.push(yval);
     }
     return [xvals, yvals];
-  };
+  }
 }
 
 export default SandboxParseDataFiles;

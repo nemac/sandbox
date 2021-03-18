@@ -102,7 +102,7 @@ export default function SandboxCustomSizeExport(props) {
   const defaultSizes = {
     name: 'Default',
     dimensions: { width: 1250, height: 625 }
-  }
+  };
 
   // get the dimensions of the chart currently
   // if none than use the default 1250x300
@@ -140,6 +140,18 @@ export default function SandboxCustomSizeExport(props) {
       setWysiwygHeight(parseInt(defaultDimensionswysiwyg.height, 10));
     }
   }, [open]);
+
+  // get dimension from config
+  const getDimensions = (name) => {
+    // get default dimensions
+    if (name === 'Default') {
+      const configDimensions = getDimensions(whichDimension);
+      return configDimensions;
+    }
+    // get dimensions based on name
+    const dimensionFromButton = sandboxDefaultExportSizes.filter((value) => (value.name === name));
+    return dimensionFromButton[0].dimensions;
+  };
 
   // only run when the compnent mounts
   useEffect(() => {
@@ -183,18 +195,6 @@ export default function SandboxCustomSizeExport(props) {
   // handle default dimension change
   const handlePresetDimensionsHeightChange = (event) => {
     setExportHeight(parseInt(event.currentTarget.value, 10));
-  };
-
-  // get dimension from config
-  const getDimensions = (name) => {
-    // get default dimensions
-    if (name === 'Default') {
-      const configDimensions = getDimensions(whichDimension);
-      return configDimensions;
-    }
-    // get dimensions based on name
-    const dimensionFromButton = sandboxDefaultExportSizes.filter((value) => (value.name === name));
-    return dimensionFromButton[0].dimensions;
   };
 
   // dimension button switch color between outlined and "contained" filled
