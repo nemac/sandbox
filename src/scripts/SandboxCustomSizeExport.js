@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
@@ -99,7 +99,10 @@ export default function SandboxCustomSizeExport(props) {
 
   //  get default dimensions from config
   const sandboxDefaultExportSizes = new SandboxDefaultExportSizes();
-  const defaultSizes = sandboxDefaultExportSizes.filter((value) => (value.name === 'Default'));
+  const defaultSizes = {
+    name: 'Default',
+    dimensions: { width: 1250, height: 625 }
+  }
 
   // get the dimensions of the chart currently
   // if none than use the default 1250x300
@@ -114,25 +117,45 @@ export default function SandboxCustomSizeExport(props) {
     return { width, height };
   };
 
+  const [whichDimension, _setWhichDimension] = useState('Default');
+  const whichDimensionRef = useRef(whichDimension);
+  const setWhichDimension = (data) => {
+    whichDimensionRef.current = data;
+    _setWhichDimension(data);
+  };
+
   // set the default state
   const dimensions = defaultDimensions();
   const [exportWidth, setExportWidth] = useState(dimensions.width);
   const [exportHeight, setExportHeight] = useState(dimensions.height);
-
   const [wysiwygWidth, setWysiwygWidth] = useState(dimensions.width);
   const [wysiwygHeight, setWysiwygHeight] = useState(dimensions.height);
 
-  const [whichDimension, setWhichDimension] = useState('Default');
+  // only run when the compnent mounts
+  useEffect(() => {
+    // only update dimensions when set to default
+    if (whichDimension === 'Default') {
+      const defaultDimensionswysiwyg = defaultDimensions();
+      setWysiwygWidth(parseInt(defaultDimensionswysiwyg.width, 10));
+      setWysiwygHeight(parseInt(defaultDimensionswysiwyg.height, 10));
+    }
+  }, [open]);
 
   // only run when the compnent mounts
   useEffect(() => {
     // on resize re calc dimensions
     window.addEventListener('resize', () => {
-      const currentDimensions = defaultDimensions();
-      setExportWidth(parseInt(currentDimensions.width, 10));
-      setExportHeight(parseInt(currentDimensions.height, 10));
-      setWysiwygWidth(parseInt(currentDimensions.width, 10));
-      setWysiwygHeight(parseInt(currentDimensions.height, 10));
+      // only update dimensions when set to default
+      if (whichDimensionRef.current === 'Default') {
+        const defaultDimensionswysiwyg = defaultDimensions();
+        setExportWidth(parseInt(defaultDimensionswysiwyg.width, 10));
+        setExportHeight(parseInt(defaultDimensionswysiwyg.height, 10));
+        // dimensions will match a default from config - ../configs/SandboxDefaultExportSizes
+      } else {
+        const configDimensions = getDimensions(whichDimension);
+        setExportWidth(parseInt(configDimensions.width, 10));
+        setExportHeight(parseInt(configDimensions.height, 10));
+      }
     });
     // passing an empty array as the dependencies of the effect will cause it to run
     //   the listener to be added only one time
@@ -164,14 +187,18 @@ export default function SandboxCustomSizeExport(props) {
 
   // get dimension from config
   const getDimensions = (name) => {
+    // get default dimensions
+    if (name === 'Default') {
+      const configDimensions = getDimensions(whichDimension);
+      return configDimensions;
+    }
+    // get dimensions based on name
     const dimensionFromButton = sandboxDefaultExportSizes.filter((value) => (value.name === name));
     return dimensionFromButton[0].dimensions;
   };
 
   // dimension button switch color between outlined and "contained" filled
-  const swithDimensionActive = (name) => {
-    return whichDimension === name ? 'contained' : 'outlined';
-  }
+  const swithDimensionActive = (name) => (whichDimension === name ? 'contained' : 'outlined');
 
   // handle default dimension click
   const handlePresetDimensionsClick = (event) => {
@@ -203,7 +230,9 @@ export default function SandboxCustomSizeExport(props) {
           <h2 id='simple-modal-title' className={classes.exportHeaderText}>
             <SaveAltIcon className={classes.exportHeaderIcon}/> {exportHeading}
           </h2>
-          <div className={classes.exportDescriptionText}>Change the dimensions of the exported chart</div>
+          <div className={classes.exportDescriptionText}>
+            Change the dimensions of the exported chart
+          </div>
           <Button
             className={classes.exportButtons}
             onClick={handlePresetDimensionsClick}
