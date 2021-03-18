@@ -25,7 +25,7 @@ module.exports = {
     output: {
         // path: paths.DISTSCRIPTS,
         filename: 'scripts/[name].app.bundle.js',
-        chunkFilename: 'scripts/[id].js',
+        chunkFilename: 'scripts/[name].js',
         publicPath: ''
     },
     optimization: {
@@ -35,7 +35,7 @@ module.exports = {
         cacheGroups: {
           vendor: {
             test: /[\\/]node_modules[\\/]/,
-            name: 'vendors',
+            // name: 'vendors',
             chunks: 'all',
           },
         },
@@ -68,8 +68,8 @@ module.exports = {
     },
     plugins: [
         new MiniCssExtractPlugin({
-          filename:  path.join('css/style.[contenthash].css'),
-          chunkFilename: "[id].css"
+          filename:  path.join('css/style.[name].css'),
+          chunkFilename: "[name].css"
         }),
         new HtmlWebpackPlugin({
           hash: true,

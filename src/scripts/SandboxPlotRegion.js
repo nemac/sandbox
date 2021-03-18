@@ -1,5 +1,5 @@
 import React from 'react';
-import Plotly from "plotly.js-cartesian-dist";
+import Plotly from "plotly.js-cartesian-dist-min";
 import createPlotlyComponent from "react-plotly.js/factory";
 import PropTypes from 'prop-types';
 
