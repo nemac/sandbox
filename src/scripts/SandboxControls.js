@@ -358,8 +358,8 @@ export default function SandboxControls() {
       .then((response) => {
         // parse the csv text file
         const sandboxParseDataFiles = new SandboxParseDataFiles();
-        const chartDataFromFile =
-          sandboxParseDataFiles.parseFile(response.data, chartDataRegion.toLowerCase(), chartDataLocation);
+        const chartDataFromFile = sandboxParseDataFiles
+          .parseFile(response.data, chartDataRegion.toLowerCase(), chartDataLocation);
 
         // get the chart type which is the climate variable
         const chartType = getClimatevariableType(chartDataClimatevariable);
@@ -956,10 +956,11 @@ export default function SandboxControls() {
     if (svgElem) {
       const svgwidth = svgElem.getAttribute('width');
       const svgheight = svgElem.getAttribute('height');
-      if (Number(svgwidth) === Number(widthARG) && Number(svgheight) === Number(heightARG)) return false;
+      if (Number(svgwidth) === Number(widthARG) &&
+        Number(svgheight) === Number(heightARG)) return false;
     }
     return true;
-  }
+  };
 
   // create svg and although for custom size
   const exportSVG = (svgSelector = '.js-plotly-plot .main-svg', widthARG = 1000, heightARG = 500) => {
@@ -1081,25 +1082,25 @@ export default function SandboxControls() {
 
       const image = new Image();
       image.onload = () => {
-          const canvas = document.createElement('canvas');
-          canvas.width = width;
-          canvas.height = height;
-          const context = canvas.getContext('2d');
-          context.drawImage(image, 0, 0, width, height);
-          const png = canvas.toDataURL();
-          donwloadFile(png, 'png');
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const context = canvas.getContext('2d');
+        context.drawImage(image, 0, 0, width, height);
+        const png = canvas.toDataURL();
+        donwloadFile(png, 'png');
 
-          if (sizeChanged) {
-            // reset dimensions back to orginal dimensions
-            plotHolderDiv.style.width = originalHolderWidth;
-            plotRegionDiv.style.width = originalWidth;
-            plotHolderDiv.style.height = originalHolderHeight;
-            plotRegionDiv.style.height = originalHeight;
-            // force window reszize so plotly re-renders the chart at fixed dimensions
-            window.dispatchEvent(new Event('resize'));
-          }
+        if (sizeChanged) {
+          // reset dimensions back to orginal dimensions
+          plotHolderDiv.style.width = originalHolderWidth;
+          plotRegionDiv.style.width = originalWidth;
+          plotHolderDiv.style.height = originalHolderHeight;
+          plotRegionDiv.style.height = originalHeight;
+          // force window reszize so plotly re-renders the chart at fixed dimensions
+          window.dispatchEvent(new Event('resize'));
+        }
       };
-        image.src = blobURL;
+      image.src = blobURL;
     }, 500);
   };
 
