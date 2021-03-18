@@ -162,11 +162,6 @@ export default function SandboxCustomSizeExport(props) {
         const defaultDimensionswysiwyg = defaultDimensions();
         setExportWidth(parseInt(defaultDimensionswysiwyg.width, 10));
         setExportHeight(parseInt(defaultDimensionswysiwyg.height, 10));
-        // dimensions will match a default from config - ../configs/SandboxDefaultExportSizes
-      } else {
-        const configDimensions = getDimensions(whichDimension);
-        setExportWidth(parseInt(configDimensions.width, 10));
-        setExportHeight(parseInt(configDimensions.height, 10));
       }
     });
     // passing an empty array as the dependencies of the effect will cause it to run
