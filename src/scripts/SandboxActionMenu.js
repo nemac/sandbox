@@ -10,6 +10,7 @@ import TimelineIcon from '@material-ui/icons/Timeline';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
 
 import SandboxCustomSizeExport from './SandboxCustomSizeExport';
+import SandboxSumbitFigure from './SandboxSumbitFigure';
 
 const useStyles = makeStyles((theme) => ({
   sandboxExportsButtonBox: {
@@ -119,6 +120,7 @@ export default function Selector(props) {
 
   const [openCustomSizeSVG, setOpenCustomSizeSVG] = React.useState(false);
   const [openCustomSizePNG, setOpenCustomSizePNG] = React.useState(false);
+  const [openSubmitFigure, setOpenSubmitFigure] = React.useState(false);
 
   const setSelected = (whichchart, me) => {
     switch (lineChart) {
@@ -177,6 +179,16 @@ export default function Selector(props) {
     handleMailToTSUa();
   };
 
+  // handles open of sumbit figure
+  const handleOpenSubmitFigure = () => {
+    setOpenSubmitFigure(true);
+  };
+
+  // handles close of custom size export
+  const handleCloseSubmitFigure = () => {
+    setOpenSubmitFigure(false);
+  };
+
   // handles open of custom size export
   const handleCustomSizeOpenSVG = () => {
     window.dispatchEvent(new Event('resize'));
@@ -227,8 +239,7 @@ export default function Selector(props) {
               handleCustomSizeClose={handleCustomSizeClosePNG}
               exportType={'PNG'}
               exportHeading={'Export chart to PNG'}
-              exportFunc={handleDownloadChartAsPNG}
-              />
+              exportFunc={handleDownloadChartAsPNG} />
             <Button onClick={handleCustomSizeOpenSVG} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveAltIcon />}>
               .SVG
             </Button>
@@ -237,11 +248,13 @@ export default function Selector(props) {
               handleCustomSizeClose={handleCustomSizeCloseSVG}
               exportType={'SVG'}
               exportHeading={'Export chart to SVG'}
-              exportFunc={handleDownloadChartAsSVG}
-              />
-            <Button onClick={handleMailToTSU} className={classes.fabsvg} variant="contained" color="default" startIcon={<MailOutlineIcon />}>
+              exportFunc={handleDownloadChartAsSVG}  />
+            <Button onClick={handleOpenSubmitFigure} className={classes.fabsvg} variant="contained" color="default" startIcon={<MailOutlineIcon />}>
               To TSU
             </Button>
+            <SandboxSumbitFigure
+              open={openSubmitFigure}
+              handleCloseFigure={handleCloseSubmitFigure} />
           </Box>
         </Grid>
       </Grid>

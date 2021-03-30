@@ -3,6 +3,7 @@ const autoprefixer = require('autoprefixer');
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const Dotenv = require('dotenv-webpack');
 
 // Constant with our paths
 const paths = {
@@ -71,6 +72,7 @@ module.exports = {
           filename:  path.join('css/style.[name].css'),
           chunkFilename: "[name].css"
         }),
+        new Dotenv(),
         new HtmlWebpackPlugin({
           hash: true,
           template: path.join(paths.SRC_HTML, 'index.html'),
