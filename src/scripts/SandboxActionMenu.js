@@ -115,7 +115,6 @@ export default function Selector(props) {
   const { handleDownloadChartAsCSVa } = props;
   const { handleDownloadChartAsPNGa } = props;
   const { handleDownloadChartAsSVGa } = props;
-  const { handleMailToTSUa } = props;
   const { lineChart } = props;
 
   const [openCustomSizeSVG, setOpenCustomSizeSVG] = React.useState(false);
@@ -173,10 +172,6 @@ export default function Selector(props) {
 
   const handleDownloadChartAsSVG = (svgSelector, width, height) => {
     handleDownloadChartAsSVGa(svgSelector, width, height);
-  };
-
-  const handleMailToTSU = (event) => {
-    handleMailToTSUa();
   };
 
   // handles open of sumbit figure
@@ -248,7 +243,7 @@ export default function Selector(props) {
               handleCustomSizeClose={handleCustomSizeCloseSVG}
               exportType={'SVG'}
               exportHeading={'Export chart to SVG'}
-              exportFunc={handleDownloadChartAsSVG}  />
+              exportFunc={handleDownloadChartAsSVG} />
             <Button onClick={handleOpenSubmitFigure} className={classes.fabsvg} variant="contained" color="default" startIcon={<MailOutlineIcon />}>
               To TSU
             </Button>
@@ -268,7 +263,6 @@ Selector.propTypes = {
   handleDownloadChartAsCSVa: PropTypes.func,
   handleDownloadChartAsPNGa: PropTypes.func,
   handleDownloadChartAsSVGa: PropTypes.func,
-  handleMailToTSUa: PropTypes.func,
   lineChart: PropTypes.string,
   onChange: PropTypes.func
 };

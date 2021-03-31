@@ -1,22 +1,20 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import InputAdornment from '@material-ui/core/InputAdornment';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Collapse from '@material-ui/core/Collapse';
-import DoneIcon from '@material-ui/icons/Done';
+import Box from '@material-ui/core/Box';
+import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import red from '@material-ui/core/colors/red';
 import green from '@material-ui/core/colors/green';
 
 const axios = require('axios');
-import { CancelToken, get, post } from 'axios';
-
-import SandboxDefaultExportSizes from '../configs/SandboxDefaultExportSizes';
 
 const darkGrey = '#E6E6E6';
 const errorBgColor = red[500];
@@ -29,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center'
   },
   exportModalDiv: {
-    width: '400px',
+    width: '500px',
     [theme.breakpoints.down('sm')]: {
       width: '80%'
     },
@@ -91,21 +89,33 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(-0.3)
   },
   exportMessage: {
-   margin: theme.spacing(1),
-   width: '100%',
- },
- figureErrorText: {
-   color: errorBgColor,
-   marginLeft: theme.spacing(2),
-   marginTop: theme.spacing(0),
-   paddingTop: theme.spacing(0)
- },
- messageSentText: {
-   color: messageSentBgColor
- },
- messageDoneIcon: {
-   color: messageSentBgColor,
- }
+    margin: theme.spacing(1),
+    width: '100%'
+  },
+  figureErrorText: {
+    color: errorBgColor,
+    marginLeft: theme.spacing(2),
+    marginTop: theme.spacing(0),
+    paddingTop: theme.spacing(0)
+  },
+  messageSentText: {
+    color: messageSentBgColor
+  },
+  messageSentFailedText: {
+    color: errorBgColor
+  },
+  messageCheckCircleOutlineIcon: {
+    color: messageSentBgColor,
+    marginLeft: theme.spacing(3),
+    marginTop: theme.spacing(-1),
+    fontSize: '5rem'
+  },
+  messageHighlightOffIcon: {
+    color: errorBgColor,
+    marginLeft: theme.spacing(3),
+    marginTop: theme.spacing(-1),
+    fontSize: '5rem'
+  }
 }));
 
 export default function SandboxSumbitFigure(props) {
@@ -113,106 +123,112 @@ export default function SandboxSumbitFigure(props) {
   const { open } = props;
   const { handleCloseFigure } = props;
 
-  const heading = 'Send to TSU'
+  const heading = 'Send to TSU';
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [figureURL, setFigureURL] = useState(window.location.href);
   const [message, setMessage] = useState('');
-  const [authorKey, setAuthorKey] = useState('vrzsjJNwaEyfSYuu75RxyQ');
+  const [authorKey, setAuthorKey] = useState('');
   const [authorVerified, setAuthorVerified] = useState(false);
   const [keyDisabled, setKeyDisabled] = useState(true);
   const [emailValid, setEmailValid] = useState(false);
   const [nameValid, setNamelValid] = useState(false);
-  const [messageSent, setmMessageSent] = useState(false);
+  const [messageSent, setMessageSent] = useState(false);
+  const [messageFailed, setMessageFailed] = useState(false);
 
   const emailErrorLabel = !emailValid ? <FormHelperText style={{ display: keyDisabled ? 'none' : 'flex' }} className={classes.figureErrorText}>{email} address is not valid</FormHelperText> : '';
   const emailNamerLabel = !nameValid ? <FormHelperText style={{ display: keyDisabled ? 'none' : 'flex' }} className={classes.figureErrorText}>Name is required</FormHelperText> : '';
 
-  async function submitFigure() {
+  // HTTP post headers
+  const axiosConfig = {
+    headers: {
+      Accept: '*/*',
+      'content-type': 'application/json'
+    }
+  };
+
+  // sumbit figure to slack or other message delivery
+  const submitFigure = async () => {
+    // get the current figures URL what it looks like
     setFigureURL(window.location.href);
 
-    const AUTHOR_KEY = authorKey
-
-    const sumbitURL = 'https://hh0t92676a.execute-api.us-east-1.amazonaws.com/dev/submit'
+    // get author key, submit URL, and setup JSON request data
+    const AUTHOR_KEY = authorKey;
+    const sumbitURL = 'https://hh0t92676a.execute-api.us-east-1.amazonaws.com/dev/submit';
     const figureInfoMessage = {
       name,
       email,
       message,
       figureURL,
       AUTHOR_KEY
-    }
-
-    const axiosConfig = {
-      headers: {
-        'Accept': '*/*',
-        'content-type': 'application/json'
-      }
     };
 
-    let res = await post(sumbitURL, JSON.stringify(figureInfoMessage), axiosConfig)
-
-    if (res.status === 200) {
-      handleCloseFigure(false);
-      return "ok"
-    } else {
-      console.error();("There was an error.  Please try again later.")
-      handleCloseFigure(false);
-      return "failed"
+    // post the submission to the submit API
+    try {
+      const res = await axios.post(sumbitURL, JSON.stringify(figureInfoMessage), axiosConfig);
+      // check if message sent
+      if (res.status === 200) { // message sent success
+        setMessageSent(true);
+        setKeyDisabled(true);
+      } else { // message sent success failure
+        setMessageFailed(false);
+        setMessageSent(false);
+      }
+      return true;
+    } catch (error) { // message sent success failure error in call
+      setMessageFailed(false);
+      setMessageSent(false);
+      return false;
     }
-  }
+  };
 
-  // check aother verification code
+  // check author verification code
   const checkAuthorVerification = (key) => {
-    const AUTHOR_KEY = key
-    const requestData = { AUTHOR_KEY }
-    const verifyAuthorURL = 'https://hh0t92676a.execute-api.us-east-1.amazonaws.com/dev/verifyAuthor'
-
-    const axiosConfig = {
-      headers: {
-        'content-type': 'text/plain'
-      }
-    };
+    // set up author verification request and URL
+    const AUTHOR_KEY = key;
+    const requestData = { AUTHOR_KEY };
+    const verifyAuthorURL = 'https://hh0t92676a.execute-api.us-east-1.amazonaws.com/dev/verifyAuthor';
 
     // call to api to veify the author key
-    axios.post(verifyAuthorURL, requestData, axiosConfig )
-      .then((response) => {
+    axios.post(verifyAuthorURL, requestData, axiosConfig)
+      .then((response) => { // get reponse if author is verified to send messages
         setAuthorVerified(response.data.verifyAuthor);
         return response.data.verifyAuthor;
       })
       .catch((error) => {
         // handle error
-        console.error(`SanboxControls loadData error: ${error}`); // eslint-disable-line no-console
+        setAuthorVerified(false);
         return [''];
       });
-  }
+  };
 
-  const validateName = (text) => {
-    return (text.length > 1)
-  }
+  // ensure name is at least chars assuming > 2 is a name of some sort
+  const validateName = (text) => (text.length > 2);
 
+  // validate if input text is an email address
   const validateEmailAddress = (text) => {
     if (text.length < 4) return false;
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-  }
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
 
   // handle authorKey change
   const handleAuthorKeyChange = (event) => {
-    const text = event.currentTarget.value;
-    setAuthorKey(text);
-    checkAuthorVerification(text);
+    const key = event.currentTarget.value;
+    setAuthorKey(key);
+    checkAuthorVerification(key);
   };
 
   // handle name change
   const handleNameChange = (event) => {
     const contactName = event.currentTarget.value;
-    setNamelValid(validateName(contactName))
+    setNamelValid(validateName(contactName));
     setName(contactName);
   };
 
   // handle email change
   const handleEmailChange = (event) => {
     const contactEmail = event.currentTarget.value;
-    setEmailValid(validateEmailAddress(contactEmail))
+    setEmailValid(validateEmailAddress(contactEmail));
     setEmail(contactEmail);
   };
 
@@ -224,12 +240,20 @@ export default function SandboxSumbitFigure(props) {
   // handle export modal close event
   const handleClose = (event) => {
     handleCloseFigure(false);
+    setMessageSent(false);
   };
 
+  // when first mounts changes set visibility of message inputs
   useEffect(() => {
-    if (authorVerified) setKeyDisabled(false)
-    if (!authorVerified) setKeyDisabled(true)
+    checkAuthorVerification(authorKey);
+    if (authorVerified) setKeyDisabled(false); // author key is valid show the messsage inputs
+    if (!authorVerified) setKeyDisabled(true); // author key is NOT valid hide the messsage inputs
+  }, [open]);
 
+  // when authorVerified changes set visibility of message inputs
+  useEffect(() => {
+    if (authorVerified) setKeyDisabled(false); // author key is valid show the messsage inputs
+    if (!authorVerified) setKeyDisabled(true); // author key is NOT valid hide the messsage inputs
   }, [authorVerified]);
 
   return (
@@ -247,8 +271,9 @@ export default function SandboxSumbitFigure(props) {
             <MailOutlineIcon className={classes.exportHeaderIcon}/> {heading}
           </h2>
           <div className={classes.exportDescriptionText}>
-            You must have an Author Key to sumbit the figure. Author keys cannot be requested and are only
-            provied to selected NCA authors, by TSU.
+            You must have an Author Key to sumbit the figure. Author keys
+            cannot be requested and are only provied to selected
+            NCA authors, by TSU.
           </div>
           <div className={classes.exportDescriptionText}>
             Once a valid Author key is entered, you can submit the current figure to TSU.
@@ -256,6 +281,7 @@ export default function SandboxSumbitFigure(props) {
           </div>
           <TextField
             className={classes.exportInputVerify}
+            size='small'
             id='outlined-text-authorKey'
             required
             variant='outlined'
@@ -264,12 +290,24 @@ export default function SandboxSumbitFigure(props) {
             value={authorKey}
             onBlur={handleAuthorKeyChange}
             onChange={handleAuthorKeyChange}
-            InputLabelProps={{ shrink: true }}  />
+            InputLabelProps={{ shrink: true }} />
 
           <Collapse in={messageSent}>
+            <Box display='flex' alignContent='center'>
+            <CheckCircleOutlineIcon className={classes.messageCheckCircleOutlineIcon}/>
             <h2 id='simple-modal-title' className={classes.messageSentText}>
-              <DoneIcon className={classes.messageDoneIcon}/>Message Sent!
+              Figure sumbitted successfully!
             </h2>
+          </Box>
+          </Collapse>
+
+          <Collapse in={messageFailed}>
+            <Box display='flex' alignContent='center'>
+            <HighlightOffIcon className={classes.messageHighlightOffIcon}/>
+            <h2 id='simple-modal-title' className={classes.messageSentFailedText}>
+              Figure sumbitted failed, please try again!
+            </h2>
+          </Box>
           </Collapse>
 
           <Collapse in={!keyDisabled}>
@@ -277,6 +315,7 @@ export default function SandboxSumbitFigure(props) {
               <TextField
                 className={classes.exportInput}
                 id='outlined-text-name'
+                size='small'
                 required
                 variant='outlined'
                 label='Name'
@@ -290,6 +329,7 @@ export default function SandboxSumbitFigure(props) {
               <TextField
                 className={classes.exportInput}
                 id='outlined-text-email'
+                size='small'
                 required
                 variant='outlined'
                 label='Email'
@@ -298,11 +338,12 @@ export default function SandboxSumbitFigure(props) {
                 value={email}
                 onChange={handleEmailChange}
                 error={!emailValid}
-                InputLabelProps={{ shrink: true }}  />
+                InputLabelProps={{ shrink: true }} />
               {emailErrorLabel}
               <TextField
                 className={classes.exportMessage}
                 id='outlined-text-message'
+                size='small'
                 variant='outlined'
                 label='Details'
                 type='text'
@@ -311,7 +352,7 @@ export default function SandboxSumbitFigure(props) {
                 rows={4}
                 multiline
                 onChange={handleMessageChange}
-                InputLabelProps={{ shrink: true }}  />
+                InputLabelProps={{ shrink: true }} />
             </FormControl>
           </Collapse>
 
@@ -322,7 +363,7 @@ export default function SandboxSumbitFigure(props) {
                 onClick={submitFigure}
                 color='primary'
                 variant='contained'
-                disabled={(keyDisabled || !nameValid || !emailValid )}
+                disabled={(keyDisabled || !nameValid || !emailValid)}
                 startIcon={<MailOutlineIcon />}>Submit Figure
               </Button>
             </div>
