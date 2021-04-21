@@ -53,7 +53,8 @@ const useStyles = makeStyles((theme) => ({
   },
   exportButtons: {
     marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1)
+    marginRight: theme.spacing(1),
+    marginTop: theme.spacing(1)
   },
   exportForm: {
     display: 'flex',
@@ -140,6 +141,17 @@ export default function SandboxCustomSizeExport(props) {
       setWysiwygHeight(parseInt(defaultDimensionswysiwyg.height, 10));
     }
   }, [open]);
+
+  // get labels from config
+  const getLabels = (name) => {
+    // get default dimensions
+    if (name === 'Default') {
+      return 'Default';
+    }
+    // get labels based on name
+    const labels = sandboxDefaultExportSizes.filter((value) => (value.name === name));
+    return labels[0].label;
+  };
 
   // get dimension from config
   const getDimensions = (name) => {
@@ -234,23 +246,26 @@ export default function SandboxCustomSizeExport(props) {
             variant={swithDimensionActive('Default')}
             color='primary'
             value='Default'>
-              Default
+              Default Current Screen Size
               <small className={classes.exportSmallButtonText}>
                 ({wysiwygWidth} x {wysiwygHeight})
               </small>
           </Button>
-          <Button
-            className={classes.exportButtons}
-            onClick={handlePresetDimensionsClick}
-            variant={swithDimensionActive('NCA')}
-            color='primary'
-            value='NCA'>
-              NCA
-              <small className={classes.exportSmallButtonText}>
-                ({getDimensions('NCA').width} x {getDimensions('NCA').height})
-              </small>
-          </Button>
-
+          {sandboxDefaultExportSizes.map((dimension) => (
+            <Button
+              key={dimension.name}
+              className={classes.exportButtons}
+              onClick={handlePresetDimensionsClick}
+              variant={swithDimensionActive(dimension.name)}
+              color='primary'
+              value={dimension.name}
+              >
+                {getLabels(dimension.name)}
+                <small className={classes.exportSmallButtonText}>
+                  ({getDimensions(dimension.name).width} x {getDimensions(dimension.name).height})
+                </small>
+            </Button>
+          ))}
           <FormControl className={classes.exportForm}>
             <TextField
               className={classes.exportInput}
