@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
@@ -126,7 +126,13 @@ export default function SandboxSumbitFigure(props) {
   const heading = 'Send to TSU';
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [figureURL, setFigureURL] = useState(window.location.href);
+  const [figureURL, _setFigureURL] = useState(window.location.href);
+  const figureURLRef = useRef(figureURL);
+  const setFigureURL = (data) => {
+    figureURLRef.current = data;
+    _setFigureURL(data);
+  };
+
   const [message, setMessage] = useState('');
   const [authorKey, setAuthorKey] = useState('');
   const [authorVerified, setAuthorVerified] = useState(false);
@@ -159,7 +165,7 @@ export default function SandboxSumbitFigure(props) {
       name,
       email,
       message,
-      figureURL,
+      figureURL: figureURLRef.current,
       AUTHOR_KEY
     };
 
@@ -203,7 +209,7 @@ export default function SandboxSumbitFigure(props) {
   };
 
   // ensure name is at least chars assuming > 2 is a name of some sort
-  const validateName = (text) => (text.length > 2);
+  const validateName = (text) => (text.length >= 2);
 
   // validate if input text is an email address
   const validateEmailAddress = (text) => {
