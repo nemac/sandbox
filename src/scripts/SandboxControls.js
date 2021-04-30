@@ -1227,20 +1227,6 @@ export default function SandboxControls() {
                   />
               </Box>
             </Grid>
-            <Grid item xs={12} sm={6} md={4} className={'sandbox-varriable-selectors'} >
-              <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
-                <SandboxSelector
-                  items={climatevariableItems}
-                  controlName={'Select a Climate Variable'}
-                  onChange={handleClimatevariableChange}
-                  value={climatevariable}
-                  season={season}
-                  disabled={climatevariableDisabled}
-                  missing={(!climatevariable)}
-                  replaceClimatevariableType={replaceClimatevariableType}
-                  />
-              </Box>
-            </Grid>
             <Grid item xs={12} sm={3} md={2} className={'sandbox-varriable-selectors'} >
               <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
@@ -1253,6 +1239,20 @@ export default function SandboxControls() {
                   season={season}
                   replaceClimatevariableType={replaceClimatevariableType}
                   replaceSeasonType={replaceSeasonType}
+                  />
+              </Box>
+            </Grid>
+            <Grid item xs={12} sm={6} md={4} className={'sandbox-varriable-selectors'} >
+              <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
+                <SandboxSelector
+                  items={climatevariableItems}
+                  controlName={'Select a Climate Variable'}
+                  onChange={handleClimatevariableChange}
+                  value={climatevariable}
+                  season={season}
+                  disabled={climatevariableDisabled}
+                  missing={(!climatevariable)}
+                  replaceClimatevariableType={replaceClimatevariableType}
                   />
               </Box>
             </Grid>
