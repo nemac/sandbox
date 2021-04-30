@@ -1,27 +1,27 @@
 const SandoxSeasonsHumanReadable = () => ([
   {
     value: 'yearly',
-    pullDownText: 'Yearly Thresholds (Jan - Dec)'
+    pullDownText: 'Threshold Exceedances (annual)'
   },
   {
     value: 'ann',
-    pullDownText: 'Annually (Jan - Dec)'
+    pullDownText: 'Annual - Mean Temperature and Precipitation (Jan-Dec)'
   },
   {
     value: 'djf',
-    pullDownText: 'Winter (Dec, Jan, Feb)'
+    pullDownText: 'Winter - Mean Temperature and Precipitation (Dec-Feb)'
   },
   {
     value: 'mam',
-    pullDownText: 'Spring (Mar, Apr, May)'
+    pullDownText: 'Spring - Mean Temperature and Precipitation (Mar-May)'
   },
   {
     value: 'jja',
-    pullDownText: 'Summer (Jun, Jul, Aug)'
+    pullDownText: 'Summer - Mean Temperature and Precipitation (Jun-Aug)'
   },
   {
     value: 'son',
-    pullDownText: 'Fall (Sep, Oct, Nov)'
+    pullDownText: 'Fall - Mean Temperature and Precipitation (Sep-Nov)'
   }
 ]);
 export default SandoxSeasonsHumanReadable;
