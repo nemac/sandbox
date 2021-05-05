@@ -8,6 +8,8 @@ import Button from '@material-ui/core/Button';
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import TimelineIcon from '@material-ui/icons/Timeline';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
 
 import SandboxCustomSizeExport from './SandboxCustomSizeExport';
 import SandboxSumbitFigure from './SandboxSumbitFigure';
@@ -104,6 +106,21 @@ const useStyles = makeStyles((theme) => ({
   },
   MenuItem: {
     textDecoration: 'underline'
+  },
+  sandboxExportsButtonBoxForm: {
+    flexDirection: 'inherit',
+    justifyContent: 'flex-end',
+    [theme.breakpoints.down('xs')]: {
+      flexDirection: 'column',
+      width: '100%'
+    }
+  },
+  sandboxExportsButtonBoxFormLabel: {
+    position: 'absolute',
+    left: '45%',
+    top: theme.spacing(-1.25),
+    fontSize: '0.75rem',
+    color: '#5C5C5C'
   }
 }));
 
@@ -210,6 +227,8 @@ export default function Selector(props) {
       <Grid container spacing={0} justify='flex-end' direction={'row'} >
         <Grid item xs={12} sm={12} md={6} width='100%' >
           <Box className={classes.sandboxExportsButtonBox} fontWeight='fontWeightBold' mt={1} display='flex' flexDirection='row' flexWrap='wrap' >
+            <FormControl component="fieldset" variant='outlined' className={classes.sandboxExportsButtonBoxForm}>
+              <FormLabel component="legend" className={classes.sandboxExportsButtonBoxFormLabel}>Trendline</FormLabel>
             <Button onClick={handleSwtichYearlyToLine} classes={{ root: `${setSelected(lineChart, 'year')}` }} className={classes.fabsvgLeft} variant="contained" color="default" startIcon={<TimelineIcon />}>
               Yearly
             </Button>
@@ -219,6 +238,7 @@ export default function Selector(props) {
             <Button onClick={handleSwtichMovingAverageAndYearly} classes={{ root: `${setSelected(lineChart, 'mavg')}` }} className={classes.fabsvgRight} variant="contained" color="default" startIcon={<TimelineIcon />}>
               Moving Average
             </Button>
+          </FormControl>
           </Box>
         </Grid>
         <Grid item xs={12} sm={12} md={6} width='100%' >
