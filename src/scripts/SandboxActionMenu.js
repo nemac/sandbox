@@ -229,47 +229,50 @@ export default function Selector(props) {
           <Box className={classes.sandboxExportsButtonBox} fontWeight='fontWeightBold' mt={1} display='flex' flexDirection='row' flexWrap='wrap' >
             <FormControl component="fieldset" variant='outlined' className={classes.sandboxExportsButtonBoxForm}>
               <FormLabel component="legend" className={classes.sandboxExportsButtonBoxFormLabel}>Trendline</FormLabel>
-            <Button onClick={handleSwtichYearlyToLine} classes={{ root: `${setSelected(lineChart, 'year')}` }} className={classes.fabsvgLeft} variant="contained" color="default" startIcon={<TimelineIcon />}>
-              Yearly
-            </Button>
-            <Button onClick={handleSwtichAverageAndYearly} classes={{ root: `${setSelected(lineChart, 'avg')}` }} className={classes.fabsvgCenter} variant="contained" color="default" startIcon={<TimelineIcon />}>
-              Average
-            </Button>
-            <Button onClick={handleSwtichMovingAverageAndYearly} classes={{ root: `${setSelected(lineChart, 'mavg')}` }} className={classes.fabsvgRight} variant="contained" color="default" startIcon={<TimelineIcon />}>
-              Moving Average
-            </Button>
-          </FormControl>
+                <Button onClick={handleSwtichYearlyToLine} classes={{ root: `${setSelected(lineChart, 'year')}` }} className={classes.fabsvgLeft} variant="contained" color="default" startIcon={<TimelineIcon />}>
+                  Yearly
+                </Button>
+                <Button onClick={handleSwtichAverageAndYearly} classes={{ root: `${setSelected(lineChart, 'avg')}` }} className={classes.fabsvgCenter} variant="contained" color="default" startIcon={<TimelineIcon />}>
+                  Average
+                </Button>
+                <Button onClick={handleSwtichMovingAverageAndYearly} classes={{ root: `${setSelected(lineChart, 'mavg')}` }} className={classes.fabsvgRight} variant="contained" color="default" startIcon={<TimelineIcon />}>
+                  Moving Average
+                </Button>
+            </FormControl>
           </Box>
         </Grid>
         <Grid item xs={12} sm={12} md={6} width='100%' >
           <Box className={classes.sandboxExportsButtonBox} fontWeight='fontWeightBold' mt={1} display='flex' flexDirection='row' flexWrap='wrap' >
-            <Button onClick={handleDownloadChartAsCSV} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveAltIcon />}>
-              .CSV
-            </Button>
-            <Button onClick={handleCustomSizeOpenPNG} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveAltIcon />}>
-              .PNG
-            </Button>
-            <SandboxCustomSizeExport
-              open={openCustomSizePNG}
-              handleCustomSizeClose={handleCustomSizeClosePNG}
-              exportType={'PNG'}
-              exportHeading={'Export chart to PNG'}
-              exportFunc={handleDownloadChartAsPNG} />
-            <Button onClick={handleCustomSizeOpenSVG} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveAltIcon />}>
-              .SVG
-            </Button>
-            <SandboxCustomSizeExport
-              open={openCustomSizeSVG}
-              handleCustomSizeClose={handleCustomSizeCloseSVG}
-              exportType={'SVG'}
-              exportHeading={'Export chart to SVG'}
-              exportFunc={handleDownloadChartAsSVG} />
-            <Button onClick={handleOpenSubmitFigure} className={classes.fabsvg} variant="contained" color="default" startIcon={<MailOutlineIcon />}>
-              To TSU
-            </Button>
-            <SandboxSumbitFigure
-              open={openSubmitFigure}
-              handleCloseFigure={handleCloseSubmitFigure} />
+            <FormControl component="fieldset" variant='outlined' className={classes.sandboxExportsButtonBoxForm}>
+              <FormLabel component="legend" className={classes.sandboxExportsButtonBoxFormLabel}>Export</FormLabel>
+                <Button onClick={handleDownloadChartAsCSV} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveAltIcon />}>
+                  .CSV
+                </Button>
+                <Button onClick={handleCustomSizeOpenPNG} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveAltIcon />}>
+                  .PNG
+                </Button>
+                <SandboxCustomSizeExport
+                  open={openCustomSizePNG}
+                  handleCustomSizeClose={handleCustomSizeClosePNG}
+                  exportType={'PNG'}
+                  exportHeading={'Export chart to PNG'}
+                  exportFunc={handleDownloadChartAsPNG} />
+                <Button onClick={handleCustomSizeOpenSVG} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveAltIcon />}>
+                  .SVG
+                </Button>
+                <SandboxCustomSizeExport
+                  open={openCustomSizeSVG}
+                  handleCustomSizeClose={handleCustomSizeCloseSVG}
+                  exportType={'SVG'}
+                  exportHeading={'Export chart to SVG'}
+                  exportFunc={handleDownloadChartAsSVG} />
+                <Button onClick={handleOpenSubmitFigure} className={classes.fabsvg} variant="contained" color="default" startIcon={<MailOutlineIcon />}>
+                  To TSU
+                </Button>
+                <SandboxSumbitFigure
+                  open={openSubmitFigure}
+                  handleCloseFigure={handleCloseSubmitFigure} />
+              </FormControl>
           </Box>
         </Grid>
       </Grid>
