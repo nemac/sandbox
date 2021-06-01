@@ -245,7 +245,7 @@ export default function SandboxControls() {
   // chart data from files in ../sandboxdata
   const [chartData, setChartData] = useState([{}]);
   // plotly chart layout defaults
-  const layoutDefaults = { yaxis: { rangemode: 'tozero', title: 'Days' }, xaxis: { rangemode: 'tozero' } };
+  const layoutDefaults = { yaxis: { rangemode: 'tozero', title: 'Days', fixedrange: true }, xaxis: { rangemode: 'tozero', fixedrange: true } };
   // plotly chart layout
   const [chartLayout, setChartLayout] = useState(layoutDefaults);
   // chart data json file
