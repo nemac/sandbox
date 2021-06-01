@@ -49,7 +49,7 @@ const exportButtonsMeduimlScreenHeight = exportAreaHeight;
 
 // heights for selectors - pullldowns
 const selectors = 5;
-const selectorHeight = 75;
+const selectorHeight = 80;
 const selectorAreaSmallScreenHeight = selectors * selectorHeight;
 const selectorAreaMediumScreenHeight = 2.5 * selectorHeight;
 
@@ -132,6 +132,7 @@ const useStyles = makeStyles((theme) => ({
   sandboxExports: {
     height: `${exportAreaHeight}px`,
     maxHeight: `${exportAreaHeight}px`,
+    paddingTop: '12px',
     [theme.breakpoints.down('sm')]: {
       height: `${exportAreaHeight * 2}px`,
       maxHeight: `${exportAreaHeight * 2}px`
