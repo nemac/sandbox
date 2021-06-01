@@ -23,7 +23,9 @@ const useStyles = makeStyles((theme) => ({
   sandboxErrorText: {
     backgroundColor: '#FBFCFE',
     margin: '0px',
-    paddingTop: '3px'
+    [theme.breakpoints.up('sm')]: {
+      paddingTop: '3px'
+    }
   }
 }));
 
