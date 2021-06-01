@@ -214,7 +214,7 @@ export default function SandboxSumbitFigure(props) {
   // validate if input text is an email address
   const validateEmailAddress = (text) => {
     if (text.length < 4) return false;
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(text);
   };
 
   // handle authorKey change
