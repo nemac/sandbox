@@ -245,11 +245,11 @@ const SandoxLocationNamesHumanReadable = () => ([
   },
   {
     value: 'Hawaii',
-    pullDownText: 'Hawai\’i and Pacific Islands'
+    pullDownText: 'Hawai\'i and Pacific Islands'
   },
   {
     value: 'Puerto Rico',
-    pullDownText: 'U.S. Caribbean (includes Puerto Rico & USVI)'
+    pullDownText: 'U.S. Caribbean (Includes Puerto Rico & USVI)'
   }
 ]);
 export default SandoxLocationNamesHumanReadable;
