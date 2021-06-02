@@ -1203,7 +1203,7 @@ export default function SandboxControls() {
               <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
                   items={RegionItems}
-                  controlName={'Select a Region'}
+                  controlName={'Select a Geographic Scale'}
                   onChange={handleRegionChange}
                   value={region}
                   disabled={false}
