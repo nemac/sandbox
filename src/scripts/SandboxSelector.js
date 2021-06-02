@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   sandboxErrorText: {
     backgroundColor: '#FBFCFE',
     margin: '0px',
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up('md')]: {
       paddingTop: '3px'
     }
   }
@@ -43,7 +43,7 @@ export default function Selector(props) {
   const replacePeriodType = controlName === 'Select a Time Period' ? props.replacePeriodType : (name) => name;
   const replaceSeasonType = controlName === 'Select the Season' ? props.replaceSeasonType : (name) => name;
   const selectorError = (missing && !disabled);
-  const errorLabel = (selectorError) ? <FormHelperText className={classes.sandboxErrorText}>{controlName} is required</FormHelperText> : '';
+  const errorLabel = (selectorError) ? <FormHelperText className={classes.sandboxErrorText}>* Required</FormHelperText> : '';
 
   // limit period based on season
   // not all periods are valid for seasons
