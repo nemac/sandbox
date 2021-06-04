@@ -24,11 +24,11 @@ const useStyles = makeStyles((theme) => ({
   },
   infoButton: {
     color: '#5C5C5C',
-    fontSize: '1.1rem',
+    fontSize: '1rem',
     marginLeft: theme.spacing(0.1),
     position: 'absolute',
     top: '-0.5rem',
-    left: '-0.7rem',
+    left: '-1.75rem',
     backgroundColor:'#ffffff',
     borderRadius: '30px'
   },
