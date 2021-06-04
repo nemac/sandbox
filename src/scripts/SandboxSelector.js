@@ -3,9 +3,14 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
+import Box from '@material-ui/core/Box';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Select from '@material-ui/core/Select';
+import Tooltip from '@material-ui/core/Tooltip';
+import InfoIcon from '@material-ui/icons/Info';
+import Fade from '@material-ui/core/Fade';
+
 import SandoxPeriodsHumanReadable from '../configs/SandoxPeriodsHumanReadable';
 
 const useStyles = makeStyles((theme) => ({
@@ -17,6 +22,16 @@ const useStyles = makeStyles((theme) => ({
   menuItem: {
     textAlign: 'left'
   },
+  infoButton: {
+    color: '#5C5C5C',
+    fontSize: '1.1rem',
+    marginLeft: theme.spacing(0.1),
+    position: 'absolute',
+    top: '-0.5rem',
+    left: '-0.7rem',
+    backgroundColor:'#ffffff',
+    borderRadius: '30px'
+  },
   sandboxInputLabel: {
     color: '#5C5C5C'
   },
@@ -26,6 +41,13 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('md')]: {
       paddingTop: '3px'
     }
+  },
+  toolTip: {
+    padding: theme.spacing(2),
+    fontSize: '1rem',
+  },
+  pulldownInfoHolder: {
+    position: 'relative'
   }
 }));
 
@@ -38,6 +60,7 @@ export default function Selector(props) {
   const { missing } = props;
   const { season } = props;
   const { onChange } = props;
+  const { TooltipText } = props;
   const replaceClimatevariableType = controlName === 'Select a Climate Variable' ? props.replaceClimatevariableType : (name) => name;
   const replaceLocationAbbreviation = controlName === 'Select a Location' ? props.replaceLocationAbbreviation : (name) => name;
   const replacePeriodType = controlName === 'Select a Time Period' ? props.replacePeriodType : (name) => name;
@@ -92,23 +115,30 @@ export default function Selector(props) {
   };
 
   return (
-    <FormControl variant='outlined' className={classes.formControl} fullWidth={true} disabled={disabled} error={selectorError}>
-      <InputLabel id='demo-simple-select-outlined-label' className={classes.sandboxInputLabel} >{controlName}</InputLabel>
-      <Select
-        labelId='demo-simple-select-outlined-label'
-        id='demo-simple-select-outlined'
-        value={value}
-        onChange={handleChange}
-        label={controlName}
-        className={classes.menuItem}
-        >
-        {items.map((name) => (
-          <MenuItem key={name} value={name} className={classes.menuItem}>
-            {replaceWithHumanReadable(controlName, name, season)}
-          </MenuItem>))}
-        </Select>
-        {errorLabel}
-      </FormControl>
+    <Box p={0} display='flex' width={'100%'}>
+      <FormControl variant='outlined' className={classes.formControl} fullWidth={true} disabled={disabled} error={selectorError}>
+        <InputLabel id='demo-simple-select-outlined-label' className={classes.sandboxInputLabel} >{controlName}</InputLabel>
+          <Select
+            labelId='demo-simple-select-outlined-label'
+            id='demo-simple-select-outlined'
+            value={value}
+            onChange={handleChange}
+            label={controlName}
+            className={classes.menuItem}
+            >
+            {items.map((name) => (
+              <MenuItem key={name} value={name} className={classes.menuItem}>
+                {replaceWithHumanReadable(controlName, name, season)}
+              </MenuItem>))}
+            </Select>
+          {errorLabel}
+        </FormControl>
+        <Box p={0} m={0} className={classes.pulldownInfoHolder}>
+          <Tooltip title={TooltipText} aria-label={TooltipText} placement='bottom-end' TransitionComponent={Fade} arrow classes={{ tooltip: classes.toolTip }}>
+            <InfoIcon className={classes.infoButton} />
+          </Tooltip>
+        </Box>
+      </Box>
   );
 }
 
@@ -118,6 +148,7 @@ Selector.propTypes = {
   value: PropTypes.string,
   disabled: PropTypes.bool,
   season: PropTypes.string,
+  TooltipText: PropTypes.string,
   missing: PropTypes.bool,
   replaceClimatevariableType: PropTypes.func,
   replaceLocationAbbreviation: PropTypes.func,

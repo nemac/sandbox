@@ -47,15 +47,20 @@ const exportAreaHeight = 75;
 const exportButtonsSmallScreenHeight = exportButtons * exportButtonHeight;
 const exportButtonsMeduimlScreenHeight = exportAreaHeight;
 
-// heights for selectors - pullldowns
-const selectors = 5;
-const selectorHeight = 80;
-const selectorAreaSmallScreenHeight = selectors * selectorHeight;
-const selectorAreaMediumScreenHeight = 2.5 * selectorHeight;
-
 // heights for header - title
 const headerTitleHeight = 50;
 const headerTitleSmallScreenHeight = 75;
+
+// heights for header - description
+const headerDescriptionHeight = 25;
+const headerDescriptionSmallScreenHeight = 50;
+
+// heights for selectors - pullldowns
+const selectors = 5;
+const selectorHeight = 80;
+const selectorAreaSmallScreenHeight = (selectors * selectorHeight) +
+    headerDescriptionSmallScreenHeight;
+const selectorAreaMediumScreenHeight = 3 * selectorHeight;
 
 // heights for entire header with buttons, pulldowns, and header
 const actionAreaSmallScreenHeight =
@@ -87,8 +92,18 @@ const useStyles = makeStyles((theme) => ({
       maxHeight: `${headerTitleSmallScreenHeight}px`
     }
   },
+  sandboxDescription: {
+    height: `${headerDescriptionHeight}px`,
+    maxHeight: `${headerDescriptionHeight}px`,
+    color: fontColor,
+    marginBottom: theme.spacing(1.25),
+    [theme.breakpoints.down('xs')]: {
+      height: `${headerDescriptionSmallScreenHeight}px`,
+      maxHeight: `${headerDescriptionSmallScreenHeight}px`
+    }
+  },
   sandboxSelectionArea: {
-    maxHeight: '200px',
+    maxHeight: '375px',
     backgroundColor: pullDownBackground,
     border: `1px solid ${darkGrey}`,
     borderRadius: '4px',
@@ -1196,11 +1211,15 @@ export default function SandboxControls() {
                 <Box onClick={handleDownloadChartAsSVG} px={1} fontSize='h4.fontSize' >
                   <InsertChartOutlinedIcon fontSize='large' className={'sandbox-header-icon'} />
                 </Box>
-                <Box px={1} fontSize='h5.fontSize' >NCA Sandbox - Climate Charts</Box>
+                <Box px={1} fontSize='h5.fontSize' >NCA Figure and Climate Data Generator</Box>
               </Box>
             </Grid>
+            <Grid item xs={12} className={classes.sandboxDescription} width='100%' >
+              <Box p={0} display='flex' flexWrap='nowrap' justifyContent='flex-start'>
+                <Box px={1} fontWeight={400} fontSize='caption' >Access basic climate data to create a proposed figure supporting your NCA chapter.</Box>              </Box>
+            </Grid>
             <Grid item xs={12} sm={3} md={2} className={'sandbox-varriable-selectors'}>
-              <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
+              <Box fontWeight='fontWeightBold' ml={1} mt={1} mb={1} mr={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
                   items={RegionItems}
                   controlName={'Select a Geographic Scale'}
@@ -1210,11 +1229,12 @@ export default function SandboxControls() {
                   season={season}
                   missing={(!region)}
                   replaceClimatevariableType={replaceClimatevariableType}
+                  TooltipText={'Select a scale: national, NCA region, or state'}
                   />
               </Box>
             </Grid>
             <Grid item xs={12} sm={3} md={2} className={'sandbox-varriable-selectors'}>
-              <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
+              <Box fontWeight='fontWeightBold' ml={1} mt={1} mb={1} mr={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
                   items={locationItems}
                   controlName={'Select a Location'}
@@ -1225,11 +1245,12 @@ export default function SandboxControls() {
                   missing={(region !== 'National' && !location)}
                   replaceClimatevariableType={replaceClimatevariableType}
                   replaceLocationAbbreviation={replaceLocationAbbreviation}
+                  TooltipText={'Select the applicable NCA region or state based on your scale selection. Not applicable for national-scale figures'}
                   />
               </Box>
             </Grid>
             <Grid item xs={12} sm={3} md={2} className={'sandbox-varriable-selectors'} >
-              <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
+              <Box fontWeight='fontWeightBold' ml={1} mt={1} mb={1} mr={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
                   items={Seasons}
                   controlName={'Select the Season'}
@@ -1240,11 +1261,12 @@ export default function SandboxControls() {
                   season={season}
                   replaceClimatevariableType={replaceClimatevariableType}
                   replaceSeasonType={replaceSeasonType}
+                  TooltipText={'Select the Season'}
                   />
               </Box>
             </Grid>
             <Grid item xs={12} sm={6} md={4} className={'sandbox-varriable-selectors'} >
-              <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
+              <Box fontWeight='fontWeightBold' ml={1} mt={1} mb={1} mr={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
                   items={climatevariableItems}
                   controlName={'Select a Climate Variable'}
@@ -1254,11 +1276,12 @@ export default function SandboxControls() {
                   disabled={climatevariableDisabled}
                   missing={(!climatevariable)}
                   replaceClimatevariableType={replaceClimatevariableType}
+                  TooltipText={'Select a Climate Variable'}
                   />
               </Box>
             </Grid>
             <Grid item xs={12} sm={3} md={2} className={'sandbox-varriable-selectors'} >
-              <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
+              <Box fontWeight='fontWeightBold' ml={1} mt={1} mb={1} mr={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
                   items={PeriodsFull}
                   controlName={'Select a Time Period'}
@@ -1269,6 +1292,7 @@ export default function SandboxControls() {
                   season={season}
                   replaceClimatevariableType={replaceClimatevariableType}
                   replacePeriodType={replacePeriodType}
+                  TooltipText={'Select a Time Period'}
                   />
               </Box>
             </Grid>
