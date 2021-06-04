@@ -22,16 +22,6 @@ const useStyles = makeStyles((theme) => ({
   menuItem: {
     textAlign: 'left'
   },
-  infoButton: {
-    color: '#5C5C5C',
-    fontSize: '1.25rem',
-    marginLeft: theme.spacing(0.1),
-    position: 'absolute',
-    top: '-0.5rem',
-    left: '-1.75rem',
-    backgroundColor:'#ffffff',
-    borderRadius: '30px'
-  },
   sandboxInputLabel: {
     color: '#5C5C5C'
   },
@@ -41,6 +31,16 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('md')]: {
       paddingTop: '3px'
     }
+  },
+  infoButton: {
+    color: '#5C5C5C',
+    fontSize: '1.25rem',
+    marginLeft: theme.spacing(0.1),
+    position: 'absolute',
+    top: '-0.5rem',
+    left: '-1.75rem',
+    backgroundColor:'#ffffff',
+    borderRadius: '30px'
   },
   toolTip: {
     padding: theme.spacing(2),

@@ -6,6 +6,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import InsertChartOutlinedIcon from '@material-ui/icons/InsertChartOutlined';
+import Tooltip from '@material-ui/core/Tooltip';
+import Fade from '@material-ui/core/Fade';
+import InfoIcon from '@material-ui/icons/Info';
 
 // sandbox conmponents
 import SandboxPlotRegion from './SandboxPlotRegion';
@@ -159,7 +162,21 @@ const useStyles = makeStyles((theme) => ({
   },
   extendedIcon: {
     marginRight: theme.spacing(1)
-  }
+  },
+  infoButton: {
+    color: '#5C5C5C',
+    fontSize: '1.5rem',
+    marginLeft: theme.spacing(0.1),
+    position: 'absolute',
+    // top: '-0.5rem',
+    // left: '-1.75rem',
+    backgroundColor:'#ffffff',
+    borderRadius: '30px'
+  },
+  toolTip: {
+    padding: theme.spacing(2),
+    fontSize: '1rem',
+  },
 }));
 
 export default function SandboxControls() {
@@ -1211,7 +1228,13 @@ export default function SandboxControls() {
                 <Box onClick={handleDownloadChartAsSVG} px={1} fontSize='h4.fontSize' >
                   <InsertChartOutlinedIcon fontSize='large' className={'sandbox-header-icon'} />
                 </Box>
-                <Box px={1} fontSize='h5.fontSize' >NCA Figure and Climate Data Generator</Box>
+                <Box px={1} fontSize='h5.fontSize' >NCA Figure and Climate Data Generator
+                </Box>
+                <Box p={0} m={0} className={classes.pulldownInfoHolder}>
+                  <Tooltip title={"View climate data from X source etc"} aria-label={"View climate data from X source etc"} placement='bottom-end' TransitionComponent={Fade} arrow classes={{ tooltip: classes.toolTip }}>
+                    <InfoIcon className={classes.infoButton} />
+                  </Tooltip>
+                </Box>
               </Box>
             </Grid>
             <Grid item xs={12} className={classes.sandboxDescription} width='100%' >
