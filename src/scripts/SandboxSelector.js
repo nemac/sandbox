@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   },
   infoButton: {
     color: '#5C5C5C',
-    fontSize: '1rem',
+    fontSize: '1.25rem',
     marginLeft: theme.spacing(0.1),
     position: 'absolute',
     top: '-0.5rem',
