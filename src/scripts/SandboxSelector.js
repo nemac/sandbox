@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '1.25rem',
     marginLeft: theme.spacing(0.1),
     position: 'absolute',
-    top: '-0.5rem',
+    top: '-0.66rem',
     left: '-1.75rem',
     backgroundColor:'#ffffff',
     borderRadius: '30px'
