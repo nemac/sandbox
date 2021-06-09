@@ -132,8 +132,8 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   sandboxChartRegion: {
-    height: (chartOnly) => (chartOnly.chartOnly === 'yes' ? '100%' : 'calc(100% - 210px)'),
-    maxHeight: (chartOnly) => (chartOnly.chartOnly === 'yes' ? '100%' : 'calc(100% - 210px)'),
+    height: (chartOnly) => (chartOnly.chartOnly === 'yes' ? '100%' : 'calc(100% - 255px)'),
+    maxHeight: (chartOnly) => (chartOnly.chartOnly === 'yes' ? '100%' : 'calc(100% - 255x)'),
     minHeight: `${chartRegionMinHeight}px`,
     [theme.breakpoints.down('sm')]: {
       height: `${sandboxChartRegionSmallScreenHeight}px !important`,
@@ -168,15 +168,13 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '1.5rem',
     marginLeft: theme.spacing(0.1),
     position: 'absolute',
-    // top: '-0.5rem',
-    // left: '-1.75rem',
-    backgroundColor:'#ffffff',
+    backgroundColor: '#ffffff',
     borderRadius: '30px'
   },
   toolTip: {
     padding: theme.spacing(2),
-    fontSize: '1rem',
-  },
+    fontSize: '1rem'
+  }
 }));
 
 export default function SandboxControls() {
@@ -321,7 +319,7 @@ export default function SandboxControls() {
     const { chartDataSeason } = props;
     const { chartLineChart } = props;
     const { chartOnlyProp } = props;
-
+    // const { chartShowLine } = props
     // create new URL parameter object
     const searchParams = new URLSearchParams();
 
@@ -333,6 +331,7 @@ export default function SandboxControls() {
     searchParams.set('season', chartDataSeason);
     searchParams.set('line', chartLineChart);
     searchParams.set('chartonly', chartOnlyProp);
+    // searchParams.set('chartShowLine', chartShowLine);
 
     // convert url parameters to a string and add the leading ? so it we can add it
     // to browser history (back button works)
@@ -354,6 +353,8 @@ export default function SandboxControls() {
     const { climateDataFilesJSONFile } = props;
     const { chartLineChart } = props;
     const { chartOnlyProp } = props;
+    // const chartShowLine = false;
+
     // update url history this is the point at which we will need to make sure
     // the graph looks the same when shared via url
     sandBoxURL({
@@ -364,6 +365,7 @@ export default function SandboxControls() {
       chartDataSeason,
       chartLineChart,
       chartOnlyProp
+      // chartShowLine,
     });
 
     // limit the possible data file to period
@@ -445,6 +447,7 @@ export default function SandboxControls() {
           chartLineChart,
           dataMissing,
           season: chartDataSeason
+          // chartShowLine
         };
 
         // get the charts data formated for plotly
@@ -577,6 +580,7 @@ export default function SandboxControls() {
             climateDataFilesJSONFile: responseData,
             chartLineChart: lineChart,
             chartOnlyProp: chartOnly
+            // chartShowLine: false
           });
         }
         return responseData;
@@ -690,6 +694,7 @@ export default function SandboxControls() {
       climateDataFilesJSONFile: climateDataFilesJSON,
       chartLineChart: lineChart,
       chartOnlyProp: 'no'
+      // chartShowLine: false
     });
   };
 
@@ -706,6 +711,7 @@ export default function SandboxControls() {
       climateDataFilesJSONFile: climateDataFilesJSON,
       chartLineChart: lineChart,
       chartOnlyProp: 'no'
+      // chartShowLine: false
     });
   };
 
@@ -722,6 +728,7 @@ export default function SandboxControls() {
       climateDataFilesJSONFile: climateDataFilesJSON,
       chartLineChart: lineChart,
       chartOnlyProp: 'no'
+      // chartShowLine: false
     });
     return null;
   };
@@ -739,6 +746,7 @@ export default function SandboxControls() {
       climateDataFilesJSONFile: climateDataFilesJSON,
       chartLineChart: lineChart,
       chartOnlyProp: 'no'
+      // chartShowLine: false
     });
     return null;
   };
@@ -784,6 +792,7 @@ export default function SandboxControls() {
       climateDataFilesJSONFile: climateDataFilesJSON,
       chartLineChart: lineChart,
       chartOnlyProp: 'no'
+      // chartShowLine: false
     });
     return null;
   };
@@ -803,6 +812,7 @@ export default function SandboxControls() {
       climateDataFilesJSONFile: climateDataFilesJSON,
       chartLineChart: 'avg',
       chartOnlyProp: 'no'
+      // chartShowLine: false
     });
     return null;
   };
@@ -822,6 +832,7 @@ export default function SandboxControls() {
       climateDataFilesJSONFile: climateDataFilesJSON,
       chartLineChart: 'mavg',
       chartOnlyProp: 'no'
+      // chartShowLine: false
     });
     return null;
   };
@@ -842,6 +853,7 @@ export default function SandboxControls() {
       climateDataFilesJSONFile: climateDataFilesJSON,
       chartLineChart: 'year',
       chartOnlyProp: 'no'
+      // chartShowLine: false
     });
     return null;
   };
@@ -1231,7 +1243,7 @@ export default function SandboxControls() {
                 <Box px={1} fontSize='h5.fontSize' >NCA Figure and Climate Data Generator
                 </Box>
                 <Box p={0} m={0} className={classes.pulldownInfoHolder}>
-                  <Tooltip title={"View climate data from X source etc"} aria-label={"View climate data from X source etc"} placement='bottom-end' TransitionComponent={Fade} arrow classes={{ tooltip: classes.toolTip }}>
+                  <Tooltip title={'View climate data from X source etc'} aria-label={'View climate data from X source etc'} placement='bottom-end' TransitionComponent={Fade} arrow classes={{ tooltip: classes.toolTip }}>
                     <InfoIcon className={classes.infoButton} />
                   </Tooltip>
                 </Box>

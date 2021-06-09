@@ -39,12 +39,12 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     top: '-0.66rem',
     left: '-1.75rem',
-    backgroundColor:'#ffffff',
+    backgroundColor: '#ffffff',
     borderRadius: '30px'
   },
   toolTip: {
     padding: theme.spacing(2),
-    fontSize: '1rem',
+    fontSize: '1rem'
   },
   pulldownInfoHolder: {
     position: 'relative'

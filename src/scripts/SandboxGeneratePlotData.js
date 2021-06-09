@@ -36,6 +36,7 @@ class SandboxGeneratePlotData {
     this.xmax = props.xmax;
     this.xvals = props.xvals;
     this.yvals = props.yvals;
+    // this.chartShowLine = props.chartShowLine;
     this.lineChart = props.chartLineChart;
     this.maxVal = Math.max(...this.yvals);
     this.minVal = Math.min(...this.yvals);
@@ -631,6 +632,7 @@ class SandboxGeneratePlotData {
       mode: 'lines',
       name: `Average ${this.textUnitsWords()} ${this.legendPerText}`,
       type: 'scatter',
+      // visible: this.chartShowLine,
       x: this.xvals,
       y: this.getYvalues(),
       marker: {
