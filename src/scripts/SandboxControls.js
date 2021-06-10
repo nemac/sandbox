@@ -81,7 +81,7 @@ const useStyles = makeStyles((theme) => ({
   sandboxRoot: {
     backgroundColor: white,
     color: fontColor,
-    height: 'calc(100vh - 17px)',
+    height: 'calc(100vh - 16px)',
     [theme.breakpoints.down('xs')]: {
       overflow: 'scroll'
     }
@@ -1231,7 +1231,7 @@ export default function SandboxControls() {
   };
 
   return (
-    <div className={classes.sandboxRoot}>
+    <div>
       <Grid container spacing={0} justify='flex-start' direction={'row'} className={classes.sandboxRoot}>
         <Grid item xs={12} width='100%' className={classes.sandboxSelectionAreaHolder} >
           <Grid container spacing={0} justify='flex-start' direction={'row'} className={classes.sandboxSelectionArea}>
