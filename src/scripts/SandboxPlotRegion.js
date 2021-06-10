@@ -9,8 +9,7 @@ export default function SandboxPlotRegion(props) {
   const { plotlyData } = props;
   const config = { ...{ responsive: true, displayModeBar: false } };
   const responsiveChartRef = React.useRef();
-  const elREF = responsiveChartRef.current;
-  const [layout, _setLayout] = React.useState({...props.plotlyLayout});
+  const [layout, _setLayout] = React.useState({ ...props.plotlyLayout });
 
   // create ref to use in listener
   const layoutRef = React.useRef(layout);
@@ -18,12 +17,6 @@ export default function SandboxPlotRegion(props) {
     layoutRef.current = data;
     _setLayout(data);
   };
-
-  // effect for prop change so when new prop is passed in from parent the graph is re-rendered
-  React.useLayoutEffect(() => {
-    setLayout(props.plotlyLayout);
-    resizeChart();
-  }, [props.plotlyLayout])
 
   // split title for small screens
   const splitTitle = (title) => {
@@ -49,7 +42,7 @@ export default function SandboxPlotRegion(props) {
 
   const resizeChart = () => {
     const elREF = responsiveChartRef.current;
-    if(!elREF) return null;
+    if (!elREF) return null;
     const el = elREF;
     const copiedLayout = layoutRef.current;
     copiedLayout.width = el.parentNode.getBoundingClientRect().width;
@@ -60,7 +53,6 @@ export default function SandboxPlotRegion(props) {
 
     // only change xaxis if the object exists
     if (copiedLayout.xaxis) {
-      props.plotlyLayout.visible = false;
       copiedLayout.xaxis.tickangle = angle;
       copiedLayout.xaxis.dtick = dtick;
     }
@@ -79,9 +71,16 @@ export default function SandboxPlotRegion(props) {
       copiedLayout.title.x = titleX;
     }
 
-    setLayout({...copiedLayout});
+    setLayout({ ...copiedLayout });
     window.dispatchEvent(new Event('resizedone'));
-  }
+    return null;
+  };
+
+  // effect for prop change so when new prop is passed in from parent the graph is re-rendered
+  React.useLayoutEffect(() => {
+    setLayout(props.plotlyLayout);
+    resizeChart();
+  }, [props.plotlyLayout]);
 
   React.useEffect(() => {
     window.addEventListener('resize', resizeChart);
@@ -89,8 +88,8 @@ export default function SandboxPlotRegion(props) {
     // returned function will be called on component unmount
     return () => {
       window.removeEventListener(resizeChart);
-    }
-  }, [])
+    };
+  }, []);
 
   return (
     <div className="PlotRegionDiv"
@@ -105,7 +104,7 @@ export default function SandboxPlotRegion(props) {
         revision={Math.floor(Math.random() * 100000)}
         />
     </div>
-  )
+  );
 }
 
 SandboxPlotRegion.propTypes = {
