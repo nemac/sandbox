@@ -81,7 +81,7 @@ const useStyles = makeStyles((theme) => ({
   sandboxRoot: {
     backgroundColor: white,
     color: fontColor,
-    height: 'calc(100vh - 20px)',
+    height: 'calc(100vh - 17px)',
     [theme.breakpoints.down('xs')]: {
       overflow: 'scroll'
     }
@@ -132,8 +132,8 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   sandboxChartRegion: {
-    height: (chartOnly) => (chartOnly.chartOnly === 'yes' ? '100%' : 'calc(100% - 255px)'),
-    maxHeight: (chartOnly) => (chartOnly.chartOnly === 'yes' ? '100%' : 'calc(100% - 255x)'),
+    height: (chartOnly) => (chartOnly.chartOnly === 'yes' ? '100%' : 'calc(100% - 250px)'),
+    maxHeight: (chartOnly) => (chartOnly.chartOnly === 'yes' ? '100%' : 'calc(100% - 250x)'),
     minHeight: `${chartRegionMinHeight}px`,
     [theme.breakpoints.down('sm')]: {
       height: `${sandboxChartRegionSmallScreenHeight}px !important`,
