@@ -1288,7 +1288,7 @@ export default function SandboxControls() {
               <Box fontWeight='fontWeightBold' ml={1} mt={1} mb={1} mr={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
                   items={Seasons}
-                  controlName={'Select the Season'}
+                  controlName={'Select the Time Scale'}
                   onChange={handleSeasonChange}
                   value={season}
                   disabled={seasonDisabled}
@@ -1296,7 +1296,7 @@ export default function SandboxControls() {
                   season={season}
                   replaceClimatevariableType={replaceClimatevariableType}
                   replaceSeasonType={replaceSeasonType}
-                  TooltipText={'Select the Season'}
+                  TooltipText={'Select from among two annual scales or the four meteorological seasons. Your selection will drive the what is available in the climate variables.'}
                   />
               </Box>
             </Grid>
@@ -1311,7 +1311,7 @@ export default function SandboxControls() {
                   disabled={climatevariableDisabled}
                   missing={(!climatevariable)}
                   replaceClimatevariableType={replaceClimatevariableType}
-                  TooltipText={'Select a Climate Variable'}
+                  TooltipText={'Select an applicable climate variable. Your available choices are based on your time scale selection. Your choice here will drive the time period/s available. '}
                   />
               </Box>
             </Grid>
@@ -1327,7 +1327,9 @@ export default function SandboxControls() {
                   season={season}
                   replaceClimatevariableType={replaceClimatevariableType}
                   replacePeriodType={replacePeriodType}
-                  TooltipText={'Select a Time Period'}
+                  TooltipText={'Your available choices are based on your time scale and climate variable selections. Time periods of 1900–2020 or 1950–2020 are ' +
+                    'available for annual threshold exceedances with any climate variable; the time period of 1895–2020 is available for mean temperature ' +
+                    'and precipitation at any time scale with any climate variable.'}
                   />
               </Box>
             </Grid>

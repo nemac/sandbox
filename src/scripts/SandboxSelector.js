@@ -64,7 +64,7 @@ export default function Selector(props) {
   const replaceClimatevariableType = controlName === 'Select a Climate Variable' ? props.replaceClimatevariableType : (name) => name;
   const replaceLocationAbbreviation = controlName === 'Select a Location' ? props.replaceLocationAbbreviation : (name) => name;
   const replacePeriodType = controlName === 'Select a Time Period' ? props.replacePeriodType : (name) => name;
-  const replaceSeasonType = controlName === 'Select the Season' ? props.replaceSeasonType : (name) => name;
+  const replaceSeasonType = controlName === 'Select the Time Scale' ? props.replaceSeasonType : (name) => name;
   const selectorError = (missing && !disabled);
   const errorLabel = (selectorError) ? <FormHelperText className={classes.sandboxErrorText}>* Required</FormHelperText> : '';
 
@@ -107,7 +107,7 @@ export default function Selector(props) {
         return replaceRegional(val);
       case 'Select a Time Period':
         return replacePeriodType(val, seasonHR);
-      case 'Select the Season':
+      case 'Select the Time Scale':
         return replaceSeasonType(val);
       default:
         return replaceClimatevariableType(val, seasonHR);

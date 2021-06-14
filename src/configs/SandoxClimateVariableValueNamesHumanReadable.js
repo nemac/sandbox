@@ -86,25 +86,25 @@ const SandoxClimateVariableValueNamesHumanReadable = () => ([
   {
     value: 'pcpn',
     pullDownText: 'Total Precipitation',
-    chartTitle: 'Annual (Jan - Dec) total Precipitation pcpn',
+    chartTitle: 'Annual (Jan—Dec) total Precipitation pcpn',
     season: 'ann'
   },
   {
     value: 'tmpc',
     pullDownText: 'Average temperature',
-    chartTitle: 'Annual (Jan - Dec) average temperature',
+    chartTitle: 'Annual (Jan—Dec) average temperature',
     season: 'ann'
   },
   {
     value: 'tmin',
     pullDownText: 'Average minimum temperature',
-    chartTitle: 'Annual (Jan - Dec) average minimum temperature',
+    chartTitle: 'Annual (Jan—Dec) average minimum temperature',
     season: 'ann'
   },
   {
     value: 'tmax',
     pullDownText: 'Average maximum temperature',
-    chartTitle: 'Annual (Jan - Dec) average maximum temperature',
+    chartTitle: 'Annual (Jan—Dec) average maximum temperature',
     season: 'ann'
   },
   {
@@ -187,19 +187,19 @@ const SandoxClimateVariableValueNamesHumanReadable = () => ([
   },
   {
     value: 'tmpc',
-    pullDownText: 'Average temperature',
+    pullDownText: 'Average Temperature',
     chartTitle: 'Fall (Sep, Oct, Nov) average temperature',
     season: 'son'
   },
   {
     value: 'tmin',
-    pullDownText: 'Average minimum temperature',
+    pullDownText: 'Average Minimum Temperature',
     chartTitle: 'Fall (Sep, Oct, Nov) average minimum temperature',
     season: 'son'
   },
   {
     value: 'tmax',
-    pullDownText: 'Average maximum temperature',
+    pullDownText: 'Average Maximum Temperature',
     chartTitle: 'Fall (Sep, Oct, Nov) average maximum temperature',
     season: 'son'
   }
