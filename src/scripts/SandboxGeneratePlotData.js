@@ -58,7 +58,7 @@ class SandboxGeneratePlotData {
     this.yValsMovingAverage = this.computeMovingAverage();
     this.xValsMovingAverage = this.movingAverageXValues();
     this.xValsPeriod = this.xValsPeriod();
-    this.xValsPeriodLabel = this.xValsPeriodLabel();
+    // this.xValsPeriodLabel = this.xValsPeriodLabel();
     const sumAll = this.yValsSumAll();
     this.yValsSumAll = sumAll <= -50 ? undefined : sumAll;
     const avgAll = this.yValsAvgAll();
@@ -70,6 +70,7 @@ class SandboxGeneratePlotData {
     this.legendPerText = this.createlegendPerText();
     this.legendEllapsedText = this.legendEllapsedText();
     this.averageTextUnits = this.averageTextUnits();
+    console.log('this. this.xValsPeriodLabel()', this.xValsPeriodLabel())
   }
 
   // default season text
@@ -78,7 +79,7 @@ class SandboxGeneratePlotData {
     const seasonHumanReadable = sandboxHumanReadable.getSeasonPullDownText(this.season);
     if (this.season !== 'yearly') {
       if (this.season === 'ann') return 'annually';
-      return seasonHumanReadable.toLowerCase().split(' ')[0];
+      return seasonHumanReadable.toLowerCase().split(' ')[0].replace(':','');
     }
     return 'year';
   }
@@ -114,10 +115,10 @@ class SandboxGeneratePlotData {
     }
     // threshold which is days in the regions locatipon
     if (this.season === 'yearly') {
-      return ' days';
+      return 'days';
     }
     // deault to days
-    return ' days';
+    return 'days';
   }
 
   // creates units days, °F, " for annotation on Average line
@@ -128,22 +129,22 @@ class SandboxGeneratePlotData {
     }
     // threshold which is days in the regions locatipon
     if (this.season === 'yearly') {
-      return ' days';
+      return 'days';
     }
     // deault to days
-    return ' days';
+    return 'days';
   }
 
   // hover text for the yearly line
   yearLineText(x, y) {
     const seasonTextPrefix = this.hoverTemplateSeasonTextPrefix();
     const seasonText = this.hoverTemplateSeasonText();
-    const climateVariableText = this.hoverTemplateClimateVariableText();
+    const climateVariableText = this.hoverTemplateClimateVariableText().replace('°f','°F');
     const unitText = this.averageTextUnits;
     // season sentence
-    if (this.season !== 'yearly') return ` In %{x} the ${climateVariableText} ${this.SmallScreenBreak} was %{y:0.2f}${unitText} ${seasonTextPrefix} ${seasonText} <extra></extra>`;
+    if (this.season !== 'yearly') return ` In %{x} the ${climateVariableText}${this.SmallScreenBreak} was %{y:0.2f}${unitText} ${seasonTextPrefix} ${seasonText} <extra></extra>`;
     // threshold and default sentence
-    return ` In %{x} there was an average of %{y:0.2f} ${this.SmallScreenBreak} ${climateVariableText} <extra></extra>`;
+    return ` In %{x} there was an average of %{y:0.2f}${this.SmallScreenBreak} ${climateVariableText} <extra></extra>`;
   }
 
   // hover text for year bar
@@ -153,21 +154,21 @@ class SandboxGeneratePlotData {
     const climateVariableText = this.hoverTemplateClimateVariableText();
     const unitText = this.averageTextUnits;
     // season sentence
-    if (this.season !== 'yearly') return ` In %{x} the ${climateVariableText} ${this.SmallScreenBreak} was %{y:0.2f}${unitText} ${seasonTextPrefix} ${seasonText}   <extra></extra>`;
+    if (this.season !== 'yearly') return ` In %{x} the ${climateVariableText}${this.SmallScreenBreak} was %{y:0.2f}${unitText} ${seasonTextPrefix} ${seasonText}   <extra></extra>`;
     // threshold and default sentence
-    return ` In %{x} there was an average of %{y:0.2f} ${this.SmallScreenBreak} ${climateVariableText} <extra></extra>`;
+    return ` In %{x} there were an average of %{y:0.2f}${this.SmallScreenBreak} ${climateVariableText} <extra></extra>`;
   }
 
   // hover text for average bar
   averageBarText(x, y) {
     const seasonTextPrefix = this.hoverTemplateSeasonTextPrefix();
     const seasonText = this.hoverTemplateSeasonText();
-    const climateVariableText = this.hoverTemplateClimateVariableText();
+    const climateVariableText = this.hoverTemplateClimateVariableText().replace('°f','°F');
     const unitText = this.averageTextUnits;
     // season sentence
-    if (this.season !== 'yearly') return ` Between %{x} the ${climateVariableText} ${this.SmallScreenBreak} was %{y:0.2f}${unitText} ${seasonTextPrefix} ${seasonText} <extra></extra>`;
+    if (this.season !== 'yearly') return ` Between %{x} the ${climateVariableText}${this.SmallScreenBreak} was %{y:0.2f}${unitText} ${seasonTextPrefix} ${seasonText} <extra></extra>`;
     // threshold and default sentence
-    return ` Between the years %{x} there was %{y:0.2f} ${this.SmallScreenBreak} ${climateVariableText} <extra></extra>`;
+    return ` Between the years  %{x} there were %{y:0.2f}${this.SmallScreenBreak} ${climateVariableText} <extra></extra>`;
   }
 
   // hover text for average line
@@ -177,8 +178,8 @@ class SandboxGeneratePlotData {
     const climateVariableText = this.hoverTemplateClimateVariableText();
     const unitText = this.averageTextUnits;
     // season sentence
-    if (this.season !== 'yearly') return ` Between %{customdata} the ${climateVariableText} ${this.SmallScreenBreak} was %{y:0.2f}${unitText} ${seasonTextPrefix} ${seasonText} <extra></extra>`;
-    return ` Between %{customdata} there was %{y:0.2f} ${this.SmallScreenBreak} ${climateVariableText} ${seasonTextPrefix} ${seasonText} <extra></extra>`;
+    if (this.season !== 'yearly') return ` Between %{customdata} the ${climateVariableText}${this.SmallScreenBreak} was %{y:0.2f}${unitText} ${seasonTextPrefix} ${seasonText} <extra></extra>`;
+    return ` Between %{customdata} there were %{y:0.2f}${this.SmallScreenBreak} ${climateVariableText} ${seasonTextPrefix} ${seasonText} <extra></extra>`;
   }
 
   // hover text for moving average line
@@ -188,8 +189,8 @@ class SandboxGeneratePlotData {
     const climateVariableText = this.hoverTemplateClimateVariableText();
     const unitText = this.averageTextUnits;
     // season sentence
-    if (this.season !== 'yearly') return ` Between %{customdata} the ${climateVariableText} ${this.SmallScreenBreak} was %{y:0.2f}${unitText} ${seasonTextPrefix} ${seasonText} <extra></extra>`;
-    return ` Between %{customdata} there was %{y:0.2f} ${this.SmallScreenBreak} ${climateVariableText} ${seasonTextPrefix} ${seasonText} <extra></extra>`;
+    if (this.season !== 'yearly') return ` Between %{customdata} the ${climateVariableText}${this.SmallScreenBreak} was %{y:0.2f}${unitText} ${seasonTextPrefix} ${seasonText} <extra></extra>`;
+    return ` Between %{customdata} there were %{y:0.2f}${this.SmallScreenBreak}${climateVariableText} ${seasonTextPrefix} ${seasonText} <extra></extra>`;
   }
 
   // creates legend text in parentheses
@@ -198,7 +199,7 @@ class SandboxGeneratePlotData {
     if (this.season !== 'yearly') {
       const seasonText = this.hoverTemplateSeasonText();
       const unitText = this.textUnitsWords();
-      const legendPerText = `${unitText} - ${seasonText.split(' ')[0].toLowerCase()}`;
+      const legendPerText = `${unitText}—${seasonText.split(' ')[0].toLowerCase()}`;
       return legendPerText;
     }
     // threshold legend text
@@ -374,21 +375,21 @@ class SandboxGeneratePlotData {
     return movingAveragesX;
   }
 
-  // creates the y values for each period
+  // creates the x values for each period
   xValsPeriodLabel() {
     let count = 0;
     const yValsPeriodAll = this.xvals.map((value, index) => { // eslint-disable-line
       // return value
       if (index === 0) {
         const plus = value + (this.periodGroups - 1);
-        const tickText = `${value}–${plus.toString().slice(-2)}`;
+        const tickText = `${value}—${plus.toString().slice(-2)}`;
         count += 1;
         return tickText;
       }
       if (count === (this.periodGroups - 1)) {
         count = 0;
         const plus = value + (this.periodGroups - 1);
-        const tickText = `${value}–${plus.toString().slice(-2)}`;
+        const tickText = `${value}—${plus.toString().slice(-2)}`;
         count += 1;
         return tickText;
       }
@@ -599,7 +600,7 @@ class SandboxGeneratePlotData {
     return {
       uid: SandboxGeneratePlotData.uuidv(),
       mode: 'lines',
-      name: `5-Year Average (${this.legendEllapsedText})`,
+      name: `5—Year Average (${this.legendEllapsedText})`,
       type: 'histogram',
       histfunc: 'avg',
       xbins: {
@@ -608,7 +609,7 @@ class SandboxGeneratePlotData {
         size: 5
       },
       nbinsx: 0,
-      x: this.xvals,
+      x:  this.xvals,
       y: this.getYvalues(),
       bargroupgap: 5,
       marker: {
@@ -685,7 +686,7 @@ class SandboxGeneratePlotData {
     return {
       uid: SandboxGeneratePlotData.uuidv(),
       mode: 'lines',
-      name: `5-Year moving average (${this.legendEllapsedText})`,
+      name: `5—Year moving average (${this.legendEllapsedText})`,
       type: 'scatter',
       x: this.xValsMovingAverage,
       y: this.yValsMovingAverage,
@@ -697,7 +698,7 @@ class SandboxGeneratePlotData {
         simplify: true
       },
       connectgaps: true,
-      customdata: this.xValsMovingAverage.map((val) => `${val - Math.floor(this.periodGroups / 2)} - ${(val - Math.floor(this.periodGroups / 2)) + this.AverageMovingPeriod}`),
+      customdata: this.xValsMovingAverage.map((val) => `${val - Math.floor(this.periodGroups / 2)}—${(val - Math.floor(this.periodGroups / 2)) + this.AverageMovingPeriod}`),
       hoverinfo: 'x+y',
       hovertemplate: this.movingAverageLineText()
     };
@@ -708,7 +709,7 @@ class SandboxGeneratePlotData {
     return {
       uid: SandboxGeneratePlotData.uuidv(),
       mode: 'lines',
-      name: `5-Year average (${this.legendEllapsedText})`,
+      name: `5—Year average (${this.legendEllapsedText})`,
       type: 'scatter',
       x: this.xValsPeriod,
       y: this.yValsAvgByPeriod,
@@ -720,7 +721,7 @@ class SandboxGeneratePlotData {
         simplify: true
       },
       connectgaps: true,
-      customdata: this.xValsPeriod.map((val) => `${val - Math.floor(this.periodGroups / 2)} - ${(val - Math.floor(this.periodGroups / 2)) + this.periodGroups - 1}`),
+      customdata: this.xValsPeriod.map((val) => `${val - Math.floor(this.periodGroups / 2)}—${(val - Math.floor(this.periodGroups / 2)) + this.periodGroups - 1}`),
       hoverinfo: 'x+y',
       hovertemplate: this.averageLineText()
     };
@@ -831,7 +832,7 @@ class SandboxGeneratePlotData {
         yref: 'y',
         x: this.xmax + 2.5,
         y: this.yValsAvgAll.toFixed(1),
-        text: `Average days ${this.yValsAvgAll.toFixed(1)}`,
+        text: `Average ${this.yValsAvgAll.toFixed(1)} ${this.averageTextUnits}`,
         showarrow: true,
         arrowhead: 7,
         arrowsize: 2,
@@ -1002,7 +1003,7 @@ class SandboxGeneratePlotData {
         yref: 'y',
         x: this.xmax + 2.5,
         y: this.yValsAvgAll.toFixed(1),
-        text: `Average ${this.yValsAvgAll.toFixed(1)}${this.averageTextUnits}`,
+        text: `Average ${this.yValsAvgAll.toFixed(1)} ${this.averageTextUnits}`,
         showarrow: true,
         arrowhead: 7,
         arrowsize: 2,
