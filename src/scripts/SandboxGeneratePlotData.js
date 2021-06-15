@@ -77,7 +77,7 @@ class SandboxGeneratePlotData {
     const seasonHumanReadable = sandboxHumanReadable.getSeasonPullDownText(this.season);
     if (this.season !== 'yearly') {
       if (this.season === 'ann') return 'annually';
-      return seasonHumanReadable.toLowerCase().split(' ')[0].replace(':','');
+      return seasonHumanReadable.toLowerCase().split(' ')[0].replace(':', '');
     }
     return 'year';
   }
@@ -137,12 +137,12 @@ class SandboxGeneratePlotData {
   yearLineText(x, y) {
     const seasonTextPrefix = this.hoverTemplateSeasonTextPrefix();
     const seasonText = this.hoverTemplateSeasonText();
-    const climateVariableText = this.hoverTemplateClimateVariableText().replace('°f','°F');
+    const climateVariableText = this.hoverTemplateClimateVariableText().replace('°f', '°F');
     const unitText = this.averageTextUnits;
     // season sentence
-    if (this.season !== 'yearly') return ` In %{x} the ${climateVariableText}${this.SmallScreenBreak} was %{y:0.2f}${unitText} ${seasonTextPrefix} ${seasonText} <extra></extra>`.replace(/  /g, ' ');;
+    if (this.season !== 'yearly') return ` In %{x} the ${climateVariableText}${this.SmallScreenBreak} was %{y:0.2f} ${unitText} ${seasonTextPrefix} ${seasonText} <extra></extra>`.replace(/ {2}/g, ' ');
     // threshold and default sentence
-    return ` In %{x} there was an average of %{y:0.2f}${this.SmallScreenBreak} ${climateVariableText} <extra></extra>`.replace(/  /g, ' ');;
+    return ` In %{x} there was an average of %{y:0.2f}${this.SmallScreenBreak} ${climateVariableText} <extra></extra>`.replace(/ {2}/g, ' ');
   }
 
   // hover text for year bar
@@ -152,21 +152,21 @@ class SandboxGeneratePlotData {
     const climateVariableText = this.hoverTemplateClimateVariableText();
     const unitText = this.averageTextUnits;
     // season sentence
-    if (this.season !== 'yearly') return ` In %{x} the ${climateVariableText}${this.SmallScreenBreak} was %{y:0.2f}${unitText} ${seasonTextPrefix} ${seasonText}   <extra></extra>`.replace(/  /g, ' ');;
+    if (this.season !== 'yearly') return ` In %{x} the ${climateVariableText}${this.SmallScreenBreak} was %{y:0.2f}${unitText} ${seasonTextPrefix} ${seasonText}   <extra></extra>`.replace(/ {2}/g, ' ');
     // threshold and default sentence
-    return ` In %{x} there were an average of %{y:0.2f}${this.SmallScreenBreak} ${climateVariableText} <extra></extra>`.replace(/  /g, ' ');;
+    return ` In %{x} there were an average of %{y:0.2f}${this.SmallScreenBreak} ${climateVariableText} <extra></extra>`.replace(/ {2}/g, ' ');
   }
 
   // hover text for average bar
   averageBarText(x, y, customdata) {
     const seasonTextPrefix = this.hoverTemplateSeasonTextPrefix();
     const seasonText = this.hoverTemplateSeasonText();
-    const climateVariableText = this.hoverTemplateClimateVariableText().replace('°f','°F');
+    const climateVariableText = this.hoverTemplateClimateVariableText().replace('°f', '°F');
     const unitText = this.averageTextUnits;
     // season sentence
-    if (this.season !== 'yearly') return ` Between %{customdata} the ${climateVariableText}${this.SmallScreenBreak} was %{y:0.2f}${unitText} ${seasonTextPrefix} ${seasonText} <extra></extra>`.replace(/  /g, ' ');
+    if (this.season !== 'yearly') return ` Between %{customdata} the ${climateVariableText}${this.SmallScreenBreak} was %{y:0.2f}${unitText} ${seasonTextPrefix} ${seasonText} <extra></extra>`.replace(/ {2}/g, ' ');
     // threshold and default sentence
-    return ` Between the years %{customdata} there were %{y:0.2f}${this.SmallScreenBreak} ${climateVariableText} <extra></extra>`.replace(/  /g, ' ');
+    return ` Between the years %{customdata} there were %{y:0.2f}${this.SmallScreenBreak} ${climateVariableText} <extra></extra>`.replace(/ {2}/g, ' ');
   }
 
   // hover text for average line
@@ -176,8 +176,8 @@ class SandboxGeneratePlotData {
     const climateVariableText = this.hoverTemplateClimateVariableText();
     const unitText = this.averageTextUnits;
     // season sentence
-    if (this.season !== 'yearly') return ` Between %{customdata} the ${climateVariableText}${this.SmallScreenBreak} was %{y:0.2f}${unitText} ${seasonTextPrefix} ${seasonText} <extra></extra>`.replace(/  /g, ' ');
-    return ` Between %{customdata} there were %{y:0.2f}${this.SmallScreenBreak} ${climateVariableText} ${seasonTextPrefix} ${seasonText} <extra></extra>`.replace(/  /g, ' ');;
+    if (this.season !== 'yearly') return ` Between %{customdata} the ${climateVariableText}${this.SmallScreenBreak} was %{y:0.2f}${unitText} ${seasonTextPrefix} ${seasonText} <extra></extra>`.replace(/ {2}/g, ' ');
+    return ` Between %{customdata} there were %{y:0.2f}${this.SmallScreenBreak} ${climateVariableText} ${seasonTextPrefix} ${seasonText} <extra></extra>`.replace(/ {2}/g, ' ');
   }
 
   // hover text for moving average line
@@ -187,8 +187,8 @@ class SandboxGeneratePlotData {
     const climateVariableText = this.hoverTemplateClimateVariableText();
     const unitText = this.averageTextUnits;
     // season sentence
-    if (this.season !== 'yearly') return ` Between %{customdata} the ${climateVariableText}${this.SmallScreenBreak} was %{y:0.2f}${unitText} ${seasonTextPrefix} ${seasonText} <extra></extra>`.replace(/  /g, ' ');
-    return ` Between %{customdata} there were %{y:0.2f}${this.SmallScreenBreak}${climateVariableText} ${seasonTextPrefix} ${seasonText} <extra></extra>`.replace(/  /g, ' ');
+    if (this.season !== 'yearly') return ` Between %{customdata} the ${climateVariableText}${this.SmallScreenBreak} was %{y:0.2f}${unitText} ${seasonTextPrefix} ${seasonText} <extra></extra>`.replace(/ {2}/g, ' ');
+    return ` Between %{customdata} there were %{y:0.2f}${this.SmallScreenBreak}${climateVariableText} ${seasonTextPrefix} ${seasonText} <extra></extra>`.replace(/ {2}/g, ' ');
   }
 
   // creates legend text in parentheses
@@ -606,7 +606,7 @@ class SandboxGeneratePlotData {
         size: 5
       },
       nbinsx: 0,
-      x:  this.xvals,
+      x: this.xvals,
       y: this.getYvalues(),
       bargroupgap: 5,
       marker: {
