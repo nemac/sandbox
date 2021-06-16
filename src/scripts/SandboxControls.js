@@ -1243,7 +1243,13 @@ export default function SandboxControls() {
                 <Box px={1} fontSize='h5.fontSize' >NCA Figure and Climate Data Generator
                 </Box>
                 <Box p={0} m={0} className={classes.pulldownInfoHolder}>
-                  <Tooltip title={'View climate data from X source etc'} aria-label={'View climate data from X source etc'} placement='bottom-end' TransitionComponent={Fade} arrow classes={{ tooltip: classes.toolTip }}>
+                  <Tooltip
+                    title={'Create a figure for the NCA using the buttons to how you want to filter the data. Generated graphics can be exported or submitted to the TSU. Data source: X.'}
+                    aria-label={'Create a figure for the NCA using the buttons to how you want to filter the data. Generated graphics can be exported or submitted to the TSU. Data source: X'}
+                    placement='bottom-end'
+                    TransitionComponent={Fade}
+                    arrow
+                    classes={{ tooltip: classes.toolTip }}>
                     <InfoIcon className={classes.infoButton} />
                   </Tooltip>
                 </Box>

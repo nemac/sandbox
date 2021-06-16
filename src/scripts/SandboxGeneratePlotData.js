@@ -5,6 +5,7 @@ class SandboxGeneratePlotData {
     // style guide driven colors, fonts, ticks may need expanding
     //  https://docs.google.com/document/d/1_zO39hdlGL9uY0Y0Vf57ncYNYXuACUAIM0fKCUo3spc/edit?ts=5fa547dd#
     this.smallScreen = 768;
+    this.verySmallScreen = 500;
     this.blue = '4, 90, 141';
     this.red = '189, 0, 38';
     this.green = '127, 188, 65';
@@ -21,7 +22,8 @@ class SandboxGeneratePlotData {
     this.zeroLineColor = '#000000';
     this.zerolinewidth = '1.25';
     this.gridColor = '#BFBFBF';
-    this.AverageAllFontColor = '#000000';
+    this.SourceFontColor = '#000000';
+    this.AverageAllFontColor = '#858585';
     this.AverageAllColor = '#858585';
     this.AverageMovingColor = '#858585';
     this.AverageAllWidth = '6';
@@ -826,6 +828,21 @@ class SandboxGeneratePlotData {
         }
       },
       annotations: [{
+        xref: 'x',
+        yref: 'y',
+        x: this.xmax + 1,
+        xanchor: 'left',
+        y: this.yRange[0] + 0.33,
+        yanchor: 'top',
+        text: 'Data Source X',
+        showarrow: false,
+        font: {
+          family: this.font,
+          size: this.AverageAllFontSize,
+          color: this.AverageAllFontColor
+        }
+      },
+      {
         xref: 'x',
         yref: 'y',
         x: this.xmax + 2.5,
