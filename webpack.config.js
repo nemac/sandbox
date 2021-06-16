@@ -18,6 +18,7 @@ module.exports = {
       index: path.join(paths.SRC, 'index.js'),
       SandboxPlotRegion: './src/scripts/SandboxPlotRegion.js',
     },
+    mode: 'production',
     performance: {
        hints: "warning",
        maxEntrypointSize: 512000,
