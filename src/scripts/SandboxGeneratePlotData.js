@@ -1016,6 +1016,21 @@ class SandboxGeneratePlotData {
       annotations: [{
         xref: 'x',
         yref: 'y',
+        x: this.xmax + 1,
+        xanchor: 'left',
+        y: this.yRange[0] + 0.33,
+        yanchor: 'top',
+        text: 'Data Source X',
+        showarrow: false,
+        font: {
+          family: this.font,
+          size: this.AverageAllFontSize,
+          color: this.AverageAllFontColor
+        }
+      },
+      {
+        xref: 'x',
+        yref: 'y',
         x: this.xmax + 2.5,
         y: this.yValsAvgAll.toFixed(1),
         text: `Average ${this.yValsAvgAll.toFixed(1)} ${this.averageTextUnits}`,
