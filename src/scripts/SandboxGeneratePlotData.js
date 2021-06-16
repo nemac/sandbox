@@ -827,21 +827,22 @@ class SandboxGeneratePlotData {
           paper_bgcolor: this.chartBackgroundColor
         }
       },
-      annotations: [{
-        xref: 'x',
-        yref: 'y',
-        x: this.xmax + 1,
-        xanchor: 'left',
-        y: this.yRange[0] + 0.33,
-        yanchor: 'top',
-        text: 'Data Source X',
-        showarrow: false,
-        font: {
-          family: this.font,
-          size: this.AverageAllFontSize,
-          color: this.AverageAllFontColor
-        }
-      },
+      annotations: [
+      //   {
+      //   xref: 'x',
+      //   yref: 'y',
+      //   x: this.xmax + 1,
+      //   xanchor: 'left',
+      //   y: this.yRange[0] + 0.33,
+      //   yanchor: 'top',
+      //   text: 'Data Source X',
+      //   showarrow: false,
+      //   font: {
+      //     family: this.font,
+      //     size: this.AverageAllFontSize,
+      //     color: this.AverageAllFontColor
+      //   }
+      // },
       {
         xref: 'x',
         yref: 'y',
@@ -1013,21 +1014,22 @@ class SandboxGeneratePlotData {
           paper_bgcolor: this.chartBackgroundColor
         }
       },
-      annotations: [{
-        xref: 'x',
-        yref: 'y',
-        x: this.xmax + 1,
-        xanchor: 'left',
-        y: this.yRange[0] + 0.33,
-        yanchor: 'top',
-        text: 'Data Source X',
-        showarrow: false,
-        font: {
-          family: this.font,
-          size: this.AverageAllFontSize,
-          color: this.AverageAllFontColor
-        }
-      },
+      annotations: [
+      // {
+      //   xref: 'x',
+      //   yref: 'y',
+      //   x: this.xmax + 1,
+      //   xanchor: 'left',
+      //   y: this.yRange[0] + 0.33,
+      //   yanchor: 'top',
+      //   text: 'Data Source X',
+      //   showarrow: false,
+      //   font: {
+      //     family: this.font,
+      //     size: this.AverageAllFontSize,
+      //     color: this.AverageAllFontColor
+      //   }
+      // },
       {
         xref: 'x',
         yref: 'y',
