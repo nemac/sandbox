@@ -134,7 +134,15 @@ export default function Selector(props) {
           {errorLabel}
         </FormControl>
         <Box p={0} m={0} className={classes.pulldownInfoHolder}>
-          <Tooltip title={TooltipText} aria-label={TooltipText} placement='bottom-end' TransitionComponent={Fade} arrow classes={{ tooltip: classes.toolTip }}>
+          <Tooltip
+            title={TooltipText}
+            aria-label={TooltipText}
+            placement='bottom-end'
+            TransitionComponent={Fade}
+            enterNextDelay={750}
+            arrow
+            interactive
+            classes={{ tooltip: classes.toolTip }}>
             <InfoIcon className={classes.infoButton} />
           </Tooltip>
         </Box>

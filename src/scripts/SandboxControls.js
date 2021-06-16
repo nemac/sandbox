@@ -1238,26 +1238,26 @@ export default function SandboxControls() {
             <Grid item xs={12} className={classes.sandboxHeader} width='100%' >
               <Box fontWeight='fontWeightBold' mt={1} p={0} display='flex' flexWrap='nowrap' justifyContent='flex-start'>
                 <Box onClick={handleDownloadChartAsSVG} px={1} fontSize='h4.fontSize' >
-                  <InsertChartOutlinedIcon fontSize='large' className={'sandbox-header-icon'} />
-                </Box>
-                <Box px={1} fontSize='h5.fontSize' >NCA Figure and Climate Data Generator
-                </Box>
-                <Box p={0} m={0} className={classes.pulldownInfoHolder}>
                   <Tooltip
                     title={'Create a figure for the NCA using the buttons to how you want to filter the data. Generated graphics can be exported or submitted to the TSU. Data source: X.'}
                     aria-label={'Create a figure for the NCA using the buttons to how you want to filter the data. Generated graphics can be exported or submitted to the TSU. Data source: X'}
                     placement='bottom-end'
                     TransitionComponent={Fade}
+                    enterNextDelay={750}
                     arrow
+                    interactive
                     classes={{ tooltip: classes.toolTip }}>
-                    <InfoIcon className={classes.infoButton} />
-                  </Tooltip>
+                    <InsertChartOutlinedIcon fontSize='large' className={'sandbox-header-icon'} />
+                    </Tooltip>
+                </Box>
+                <Box px={1} fontSize='h5.fontSize' >NCA Figure and Climate Data Generator
                 </Box>
               </Box>
             </Grid>
             <Grid item xs={12} className={classes.sandboxDescription} width='100%' >
               <Box p={0} display='flex' flexWrap='nowrap' justifyContent='flex-start'>
-                <Box px={1} fontWeight={400} fontSize='caption' >Access basic climate data to create a proposed figure supporting your NCA chapter.</Box>              </Box>
+                <Box px={1} fontWeight={400} fontSize='caption' >Access climate data derived from X to create a proposed figure supporting your NCA chapter.</Box>
+              </Box>
             </Grid>
             <Grid item xs={12} sm={3} md={2} className={'sandbox-varriable-selectors'}>
               <Box fontWeight='fontWeightBold' ml={1} mt={1} mb={1} mr={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
