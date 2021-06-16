@@ -8,7 +8,6 @@ import Box from '@material-ui/core/Box';
 import InsertChartOutlinedIcon from '@material-ui/icons/InsertChartOutlined';
 import Tooltip from '@material-ui/core/Tooltip';
 import Fade from '@material-ui/core/Fade';
-import InfoIcon from '@material-ui/icons/Info';
 
 // sandbox conmponents
 import SandboxPlotRegion from './SandboxPlotRegion';

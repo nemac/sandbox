@@ -20,8 +20,8 @@ module.exports = {
     },
     performance: {
        hints: "warning",
-       maxEntrypointSize: 100000,
-       maxAssetSize: 100000
+       maxEntrypointSize: 512000,
+       maxAssetSize: 512000
     },
     output: {
         // path: paths.DISTSCRIPTS,
