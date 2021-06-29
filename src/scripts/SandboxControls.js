@@ -1316,7 +1316,7 @@ export default function SandboxControls() {
                   disabled={climatevariableDisabled}
                   missing={(!climatevariable)}
                   replaceClimatevariableType={replaceClimatevariableType}
-                  TooltipText={'Select an applicable climate variable. Your available choices are based on your time scale selection. Your choice here will drive the time period/s available. '}
+                  TooltipText={'Select an applicable climate variable. Your available choices are based on your time scale selection. Your choice here will drive the time period(s) available. '}
                   />
               </Box>
             </Grid>
