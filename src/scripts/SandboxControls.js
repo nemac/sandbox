@@ -6,6 +6,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import InsertChartOutlinedIcon from '@material-ui/icons/InsertChartOutlined';
+import Tooltip from '@material-ui/core/Tooltip';
+import Fade from '@material-ui/core/Fade';
 
 // sandbox conmponents
 import SandboxPlotRegion from './SandboxPlotRegion';
@@ -47,15 +49,20 @@ const exportAreaHeight = 75;
 const exportButtonsSmallScreenHeight = exportButtons * exportButtonHeight;
 const exportButtonsMeduimlScreenHeight = exportAreaHeight;
 
-// heights for selectors - pullldowns
-const selectors = 5;
-const selectorHeight = 80;
-const selectorAreaSmallScreenHeight = selectors * selectorHeight;
-const selectorAreaMediumScreenHeight = 2.5 * selectorHeight;
-
 // heights for header - title
 const headerTitleHeight = 50;
 const headerTitleSmallScreenHeight = 75;
+
+// heights for header - description
+const headerDescriptionHeight = 25;
+const headerDescriptionSmallScreenHeight = 50;
+
+// heights for selectors - pullldowns
+const selectors = 5;
+const selectorHeight = 80;
+const selectorAreaSmallScreenHeight = (selectors * selectorHeight) +
+    headerDescriptionSmallScreenHeight;
+const selectorAreaMediumScreenHeight = 3 * selectorHeight;
 
 // heights for entire header with buttons, pulldowns, and header
 const actionAreaSmallScreenHeight =
@@ -73,7 +80,7 @@ const useStyles = makeStyles((theme) => ({
   sandboxRoot: {
     backgroundColor: white,
     color: fontColor,
-    height: 'calc(100vh - 20px)',
+    height: 'calc(100vh - 16px)',
     [theme.breakpoints.down('xs')]: {
       overflow: 'scroll'
     }
@@ -87,8 +94,18 @@ const useStyles = makeStyles((theme) => ({
       maxHeight: `${headerTitleSmallScreenHeight}px`
     }
   },
+  sandboxDescription: {
+    height: `${headerDescriptionHeight}px`,
+    maxHeight: `${headerDescriptionHeight}px`,
+    color: fontColor,
+    marginBottom: theme.spacing(1.25),
+    [theme.breakpoints.down('xs')]: {
+      height: `${headerDescriptionSmallScreenHeight}px`,
+      maxHeight: `${headerDescriptionSmallScreenHeight}px`
+    }
+  },
   sandboxSelectionArea: {
-    maxHeight: '200px',
+    maxHeight: '375px',
     backgroundColor: pullDownBackground,
     border: `1px solid ${darkGrey}`,
     borderRadius: '4px',
@@ -114,8 +131,8 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   sandboxChartRegion: {
-    height: (chartOnly) => (chartOnly.chartOnly === 'yes' ? '100%' : 'calc(100% - 210px)'),
-    maxHeight: (chartOnly) => (chartOnly.chartOnly === 'yes' ? '100%' : 'calc(100% - 210px)'),
+    height: (chartOnly) => (chartOnly.chartOnly === 'yes' ? '100%' : 'calc(100% - 250px)'),
+    maxHeight: (chartOnly) => (chartOnly.chartOnly === 'yes' ? '100%' : 'calc(100% - 250x)'),
     minHeight: `${chartRegionMinHeight}px`,
     [theme.breakpoints.down('sm')]: {
       height: `${sandboxChartRegionSmallScreenHeight}px !important`,
@@ -144,6 +161,18 @@ const useStyles = makeStyles((theme) => ({
   },
   extendedIcon: {
     marginRight: theme.spacing(1)
+  },
+  infoButton: {
+    color: '#5C5C5C',
+    fontSize: '1.5rem',
+    marginLeft: theme.spacing(0.1),
+    position: 'absolute',
+    backgroundColor: '#ffffff',
+    borderRadius: '30px'
+  },
+  toolTip: {
+    padding: theme.spacing(2),
+    fontSize: '1rem'
   }
 }));
 
@@ -289,7 +318,7 @@ export default function SandboxControls() {
     const { chartDataSeason } = props;
     const { chartLineChart } = props;
     const { chartOnlyProp } = props;
-
+    // const { chartShowLine } = props
     // create new URL parameter object
     const searchParams = new URLSearchParams();
 
@@ -301,6 +330,7 @@ export default function SandboxControls() {
     searchParams.set('season', chartDataSeason);
     searchParams.set('line', chartLineChart);
     searchParams.set('chartonly', chartOnlyProp);
+    // searchParams.set('chartShowLine', chartShowLine);
 
     // convert url parameters to a string and add the leading ? so it we can add it
     // to browser history (back button works)
@@ -322,6 +352,8 @@ export default function SandboxControls() {
     const { climateDataFilesJSONFile } = props;
     const { chartLineChart } = props;
     const { chartOnlyProp } = props;
+    // const chartShowLine = false;
+
     // update url history this is the point at which we will need to make sure
     // the graph looks the same when shared via url
     sandBoxURL({
@@ -332,6 +364,7 @@ export default function SandboxControls() {
       chartDataSeason,
       chartLineChart,
       chartOnlyProp
+      // chartShowLine,
     });
 
     // limit the possible data file to period
@@ -413,6 +446,7 @@ export default function SandboxControls() {
           chartLineChart,
           dataMissing,
           season: chartDataSeason
+          // chartShowLine
         };
 
         // get the charts data formated for plotly
@@ -545,6 +579,7 @@ export default function SandboxControls() {
             climateDataFilesJSONFile: responseData,
             chartLineChart: lineChart,
             chartOnlyProp: chartOnly
+            // chartShowLine: false
           });
         }
         return responseData;
@@ -658,6 +693,7 @@ export default function SandboxControls() {
       climateDataFilesJSONFile: climateDataFilesJSON,
       chartLineChart: lineChart,
       chartOnlyProp: 'no'
+      // chartShowLine: false
     });
   };
 
@@ -674,6 +710,7 @@ export default function SandboxControls() {
       climateDataFilesJSONFile: climateDataFilesJSON,
       chartLineChart: lineChart,
       chartOnlyProp: 'no'
+      // chartShowLine: false
     });
   };
 
@@ -690,6 +727,7 @@ export default function SandboxControls() {
       climateDataFilesJSONFile: climateDataFilesJSON,
       chartLineChart: lineChart,
       chartOnlyProp: 'no'
+      // chartShowLine: false
     });
     return null;
   };
@@ -707,6 +745,7 @@ export default function SandboxControls() {
       climateDataFilesJSONFile: climateDataFilesJSON,
       chartLineChart: lineChart,
       chartOnlyProp: 'no'
+      // chartShowLine: false
     });
     return null;
   };
@@ -752,6 +791,7 @@ export default function SandboxControls() {
       climateDataFilesJSONFile: climateDataFilesJSON,
       chartLineChart: lineChart,
       chartOnlyProp: 'no'
+      // chartShowLine: false
     });
     return null;
   };
@@ -771,6 +811,7 @@ export default function SandboxControls() {
       climateDataFilesJSONFile: climateDataFilesJSON,
       chartLineChart: 'avg',
       chartOnlyProp: 'no'
+      // chartShowLine: false
     });
     return null;
   };
@@ -790,6 +831,7 @@ export default function SandboxControls() {
       climateDataFilesJSONFile: climateDataFilesJSON,
       chartLineChart: 'mavg',
       chartOnlyProp: 'no'
+      // chartShowLine: false
     });
     return null;
   };
@@ -810,6 +852,7 @@ export default function SandboxControls() {
       climateDataFilesJSONFile: climateDataFilesJSON,
       chartLineChart: 'year',
       chartOnlyProp: 'no'
+      // chartShowLine: false
     });
     return null;
   };
@@ -1187,20 +1230,36 @@ export default function SandboxControls() {
   };
 
   return (
-    <div className={classes.sandboxRoot}>
+    <div>
       <Grid container spacing={0} justify='flex-start' direction={'row'} className={classes.sandboxRoot}>
         <Grid item xs={12} width='100%' className={classes.sandboxSelectionAreaHolder} >
           <Grid container spacing={0} justify='flex-start' direction={'row'} className={classes.sandboxSelectionArea}>
             <Grid item xs={12} className={classes.sandboxHeader} width='100%' >
               <Box fontWeight='fontWeightBold' mt={1} p={0} display='flex' flexWrap='nowrap' justifyContent='flex-start'>
                 <Box onClick={handleDownloadChartAsSVG} px={1} fontSize='h4.fontSize' >
-                  <InsertChartOutlinedIcon fontSize='large' className={'sandbox-header-icon'} />
+                  <Tooltip
+                    title={'Create a figure for the NCA using the buttons to how you want to filter the data. Generated graphics can be exported or submitted to the TSU. Data source: X.'}
+                    aria-label={'Create a figure for the NCA using the buttons to how you want to filter the data. Generated graphics can be exported or submitted to the TSU. Data source: X'}
+                    placement='bottom-end'
+                    TransitionComponent={Fade}
+                    enterNextDelay={750}
+                    arrow
+                    interactive
+                    classes={{ tooltip: classes.toolTip }}>
+                    <InsertChartOutlinedIcon fontSize='large' className={'sandbox-header-icon'} />
+                    </Tooltip>
                 </Box>
-                <Box px={1} fontSize='h5.fontSize' >NCA Sandbox - Climate Charts</Box>
+                <Box px={1} fontSize='h5.fontSize' >NCA Figure and Climate Data Generator
+                </Box>
+              </Box>
+            </Grid>
+            <Grid item xs={12} className={classes.sandboxDescription} width='100%' >
+              <Box p={0} display='flex' flexWrap='nowrap' justifyContent='flex-start'>
+                <Box px={1} fontWeight={400} fontSize='caption' >Access climate data derived from X to create a proposed figure supporting your NCA chapter.</Box>
               </Box>
             </Grid>
             <Grid item xs={12} sm={3} md={2} className={'sandbox-varriable-selectors'}>
-              <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
+              <Box fontWeight='fontWeightBold' ml={1} mt={1} mb={1} mr={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
                   items={RegionItems}
                   controlName={'Select a Geographic Scale'}
@@ -1210,11 +1269,12 @@ export default function SandboxControls() {
                   season={season}
                   missing={(!region)}
                   replaceClimatevariableType={replaceClimatevariableType}
+                  TooltipText={'Select a scale: national, NCA region, or state'}
                   />
               </Box>
             </Grid>
             <Grid item xs={12} sm={3} md={2} className={'sandbox-varriable-selectors'}>
-              <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
+              <Box fontWeight='fontWeightBold' ml={1} mt={1} mb={1} mr={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
                   items={locationItems}
                   controlName={'Select a Location'}
@@ -1225,14 +1285,15 @@ export default function SandboxControls() {
                   missing={(region !== 'National' && !location)}
                   replaceClimatevariableType={replaceClimatevariableType}
                   replaceLocationAbbreviation={replaceLocationAbbreviation}
+                  TooltipText={'Select the applicable NCA region or state based on your scale selection. Not applicable for national-scale figures'}
                   />
               </Box>
             </Grid>
             <Grid item xs={12} sm={3} md={2} className={'sandbox-varriable-selectors'} >
-              <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
+              <Box fontWeight='fontWeightBold' ml={1} mt={1} mb={1} mr={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
                   items={Seasons}
-                  controlName={'Select the Season'}
+                  controlName={'Select the Time Scale'}
                   onChange={handleSeasonChange}
                   value={season}
                   disabled={seasonDisabled}
@@ -1240,11 +1301,12 @@ export default function SandboxControls() {
                   season={season}
                   replaceClimatevariableType={replaceClimatevariableType}
                   replaceSeasonType={replaceSeasonType}
+                  TooltipText={'Select from among two annual scales or the four meteorological seasons. Your selection will drive the what is available in the climate variables.'}
                   />
               </Box>
             </Grid>
             <Grid item xs={12} sm={6} md={4} className={'sandbox-varriable-selectors'} >
-              <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
+              <Box fontWeight='fontWeightBold' ml={1} mt={1} mb={1} mr={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
                   items={climatevariableItems}
                   controlName={'Select a Climate Variable'}
@@ -1254,11 +1316,12 @@ export default function SandboxControls() {
                   disabled={climatevariableDisabled}
                   missing={(!climatevariable)}
                   replaceClimatevariableType={replaceClimatevariableType}
+                  TooltipText={'Select an applicable climate variable. Your available choices are based on your time scale selection. Your choice here will drive the time period(s) available. '}
                   />
               </Box>
             </Grid>
             <Grid item xs={12} sm={3} md={2} className={'sandbox-varriable-selectors'} >
-              <Box fontWeight='fontWeightBold' m={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
+              <Box fontWeight='fontWeightBold' ml={1} mt={1} mb={1} mr={1} display='flex' flexDirection='row' flexWrap='nowrap' justifyContent='flex-start'>
                 <SandboxSelector
                   items={PeriodsFull}
                   controlName={'Select a Time Period'}
@@ -1269,6 +1332,9 @@ export default function SandboxControls() {
                   season={season}
                   replaceClimatevariableType={replaceClimatevariableType}
                   replacePeriodType={replacePeriodType}
+                  TooltipText={'Your available choices are based on your time scale and climate variable selections. Time periods of 1900–2020 or 1950–2020 are ' +
+                    'available for annual threshold exceedances with any climate variable; the time period of 1895–2020 is available for mean temperature ' +
+                    'and precipitation at any time scale with any climate variable.'}
                   />
               </Box>
             </Grid>

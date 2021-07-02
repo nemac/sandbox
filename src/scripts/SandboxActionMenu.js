@@ -10,6 +10,8 @@ import TimelineIcon from '@material-ui/icons/Timeline';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
+import Tooltip from '@material-ui/core/Tooltip';
+import Fade from '@material-ui/core/Fade';
 
 import SandboxCustomSizeExport from './SandboxCustomSizeExport';
 import SandboxSumbitFigure from './SandboxSumbitFigure';
@@ -121,6 +123,10 @@ const useStyles = makeStyles((theme) => ({
     top: theme.spacing(-1.25),
     fontSize: '0.75rem',
     color: '#5C5C5C'
+  },
+  toolTip: {
+    padding: theme.spacing(2),
+    fontSize: '1rem'
   }
 }));
 
@@ -227,48 +233,113 @@ export default function Selector(props) {
       <Grid container spacing={0} justify='flex-end' direction={'row'} >
         <Grid item xs={12} sm={12} md={6} width='100%' >
           <Box className={classes.sandboxExportsButtonBox} fontWeight='fontWeightBold' mt={1} display='flex' flexDirection='row' flexWrap='wrap' >
-            <FormControl component="fieldset" variant='outlined' className={classes.sandboxExportsButtonBoxForm}>
-              <FormLabel component="legend" className={classes.sandboxExportsButtonBoxFormLabel}>Trendline</FormLabel>
-                <Button onClick={handleSwtichYearlyToLine} classes={{ root: `${setSelected(lineChart, 'year')}` }} className={classes.fabsvgLeft} variant="contained" color="default" startIcon={<TimelineIcon />}>
-                  Yearly
-                </Button>
-                <Button onClick={handleSwtichAverageAndYearly} classes={{ root: `${setSelected(lineChart, 'avg')}` }} className={classes.fabsvgCenter} variant="contained" color="default" startIcon={<TimelineIcon />}>
-                  Average
-                </Button>
-                <Button onClick={handleSwtichMovingAverageAndYearly} classes={{ root: `${setSelected(lineChart, 'mavg')}` }} className={classes.fabsvgRight} variant="contained" color="default" startIcon={<TimelineIcon />}>
-                  Moving Average
-                </Button>
+            <FormControl component='fieldset' variant='outlined' className={classes.sandboxExportsButtonBoxForm}>
+              <FormLabel component='legend' className={classes.sandboxExportsButtonBoxFormLabel}>Data Display</FormLabel>
+                <Tooltip
+                  title={'Yearly: Displays data as five-year averages with trendlines showing annual averages and the average for the entire dataset.'} aria-label={'Yearly: Displays data as five-year averages with trendlines showing annual averages and the average for the entire dataset.'}
+                  placement='bottom'
+                  TransitionComponent={Fade}
+                  enterNextDelay={750}
+                  arrow
+                  interactive
+                  classes={{ tooltip: classes.toolTip }}>
+                  <Button onClick={handleSwtichYearlyToLine} classes={{ root: `${setSelected(lineChart, 'year')}` }} className={classes.fabsvgLeft} variant='contained' color='default' startIcon={<TimelineIcon />}>
+                    Yearly
+                  </Button>
+                </Tooltip>
+                <Tooltip
+                  title={'Average: Displays data as annual averages with trendlines showing five-year averages and the average for the entire dataset.'}
+                  aria-label={'Average: Displays data as annual averages with trendlines showing five-year averages and the average for the entire dataset.'}
+                  placement='bottom'
+                  TransitionComponent={Fade}
+                  enterNextDelay={750}
+                  arrow
+                  interactive
+                  classes={{ tooltip: classes.toolTip }}>
+                  <Button onClick={handleSwtichAverageAndYearly} classes={{ root: `${setSelected(lineChart, 'avg')}` }} className={classes.fabsvgCenter} variant='contained' color='default' startIcon={<TimelineIcon />}>
+                    Average
+                  </Button>
+                </Tooltip>
+                <Tooltip
+                  title={'Moving Average: Displays data as annual averages with trendlines showing five-year moving averages and the average for the entire dataset.'}
+                  aria-label={'Moving Average: Displays data as annual averages with trendlines showing five-year moving averages and the average for the entire dataset.'}
+                  placement='bottom'
+                  TransitionComponent={Fade}
+                  enterNextDelay={750}
+                  arrow
+                  interactive
+                  classes={{ tooltip: classes.toolTip }}>
+                  <Button onClick={handleSwtichMovingAverageAndYearly} classes={{ root: `${setSelected(lineChart, 'mavg')}` }} className={classes.fabsvgRight} variant='contained' color='default' startIcon={<TimelineIcon />}>
+                    Moving Average
+                  </Button>
+                </Tooltip>
             </FormControl>
           </Box>
         </Grid>
         <Grid item xs={12} sm={12} md={6} width='100%' >
           <Box className={classes.sandboxExportsButtonBox} fontWeight='fontWeightBold' mt={1} display='flex' flexDirection='row' flexWrap='wrap' >
-            <FormControl component="fieldset" variant='outlined' className={classes.sandboxExportsButtonBoxForm}>
-              <FormLabel component="legend" className={classes.sandboxExportsButtonBoxFormLabel}>Export</FormLabel>
-                <Button onClick={handleDownloadChartAsCSV} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveAltIcon />}>
-                  .CSV
-                </Button>
-                <Button onClick={handleCustomSizeOpenPNG} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveAltIcon />}>
-                  .PNG
-                </Button>
+            <FormControl component='fieldset' variant='outlined' className={classes.sandboxExportsButtonBoxForm}>
+              <FormLabel component='legend' className={classes.sandboxExportsButtonBoxFormLabel}>Export</FormLabel>
+                <Tooltip title={'Export data in the current chart to Excel or CSV file.'} aria-label={'Export data in the current chart to Excel or CSV file.'}
+                  placement='bottom'
+                  TransitionComponent={Fade}
+                  enterNextDelay={750}
+                  arrow
+                  interactive
+                  classes={{ tooltip: classes.toolTip }}>
+                  <Button onClick={handleDownloadChartAsCSV} className={classes.fabsvg} variant='contained' color='default' startIcon={<SaveAltIcon />}>
+                    .CSV
+                  </Button>
+                </Tooltip>
+                <Tooltip title={'Export current chart for a report, social media post, or presentation.'}
+                  aria-label={'Export current chart for a report, social media post, or presentation.'}
+                  placement='bottom'
+                  TransitionComponent={Fade}
+                  enterNextDelay={750}
+                  arrow
+                  interactive
+                  classes={{ tooltip: classes.toolTip }}>
+                  <Button onClick={handleCustomSizeOpenPNG} className={classes.fabsvg} variant='contained' color='default' startIcon={<SaveAltIcon />}>
+                    .PNG
+                  </Button>
+                </Tooltip>
                 <SandboxCustomSizeExport
                   open={openCustomSizePNG}
                   handleCustomSizeClose={handleCustomSizeClosePNG}
                   exportType={'PNG'}
                   exportHeading={'Export chart to PNG'}
                   exportFunc={handleDownloadChartAsPNG} />
-                <Button onClick={handleCustomSizeOpenSVG} className={classes.fabsvg} variant="contained" color="default" startIcon={<SaveAltIcon />}>
-                  .SVG
-                </Button>
+                <Tooltip
+                  title={'Export current chart in vector a format, typically for a graphics team.'}
+                  aria-label={'Export current chart in vector a format, typically for a graphics team.'}
+                  placement='bottom' TransitionComponent={Fade}
+                  enterNextDelay={750}
+                  arrow
+                  interactive
+                  classes={{ tooltip: classes.toolTip }}>
+                  <Button onClick={handleCustomSizeOpenSVG} className={classes.fabsvg} variant='contained' color='default' startIcon={<SaveAltIcon />}>
+                    .SVG
+                  </Button>
+                </Tooltip>
                 <SandboxCustomSizeExport
                   open={openCustomSizeSVG}
                   handleCustomSizeClose={handleCustomSizeCloseSVG}
                   exportType={'SVG'}
                   exportHeading={'Export chart to SVG'}
                   exportFunc={handleDownloadChartAsSVG} />
-                <Button onClick={handleOpenSubmitFigure} className={classes.fabsvg} variant="contained" color="default" startIcon={<MailOutlineIcon />}>
-                  To TSU
-                </Button>
+                  <Tooltip
+                    title={'Once the figure is ready, submit it to the TSU.'}
+                    aria-label={'Once the figure is ready, submit it to the TSU.'}
+                    placement='bottom'
+                    TransitionComponent={Fade}
+                    enterNextDelay={750}
+                    arrow
+                    interactive
+                    classes={{ tooltip: classes.toolTip }}>
+                    <Button onClick={handleOpenSubmitFigure} className={classes.fabsvg} variant='contained' color='default' startIcon={<MailOutlineIcon />}>
+                      To TSU
+                    </Button>
+                  </Tooltip>
                 <SandboxSumbitFigure
                   open={openSubmitFigure}
                   handleCloseFigure={handleCloseSubmitFigure} />

@@ -69,3 +69,44 @@ html, body {
     }
   }
 }
+
+/* do we want the legend items to look like a button?
+.legend rect.legendtoggle {
+  rx: 4;
+  ry: 4;
+  stroke: #5C5C5C;
+  stroke-width: 0.25px;
+  height: 36px;
+  -webkit-filter: drop-shadow(0 0px 5px #5C5C5C);
+  -moz-filter: drop-shadow(0 0px 5px #5C5C5C);
+  -ms-filter: drop-shadow(0 0px 5px #5C5C5C);
+  -o-filter: drop-shadow(0 0px 5px #5C5C5C);
+  filter: drop-shadow(0 0px 5px #5C5C5C);
+}
+
+.legend rect.bg {
+  transform: translateY(-15px) translateX(-2px);
+  height: 40px !important;
+}
+
+.legend g.scrollbox {
+  height: 38px !important;
+  clip-path: unset;
+}
+
+
+.legend text.legendtext {
+  transform: translateY(5px) translateX(-2px);
+  fill: rgba(0, 0, 0, 0.87) !important;
+}
+
+.legend g.layers {
+  transform: translateY(5px) translateX(0px);
+}
+
+.legend g.traces {
+  transform: translateY(-5px) translateX(0px);
+}
+
+*/
+
