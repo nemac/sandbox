@@ -843,26 +843,26 @@ class SandboxGeneratePlotData {
       //     color: this.AverageAllFontColor
       //   }
       // },
-      {
-        xref: 'x',
-        yref: 'y',
-        x: this.xmax + 2.5,
-        y: this.yValsAvgAll.toFixed(1),
-        text: `Average ${this.yValsAvgAll.toFixed(1)} ${this.averageTextUnits}`,
-        showarrow: true,
-        arrowhead: 7,
-        arrowsize: 2,
-        arrowwidth: 2,
-        arrowcolor: this.AverageAllColor,
-        ay: -100,
-        ax: 10,
-        bgcolor: '#ffffff',
-        font: {
-          family: this.font,
-          size: this.AverageAllFontSize,
-          color: this.AverageAllFontColor
-        }
-      }],
+        {
+          xref: 'x',
+          yref: 'y',
+          x: this.xmax + 2.5,
+          y: this.yValsAvgAll.toFixed(1),
+          text: `Average ${this.yValsAvgAll.toFixed(1)} ${this.averageTextUnits}`,
+          showarrow: true,
+          arrowhead: 7,
+          arrowsize: 2,
+          arrowwidth: 2,
+          arrowcolor: this.AverageAllColor,
+          ay: -100,
+          ax: 10,
+          bgcolor: '#ffffff',
+          font: {
+            family: this.font,
+            size: this.AverageAllFontSize,
+            color: this.AverageAllFontColor
+          }
+        }],
       shapes: [{
         type: 'line',
         layer: 'below',
@@ -1030,26 +1030,26 @@ class SandboxGeneratePlotData {
       //     color: this.AverageAllFontColor
       //   }
       // },
-      {
-        xref: 'x',
-        yref: 'y',
-        x: this.xmax + 2.5,
-        y: this.yValsAvgAll.toFixed(1),
-        text: `Average ${this.yValsAvgAll.toFixed(1)} ${this.averageTextUnits}`,
-        showarrow: true,
-        arrowhead: 7,
-        arrowsize: 2,
-        arrowwidth: 2,
-        arrowcolor: this.AverageAllColor,
-        ay: -100,
-        ax: 35,
-        bgcolor: '#ffffff',
-        font: {
-          family: this.font,
-          size: this.AverageAllFontSize,
-          color: this.AverageAllFontColor
-        }
-      }],
+        {
+          xref: 'x',
+          yref: 'y',
+          x: this.xmax + 2.5,
+          y: this.yValsAvgAll.toFixed(1),
+          text: `Average ${this.yValsAvgAll.toFixed(1)} ${this.averageTextUnits}`,
+          showarrow: true,
+          arrowhead: 7,
+          arrowsize: 2,
+          arrowwidth: 2,
+          arrowcolor: this.AverageAllColor,
+          ay: -100,
+          ax: 35,
+          bgcolor: '#ffffff',
+          font: {
+            family: this.font,
+            size: this.AverageAllFontSize,
+            color: this.AverageAllFontColor
+          }
+        }],
       shapes: [{
         type: 'line',
         layer: 'below',
