@@ -8,6 +8,11 @@ import Box from '@material-ui/core/Box';
 import InsertChartOutlinedIcon from '@material-ui/icons/InsertChartOutlined';
 import Tooltip from '@material-ui/core/Tooltip';
 import Fade from '@material-ui/core/Fade';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import Typography from '@material-ui/core/Typography';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 // sandbox conmponents
 import SandboxPlotRegion from './SandboxPlotRegion';
@@ -54,15 +59,15 @@ const headerTitleHeight = 50;
 const headerTitleSmallScreenHeight = 75;
 
 // heights for header - description
-const headerDescriptionHeight = 25;
-const headerDescriptionSmallScreenHeight = 50;
+const headerDescriptionHeight = 60;
+const headerDescriptionSmallScreenHeight = 90;
 
 // heights for selectors - pullldowns
 const selectors = 5;
-const selectorHeight = 80;
+const selectorHeight = 90;
 const selectorAreaSmallScreenHeight = (selectors * selectorHeight) +
     headerDescriptionSmallScreenHeight;
-const selectorAreaMediumScreenHeight = 3 * selectorHeight;
+const selectorAreaMediumScreenHeight = 3.33 * selectorHeight;
 
 // heights for entire header with buttons, pulldowns, and header
 const actionAreaSmallScreenHeight =
@@ -95,10 +100,12 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   sandboxDescription: {
+    border: '0px solid transparent',
     height: `${headerDescriptionHeight}px`,
     maxHeight: `${headerDescriptionHeight}px`,
     color: fontColor,
     marginBottom: theme.spacing(1.25),
+    zIndex: 900,
     [theme.breakpoints.down('xs')]: {
       height: `${headerDescriptionSmallScreenHeight}px`,
       maxHeight: `${headerDescriptionSmallScreenHeight}px`
@@ -168,11 +175,24 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(0.1),
     position: 'absolute',
     backgroundColor: '#ffffff',
-    borderRadius: '30px'
+    borderRadius: '30px',
+    top: '-0.66rem'
   },
   toolTip: {
     padding: theme.spacing(2),
     fontSize: '1rem'
+  },
+  pulldownInfoHolder: {
+    '& .MuiPaper-elevation1.Mui-expanded': {
+      boxShadow: '0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)',
+      backgroundColor: darkGrey
+    },
+    '& .MuiPaper-elevation1': {
+      boxShadow: 'unset'
+    }
+  },
+  moreAboutData: {
+    backgroundColor: pullDownBackground
   }
 }));
 
@@ -1246,7 +1266,7 @@ export default function SandboxControls() {
                     arrow
                     interactive
                     classes={{ tooltip: classes.toolTip }}>
-                    <InsertChartOutlinedIcon fontSize='large' className={'sandbox-header-icon'} />
+                    <InsertChartOutlinedIcon fontSize='large' className={'InfoIcon'} />
                     </Tooltip>
                 </Box>
                 <Box px={1} fontSize='h5.fontSize' >NCA Figure and Climate Data Generator
@@ -1255,7 +1275,34 @@ export default function SandboxControls() {
             </Grid>
             <Grid item xs={12} className={classes.sandboxDescription} width='100%' >
               <Box p={0} display='flex' flexWrap='nowrap' justifyContent='flex-start'>
-                <Box px={1} fontWeight={400} fontSize='caption' >Access climate data derived from X to create a proposed figure supporting your NCA chapter.</Box>
+                <Box px={1} fontWeight={400} fontSize='caption' className={classes.pulldownInfoHolder} >
+                  <Accordion square className={classes.moreAboutData}>
+                    <AccordionSummary
+                      expandIcon={<ExpandMoreIcon />}
+                      aria-controls="data-description-header"
+                      id="data-description-header">
+                      <Typography className={classes.heading}>
+                        Access climate data to create a proposed figure supporting
+                        your NCA chapter.&nbsp;
+                        <a href="#">
+                          Learn more about what data is being used...
+                        </a>
+                      </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <Typography>
+                        The Annual-Threshold graphs are derived from the
+                        Global Historical Climatology Network-Daily (GHCN) of the
+                        National Centers for Environmental Information. A select set of
+                        stations with minimal missing data are used for the calculations. The
+                        Annual and Seasonal Temperature and Precipitation
+                        graphs are derived from the new NOAA Monthly U.S.
+                        Climate Divisional Database (NClimDiv) of the National Centers f
+                        or Environmental Information.
+                      </Typography>
+                    </AccordionDetails>
+                  </Accordion>
+                </Box>
               </Box>
             </Grid>
             <Grid item xs={12} sm={3} md={2} className={'sandbox-varriable-selectors'}>
@@ -1332,9 +1379,12 @@ export default function SandboxControls() {
                   season={season}
                   replaceClimatevariableType={replaceClimatevariableType}
                   replacePeriodType={replacePeriodType}
-                  TooltipText={'Your available choices are based on your time scale and climate variable selections. Time periods of 1900–2020 or 1950–2020 are ' +
-                    'available for annual threshold exceedances with any climate variable; the time period of 1895–2020 is available for mean temperature ' +
-                    'and precipitation at any time scale with any climate variable.'}
+                  TooltipText={'For mean temperature and precipitation, the entire available period of 1895-2020 should be displayed and it is thus the only option. ' +
+                    'For annual threshold graphics, the longest period of 1900-2020 should generally be chosen if available to represent a fuller range of observed variability. ' +
+                    'However, for some states, there are few or no stations that satisfy the missing data criterion (less than 10% missing daily data) and the shorter ' +
+                    'period of 1950-2020 is the only option. This shorter period is offered as an option for all of the regions and states for the threshold graphs. ' +
+                    'It may be a better option in some cases if the major features of variability occur after 1950; in that case, the greater number of stations that are ' +
+                    'used in the calculations provide for more robust statistics'}
                   />
               </Box>
             </Grid>
