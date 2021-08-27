@@ -14,6 +14,8 @@ class SandboxGeneratePlotData {
     this.annualLineColor = '#000000';
     this.precipitationColor = '#5AB4AC';
     this.temperatureColor = '#FEB24C';
+    this.heatingDegreeColor = '#DB1E1C';
+    this.coolingDegreeColor = '#2276B4';
     this.bargap = 0.15;
     this.showLegend = true;
     this.legendBarLineX = window.innerWidth <= this.smallScreen ? 0 : 0.65;
@@ -50,7 +52,7 @@ class SandboxGeneratePlotData {
     this.chartType = props.chartType;
     this.climatevariable = props.climatevariable;
     this.season = props.season;
-    this.barColor = this.chartType === 'Precipitation' ? this.precipitationColor : this.temperatureColor;
+    this.barColor = this.setChartColor(this.chartType);
     this.periodGroups = props.periodGroups ? props.periodGroups : 5;
     this.AverageMovingPeriod = 5;
     this.textAngle = window.innerWidth <= 1000 ? 90 : 0;
@@ -71,6 +73,22 @@ class SandboxGeneratePlotData {
     this.legendPerText = this.createlegendPerText();
     this.legendEllapsedText = this.legendEllapsedText();
     this.averageTextUnits = this.averageTextUnits();
+  }
+
+  // set color for chart based on climate variable or chartType
+  setChartColor(chartType) {
+    switch (chartType) {
+      case 'Precipitation':
+        return this.precipitationColor;
+      case 'Temperature':
+        return this.temperatureColor;
+      case 'CoolingDays':
+        return this.coolingDegreeColor;
+      case 'HeatingDays':
+        return this.heatingDegreeColor;
+      default:
+        return this.temperatureColor;
+    }
   }
 
   // default season text

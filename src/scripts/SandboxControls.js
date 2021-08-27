@@ -317,8 +317,18 @@ export default function SandboxControls() {
 
   // sets climate variable type for precip or temp, this will likely change latter...
   const getClimatevariableType = (switchClimatevariable) => {
-    const returnValue = ['inch', 'pcpn'].some((type) => (switchClimatevariable.indexOf(type) >= 0)) ? 'Precipitation' : 'Temperature';
-    return returnValue;
+    switch (switchClimatevariable) {
+      case 'pcpn':
+        return 'Precipitation';
+      case 'inch':
+        return 'Precipitation';
+      case 'hdd':
+        return 'HeatingDays';
+      case 'cdd':
+        return 'CoolingDays';
+      default:
+        return 'Temperature';
+    }
   };
 
   // replace the state abbrevaiations from the data text files with a more
@@ -1297,8 +1307,8 @@ export default function SandboxControls() {
                         stations with minimal missing data are used for the calculations. The
                         Annual and Seasonal Temperature and Precipitation
                         graphs are derived from the new NOAA Monthly U.S.
-                        Climate Divisional Database (NClimDiv) of the National Centers f
-                        or Environmental Information.
+                        Climate Divisional Database (NClimDiv) of the National Centers for
+                        Environmental Information.
                       </Typography>
                     </AccordionDetails>
                   </Accordion>
