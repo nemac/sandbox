@@ -74,6 +74,96 @@
         },
         {
             "end": 2020,
+            "name": "nationalcdd_ann_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "ann",
+            "start": 1895,
+            "type": "cdd"
+        },
+        {
+            "end": 2020,
+            "name": "nationalcdd_djf_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "djf",
+            "start": 1895,
+            "type": "cdd"
+        },
+        {
+            "end": 2020,
+            "name": "nationalcdd_jja_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "jja",
+            "start": 1895,
+            "type": "cdd"
+        },
+        {
+            "end": 2020,
+            "name": "nationalcdd_mam_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "mam",
+            "start": 1895,
+            "type": "cdd"
+        },
+        {
+            "end": 2020,
+            "name": "nationalcdd_son_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "son",
+            "start": 1895,
+            "type": "cdd"
+        },
+        {
+            "end": 2020,
+            "name": "nationalhdd_ann_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "ann",
+            "start": 1895,
+            "type": "hdd"
+        },
+        {
+            "end": 2020,
+            "name": "nationalhdd_djf_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "djf",
+            "start": 1895,
+            "type": "hdd"
+        },
+        {
+            "end": 2020,
+            "name": "nationalhdd_jja_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "jja",
+            "start": 1895,
+            "type": "hdd"
+        },
+        {
+            "end": 2020,
+            "name": "nationalhdd_mam_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "mam",
+            "start": 1895,
+            "type": "hdd"
+        },
+        {
+            "end": 2020,
+            "name": "nationalhdd_son_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "son",
+            "start": 1895,
+            "type": "hdd"
+        },
+        {
+            "end": 2020,
             "name": "nationalpcpn_ann_1895_2020_Sandbox2020.txt",
             "period": "1895-current",
             "robust": false,
@@ -508,6 +598,96 @@
         },
         {
             "end": 2020,
+            "name": "regionscdd_ann_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "ann",
+            "start": 1895,
+            "type": "cdd"
+        },
+        {
+            "end": 2020,
+            "name": "regionscdd_djf_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "djf",
+            "start": 1895,
+            "type": "cdd"
+        },
+        {
+            "end": 2020,
+            "name": "regionscdd_jja_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "jja",
+            "start": 1895,
+            "type": "cdd"
+        },
+        {
+            "end": 2020,
+            "name": "regionscdd_mam_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "mam",
+            "start": 1895,
+            "type": "cdd"
+        },
+        {
+            "end": 2020,
+            "name": "regionscdd_son_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "son",
+            "start": 1895,
+            "type": "cdd"
+        },
+        {
+            "end": 2020,
+            "name": "regionshdd_ann_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "ann",
+            "start": 1895,
+            "type": "hdd"
+        },
+        {
+            "end": 2020,
+            "name": "regionshdd_djf_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "djf",
+            "start": 1895,
+            "type": "hdd"
+        },
+        {
+            "end": 2020,
+            "name": "regionshdd_jja_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "jja",
+            "start": 1895,
+            "type": "hdd"
+        },
+        {
+            "end": 2020,
+            "name": "regionshdd_mam_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "mam",
+            "start": 1895,
+            "type": "hdd"
+        },
+        {
+            "end": 2020,
+            "name": "regionshdd_son_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "son",
+            "start": 1895,
+            "type": "hdd"
+        },
+        {
+            "end": 2020,
             "name": "regionspcpn_ann_1895_2020_Sandbox2020.txt",
             "period": "1895-current",
             "robust": false,
@@ -939,6 +1119,96 @@
             "season": "yearly",
             "start": 1950,
             "type": "4inch"
+        },
+        {
+            "end": 2020,
+            "name": "statecdd_ann_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "ann",
+            "start": 1895,
+            "type": "cdd"
+        },
+        {
+            "end": 2020,
+            "name": "statecdd_djf_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "djf",
+            "start": 1895,
+            "type": "cdd"
+        },
+        {
+            "end": 2020,
+            "name": "statecdd_jja_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "jja",
+            "start": 1895,
+            "type": "cdd"
+        },
+        {
+            "end": 2020,
+            "name": "statecdd_mam_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "mam",
+            "start": 1895,
+            "type": "cdd"
+        },
+        {
+            "end": 2020,
+            "name": "statecdd_son_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "son",
+            "start": 1895,
+            "type": "cdd"
+        },
+        {
+            "end": 2020,
+            "name": "statehdd_ann_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "ann",
+            "start": 1895,
+            "type": "hdd"
+        },
+        {
+            "end": 2020,
+            "name": "statehdd_djf_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "djf",
+            "start": 1895,
+            "type": "hdd"
+        },
+        {
+            "end": 2020,
+            "name": "statehdd_jja_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "jja",
+            "start": 1895,
+            "type": "hdd"
+        },
+        {
+            "end": 2020,
+            "name": "statehdd_mam_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "mam",
+            "start": 1895,
+            "type": "hdd"
+        },
+        {
+            "end": 2020,
+            "name": "statehdd_son_1895_2020_Sandbox2020.txt",
+            "period": "1895-current",
+            "robust": false,
+            "season": "son",
+            "start": 1895,
+            "type": "hdd"
         },
         {
             "end": 2020,
