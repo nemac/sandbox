@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+import os, glob
+import pandas as pd
+import argparse
+
 jsonFile = 'index.json'
 processingFile =  'make_index.py'
 htmlFile =  'index.html'
@@ -7,10 +11,6 @@ dsStore = '.DS_Store'
 EXCLUDED = [htmlFile, processingFile, jsonFile, dsStore]
 
 removeFields = ['#grids']
-
-import os, glob
-import pandas as pd
-import argparse
 
 # May need to do "pip install mako"
 from mako.template import Template
