@@ -317,18 +317,29 @@ export default function SandboxControls() {
 
   // sets climate variable type for precip or temp, this will likely change latter...
   const getClimatevariableType = (switchClimatevariable) => {
-    switch (switchClimatevariable) {
-      case 'pcpn':
-        return 'Precipitation';
-      case 'inch':
-        return 'Precipitation';
-      case 'hdd':
-        return 'HeatingDays';
-      case 'cdd':
-        return 'CoolingDays';
-      default:
-        return 'Temperature';
-    }
+    const chartType = {
+      'default': 'Temperature', // eslint-disable-line quote-props
+      'pcpn': 'Precipitation', // eslint-disable-line quote-props
+      '1inch': 'Precipitation',
+      '2inch': 'Precipitation',
+      '3inch': 'Precipitation',
+      '4inch': 'Precipitation',
+      'tmin': 'Temperature', // eslint-disable-line quote-props
+      'tmax': 'Temperature', // eslint-disable-line quote-props
+      'tmax0F': 'Temperature', // eslint-disable-line quote-props
+      'tmax32F': 'Temperature', // eslint-disable-line quote-props
+      'tmax90F': 'Temperature', // eslint-disable-line quote-props
+      'tmax95F': 'Temperature', // eslint-disable-line quote-props
+      'tmax100F': 'Temperature', // eslint-disable-line quote-props
+      'tmin0F': 'Temperature', // eslint-disable-line quote-props
+      'tmin32F': 'Temperature', // eslint-disable-line quote-props
+      'tmin70F': 'Temperature', // eslint-disable-line quote-props
+      'tmin75F': 'Temperature', // eslint-disable-line quote-props
+      'tmin80F': 'Temperature', // eslint-disable-line quote-props
+      'hdd': 'HeatingDays', // eslint-disable-line quote-props
+      'cdd': 'CoolingDays' // eslint-disable-line quote-props
+    };
+    return (chartType[switchClimatevariable] || chartType.default);
   };
 
   // replace the state abbrevaiations from the data text files with a more
