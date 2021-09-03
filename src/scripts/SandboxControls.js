@@ -187,6 +187,9 @@ const useStyles = makeStyles((theme) => ({
       boxShadow: '0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)',
       backgroundColor: darkGrey
     },
+    '& .MuiAccordionSummary-root.Mui-expanded': {
+      backgroundColor: white
+    },
     '& .MuiPaper-elevation1': {
       boxShadow: 'unset'
     }
@@ -1302,7 +1305,7 @@ export default function SandboxControls() {
                       expandIcon={<ExpandMoreIcon />}
                       aria-controls="data-description-header"
                       id="data-description-header">
-                      <Typography className={classes.heading}>
+                      <Typography className={classes.aboutTheDataHeading}>
                         Access climate data to create a proposed figure supporting
                         your NCA chapter.&nbsp;
                         <a href="#">
