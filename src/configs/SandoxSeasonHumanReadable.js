@@ -5,23 +5,23 @@ const SandoxSeasonsHumanReadable = () => ([
   },
   {
     value: 'ann',
-    pullDownText: 'Annual: Mean Temperature, Precipitation or, Degree Days (Jan—Dec)'
+    pullDownText: 'Annual: Mean Temperature, Precipitation, or Degree Days (Jan—Dec)'
   },
   {
     value: 'mam',
-    pullDownText: 'Spring: Mean Temperature, Precipitation or, Degree Days (Mar—May)'
+    pullDownText: 'Spring: Mean Temperature, Precipitation, or Degree Days (Mar—May)'
   },
   {
     value: 'jja',
-    pullDownText: 'Summer: Mean Temperature, Precipitation or, Degree Days (Jun—Aug)'
+    pullDownText: 'Summer: Mean Temperature, Precipitation, or Degree Days (Jun—Aug)'
   },
   {
     value: 'son',
-    pullDownText: 'Fall: Mean Temperature, Precipitation or, Degree Days (Sep—Nov)'
+    pullDownText: 'Fall: Mean Temperature, Precipitation, or Degree Days (Sep—Nov)'
   },
   {
     value: 'djf',
-    pullDownText: 'Winter: Mean Temperature, Precipitation or, Degree Days (Dec—Feb)'
+    pullDownText: 'Winter: Mean Temperature, Precipitation, or Degree Days (Dec—Feb)'
   }
 ]);
 export default SandoxSeasonsHumanReadable;
