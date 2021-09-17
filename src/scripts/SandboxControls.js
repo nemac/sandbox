@@ -657,7 +657,7 @@ export default function SandboxControls() {
   useEffect(() => {
     // call loadData when at start changes, meaning only call this
     // when the site fist starts and intializes
-    console.log('useEffect2', region, period, season, atStart)
+    console.log('useEffect3', region, period, season, atStart)
     loadData(region, period, season, atStart);
 
     // make sure the start state is no false and this will never run again
