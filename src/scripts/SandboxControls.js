@@ -571,8 +571,7 @@ export default function SandboxControls() {
   // function loads the index.json file to find the correct data.txt file based on the varriables
   // the user chooses or from URL parameters
   const loadData = async (loadRegion, argPeriod, argSeason) => {
-    console.log('loadData before')
-    const path = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
+    const path = `${window.location.protocol}/${window.location.host}${window.location.pathname}`;
     console.log('loadData', `${path}/sandboxdata/TSU_Sandbox_Datafiles/index.json`)
     await axios.get(`${path}/sandboxdata/TSU_Sandbox_Datafiles/index.json`)
       .then((response) => {
@@ -640,7 +639,6 @@ export default function SandboxControls() {
   // use the react effect to control when season changes
   useEffect(() => {
     // call loadData when season changes
-    console.log('useEffect1', region, period, season, atStart)
     loadData(region, period, season, atStart);
   }, [season]);
 
@@ -648,7 +646,6 @@ export default function SandboxControls() {
   // regions change to repopulate the climate variable pulldown
   useEffect(() => {
     // call loadData when region changes
-    console.log('useEffect2', region, period, season, atStart)
     loadData(region, period, season, atStart);
   }, [region]);
 
@@ -657,7 +654,6 @@ export default function SandboxControls() {
   useEffect(() => {
     // call loadData when at start changes, meaning only call this
     // when the site fist starts and intializes
-    console.log('useEffect3', region, period, season, atStart)
     loadData(region, period, season, atStart);
 
     // make sure the start state is no false and this will never run again
