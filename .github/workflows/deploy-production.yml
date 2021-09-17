@@ -26,4 +26,4 @@ jobs:
         git remote set-url origin https://${{ secrets.GH_ACTION_TOKEN }}@github.com/nemac/sandbox.git
         npm install
         npm run build
-        aws s3 cp ./dist/ s3://sandbox.nemac.org --acl public-read
+        aws s3 sync ./dist/ s3://sandbox.nemac.org --acl public-read
