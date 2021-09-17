@@ -571,6 +571,7 @@ export default function SandboxControls() {
   // function loads the index.json file to find the correct data.txt file based on the varriables
   // the user chooses or from URL parameters
   const loadData = async (loadRegion, argPeriod, argSeason) => {
+    console.log('loadData before')
     const path = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
     console.log('loadData', `${path}/sandboxdata/TSU_Sandbox_Datafiles/index.json`)
     await axios.get(`${path}/sandboxdata/TSU_Sandbox_Datafiles/index.json`)
