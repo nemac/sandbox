@@ -432,7 +432,7 @@ export default function SandboxControls() {
         !chartDataPeriod ||
         !chartDataSeason) return null;
 
-    axios.get(`${path}/sandboxdata/TSU_Sandbox_Datafiles/${dataFile}`)
+    axios.get(`${path}sandboxdata/TSU_Sandbox_Datafiles/${dataFile}`)
       .then((response) => {
         // parse the csv text file
         const sandboxParseDataFiles = new SandboxParseDataFiles();
