@@ -640,6 +640,7 @@ export default function SandboxControls() {
   // use the react effect to control when season changes
   useEffect(() => {
     // call loadData when season changes
+    console.log('useEffect1', region, period, season, atStart)
     loadData(region, period, season, atStart);
   }, [season]);
 
@@ -647,6 +648,7 @@ export default function SandboxControls() {
   // regions change to repopulate the climate variable pulldown
   useEffect(() => {
     // call loadData when region changes
+    console.log('useEffect2', region, period, season, atStart)
     loadData(region, period, season, atStart);
   }, [region]);
 
@@ -655,6 +657,7 @@ export default function SandboxControls() {
   useEffect(() => {
     // call loadData when at start changes, meaning only call this
     // when the site fist starts and intializes
+    console.log('useEffect3', region, period, season, atStart)
     loadData(region, period, season, atStart);
 
     // make sure the start state is no false and this will never run again
