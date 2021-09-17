@@ -27,3 +27,4 @@ jobs:
         npm install
         npm run build
         aws s3 sync ./dist/ s3://sandbox.nemac.org --acl public-read
+        aws cloudfront create-invalidation --distribution-id E3H0SBJ02HEEPE --paths '/*'  
