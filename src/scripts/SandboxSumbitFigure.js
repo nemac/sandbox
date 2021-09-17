@@ -136,8 +136,8 @@ export default function SandboxSumbitFigure(props) {
   };
 
   const [message, setMessage] = useState('');
-  // const [authorKey, setAuthorKey] = useState('');
-  // const [authorVerified, setAuthorVerified] = useState(false);
+  const [authorKey, setAuthorKey] = useState('');
+  const [authorVerified, setAuthorVerified] = useState(false);
   const [keyDisabled, setKeyDisabled] = useState(false);
   const [emailValid, setEmailValid] = useState(false);
   const [nameValid, setNamelValid] = useState(false);
@@ -194,25 +194,25 @@ export default function SandboxSumbitFigure(props) {
     }
   };
 
-  // // check author verification code
-  // const checkAuthorVerification = (key) => {
-  //   // set up author verification request and URL
-  //   const AUTHOR_KEY = key;
-  //   const requestData = { AUTHOR_KEY };
-  //   const verifyAuthorURL = 'https://hh0t92676a.execute-api.us-east-1.amazonaws.com/dev/verifyAuthor';
-  //
-  //   // call to api to veify the author key
-  //   axios.post(verifyAuthorURL, requestData, axiosConfig)
-  //     .then((response) => { // get reponse if author is verified to send messages
-  //       setAuthorVerified(response.data.verifyAuthor);
-  //       return response.data.verifyAuthor;
-  //     })
-  //     .catch((error) => {
-  //       // handle error
-  //       setAuthorVerified(false);
-  //       return [''];
-  //     });
-  // };
+  // check author verification code
+  const checkAuthorVerification = (key) => {
+    // set up author verification request and URL
+    const AUTHOR_KEY = key;
+    const requestData = { AUTHOR_KEY };
+    const verifyAuthorURL = 'https://hh0t92676a.execute-api.us-east-1.amazonaws.com/dev/verifyAuthor';
+
+    // call to api to veify the author key
+    axios.post(verifyAuthorURL, requestData, axiosConfig)
+      .then((response) => { // get reponse if author is verified to send messages
+        setAuthorVerified(response.data.verifyAuthor);
+        return response.data.verifyAuthor;
+      })
+      .catch((error) => {
+        // handle error
+        setAuthorVerified(false);
+        return [''];
+      });
+  };
 
   // ensure name is at least chars assuming > 2 is a name of some sort
   const validateName = (text) => (text.length >= 2);
@@ -223,12 +223,12 @@ export default function SandboxSumbitFigure(props) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(text);
   };
 
-  // // handle authorKey change
-  // const handleAuthorKeyChange = (event) => {
-  //   const key = event.currentTarget.value;
-  //   setAuthorKey(key);
-  //   checkAuthorVerification(key);
-  // };
+  // handle authorKey change
+  const handleAuthorKeyChange = (event) => {
+    const key = event.currentTarget.value;
+    setAuthorKey(key);
+    checkAuthorVerification(key);
+  };
 
   // handle name change
   const handleNameChange = (event) => {
@@ -262,20 +262,20 @@ export default function SandboxSumbitFigure(props) {
     setMessageSent(false);
   };
 
-  // // when first mounts changes set visibility of message inputs
-  // useEffect(() => {
-  //   checkAuthorVerification(authorKey);
-  //   if (authorVerified) setKeyDisabled(false); // author key is valid show the messsage inputs
-  //   if (!authorVerified) setKeyDisabled(true);
-  // author key is NOT valid hide the messsage inputs
-  // }, [open]);
+  // when first mounts changes set visibility of message inputs
+  useEffect(() => {
+    checkAuthorVerification(authorKey);
+    if (authorVerified) setKeyDisabled(false); // author key is valid show the messsage inputs
+    if (!authorVerified) setKeyDisabled(true);
+  author key is NOT valid hide the messsage inputs
+  }, [open]);
 
-  // // when authorVerified changes set visibility of message inputs
-  // useEffect(() => {
-  //   if (authorVerified) setKeyDisabled(false); // author key is valid show the messsage inputs
-  //   if (!authorVerified) setKeyDisabled(false);
-  // author key is NOT valid hide the messsage inputs
-  // }, [authorVerified]);
+  // when authorVerified changes set visibility of message inputs
+  useEffect(() => {
+    if (authorVerified) setKeyDisabled(false); // author key is valid show the messsage inputs
+    if (!authorVerified) setKeyDisabled(false);
+  author key is NOT valid hide the messsage inputs
+  }, [authorVerified]);
 
   return (
       <Modal
