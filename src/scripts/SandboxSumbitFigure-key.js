@@ -1,4 +1,5 @@
-import React, { useState, useRef } from 'react';
+// import React, { useEffect, useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
@@ -135,9 +136,9 @@ export default function SandboxSumbitFigure(props) {
   };
 
   const [message, setMessage] = useState('');
-  // const [authorKey, setAuthorKey] = useState('');
-  // const [authorVerified, setAuthorVerified] = useState(false);
-  const [keyDisabled, setKeyDisabled] = useState(false);
+  const [authorKey, setAuthorKey] = useState('');
+  const [authorVerified, setAuthorVerified] = useState(false);
+  const [keyDisabled, setKeyDisabled] = useState(true);
   const [emailValid, setEmailValid] = useState(false);
   const [nameValid, setNamelValid] = useState(false);
   const [chapterValid, setChapterlValid] = useState(false);
@@ -193,6 +194,26 @@ export default function SandboxSumbitFigure(props) {
     }
   };
 
+  // check author verification code
+  const checkAuthorVerification = (key) => {
+    // set up author verification request and URL
+    const AUTHOR_KEY = key;
+    const requestData = { AUTHOR_KEY };
+    const verifyAuthorURL = 'https://v9bh75u4xh.execute-api.us-east-1.amazonaws.com/dev/verifyAuthor';
+
+    // call to api to veify the author key
+    axios.post(verifyAuthorURL, requestData, axiosConfig)
+      .then((response) => { // get reponse if author is verified to send messages
+        setAuthorVerified(response.data.verifyAuthor);
+        return response.data.verifyAuthor;
+      })
+      .catch((error) => {
+        // handle error
+        setAuthorVerified(false);
+        return [''];
+      });
+  };
+
   // ensure name is at least chars assuming > 2 is a name of some sort
   const validateName = (text) => (text.length >= 2);
 
@@ -200,6 +221,13 @@ export default function SandboxSumbitFigure(props) {
   const validateEmailAddress = (text) => {
     if (text.length < 4) return false;
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(text);
+  };
+
+  // handle authorKey change
+  const handleAuthorKeyChange = (event) => {
+    const key = event.currentTarget.value;
+    setAuthorKey(key);
+    checkAuthorVerification(key);
   };
 
   // handle name change
@@ -234,6 +262,21 @@ export default function SandboxSumbitFigure(props) {
     setMessageSent(false);
   };
 
+  // when first mounts changes set visibility of message inputs
+  useEffect(() => {
+    checkAuthorVerification(authorKey);
+    if (authorVerified) setKeyDisabled(false); // author key is valid show the messsage inputs
+    if (!authorVerified) setKeyDisabled(true);
+  // author key is NOT valid hide the messsage inputs
+  }, [open]);
+
+  // when authorVerified changes set visibility of message inputs
+  useEffect(() => {
+    if (authorVerified) setKeyDisabled(false); // author key is valid show the messsage inputs
+    if (!authorVerified) setKeyDisabled(true);
+  // author key is NOT valid hide the messsage inputs
+  }, [authorVerified]);
+
   return (
       <Modal
         disableBackdropClick
@@ -257,6 +300,18 @@ export default function SandboxSumbitFigure(props) {
             Once a valid Author key is entered, you can submit the current figure to TSU.
             Please note that you must include your email, name and any details about figure.
           </div>
+          <TextField
+               className={classes.exportInputVerify}
+               size='small'
+               id='outlined-text-authorKey'
+               required
+               variant='outlined'
+               label='Author Key'
+               type='text'
+               value={authorKey}
+               onBlur={handleAuthorKeyChange}
+               onChange={handleAuthorKeyChange}
+               InputLabelProps={{ shrink: true }} />
 
           <Collapse in={messageSent}>
             <Box display='flex' alignContent='center'>
