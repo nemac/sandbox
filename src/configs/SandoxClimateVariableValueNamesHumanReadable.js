@@ -204,62 +204,62 @@ const SandoxClimateVariableValueNamesHumanReadable = () => ([
     season: 'son'
   },
   {
-    value: 'cdd',
+    value: 'cddc',
     pullDownText: 'Cooling Degree Days',
     chartTitle: 'Annual (Jan—Dec) Cooling Degree Days',
     season: 'ann'
   },
   {
-    value: 'cdd',
+    value: 'cddc',
     pullDownText: 'Cooling Degree Days',
     chartTitle: 'Winter (Dec, Jan, Feb) Cooling Degree Days',
     season: 'djf'
   },
   {
-    value: 'cdd',
+    value: 'cddc',
     pullDownText: 'Cooling Degree Days',
     chartTitle: 'Spring (Mar, Apr, May) Cooling Degree Days',
     season: 'mam'
   },
   {
-    value: 'cdd',
+    value: 'cddc',
     pullDownText: 'Cooling Degree Days',
     chartTitle: 'Summer (Jun, Jul, Aug) Cooling Degree Days',
     season: 'jja'
   },
   {
-    value: 'cdd',
+    value: 'cddc',
     pullDownText: 'Cooling Degree Days',
     chartTitle: 'Fall (Sep, Oct, Nov) Cooling Degree Days',
     season: 'son'
   },
 
   {
-    value: 'hdd',
+    value: 'hddc',
     pullDownText: 'Heating Degree Days',
     chartTitle: 'Annual (Jan—Dec) Heating Degree Days',
     season: 'ann'
   },
   {
-    value: 'hdd',
+    value: 'hddc',
     pullDownText: 'Heating Degree Days',
     chartTitle: 'Winter (Dec, Jan, Feb) Heating Degree Days',
     season: 'djf'
   },
   {
-    value: 'hdd',
+    value: 'hddc',
     pullDownText: 'Heating Degree Days',
     chartTitle: 'Spring (Mar, Apr, May) Heating Degree Days',
     season: 'mam'
   },
   {
-    value: 'hdd',
+    value: 'hddc',
     pullDownText: 'Heating Degree Days',
     chartTitle: 'Summer (Jun, Jul, Aug) Heating Degree Days',
     season: 'jja'
   },
   {
-    value: 'hdd',
+    value: 'hddc',
     pullDownText: 'Heating Degree Days',
     chartTitle: 'Fall (Sep, Oct, Nov) Heating Degree Days',
     season: 'son'

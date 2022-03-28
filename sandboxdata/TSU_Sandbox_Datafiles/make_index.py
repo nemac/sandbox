@@ -42,6 +42,7 @@ def main():
         'state' : [],
     }
 
+    fnames = [fname for fname in sorted(os.listdir('.')) if fname not in EXCLUDED]
     for fn in fnames:
         parts = fn.split('_')
         for ft in data.keys():
