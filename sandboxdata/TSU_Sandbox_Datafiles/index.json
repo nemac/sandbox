@@ -1,8 +1,8 @@
 {
     "national": [
         {
-            "end": 2020,
-            "name": "national1inch_1900_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "national1inch_1900_2021_Sandbox2021.txt",
             "period": "1900-current",
             "robust": false,
             "season": "yearly",
@@ -10,8 +10,8 @@
             "type": "1inch"
         },
         {
-            "end": 2020,
-            "name": "national1inch_1950_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "national1inch_1950_2021_Sandbox2021.txt",
             "period": "1950-current",
             "robust": true,
             "season": "yearly",
@@ -19,8 +19,8 @@
             "type": "1inch"
         },
         {
-            "end": 2020,
-            "name": "national2inch_1900_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "national2inch_1900_2021_Sandbox2021.txt",
             "period": "1900-current",
             "robust": false,
             "season": "yearly",
@@ -28,8 +28,8 @@
             "type": "2inch"
         },
         {
-            "end": 2020,
-            "name": "national2inch_1950_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "national2inch_1950_2021_Sandbox2021.txt",
             "period": "1950-current",
             "robust": true,
             "season": "yearly",
@@ -37,8 +37,8 @@
             "type": "2inch"
         },
         {
-            "end": 2020,
-            "name": "national3inch_1900_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "national3inch_1900_2021_Sandbox2021.txt",
             "period": "1900-current",
             "robust": false,
             "season": "yearly",
@@ -46,8 +46,8 @@
             "type": "3inch"
         },
         {
-            "end": 2020,
-            "name": "national3inch_1950_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "national3inch_1950_2021_Sandbox2021.txt",
             "period": "1950-current",
             "robust": true,
             "season": "yearly",
@@ -55,8 +55,8 @@
             "type": "3inch"
         },
         {
-            "end": 2020,
-            "name": "national4inch_1900_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "national4inch_1900_2021_Sandbox2021.txt",
             "period": "1900-current",
             "robust": false,
             "season": "yearly",
@@ -64,8 +64,8 @@
             "type": "4inch"
         },
         {
-            "end": 2020,
-            "name": "national4inch_1950_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "national4inch_1950_2021_Sandbox2021.txt",
             "period": "1950-current",
             "robust": true,
             "season": "yearly",
@@ -73,98 +73,98 @@
             "type": "4inch"
         },
         {
-            "end": 2020,
-            "name": "nationalcdd_ann_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationalcddc_ann_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "ann",
             "start": 1895,
-            "type": "cdd"
+            "type": "cddc"
         },
         {
-            "end": 2020,
-            "name": "nationalcdd_djf_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationalcddc_djf_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "djf",
             "start": 1895,
-            "type": "cdd"
+            "type": "cddc"
         },
         {
-            "end": 2020,
-            "name": "nationalcdd_jja_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationalcddc_jja_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "jja",
             "start": 1895,
-            "type": "cdd"
+            "type": "cddc"
         },
         {
-            "end": 2020,
-            "name": "nationalcdd_mam_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationalcddc_mam_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "mam",
             "start": 1895,
-            "type": "cdd"
+            "type": "cddc"
         },
         {
-            "end": 2020,
-            "name": "nationalcdd_son_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationalcddc_son_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "son",
             "start": 1895,
-            "type": "cdd"
+            "type": "cddc"
         },
         {
-            "end": 2020,
-            "name": "nationalhdd_ann_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationalhddc_ann_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "ann",
             "start": 1895,
-            "type": "hdd"
+            "type": "hddc"
         },
         {
-            "end": 2020,
-            "name": "nationalhdd_djf_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationalhddc_djf_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "djf",
             "start": 1895,
-            "type": "hdd"
+            "type": "hddc"
         },
         {
-            "end": 2020,
-            "name": "nationalhdd_jja_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationalhddc_jja_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "jja",
             "start": 1895,
-            "type": "hdd"
+            "type": "hddc"
         },
         {
-            "end": 2020,
-            "name": "nationalhdd_mam_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationalhddc_mam_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "mam",
             "start": 1895,
-            "type": "hdd"
+            "type": "hddc"
         },
         {
-            "end": 2020,
-            "name": "nationalhdd_son_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationalhddc_son_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "son",
             "start": 1895,
-            "type": "hdd"
+            "type": "hddc"
         },
         {
-            "end": 2020,
-            "name": "nationalpcpn_ann_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationalpcpn_ann_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "ann",
@@ -172,8 +172,8 @@
             "type": "pcpn"
         },
         {
-            "end": 2020,
-            "name": "nationalpcpn_djf_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationalpcpn_djf_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "djf",
@@ -181,8 +181,8 @@
             "type": "pcpn"
         },
         {
-            "end": 2020,
-            "name": "nationalpcpn_jja_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationalpcpn_jja_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "jja",
@@ -190,8 +190,8 @@
             "type": "pcpn"
         },
         {
-            "end": 2020,
-            "name": "nationalpcpn_mam_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationalpcpn_mam_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "mam",
@@ -199,8 +199,8 @@
             "type": "pcpn"
         },
         {
-            "end": 2020,
-            "name": "nationalpcpn_son_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationalpcpn_son_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "son",
@@ -208,8 +208,8 @@
             "type": "pcpn"
         },
         {
-            "end": 2020,
-            "name": "nationaltmax0F_1900_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationaltmax0F_1900_2021_Sandbox2021.txt",
             "period": "1900-current",
             "robust": false,
             "season": "yearly",
@@ -217,8 +217,8 @@
             "type": "tmax0F"
         },
         {
-            "end": 2020,
-            "name": "nationaltmax0F_1950_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationaltmax0F_1950_2021_Sandbox2021.txt",
             "period": "1950-current",
             "robust": true,
             "season": "yearly",
@@ -226,8 +226,8 @@
             "type": "tmax0F"
         },
         {
-            "end": 2020,
-            "name": "nationaltmax100F_1900_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationaltmax100F_1900_2021_Sandbox2021.txt",
             "period": "1900-current",
             "robust": false,
             "season": "yearly",
@@ -235,8 +235,8 @@
             "type": "tmax100F"
         },
         {
-            "end": 2020,
-            "name": "nationaltmax100F_1950_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationaltmax100F_1950_2021_Sandbox2021.txt",
             "period": "1950-current",
             "robust": true,
             "season": "yearly",
@@ -244,8 +244,8 @@
             "type": "tmax100F"
         },
         {
-            "end": 2020,
-            "name": "nationaltmax32F_1900_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationaltmax32F_1900_2021_Sandbox2021.txt",
             "period": "1900-current",
             "robust": false,
             "season": "yearly",
@@ -253,8 +253,8 @@
             "type": "tmax32F"
         },
         {
-            "end": 2020,
-            "name": "nationaltmax32F_1950_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationaltmax32F_1950_2021_Sandbox2021.txt",
             "period": "1950-current",
             "robust": true,
             "season": "yearly",
@@ -262,8 +262,8 @@
             "type": "tmax32F"
         },
         {
-            "end": 2020,
-            "name": "nationaltmax90F_1900_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationaltmax90F_1900_2021_Sandbox2021.txt",
             "period": "1900-current",
             "robust": false,
             "season": "yearly",
@@ -271,8 +271,8 @@
             "type": "tmax90F"
         },
         {
-            "end": 2020,
-            "name": "nationaltmax90F_1950_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationaltmax90F_1950_2021_Sandbox2021.txt",
             "period": "1950-current",
             "robust": true,
             "season": "yearly",
@@ -280,8 +280,8 @@
             "type": "tmax90F"
         },
         {
-            "end": 2020,
-            "name": "nationaltmax95F_1900_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationaltmax95F_1900_2021_Sandbox2021.txt",
             "period": "1900-current",
             "robust": false,
             "season": "yearly",
@@ -289,8 +289,8 @@
             "type": "tmax95F"
         },
         {
-            "end": 2020,
-            "name": "nationaltmax95F_1950_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationaltmax95F_1950_2021_Sandbox2021.txt",
             "period": "1950-current",
             "robust": true,
             "season": "yearly",
@@ -298,8 +298,8 @@
             "type": "tmax95F"
         },
         {
-            "end": 2020,
-            "name": "nationaltmax_ann_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationaltmax_ann_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "ann",
@@ -307,8 +307,8 @@
             "type": "tmax"
         },
         {
-            "end": 2020,
-            "name": "nationaltmax_djf_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationaltmax_djf_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "djf",
@@ -316,8 +316,8 @@
             "type": "tmax"
         },
         {
-            "end": 2020,
-            "name": "nationaltmax_jja_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationaltmax_jja_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "jja",
@@ -325,8 +325,8 @@
             "type": "tmax"
         },
         {
-            "end": 2020,
-            "name": "nationaltmax_mam_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationaltmax_mam_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "mam",
@@ -334,8 +334,8 @@
             "type": "tmax"
         },
         {
-            "end": 2020,
-            "name": "nationaltmax_son_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationaltmax_son_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "son",
@@ -343,8 +343,8 @@
             "type": "tmax"
         },
         {
-            "end": 2020,
-            "name": "nationaltmin0F_1900_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationaltmin0F_1900_2021_Sandbox2021.txt",
             "period": "1900-current",
             "robust": false,
             "season": "yearly",
@@ -352,8 +352,8 @@
             "type": "tmin0F"
         },
         {
-            "end": 2020,
-            "name": "nationaltmin0F_1950_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationaltmin0F_1950_2021_Sandbox2021.txt",
             "period": "1950-current",
             "robust": true,
             "season": "yearly",
@@ -361,8 +361,8 @@
             "type": "tmin0F"
         },
         {
-            "end": 2020,
-            "name": "nationaltmin32F_1900_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationaltmin32F_1900_2021_Sandbox2021.txt",
             "period": "1900-current",
             "robust": false,
             "season": "yearly",
@@ -370,8 +370,8 @@
             "type": "tmin32F"
         },
         {
-            "end": 2020,
-            "name": "nationaltmin32F_1950_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationaltmin32F_1950_2021_Sandbox2021.txt",
             "period": "1950-current",
             "robust": true,
             "season": "yearly",
@@ -379,8 +379,8 @@
             "type": "tmin32F"
         },
         {
-            "end": 2020,
-            "name": "nationaltmin70F_1900_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationaltmin70F_1900_2021_Sandbox2021.txt",
             "period": "1900-current",
             "robust": false,
             "season": "yearly",
@@ -388,8 +388,8 @@
             "type": "tmin70F"
         },
         {
-            "end": 2020,
-            "name": "nationaltmin70F_1950_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationaltmin70F_1950_2021_Sandbox2021.txt",
             "period": "1950-current",
             "robust": true,
             "season": "yearly",
@@ -397,8 +397,8 @@
             "type": "tmin70F"
         },
         {
-            "end": 2020,
-            "name": "nationaltmin75F_1900_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationaltmin75F_1900_2021_Sandbox2021.txt",
             "period": "1900-current",
             "robust": false,
             "season": "yearly",
@@ -406,8 +406,8 @@
             "type": "tmin75F"
         },
         {
-            "end": 2020,
-            "name": "nationaltmin75F_1950_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationaltmin75F_1950_2021_Sandbox2021.txt",
             "period": "1950-current",
             "robust": true,
             "season": "yearly",
@@ -415,8 +415,8 @@
             "type": "tmin75F"
         },
         {
-            "end": 2020,
-            "name": "nationaltmin80F_1900_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationaltmin80F_1900_2021_Sandbox2021.txt",
             "period": "1900-current",
             "robust": false,
             "season": "yearly",
@@ -424,8 +424,8 @@
             "type": "tmin80F"
         },
         {
-            "end": 2020,
-            "name": "nationaltmin80F_1950_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationaltmin80F_1950_2021_Sandbox2021.txt",
             "period": "1950-current",
             "robust": true,
             "season": "yearly",
@@ -433,8 +433,8 @@
             "type": "tmin80F"
         },
         {
-            "end": 2020,
-            "name": "nationaltmin_ann_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationaltmin_ann_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "ann",
@@ -442,8 +442,8 @@
             "type": "tmin"
         },
         {
-            "end": 2020,
-            "name": "nationaltmin_djf_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationaltmin_djf_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "djf",
@@ -451,8 +451,8 @@
             "type": "tmin"
         },
         {
-            "end": 2020,
-            "name": "nationaltmin_jja_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationaltmin_jja_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "jja",
@@ -460,8 +460,8 @@
             "type": "tmin"
         },
         {
-            "end": 2020,
-            "name": "nationaltmin_mam_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationaltmin_mam_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "mam",
@@ -469,8 +469,8 @@
             "type": "tmin"
         },
         {
-            "end": 2020,
-            "name": "nationaltmin_son_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationaltmin_son_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "son",
@@ -478,8 +478,8 @@
             "type": "tmin"
         },
         {
-            "end": 2020,
-            "name": "nationaltmpc_ann_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationaltmpc_ann_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "ann",
@@ -487,8 +487,8 @@
             "type": "tmpc"
         },
         {
-            "end": 2020,
-            "name": "nationaltmpc_djf_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationaltmpc_djf_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "djf",
@@ -496,8 +496,8 @@
             "type": "tmpc"
         },
         {
-            "end": 2020,
-            "name": "nationaltmpc_jja_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationaltmpc_jja_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "jja",
@@ -505,8 +505,8 @@
             "type": "tmpc"
         },
         {
-            "end": 2020,
-            "name": "nationaltmpc_mam_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationaltmpc_mam_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "mam",
@@ -514,8 +514,8 @@
             "type": "tmpc"
         },
         {
-            "end": 2020,
-            "name": "nationaltmpc_son_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "nationaltmpc_son_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "son",
@@ -525,8 +525,8 @@
     ],
     "regional": [
         {
-            "end": 2020,
-            "name": "regions1inch_1900_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regions1inch_1900_2021_Sandbox2021.txt",
             "period": "1900-current",
             "robust": false,
             "season": "yearly",
@@ -534,8 +534,8 @@
             "type": "1inch"
         },
         {
-            "end": 2020,
-            "name": "regions1inch_1950_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regions1inch_1950_Sandbox2021.txt",
             "period": "1950-current",
             "robust": true,
             "season": "yearly",
@@ -543,8 +543,8 @@
             "type": "1inch"
         },
         {
-            "end": 2020,
-            "name": "regions2inch_1900_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regions2inch_1900_2021_Sandbox2021.txt",
             "period": "1900-current",
             "robust": false,
             "season": "yearly",
@@ -552,8 +552,8 @@
             "type": "2inch"
         },
         {
-            "end": 2020,
-            "name": "regions2inch_1950_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regions2inch_1950_Sandbox2021.txt",
             "period": "1950-current",
             "robust": true,
             "season": "yearly",
@@ -561,8 +561,8 @@
             "type": "2inch"
         },
         {
-            "end": 2020,
-            "name": "regions3inch_1900_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regions3inch_1900_2021_Sandbox2021.txt",
             "period": "1900-current",
             "robust": false,
             "season": "yearly",
@@ -570,8 +570,8 @@
             "type": "3inch"
         },
         {
-            "end": 2020,
-            "name": "regions3inch_1950_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regions3inch_1950_Sandbox2021.txt",
             "period": "1950-current",
             "robust": true,
             "season": "yearly",
@@ -579,8 +579,8 @@
             "type": "3inch"
         },
         {
-            "end": 2020,
-            "name": "regions4inch_1900_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regions4inch_1900_2021_Sandbox2021.txt",
             "period": "1900-current",
             "robust": false,
             "season": "yearly",
@@ -588,8 +588,8 @@
             "type": "4inch"
         },
         {
-            "end": 2020,
-            "name": "regions4inch_1950_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regions4inch_1950_Sandbox2021.txt",
             "period": "1950-current",
             "robust": true,
             "season": "yearly",
@@ -597,98 +597,98 @@
             "type": "4inch"
         },
         {
-            "end": 2020,
-            "name": "regionscdd_ann_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionscddc_ann_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "ann",
             "start": 1895,
-            "type": "cdd"
+            "type": "cddc"
         },
         {
-            "end": 2020,
-            "name": "regionscdd_djf_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionscddc_djf_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "djf",
             "start": 1895,
-            "type": "cdd"
+            "type": "cddc"
         },
         {
-            "end": 2020,
-            "name": "regionscdd_jja_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionscddc_jja_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "jja",
             "start": 1895,
-            "type": "cdd"
+            "type": "cddc"
         },
         {
-            "end": 2020,
-            "name": "regionscdd_mam_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionscddc_mam_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "mam",
             "start": 1895,
-            "type": "cdd"
+            "type": "cddc"
         },
         {
-            "end": 2020,
-            "name": "regionscdd_son_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionscddc_son_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "son",
             "start": 1895,
-            "type": "cdd"
+            "type": "cddc"
         },
         {
-            "end": 2020,
-            "name": "regionshdd_ann_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionshddc_ann_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "ann",
             "start": 1895,
-            "type": "hdd"
+            "type": "hddc"
         },
         {
-            "end": 2020,
-            "name": "regionshdd_djf_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionshddc_djf_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "djf",
             "start": 1895,
-            "type": "hdd"
+            "type": "hddc"
         },
         {
-            "end": 2020,
-            "name": "regionshdd_jja_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionshddc_jja_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "jja",
             "start": 1895,
-            "type": "hdd"
+            "type": "hddc"
         },
         {
-            "end": 2020,
-            "name": "regionshdd_mam_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionshddc_mam_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "mam",
             "start": 1895,
-            "type": "hdd"
+            "type": "hddc"
         },
         {
-            "end": 2020,
-            "name": "regionshdd_son_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionshddc_son_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "son",
             "start": 1895,
-            "type": "hdd"
+            "type": "hddc"
         },
         {
-            "end": 2020,
-            "name": "regionspcpn_ann_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionspcpn_ann_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "ann",
@@ -696,8 +696,8 @@
             "type": "pcpn"
         },
         {
-            "end": 2020,
-            "name": "regionspcpn_djf_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionspcpn_djf_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "djf",
@@ -705,8 +705,8 @@
             "type": "pcpn"
         },
         {
-            "end": 2020,
-            "name": "regionspcpn_jja_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionspcpn_jja_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "jja",
@@ -714,8 +714,8 @@
             "type": "pcpn"
         },
         {
-            "end": 2020,
-            "name": "regionspcpn_mam_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionspcpn_mam_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "mam",
@@ -723,8 +723,8 @@
             "type": "pcpn"
         },
         {
-            "end": 2020,
-            "name": "regionspcpn_son_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionspcpn_son_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "son",
@@ -732,8 +732,8 @@
             "type": "pcpn"
         },
         {
-            "end": 2020,
-            "name": "regionstmax0F_1900_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionstmax0F_1900_2021_Sandbox2021.txt",
             "period": "1900-current",
             "robust": false,
             "season": "yearly",
@@ -741,8 +741,8 @@
             "type": "tmax0F"
         },
         {
-            "end": 2020,
-            "name": "regionstmax0F_1950_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionstmax0F_1950_2021_Sandbox2021.txt",
             "period": "1950-current",
             "robust": true,
             "season": "yearly",
@@ -750,8 +750,8 @@
             "type": "tmax0F"
         },
         {
-            "end": 2020,
-            "name": "regionstmax100F_1900_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionstmax100F_1900_2021_Sandbox2021.txt",
             "period": "1900-current",
             "robust": false,
             "season": "yearly",
@@ -759,8 +759,8 @@
             "type": "tmax100F"
         },
         {
-            "end": 2020,
-            "name": "regionstmax100F_1950_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionstmax100F_1950_2021_Sandbox2021.txt",
             "period": "1950-current",
             "robust": true,
             "season": "yearly",
@@ -768,8 +768,8 @@
             "type": "tmax100F"
         },
         {
-            "end": 2020,
-            "name": "regionstmax32F_1900_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionstmax32F_1900_2021_Sandbox2021.txt",
             "period": "1900-current",
             "robust": false,
             "season": "yearly",
@@ -777,8 +777,8 @@
             "type": "tmax32F"
         },
         {
-            "end": 2020,
-            "name": "regionstmax32F_1950_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionstmax32F_1950_2021_Sandbox2021.txt",
             "period": "1950-current",
             "robust": true,
             "season": "yearly",
@@ -786,8 +786,8 @@
             "type": "tmax32F"
         },
         {
-            "end": 2020,
-            "name": "regionstmax90F_1900_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionstmax90F_1900_2021_Sandbox2021.txt",
             "period": "1900-current",
             "robust": false,
             "season": "yearly",
@@ -795,8 +795,8 @@
             "type": "tmax90F"
         },
         {
-            "end": 2020,
-            "name": "regionstmax90F_1950_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionstmax90F_1950_2021_Sandbox2021.txt",
             "period": "1950-current",
             "robust": true,
             "season": "yearly",
@@ -804,8 +804,8 @@
             "type": "tmax90F"
         },
         {
-            "end": 2020,
-            "name": "regionstmax95F_1900_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionstmax95F_1900_2021_Sandbox2021.txt",
             "period": "1900-current",
             "robust": false,
             "season": "yearly",
@@ -813,8 +813,8 @@
             "type": "tmax95F"
         },
         {
-            "end": 2020,
-            "name": "regionstmax95F_1950_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionstmax95F_1950_2021_Sandbox2021.txt",
             "period": "1950-current",
             "robust": true,
             "season": "yearly",
@@ -822,8 +822,8 @@
             "type": "tmax95F"
         },
         {
-            "end": 2020,
-            "name": "regionstmax_ann_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionstmax_ann_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "ann",
@@ -831,8 +831,8 @@
             "type": "tmax"
         },
         {
-            "end": 2020,
-            "name": "regionstmax_djf_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionstmax_djf_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "djf",
@@ -840,8 +840,8 @@
             "type": "tmax"
         },
         {
-            "end": 2020,
-            "name": "regionstmax_jja_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionstmax_jja_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "jja",
@@ -849,8 +849,8 @@
             "type": "tmax"
         },
         {
-            "end": 2020,
-            "name": "regionstmax_mam_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionstmax_mam_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "mam",
@@ -858,8 +858,8 @@
             "type": "tmax"
         },
         {
-            "end": 2020,
-            "name": "regionstmax_son_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionstmax_son_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "son",
@@ -867,8 +867,8 @@
             "type": "tmax"
         },
         {
-            "end": 2020,
-            "name": "regionstmin0F_1900_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionstmin0F_1900_2021_Sandbox2021.txt",
             "period": "1900-current",
             "robust": false,
             "season": "yearly",
@@ -876,8 +876,8 @@
             "type": "tmin0F"
         },
         {
-            "end": 2020,
-            "name": "regionstmin0F_1950_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionstmin0F_1950_2021_Sandbox2021.txt",
             "period": "1950-current",
             "robust": true,
             "season": "yearly",
@@ -885,8 +885,8 @@
             "type": "tmin0F"
         },
         {
-            "end": 2020,
-            "name": "regionstmin32F_1900_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionstmin32F_1900_2021_Sandbox2021.txt",
             "period": "1900-current",
             "robust": false,
             "season": "yearly",
@@ -894,8 +894,8 @@
             "type": "tmin32F"
         },
         {
-            "end": 2020,
-            "name": "regionstmin32F_1950_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionstmin32F_1950_2021_Sandbox2021.txt",
             "period": "1950-current",
             "robust": true,
             "season": "yearly",
@@ -903,8 +903,8 @@
             "type": "tmin32F"
         },
         {
-            "end": 2020,
-            "name": "regionstmin70F_1900_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionstmin70F_1900_2021_Sandbox2021.txt",
             "period": "1900-current",
             "robust": false,
             "season": "yearly",
@@ -912,8 +912,8 @@
             "type": "tmin70F"
         },
         {
-            "end": 2020,
-            "name": "regionstmin70F_1950_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionstmin70F_1950_2021_Sandbox2021.txt",
             "period": "1950-current",
             "robust": true,
             "season": "yearly",
@@ -921,8 +921,8 @@
             "type": "tmin70F"
         },
         {
-            "end": 2020,
-            "name": "regionstmin75F_1900_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionstmin75F_1900_2021_Sandbox2021.txt",
             "period": "1900-current",
             "robust": false,
             "season": "yearly",
@@ -930,8 +930,8 @@
             "type": "tmin75F"
         },
         {
-            "end": 2020,
-            "name": "regionstmin75F_1950_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionstmin75F_1950_2021_Sandbox2021.txt",
             "period": "1950-current",
             "robust": true,
             "season": "yearly",
@@ -939,8 +939,8 @@
             "type": "tmin75F"
         },
         {
-            "end": 2020,
-            "name": "regionstmin80F_1900_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionstmin80F_1900_2021_Sandbox2021.txt",
             "period": "1900-current",
             "robust": false,
             "season": "yearly",
@@ -948,8 +948,8 @@
             "type": "tmin80F"
         },
         {
-            "end": 2020,
-            "name": "regionstmin80F_1950_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionstmin80F_1950_2021_Sandbox2021.txt",
             "period": "1950-current",
             "robust": true,
             "season": "yearly",
@@ -957,8 +957,8 @@
             "type": "tmin80F"
         },
         {
-            "end": 2020,
-            "name": "regionstmin_ann_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionstmin_ann_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "ann",
@@ -966,8 +966,8 @@
             "type": "tmin"
         },
         {
-            "end": 2020,
-            "name": "regionstmin_djf_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionstmin_djf_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "djf",
@@ -975,8 +975,8 @@
             "type": "tmin"
         },
         {
-            "end": 2020,
-            "name": "regionstmin_jja_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionstmin_jja_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "jja",
@@ -984,8 +984,8 @@
             "type": "tmin"
         },
         {
-            "end": 2020,
-            "name": "regionstmin_mam_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionstmin_mam_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "mam",
@@ -993,8 +993,8 @@
             "type": "tmin"
         },
         {
-            "end": 2020,
-            "name": "regionstmin_son_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionstmin_son_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "son",
@@ -1002,8 +1002,8 @@
             "type": "tmin"
         },
         {
-            "end": 2020,
-            "name": "regionstmpc_ann_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionstmpc_ann_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "ann",
@@ -1011,8 +1011,8 @@
             "type": "tmpc"
         },
         {
-            "end": 2020,
-            "name": "regionstmpc_djf_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionstmpc_djf_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "djf",
@@ -1020,8 +1020,8 @@
             "type": "tmpc"
         },
         {
-            "end": 2020,
-            "name": "regionstmpc_jja_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionstmpc_jja_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "jja",
@@ -1029,8 +1029,8 @@
             "type": "tmpc"
         },
         {
-            "end": 2020,
-            "name": "regionstmpc_mam_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionstmpc_mam_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "mam",
@@ -1038,8 +1038,8 @@
             "type": "tmpc"
         },
         {
-            "end": 2020,
-            "name": "regionstmpc_son_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "regionstmpc_son_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "son",
@@ -1049,8 +1049,8 @@
     ],
     "state": [
         {
-            "end": 2020,
-            "name": "state1inch_1900_Sandbox2020.txt",
+            "end": 2021,
+            "name": "state1inch_1900_Sandbox2021.txt",
             "period": "1900-current",
             "robust": false,
             "season": "yearly",
@@ -1058,8 +1058,8 @@
             "type": "1inch"
         },
         {
-            "end": 2020,
-            "name": "state1inch_1950_Sandbox2020.txt",
+            "end": 2021,
+            "name": "state1inch_1950_Sandbox2021.txt",
             "period": "1950-current",
             "robust": true,
             "season": "yearly",
@@ -1067,8 +1067,8 @@
             "type": "1inch"
         },
         {
-            "end": 2020,
-            "name": "state2inch_1900_Sandbox2020.txt",
+            "end": 2021,
+            "name": "state2inch_1900_Sandbox2021.txt",
             "period": "1900-current",
             "robust": false,
             "season": "yearly",
@@ -1076,8 +1076,8 @@
             "type": "2inch"
         },
         {
-            "end": 2020,
-            "name": "state2inch_1950_Sandbox2020.txt",
+            "end": 2021,
+            "name": "state2inch_1950_Sandbox2021.txt",
             "period": "1950-current",
             "robust": true,
             "season": "yearly",
@@ -1085,8 +1085,8 @@
             "type": "2inch"
         },
         {
-            "end": 2020,
-            "name": "state3inch_1900_Sandbox2020.txt",
+            "end": 2021,
+            "name": "state3inch_1900_Sandbox2021.txt",
             "period": "1900-current",
             "robust": false,
             "season": "yearly",
@@ -1094,8 +1094,8 @@
             "type": "3inch"
         },
         {
-            "end": 2020,
-            "name": "state3inch_1950_Sandbox2020.txt",
+            "end": 2021,
+            "name": "state3inch_1950_Sandbox2021.txt",
             "period": "1950-current",
             "robust": true,
             "season": "yearly",
@@ -1103,8 +1103,8 @@
             "type": "3inch"
         },
         {
-            "end": 2020,
-            "name": "state4inch_1900_Sandbox2020.txt",
+            "end": 2021,
+            "name": "state4inch_1900_Sandbox2021.txt",
             "period": "1900-current",
             "robust": false,
             "season": "yearly",
@@ -1112,8 +1112,8 @@
             "type": "4inch"
         },
         {
-            "end": 2020,
-            "name": "state4inch_1950_Sandbox2020.txt",
+            "end": 2021,
+            "name": "state4inch_1950_Sandbox2021.txt",
             "period": "1950-current",
             "robust": true,
             "season": "yearly",
@@ -1121,98 +1121,98 @@
             "type": "4inch"
         },
         {
-            "end": 2020,
-            "name": "statecdd_ann_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statecddc_ann_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "ann",
             "start": 1895,
-            "type": "cdd"
+            "type": "cddc"
         },
         {
-            "end": 2020,
-            "name": "statecdd_djf_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statecddc_djf_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "djf",
             "start": 1895,
-            "type": "cdd"
+            "type": "cddc"
         },
         {
-            "end": 2020,
-            "name": "statecdd_jja_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statecddc_jja_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "jja",
             "start": 1895,
-            "type": "cdd"
+            "type": "cddc"
         },
         {
-            "end": 2020,
-            "name": "statecdd_mam_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statecddc_mam_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "mam",
             "start": 1895,
-            "type": "cdd"
+            "type": "cddc"
         },
         {
-            "end": 2020,
-            "name": "statecdd_son_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statecddc_son_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "son",
             "start": 1895,
-            "type": "cdd"
+            "type": "cddc"
         },
         {
-            "end": 2020,
-            "name": "statehdd_ann_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statehddc_ann_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "ann",
             "start": 1895,
-            "type": "hdd"
+            "type": "hddc"
         },
         {
-            "end": 2020,
-            "name": "statehdd_djf_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statehddc_djf_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "djf",
             "start": 1895,
-            "type": "hdd"
+            "type": "hddc"
         },
         {
-            "end": 2020,
-            "name": "statehdd_jja_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statehddc_jja_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "jja",
             "start": 1895,
-            "type": "hdd"
+            "type": "hddc"
         },
         {
-            "end": 2020,
-            "name": "statehdd_mam_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statehddc_mam_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "mam",
             "start": 1895,
-            "type": "hdd"
+            "type": "hddc"
         },
         {
-            "end": 2020,
-            "name": "statehdd_son_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statehddc_son_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "son",
             "start": 1895,
-            "type": "hdd"
+            "type": "hddc"
         },
         {
-            "end": 2020,
-            "name": "statepcpn_ann_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statepcpn_ann_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "ann",
@@ -1220,8 +1220,8 @@
             "type": "pcpn"
         },
         {
-            "end": 2020,
-            "name": "statepcpn_djf_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statepcpn_djf_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "djf",
@@ -1229,8 +1229,8 @@
             "type": "pcpn"
         },
         {
-            "end": 2020,
-            "name": "statepcpn_jja_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statepcpn_jja_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "jja",
@@ -1238,8 +1238,8 @@
             "type": "pcpn"
         },
         {
-            "end": 2020,
-            "name": "statepcpn_mam_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statepcpn_mam_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "mam",
@@ -1247,8 +1247,8 @@
             "type": "pcpn"
         },
         {
-            "end": 2020,
-            "name": "statepcpn_son_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statepcpn_son_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "son",
@@ -1256,8 +1256,8 @@
             "type": "pcpn"
         },
         {
-            "end": 2020,
-            "name": "statetmax0F_1900_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statetmax0F_1900_2021_Sandbox2021.txt",
             "period": "1900-current",
             "robust": false,
             "season": "yearly",
@@ -1265,8 +1265,8 @@
             "type": "tmax0F"
         },
         {
-            "end": 2020,
-            "name": "statetmax0F_1950_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statetmax0F_1950_2021_Sandbox2021.txt",
             "period": "1950-current",
             "robust": true,
             "season": "yearly",
@@ -1274,8 +1274,8 @@
             "type": "tmax0F"
         },
         {
-            "end": 2020,
-            "name": "statetmax100F_1900_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statetmax100F_1900_2021_Sandbox2021.txt",
             "period": "1900-current",
             "robust": false,
             "season": "yearly",
@@ -1283,8 +1283,8 @@
             "type": "tmax100F"
         },
         {
-            "end": 2020,
-            "name": "statetmax100F_1950_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statetmax100F_1950_2021_Sandbox2021.txt",
             "period": "1950-current",
             "robust": true,
             "season": "yearly",
@@ -1292,8 +1292,8 @@
             "type": "tmax100F"
         },
         {
-            "end": 2020,
-            "name": "statetmax32F_1900_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statetmax32F_1900_2021_Sandbox2021.txt",
             "period": "1900-current",
             "robust": false,
             "season": "yearly",
@@ -1301,8 +1301,8 @@
             "type": "tmax32F"
         },
         {
-            "end": 2020,
-            "name": "statetmax32F_1950_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statetmax32F_1950_2021_Sandbox2021.txt",
             "period": "1950-current",
             "robust": true,
             "season": "yearly",
@@ -1310,8 +1310,8 @@
             "type": "tmax32F"
         },
         {
-            "end": 2020,
-            "name": "statetmax90F_1900_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statetmax90F_1900_2021_Sandbox2021.txt",
             "period": "1900-current",
             "robust": false,
             "season": "yearly",
@@ -1319,8 +1319,8 @@
             "type": "tmax90F"
         },
         {
-            "end": 2020,
-            "name": "statetmax90F_1950_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statetmax90F_1950_2021_Sandbox2021.txt",
             "period": "1950-current",
             "robust": true,
             "season": "yearly",
@@ -1328,8 +1328,8 @@
             "type": "tmax90F"
         },
         {
-            "end": 2020,
-            "name": "statetmax95F_1900_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statetmax95F_1900_2021_Sandbox2021.txt",
             "period": "1900-current",
             "robust": false,
             "season": "yearly",
@@ -1337,8 +1337,8 @@
             "type": "tmax95F"
         },
         {
-            "end": 2020,
-            "name": "statetmax95F_1950_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statetmax95F_1950_2021_Sandbox2021.txt",
             "period": "1950-current",
             "robust": true,
             "season": "yearly",
@@ -1346,8 +1346,8 @@
             "type": "tmax95F"
         },
         {
-            "end": 2020,
-            "name": "statetmax_ann_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statetmax_ann_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "ann",
@@ -1355,8 +1355,8 @@
             "type": "tmax"
         },
         {
-            "end": 2020,
-            "name": "statetmax_djf_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statetmax_djf_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "djf",
@@ -1364,8 +1364,8 @@
             "type": "tmax"
         },
         {
-            "end": 2020,
-            "name": "statetmax_jja_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statetmax_jja_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "jja",
@@ -1373,8 +1373,8 @@
             "type": "tmax"
         },
         {
-            "end": 2020,
-            "name": "statetmax_mam_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statetmax_mam_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "mam",
@@ -1382,8 +1382,8 @@
             "type": "tmax"
         },
         {
-            "end": 2020,
-            "name": "statetmax_son_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statetmax_son_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "son",
@@ -1391,8 +1391,8 @@
             "type": "tmax"
         },
         {
-            "end": 2020,
-            "name": "statetmin0F_1900_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statetmin0F_1900_2021_Sandbox2021.txt",
             "period": "1900-current",
             "robust": false,
             "season": "yearly",
@@ -1400,8 +1400,8 @@
             "type": "tmin0F"
         },
         {
-            "end": 2020,
-            "name": "statetmin0F_1950_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statetmin0F_1950_2021_Sandbox2021.txt",
             "period": "1950-current",
             "robust": true,
             "season": "yearly",
@@ -1409,8 +1409,8 @@
             "type": "tmin0F"
         },
         {
-            "end": 2020,
-            "name": "statetmin32F_1900_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statetmin32F_1900_2021_Sandbox2021.txt",
             "period": "1900-current",
             "robust": false,
             "season": "yearly",
@@ -1418,8 +1418,8 @@
             "type": "tmin32F"
         },
         {
-            "end": 2020,
-            "name": "statetmin32F_1950_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statetmin32F_1950_2021_Sandbox2021.txt",
             "period": "1950-current",
             "robust": true,
             "season": "yearly",
@@ -1427,8 +1427,8 @@
             "type": "tmin32F"
         },
         {
-            "end": 2020,
-            "name": "statetmin70F_1900_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statetmin70F_1900_2021_Sandbox2021.txt",
             "period": "1900-current",
             "robust": false,
             "season": "yearly",
@@ -1436,8 +1436,8 @@
             "type": "tmin70F"
         },
         {
-            "end": 2020,
-            "name": "statetmin70F_1950_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statetmin70F_1950_2021_Sandbox2021.txt",
             "period": "1950-current",
             "robust": true,
             "season": "yearly",
@@ -1445,8 +1445,8 @@
             "type": "tmin70F"
         },
         {
-            "end": 2020,
-            "name": "statetmin75F_1900_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statetmin75F_1900_2021_Sandbox2021.txt",
             "period": "1900-current",
             "robust": false,
             "season": "yearly",
@@ -1454,8 +1454,8 @@
             "type": "tmin75F"
         },
         {
-            "end": 2020,
-            "name": "statetmin75F_1950_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statetmin75F_1950_2021_Sandbox2021.txt",
             "period": "1950-current",
             "robust": true,
             "season": "yearly",
@@ -1463,8 +1463,8 @@
             "type": "tmin75F"
         },
         {
-            "end": 2020,
-            "name": "statetmin80F_1900_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statetmin80F_1900_2021_Sandbox2021.txt",
             "period": "1900-current",
             "robust": false,
             "season": "yearly",
@@ -1472,8 +1472,8 @@
             "type": "tmin80F"
         },
         {
-            "end": 2020,
-            "name": "statetmin80F_1950_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statetmin80F_1950_2021_Sandbox2021.txt",
             "period": "1950-current",
             "robust": true,
             "season": "yearly",
@@ -1481,8 +1481,8 @@
             "type": "tmin80F"
         },
         {
-            "end": 2020,
-            "name": "statetmin_ann_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statetmin_ann_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "ann",
@@ -1490,8 +1490,8 @@
             "type": "tmin"
         },
         {
-            "end": 2020,
-            "name": "statetmin_djf_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statetmin_djf_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "djf",
@@ -1499,8 +1499,8 @@
             "type": "tmin"
         },
         {
-            "end": 2020,
-            "name": "statetmin_jja_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statetmin_jja_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "jja",
@@ -1508,8 +1508,8 @@
             "type": "tmin"
         },
         {
-            "end": 2020,
-            "name": "statetmin_mam_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statetmin_mam_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "mam",
@@ -1517,8 +1517,8 @@
             "type": "tmin"
         },
         {
-            "end": 2020,
-            "name": "statetmin_son_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statetmin_son_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "son",
@@ -1526,8 +1526,8 @@
             "type": "tmin"
         },
         {
-            "end": 2020,
-            "name": "statetmpc_ann_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statetmpc_ann_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "ann",
@@ -1535,8 +1535,8 @@
             "type": "tmpc"
         },
         {
-            "end": 2020,
-            "name": "statetmpc_djf_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statetmpc_djf_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "djf",
@@ -1544,8 +1544,8 @@
             "type": "tmpc"
         },
         {
-            "end": 2020,
-            "name": "statetmpc_jja_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statetmpc_jja_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "jja",
@@ -1553,8 +1553,8 @@
             "type": "tmpc"
         },
         {
-            "end": 2020,
-            "name": "statetmpc_mam_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statetmpc_mam_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "mam",
@@ -1562,8 +1562,8 @@
             "type": "tmpc"
         },
         {
-            "end": 2020,
-            "name": "statetmpc_son_1895_2020_Sandbox2020.txt",
+            "end": 2021,
+            "name": "statetmpc_son_1895_2021_Sandbox2021.txt",
             "period": "1895-current",
             "robust": false,
             "season": "son",
