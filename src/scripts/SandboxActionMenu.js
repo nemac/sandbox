@@ -16,6 +16,9 @@ import Fade from '@material-ui/core/Fade';
 import SandboxCustomSizeExport from './SandboxCustomSizeExport';
 import SandboxSumbitFigure from './SandboxSumbitFigure';
 
+import printHelloWorld from './HelloWorld';
+import handleClimatePostTest from './SandboxHandleClimateData';
+
 const useStyles = makeStyles((theme) => ({
   sandboxExportsButtonBox: {
     justifyContent: 'flex-end',
@@ -319,6 +322,18 @@ export default function Selector(props) {
                   classes={{ tooltip: classes.toolTip }}>
                   <Button onClick={handleCustomSizeOpenSVG} className={classes.fabsvg} variant='contained' color='default' startIcon={<SaveAltIcon />}>
                     .SVG
+                  </Button>
+                </Tooltip>
+                <Tooltip
+                  title={'Console logs data from API post call.'}
+                  aria-label={'Console logs data from API post call.'}
+                  placement='bottom' TransitionComponent={Fade}
+                  enterNextDelay={750}
+                  arrow
+                  interactive
+                  classes={{ tooltip: classes.toolTip }}>
+                  <Button onClick={handleClimatePostTest} className={classes.fabsvg} variant='contained' color='default' startIcon={<SaveAltIcon />}>
+                    post 
                   </Button>
                 </Tooltip>
                 <SandboxCustomSizeExport

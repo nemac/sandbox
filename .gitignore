@@ -102,3 +102,6 @@ dist
 
 # TernJS port file
 .tern-port
+
+# My test file for posting data to the Sandbox console.
+src/scripts/HelloWorld.js
