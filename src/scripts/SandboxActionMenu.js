@@ -16,7 +16,6 @@ import Fade from '@material-ui/core/Fade';
 import SandboxCustomSizeExport from './SandboxCustomSizeExport';
 import SandboxSumbitFigure from './SandboxSumbitFigure';
 
-import printHelloWorld from './HelloWorld';
 import handleClimatePostTest from './SandboxHandleClimateData';
 
 const useStyles = makeStyles((theme) => ({
