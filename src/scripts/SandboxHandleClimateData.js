@@ -44,12 +44,48 @@ const ClimateVariableSelector = () => {
     const URLClimateVariable = urlParams.get('climatevariable') ? urlParams.get('climatevariable') : '';
 
     switch (URLClimateVariable) {
-        // Cooling and Heating Degree Days is not applicable here.
+        // Cooling degree days, heating degree days, and precipitation is not applicable here.
         case 'tmax':
             return 'maxt';
+
         case 'tmin':
             return 'mint';
+
         case 'tmpc':
             return 'avgt';
     }
 }
+
+const TimeScaleSelector = () => {
+    
+    // check url parameters for season data it blank make yearly
+    const URLSeason = urlParams.get('season') ? urlParams.get('season') : 'ann';
+
+    switch (URLSeason) {
+        case 'ann':
+            return;
+
+        case 'djf':
+            return;
+
+        case 'mam':
+            return;
+
+        case 'jja':
+            return;
+
+        case 'son':
+            return;
+    }
+}
+
+const LocationSelector = () => {
+    // Pick state
+
+    // If state is empty, then check region.
+
+    // If nothing else, then national.
+}
+
+// How do I handle threshold exceedances???
+
