@@ -450,8 +450,17 @@ export default function SandboxControls() {
         !chartDataPeriod ||
         !chartDataSeason) return null;
 
-    // A AN AND T TH THI THIS
-    axios.get(`${path}sandboxdata/TSU_Sandbox_Datafiles/${dataFile}`)
+    console.log(chartDataRegion);
+    console.log(chartDataClimatevariable);
+    console.log(chartDataPeriod);
+    console.log(chartDataSeason);
+
+    if (chartDataPeriod === "current-2099") {
+      console.log("We're in the money!");
+      console.log("Pst in order to get the graphs back instead of the white screen, modify the URL and put this instead: 1895-current")
+    } else {
+      // A AN AND T TH THI THIS
+      axios.get(`${path}sandboxdata/TSU_Sandbox_Datafiles/${dataFile}`)
       .then((response) => {
         // parse the csv text file
         const sandboxParseDataFiles = new SandboxParseDataFiles();
@@ -653,6 +662,7 @@ export default function SandboxControls() {
         return [''];
       });
   };
+};
 
   // use the react effect to control when season changes
   useEffect(() => {
