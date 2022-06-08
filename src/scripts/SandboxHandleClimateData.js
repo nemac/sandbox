@@ -5,7 +5,9 @@ const axios = require('axios');
 let urlParams = new URLSearchParams(window.location.search);
 
 // This function only works for state-level posts.
-export default function HandleClimatePost() {
+export default function HandleClimatePost(props) {
+
+    console.log(props);
 
     // Updates the URL in urlParams in order to account for changed variables.
     urlParams = new URLSearchParams(window.location.search);

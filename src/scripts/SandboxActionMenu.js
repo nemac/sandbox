@@ -16,7 +16,7 @@ import Fade from '@material-ui/core/Fade';
 import SandboxCustomSizeExport from './SandboxCustomSizeExport';
 import SandboxSumbitFigure from './SandboxSumbitFigure';
 
-import handleClimatePostTest from './SandboxHandleClimateData';
+import HandleClimatePostTest from './SandboxHandleClimateData';
 
 const useStyles = makeStyles((theme) => ({
   sandboxExportsButtonBox: {
@@ -331,7 +331,7 @@ export default function Selector(props) {
                   arrow
                   interactive
                   classes={{ tooltip: classes.toolTip }}>
-                  <Button onClick={handleClimatePostTest} className={classes.fabsvg} variant='contained' color='default' startIcon={<SaveAltIcon />}>
+                  <Button onClick={() => HandleClimatePostTest(props)} className={classes.fabsvg} variant='contained' color='default' startIcon={<SaveAltIcon />}>
                     post 
                   </Button>
                 </Tooltip>

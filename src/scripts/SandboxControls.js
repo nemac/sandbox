@@ -411,14 +411,32 @@ export default function SandboxControls() {
       // chartShowLine,
     });
 
+    console.log(props);
+        
+    // console.log(
+    //   "\nchartDataFromFile[0] = " + chartDataFromFile[0] + "\n" +
+    //   "\nchartDataFromFile[1] = " + chartDataFromFile[1] + "\n" +
+    //   "\nhumandReadablPeriodRange[0] = " + humandReadablPeriodRange[0] + "\n" +
+    //   "\nhumandReadablPeriodRange[1] = " + humandReadablPeriodRange[1] + "\n" +
+    //   "\nchartTitle = " + chartTitle + "\n" +
+    //   "\nchartType = " + chartType + "\n" +
+    //   "\nclimateVariable = " + climatevariable + "\n" +
+    //   "\nchartLineChart = " + chartLineChart + "\n" +
+    //   "\ndataMissing = " + dataMissing + "\n" +
+    //   "\nchartDataSeason = " + chartDataSeason
+    // );
+
+    // T TH THI THIS
     // limit the possible data file to period
     // (years aka 1900 - current 1950 - current) and the climate variable (should be one)
+
     const data = climateDataFilesJSONFile.filter((json) => {
       const returnValue = json.period === chartDataPeriod &&
         json.type === chartDataClimatevariable && json.season === chartDataSeason;
       return returnValue;
     });
 
+    // A AN AND T TH THI THIS
     // get the data file name
     const dataFile = data.map((json) => json.name);
 
@@ -432,6 +450,7 @@ export default function SandboxControls() {
         !chartDataPeriod ||
         !chartDataSeason) return null;
 
+    // A AN AND T TH THI THIS
     axios.get(`${path}sandboxdata/TSU_Sandbox_Datafiles/${dataFile}`)
       .then((response) => {
         // parse the csv text file
