@@ -412,7 +412,7 @@ export default function SandboxControls() {
     });
 
     console.log(props);
-        
+
     // console.log(
     //   "\nchartDataFromFile[0] = " + chartDataFromFile[0] + "\n" +
     //   "\nchartDataFromFile[1] = " + chartDataFromFile[1] + "\n" +
@@ -455,147 +455,147 @@ export default function SandboxControls() {
     console.log(chartDataPeriod);
     console.log(chartDataSeason);
 
-    if (chartDataPeriod === "current-2099") {
+    if (chartDataPeriod === 'current-2099') {
       console.log("We're in the money!");
+      console.log('Pst in order to get the graphs back instead of the white screen, modify the URL and put this instead: 1895-current');
+      setChartData([{}]);
+      setChartLayout(layoutDefaults);
     } else {
-      console.log("Else do nothing for now.");
-    }
-
-    // A AN AND T TH THI THIS
-    axios.get(`${path}sandboxdata/TSU_Sandbox_Datafiles/${dataFile}`)
-      .then((response) => {
+      axios.get(`${path}sandboxdata/TSU_Sandbox_Datafiles/${dataFile}`)
+        .then((response) => {
         // parse the csv text file
-        const sandboxParseDataFiles = new SandboxParseDataFiles();
-        const chartDataFromFile = sandboxParseDataFiles
-          .parseFile(response.data, chartDataRegion.toLowerCase(), chartDataLocation);
+          const sandboxParseDataFiles = new SandboxParseDataFiles();
+          const chartDataFromFile = sandboxParseDataFiles
+            .parseFile(response.data, chartDataRegion.toLowerCase(), chartDataLocation);
 
-        // get the chart type which is the climate variable
-        const chartType = getClimatevariableType(chartDataClimatevariable);
+          // get the chart type which is the climate variable
+          const chartType = getClimatevariableType(chartDataClimatevariable);
 
-        // create a new instance of the sandbox human readable class this transforms
-        // the short text to something
-        // humans can read tmax100F beceomes Days with Maximum Temperature Above 100°F and
-        // AK becomes Alaska
-        const sandboxHumanReadable = new SandboxHumanReadable(chartDataClimatevariable);
+          // create a new instance of the sandbox human readable class this transforms
+          // the short text to something
+          // humans can read tmax100F beceomes Days with Maximum Temperature Above 100°F and
+          // AK becomes Alaska
+          const sandboxHumanReadable = new SandboxHumanReadable(chartDataClimatevariable);
 
-        // get the location from the ui
-        const titleLocation = replaceLocationAbbreviation(chartDataLocation);
+          // get the location from the ui
+          const titleLocation = replaceLocationAbbreviation(chartDataLocation);
 
-        // convert the all the parameters to human readable title
-        const chartTitle = sandboxHumanReadable.getChartTitle({
-          climatevariable: chartDataClimatevariable,
-          region: chartDataRegion,
-          titleLocation,
-          chartDataSeason
-        });
+          // convert the all the parameters to human readable title
+          const chartTitle = sandboxHumanReadable.getChartTitle({
+            climatevariable: chartDataClimatevariable,
+            region: chartDataRegion,
+            titleLocation,
+            chartDataSeason
+          });
 
-        // get climate varriable human readable format
-        const humandReadablechartDataClimatevariable =
+          // get climate varriable human readable format
+          const humandReadablechartDataClimatevariable =
           sandboxHumanReadable.getClimateVariablePullDownText(chartDataClimatevariable,
             chartDataSeason);
 
-        // get period range
-        const humandReadablPeriodRange =
+          // get period range
+          const humandReadablPeriodRange =
           sandboxHumanReadable.getPeriodRange(chartDataPeriod);
 
-        // if no data mark as data missing so we can handle required fields and error messaging
-        let dataMissing = false;
-        if (!climateDataFilesJSONFile) dataMissing = true;
-        if (!chartDataRegion) dataMissing = true;
-        if (chartDataRegion !== 'National' && !chartDataLocation) dataMissing = true;
-        if (!chartDataClimatevariable) dataMissing = true;
-        if (!chartDataPeriod) dataMissing = true;
-        if (!chartDataSeason) dataMissing = true;
+          // if no data mark as data missing so we can handle required fields and error messaging
+          let dataMissing = false;
+          if (!climateDataFilesJSONFile) dataMissing = true;
+          if (!chartDataRegion) dataMissing = true;
+          if (chartDataRegion !== 'National' && !chartDataLocation) dataMissing = true;
+          if (!chartDataClimatevariable) dataMissing = true;
+          if (!chartDataPeriod) dataMissing = true;
+          if (!chartDataSeason) dataMissing = true;
 
-        // create the plotly input so the chart is created based on users seletion
-        const plotInfo = {
-          xvals: chartDataFromFile[0],
-          yvals: chartDataFromFile[1],
-          xmin: humandReadablPeriodRange[0],
-          xmax: humandReadablPeriodRange[1],
-          chartTitle,
-          legnedText: chartType,
-          chartType,
-          climatevariable: humandReadablechartDataClimatevariable,
-          chartLineChart,
-          dataMissing,
-          season: chartDataSeason
+          // create the plotly input so the chart is created based on users seletion
+          const plotInfo = {
+            xvals: chartDataFromFile[0],
+            yvals: chartDataFromFile[1],
+            xmin: humandReadablPeriodRange[0],
+            xmax: humandReadablPeriodRange[1],
+            chartTitle,
+            legnedText: chartType,
+            chartType,
+            climatevariable: humandReadablechartDataClimatevariable,
+            chartLineChart,
+            dataMissing,
+            season: chartDataSeason
           // chartShowLine
-        };
+          };
 
-        // get the charts data formated for plotly
-        const plotData = new SandboxGeneratePlotData(plotInfo);
+          // get the charts data formated for plotly
+          const plotData = new SandboxGeneratePlotData(plotInfo);
 
-        // if data is missing then zero out chart
-        if (dataMissing) {
-          plotData.zeroOutChartData();
-        }
+          // if data is missing then zero out chart
+          if (dataMissing) {
+            plotData.zeroOutChartData();
+          }
 
-        // get configuration for defaults and invalid varriables/periods
-        const locationLimit = chartDataRegion === 'National' ? 'National' : chartDataLocation;
-        const configLimitData = { locationLimit };
-        const sandboxDataControl = new SandboxDataControl();
+          // get configuration for defaults and invalid varriables/periods
+          const locationLimit = chartDataRegion === 'National' ? 'National' : chartDataLocation;
+          const configLimitData = { locationLimit };
+          const sandboxDataControl = new SandboxDataControl();
 
-        // get default period for the location
-        const defaultPeriod = sandboxDataControl.getDefaultPeriod(configLimitData);
-        // get invalid climate variables for the location
-        const inValidClimateVariables =
+          // get default period for the location
+          const defaultPeriod = sandboxDataControl.getDefaultPeriod(configLimitData);
+          // get invalid climate variables for the location
+          const inValidClimateVariables =
           sandboxDataControl.getInValidClimateVariables(configLimitData);
-        // get invalid periods for the location
-        const inValidPeriods = sandboxDataControl.getInValidPeriods(configLimitData);
+          // get invalid periods for the location
+          const inValidPeriods = sandboxDataControl.getInValidPeriods(configLimitData);
 
-        // TODO will fill this in later
-        if (defaultPeriod) {
+          // TODO will fill this in later
+          if (defaultPeriod) {
           // do nothing for now
-        }
+          }
 
-        if (inValidClimateVariables) {
+          if (inValidClimateVariables) {
           // do nothing for now
-        }
+          }
 
-        if (inValidPeriods) {
+          if (inValidPeriods) {
           // do nothing for now
-        }
+          }
 
-        // check if region or location has data if not display
-        // no data available for location and clear the chart
-        // if data missing for combo field level errors will handle messaging
-        if (!plotData.hasData() && !dataMissing) {
-          setOpenError(true);
-          setErrorType('Error');
-          setChartErrorTitle('Error data not available');
-          setChartErrorMessage(`Unfortunately, there is no data available for ${humandReadablechartDataClimatevariable}
+          // check if region or location has data if not display
+          // no data available for location and clear the chart
+          // if data missing for combo field level errors will handle messaging
+          if (!plotData.hasData() && !dataMissing) {
+            setOpenError(true);
+            setErrorType('Error');
+            setChartErrorTitle('Error data not available');
+            setChartErrorMessage(`Unfortunately, there is no data available for ${humandReadablechartDataClimatevariable}
             for ${titleLocation}. To resolve this issue, try one or all of these three actions.
             1) Change the location.
             2) Change the climate variable.
             3) Change the time period`);
-        } else if (plotData.isAllZeros() && !dataMissing) {
-          setOpenError(true);
-          setErrorType('Warning');
-          setChartErrorTitle('Warning data is all zeros');
-          setChartErrorMessage(`Warning the chart data for ${chartTitle} contains all zeros (0).`);
-        } else {
-          setOpenError(false);
-        }
+          } else if (plotData.isAllZeros() && !dataMissing) {
+            setOpenError(true);
+            setErrorType('Warning');
+            setChartErrorTitle('Warning data is all zeros');
+            setChartErrorMessage(`Warning the chart data for ${chartTitle} contains all zeros (0).`);
+          } else {
+            setOpenError(false);
+          }
 
-        const xRange = {
-          xmin: humandReadablPeriodRange[0],
-          xmax: humandReadablPeriodRange[1]
-        };
+          const xRange = {
+            xmin: humandReadablPeriodRange[0],
+            xmax: humandReadablPeriodRange[1]
+          };
 
-        // set the charts min and max based on the data in the data file
-        plotData.setXRange(xRange);
+          // set the charts min and max based on the data in the data file
+          plotData.setXRange(xRange);
 
-        // change reacts state so it refreshes
-        setChartData(plotData.getData());
-        setChartLayout(plotData.getLayout());
-        return plotData;
-      })
+          // change reacts state so it refreshes
+          setChartData(plotData.getData());
+          setChartLayout(plotData.getLayout());
+          return plotData;
+        })
       // handle errors
-      .catch((error) => {
-        console.error(`SanboxControls.updatePlotData() error=${error}`); // eslint-disable-line no-console
-      });
-    return null;
+        .catch((error) => {
+          console.error(`SanboxControls.updatePlotData() error=${error}`); // eslint-disable-line no-console
+        });
+      return null;
+    }
   };
 
   // function loads the index.json file to find the correct data.txt file based on the varriables
@@ -629,7 +629,7 @@ export default function SandboxControls() {
         // filter data for period and season
         data = responseData.filter((type) => {
           const returnValue = type.period === argPeriod &&
-            type.season === argSeason;
+                type.season === argSeason;
           return returnValue;
         });
 
