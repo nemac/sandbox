@@ -24,12 +24,20 @@ export default function HandleClimatePost(props) {
                 "name": ClimateVariableSelector(), // This is URLClimateVariable. See Table 3 of StnMeta at https://www.rcc-acis.org/docs_webservices.html Modify to get average min and max.
                 "interval": "yly", // Returns data for every day or year in the duration thereof. See table 2 of StnMeta // Think about changing this interval for daily for more accurate data.
                 "duration": "yly", // How long the data goes for. This combined with interval returns a data point for every day in a month, for example. See table 2 of StnMeta
-                "reduce": "mean", // Summarizes the data. 
-                "units": "degreeF", 
+                "reduce": ClimateReduceSelector(), // Summarizes the data. 
+                "units": ((
+                            urlParams.get('climatevariable') == 'cddc' ||
+                            urlParams.get('climatevariable') == 'hddc' ||
+                            urlParams.get('climatevariable') == 'pcpn'
+                          ) ? "" : "degreeF"), 
                 "area_reduce": "state_mean" // Returns the state_mean using the mean summarization from reduce. //
             }
         ],
-        "state": URLLocation // Replace with urlParams.get('location') ? urlParams.get('location') : (region accessor ? region accessor : (national bound)) when it actually works. // Look up bounding box
+        "state": ((
+                    urlParams.get('climatevariable') == 'cddc' ||
+                    urlParams.get('climatevariable') == 'hddc' ||
+                    urlParams.get('climatevariable') == 'pcpn'
+                ) ? "" : URLLocation) // Replace with urlParams.get('location') ? urlParams.get('location') : (region accessor ? region accessor : (national bound)) when it actually works. // Look up bounding box
     })
     .then(function (response) {
         console.log(response);
@@ -39,7 +47,6 @@ export default function HandleClimatePost(props) {
     });
 }
 
-// Dave, arrow syntax or regular syntax?
 const ClimateVariableSelector = () => {
 
     // check url parameters for a climatevariable if none make it blank
@@ -47,6 +54,15 @@ const ClimateVariableSelector = () => {
 
     switch (URLClimateVariable) {
         // Cooling degree days, heating degree days, and precipitation is not applicable here.
+        case 'cddc':
+            return 'cdd';
+
+        case 'hddc':
+            return 'hdd'
+
+        case 'pcpn':
+            return 'pcpn'
+
         case 'tmax':
             return 'maxt';
 
@@ -58,36 +74,21 @@ const ClimateVariableSelector = () => {
     }
 }
 
-const TimeScaleSelector = () => {
-    
-    // check url parameters for season data it blank make yearly
-    const URLSeason = urlParams.get('season') ? urlParams.get('season') : 'ann';
+const ClimateReduceSelector = () => {
 
-    switch (URLSeason) {
-        case 'ann':
-            return;
+    const URLClimateVariable = urlParams.get('climatevariable') ? urlParams.get('climatevariable') : '';
 
-        case 'djf':
-            return;
-
-        case 'mam':
-            return;
-
-        case 'jja':
-            return;
-
-        case 'son':
-            return;
+    switch (URLClimateVariable) {
+        case 'cdd':
+        case 'hdd':
+        case 'pcpn':
+            return 'sum'; 
+        
+        case 'tmax':
+        case 'tmin':
+        case 'tmpc':
+            return 'mean';
     }
 }
 
-const LocationSelector = () => {
-    // Pick state
-
-    // If state is empty, then check region.
-
-    // If nothing else, then national.
-}
-
-// How do I handle threshold exceedances???
-
+// Redo function with cdd hdd and pcpn in mind.
