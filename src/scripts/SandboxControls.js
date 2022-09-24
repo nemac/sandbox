@@ -33,6 +33,7 @@ import SandboxLocationStateItems from '../configs/SandboxLocationStateItems';
 
 // css
 import '../css/Sandbox.scss';
+import { data } from 'autoprefixer';
 
 const RegionItems = SandboxRegionItems();
 const PeriodsFull = SandboxPeriods();
@@ -450,14 +451,9 @@ export default function SandboxControls() {
         !chartDataPeriod ||
         !chartDataSeason) return null;
 
-    console.log(chartDataRegion);
-    console.log(chartDataClimatevariable);
-    console.log(chartDataPeriod);
-    console.log(chartDataSeason);
-
     if (chartDataPeriod === 'current-2099') {
-      console.log("We're in the money!");
-      console.log('Pst in order to get the graphs back instead of the white screen, modify the URL and put this instead: 1895-current');
+      const data = get
+
       setChartData([{}]);
       setChartLayout(layoutDefaults);
     } else {
@@ -1303,6 +1299,90 @@ export default function SandboxControls() {
     saveFile(fileContent, fileName, fileType);
   };
 
+  // handle post request
+  const handleClimatePost = () => {
+
+    let reduce;
+    let units;
+    let data;
+    
+    if (URLClimatevariable === "cddc" || URLClimatevariable === "hddc" || URLClimatevariable === "pcpn") {
+        reduce = "sum";
+        units = "inch";
+    } else if (URLClimatevariable === "tmax" || URLClimatevariable === "tmin" || URLClimatevariable === "tmpc") {
+        reduce = "mean";
+        units = "degreeF";
+    } else {
+        console.log("An error has occurred.");
+        return;
+    }
+
+    let locationKey = (URLLocation === "" ? "bbox" : "state");
+    let locationValue = (URLLocation === "" ? "-124.848974,24.396308,-66.885444,49.384358" : URLLocation);
+
+    axios.post('https://grid2.rcc-acis.org/GridData', {
+        "grid": "loca:allMax:rcp85",
+        "sdate": "2006-01-01",
+        "edate": "2099-12-31",
+        "elems": [
+            {
+                "name": formatClimateVariable(URLClimatevariable),
+                "interval": "yly",
+                "duration": "yly",
+                "reduce": reduce,
+                "units": units, 
+                "area_reduce": "state_mean"
+            }
+        ],
+        [locationKey] : locationValue
+    })    
+    .then(function (response) {
+        if (URLLocation === "") {
+            data = response.data.data;
+
+            for (let i = 0; i < data.length; i++) {
+                const dataArray = Object.values(data[i][1]);
+                data[i][1] = dataArray.reduce((a, b) => a + b, 0) / dataArray.length;
+            }
+        }
+        console.log(response);
+    })
+    .catch(function (error) {
+    console.log(error);
+    });
+
+    return data;
+  }
+
+  // helper function for post requests
+  const formatClimateVariable = (URLClimatevariable) => {
+
+    // Format climate variable
+    switch (URLClimatevariable) {
+        case 'cddc':
+            return 'cdd';
+
+        case 'hddc':
+            return 'hdd';
+
+        case 'pcpn':
+            return 'pcpn';
+
+        case 'tmax':
+            return 'maxt';
+
+        case 'tmin':
+            return 'mint';
+
+        case 'tmpc':
+            return 'avgt';
+
+        default:
+            console.log("Something went wrong!");
+            break;
+    }
+} 
+
   return (
     <div>
       <Grid container spacing={0} justify='flex-start' direction={'row'} className={classes.sandboxRoot}>
@@ -1447,6 +1527,7 @@ export default function SandboxControls() {
                 handleDownloadChartAsCSVa={handleDownloadChartAsCSV}
                 handleDownloadChartAsPNGa={handleDownloadChartAsPNG}
                 handleDownloadChartAsSVGa={handleDownloadChartAsSVG}
+                handleClimatePosta={handleClimatePost}
                 handleSwtichAverageAndYearlya={handleSwtichAverageAndYearly}
                 handleSwtichMovingAverageAndYearlya={handleSwtichMovingAverageAndYearly}
                 handleSwtichYearlyToLinea={handleSwtichYearlyToLine}

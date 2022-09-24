@@ -140,6 +140,7 @@ export default function Selector(props) {
   const { handleDownloadChartAsCSVa } = props;
   const { handleDownloadChartAsPNGa } = props;
   const { handleDownloadChartAsSVGa } = props;
+  const { handleClimatePosta } = props;
   const { lineChart } = props;
 
   const [openCustomSizeSVG, setOpenCustomSizeSVG] = React.useState(false);
@@ -198,6 +199,10 @@ export default function Selector(props) {
   const handleDownloadChartAsSVG = (svgSelector, width, height) => {
     handleDownloadChartAsSVGa(svgSelector, width, height);
   };
+
+  const handleClimatePost = () => {
+    handleClimatePosta();
+  }
 
   // handles open of sumbit figure
   const handleOpenSubmitFigure = () => {
@@ -323,18 +328,6 @@ export default function Selector(props) {
                     .SVG
                   </Button>
                 </Tooltip>
-                <Tooltip
-                  title={'Console logs data from API post call.'}
-                  aria-label={'Console logs data from API post call.'}
-                  placement='bottom' TransitionComponent={Fade}
-                  enterNextDelay={750}
-                  arrow
-                  interactive
-                  classes={{ tooltip: classes.toolTip }}>
-                  <Button onClick={() => HandleClimatePostTest(props)} className={classes.fabsvg} variant='contained' color='default' startIcon={<SaveAltIcon />}>
-                    post 
-                  </Button>
-                </Tooltip>
                 <SandboxCustomSizeExport
                   open={openCustomSizeSVG}
                   handleCustomSizeClose={handleCustomSizeCloseSVG}
@@ -354,6 +347,18 @@ export default function Selector(props) {
                       To TSU
                     </Button>
                   </Tooltip>
+                  <Tooltip
+                  title={'Console logs data from API post call.'}
+                  aria-label={'Console logs data from API post call.'}
+                  placement='bottom' TransitionComponent={Fade}
+                  enterNextDelay={750}
+                  arrow
+                  interactive
+                  classes={{ tooltip: classes.toolTip }}>
+                  <Button onClick={handleClimatePost} className={classes.fabsvg} variant='contained' color='default' startIcon={<SaveAltIcon />}>
+                    post 
+                  </Button>
+                </Tooltip>
                 <SandboxSumbitFigure
                   open={openSubmitFigure}
                   handleCloseFigure={handleCloseSubmitFigure} />

@@ -1,45 +1,62 @@
+import { SystemUpdate } from '@material-ui/icons';
+import React, { useState } from 'react';
+
 // Look at https://www.rcc-acis.org/docs_webservices.html
 const axios = require('axios');
 
-// check url parameters frist for values
-let urlParams = new URLSearchParams(window.location.search);
+//--------------------------------------------------------------------------------------------------------
+// 3. Use React state instead of passing in URLs.
+//--------------------------------------------------------------------------------------------------------
 
-// This function only works for state-level posts.
 export default function HandleClimatePost(props) {
 
-    console.log(props);
+    let urlParams = new URLSearchParams(window.location.search);
 
-    // Updates the URL in urlParams in order to account for changed variables.
-    urlParams = new URLSearchParams(window.location.search);
+    const URLClimateVariable = urlParams.get('climatevariable');
+    const URLLocation = urlParams.get('location');
 
-    // check url parameters for a location if none make it blank
-    const URLLocation = urlParams.get('location') ? urlParams.get('location') : '';
+    let reduce;
+    let units;
+    
+    if (URLClimateVariable === "cddc" || URLClimateVariable === "hddc" || URLClimateVariable === "pcpn") {
+        reduce = "sum";
+        units = "inch";
+    } else if (URLClimateVariable === "tmax" || URLClimateVariable === "tmin" || URLClimateVariable === "tmpc") {
+        reduce = "mean";
+        units = "degreeF";
+    } else {
+        console.log("An error has occurred.");
+        return;
+    }
 
-    axios.post('https://grid2.rcc-acis.org/GridData' , {
+    let locationKey = (URLLocation === "" ? "bbox" : "state");
+    let locationValue = (URLLocation === "" ? "-124.848974,24.396308,-66.885444,49.384358" : URLLocation);
+
+    axios.post('https://grid2.rcc-acis.org/GridData', {
         "grid": "loca:allMax:rcp85",
         "sdate": "2006-01-01",
         "edate": "2099-12-31",
         "elems": [
             {
-                "name": ClimateVariableSelector(), // This is URLClimateVariable. See Table 3 of StnMeta at https://www.rcc-acis.org/docs_webservices.html Modify to get average min and max.
-                "interval": "yly", // Returns data for every day or year in the duration thereof. See table 2 of StnMeta // Think about changing this interval for daily for more accurate data.
-                "duration": "yly", // How long the data goes for. This combined with interval returns a data point for every day in a month, for example. See table 2 of StnMeta
-                "reduce": ClimateReduceSelector(), // Summarizes the data. 
-                "units": ((
-                            urlParams.get('climatevariable') == 'cddc' ||
-                            urlParams.get('climatevariable') == 'hddc' ||
-                            urlParams.get('climatevariable') == 'pcpn'
-                          ) ? "" : "degreeF"), 
-                "area_reduce": "state_mean" // Returns the state_mean using the mean summarization from reduce. //
+                "name": formatClimateVariable(URLClimateVariable),
+                "interval": "yly",
+                "duration": "yly",
+                "reduce": reduce,
+                "units": units, 
+                "area_reduce": "state_mean"
             }
         ],
-        "state": ((
-                    urlParams.get('climatevariable') == 'cddc' ||
-                    urlParams.get('climatevariable') == 'hddc' ||
-                    urlParams.get('climatevariable') == 'pcpn'
-                ) ? "" : URLLocation) // Replace with urlParams.get('location') ? urlParams.get('location') : (region accessor ? region accessor : (national bound)) when it actually works. // Look up bounding box
-    })
+        [locationKey] : locationValue
+    })    
     .then(function (response) {
+        if (URLLocation === "") {
+            let data = response.data.data;
+
+            for (let i = 0; i < data.length; i++) {
+                const dataArray = Object.values(data[i][1]);
+                data[i][1] = dataArray.reduce((a, b) => a + b, 0) / dataArray.length;
+            }
+        }
         console.log(response);
     })
     .catch(function (error) {
@@ -47,21 +64,18 @@ export default function HandleClimatePost(props) {
     });
 }
 
-const ClimateVariableSelector = () => {
+function formatClimateVariable(URLClimateVariable) {
 
-    // check url parameters for a climatevariable if none make it blank
-    const URLClimateVariable = urlParams.get('climatevariable') ? urlParams.get('climatevariable') : '';
-
+    // Format climate variable
     switch (URLClimateVariable) {
-        // Cooling degree days, heating degree days, and precipitation is not applicable here.
         case 'cddc':
             return 'cdd';
 
         case 'hddc':
-            return 'hdd'
+            return 'hdd';
 
         case 'pcpn':
-            return 'pcpn'
+            return 'pcpn';
 
         case 'tmax':
             return 'maxt';
@@ -71,24 +85,9 @@ const ClimateVariableSelector = () => {
 
         case 'tmpc':
             return 'avgt';
+
+        default:
+            console.log("Something went wrong!");
+            break;
     }
-}
-
-const ClimateReduceSelector = () => {
-
-    const URLClimateVariable = urlParams.get('climatevariable') ? urlParams.get('climatevariable') : '';
-
-    switch (URLClimateVariable) {
-        case 'cdd':
-        case 'hdd':
-        case 'pcpn':
-            return 'sum'; 
-        
-        case 'tmax':
-        case 'tmin':
-        case 'tmpc':
-            return 'mean';
-    }
-}
-
-// Redo function with cdd hdd and pcpn in mind.
+} 
