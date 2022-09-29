@@ -414,20 +414,6 @@ export default function SandboxControls() {
 
     console.log(props);
 
-    // console.log(
-    //   "\nchartDataFromFile[0] = " + chartDataFromFile[0] + "\n" +
-    //   "\nchartDataFromFile[1] = " + chartDataFromFile[1] + "\n" +
-    //   "\nhumandReadablPeriodRange[0] = " + humandReadablPeriodRange[0] + "\n" +
-    //   "\nhumandReadablPeriodRange[1] = " + humandReadablPeriodRange[1] + "\n" +
-    //   "\nchartTitle = " + chartTitle + "\n" +
-    //   "\nchartType = " + chartType + "\n" +
-    //   "\nclimateVariable = " + climatevariable + "\n" +
-    //   "\nchartLineChart = " + chartLineChart + "\n" +
-    //   "\ndataMissing = " + dataMissing + "\n" +
-    //   "\nchartDataSeason = " + chartDataSeason
-    // );
-
-    // T TH THI THIS
     // limit the possible data file to period
     // (years aka 1900 - current 1950 - current) and the climate variable (should be one)
 
@@ -437,7 +423,6 @@ export default function SandboxControls() {
       return returnValue;
     });
 
-    // A AN AND T TH THI THIS
     // get the data file name
     const dataFile = data.map((json) => json.name);
 
@@ -451,147 +436,163 @@ export default function SandboxControls() {
         !chartDataPeriod ||
         !chartDataSeason) return null;
 
-    if (chartDataPeriod === 'current-2099') {
-      const data = get
+    getResponse(chartDataPeriod, path, dataFile).then(response => {// get the chart type which is the climate variable
 
-      setChartData([{}]);
-      setChartLayout(layoutDefaults);
-    } else {
-      axios.get(`${path}sandboxdata/TSU_Sandbox_Datafiles/${dataFile}`)
-        .then((response) => {
-        // parse the csv text file
-          const sandboxParseDataFiles = new SandboxParseDataFiles();
-          const chartDataFromFile = sandboxParseDataFiles
-            .parseFile(response.data, chartDataRegion.toLowerCase(), chartDataLocation);
+      // Logic to get xvals and yvals
+      let xvals = [];
+      let yvals = [];
 
-          // get the chart type which is the climate variable
-          const chartType = getClimatevariableType(chartDataClimatevariable);
-
-          // create a new instance of the sandbox human readable class this transforms
-          // the short text to something
-          // humans can read tmax100F beceomes Days with Maximum Temperature Above 100°F and
-          // AK becomes Alaska
-          const sandboxHumanReadable = new SandboxHumanReadable(chartDataClimatevariable);
-
-          // get the location from the ui
-          const titleLocation = replaceLocationAbbreviation(chartDataLocation);
-
-          // convert the all the parameters to human readable title
-          const chartTitle = sandboxHumanReadable.getChartTitle({
-            climatevariable: chartDataClimatevariable,
-            region: chartDataRegion,
-            titleLocation,
-            chartDataSeason
-          });
-
-          // get climate varriable human readable format
-          const humandReadablechartDataClimatevariable =
-          sandboxHumanReadable.getClimateVariablePullDownText(chartDataClimatevariable,
-            chartDataSeason);
-
-          // get period range
-          const humandReadablPeriodRange =
-          sandboxHumanReadable.getPeriodRange(chartDataPeriod);
-
-          // if no data mark as data missing so we can handle required fields and error messaging
-          let dataMissing = false;
-          if (!climateDataFilesJSONFile) dataMissing = true;
-          if (!chartDataRegion) dataMissing = true;
-          if (chartDataRegion !== 'National' && !chartDataLocation) dataMissing = true;
-          if (!chartDataClimatevariable) dataMissing = true;
-          if (!chartDataPeriod) dataMissing = true;
-          if (!chartDataSeason) dataMissing = true;
-
-          // create the plotly input so the chart is created based on users seletion
-          const plotInfo = {
-            xvals: chartDataFromFile[0],
-            yvals: chartDataFromFile[1],
-            xmin: humandReadablPeriodRange[0],
-            xmax: humandReadablPeriodRange[1],
-            chartTitle,
-            legnedText: chartType,
-            chartType,
-            climatevariable: humandReadablechartDataClimatevariable,
-            chartLineChart,
-            dataMissing,
-            season: chartDataSeason
-          // chartShowLine
-          };
-
-          // get the charts data formated for plotly
-          const plotData = new SandboxGeneratePlotData(plotInfo);
-
-          // if data is missing then zero out chart
-          if (dataMissing) {
-            plotData.zeroOutChartData();
-          }
-
-          // get configuration for defaults and invalid varriables/periods
-          const locationLimit = chartDataRegion === 'National' ? 'National' : chartDataLocation;
-          const configLimitData = { locationLimit };
-          const sandboxDataControl = new SandboxDataControl();
-
-          // get default period for the location
-          const defaultPeriod = sandboxDataControl.getDefaultPeriod(configLimitData);
-          // get invalid climate variables for the location
-          const inValidClimateVariables =
-          sandboxDataControl.getInValidClimateVariables(configLimitData);
-          // get invalid periods for the location
-          const inValidPeriods = sandboxDataControl.getInValidPeriods(configLimitData);
-
-          // TODO will fill this in later
-          if (defaultPeriod) {
-          // do nothing for now
-          }
-
-          if (inValidClimateVariables) {
-          // do nothing for now
-          }
-
-          if (inValidPeriods) {
-          // do nothing for now
-          }
-
-          // check if region or location has data if not display
-          // no data available for location and clear the chart
-          // if data missing for combo field level errors will handle messaging
-          if (!plotData.hasData() && !dataMissing) {
-            setOpenError(true);
-            setErrorType('Error');
-            setChartErrorTitle('Error data not available');
-            setChartErrorMessage(`Unfortunately, there is no data available for ${humandReadablechartDataClimatevariable}
-            for ${titleLocation}. To resolve this issue, try one or all of these three actions.
-            1) Change the location.
-            2) Change the climate variable.
-            3) Change the time period`);
-          } else if (plotData.isAllZeros() && !dataMissing) {
-            setOpenError(true);
-            setErrorType('Warning');
-            setChartErrorTitle('Warning data is all zeros');
-            setChartErrorMessage(`Warning the chart data for ${chartTitle} contains all zeros (0).`);
-          } else {
-            setOpenError(false);
-          }
-
-          const xRange = {
-            xmin: humandReadablPeriodRange[0],
-            xmax: humandReadablPeriodRange[1]
-          };
-
-          // set the charts min and max based on the data in the data file
-          plotData.setXRange(xRange);
-
-          // change reacts state so it refreshes
-          setChartData(plotData.getData());
-          setChartLayout(plotData.getLayout());
-          return plotData;
-        })
-      // handle errors
-        .catch((error) => {
-          console.error(`SanboxControls.updatePlotData() error=${error}`); // eslint-disable-line no-console
+      if (chartDataPeriod === 'current-2099') {
+        response.forEach(elem => {
+          xvals.push(parseInt(elem[0]));
+          yvals.push(elem[1]);
         });
-      return null;
+      } else {
+        // parse the csv text file
+        const sandboxParseDataFiles = new SandboxParseDataFiles();
+        const chartDataFromFile = sandboxParseDataFiles
+          .parseFile(response.data, chartDataRegion.toLowerCase(), chartDataLocation);
+        xvals = chartDataFromFile[0];
+        yvals = chartDataFromFile[1];
+      }
+
+      const chartType = getClimatevariableType(chartDataClimatevariable);
+
+      // create a new instance of the sandbox human readable class this transforms
+      // the short text to something
+      // humans can read tmax100F beceomes Days with Maximum Temperature Above 100°F and
+      // AK becomes Alaska
+      const sandboxHumanReadable = new SandboxHumanReadable(chartDataClimatevariable);
+
+      // get the location from the ui
+      const titleLocation = replaceLocationAbbreviation(chartDataLocation);
+
+      // convert the all the parameters to human readable title
+      const chartTitle = sandboxHumanReadable.getChartTitle({
+        climatevariable: chartDataClimatevariable,
+        region: chartDataRegion,
+        titleLocation,
+        chartDataSeason
+      });
+
+      // get climate varriable human readable format
+      const humandReadablechartDataClimatevariable =
+      sandboxHumanReadable.getClimateVariablePullDownText(chartDataClimatevariable,
+        chartDataSeason);
+
+      // get period range
+      const humandReadablPeriodRange =
+      sandboxHumanReadable.getPeriodRange(chartDataPeriod);
+
+      // if no data mark as data missing so we can handle required fields and error messaging
+      let dataMissing = false;
+      if (!climateDataFilesJSONFile) dataMissing = true;
+      if (!chartDataRegion) dataMissing = true;
+      if (chartDataRegion !== 'National' && !chartDataLocation) dataMissing = true;
+      if (!chartDataClimatevariable) dataMissing = true;
+      if (!chartDataPeriod) dataMissing = true;
+      if (!chartDataSeason) dataMissing = true;
+
+      // create the plotly input so the chart is created based on users seletion
+      const plotInfo = {
+        xvals: xvals,
+        yvals: yvals,
+        xmin: humandReadablPeriodRange[0],
+        xmax: humandReadablPeriodRange[1],
+        chartTitle,
+        legnedText: chartType,
+        chartType,
+        climatevariable: humandReadablechartDataClimatevariable,
+        chartLineChart,
+        dataMissing,
+        season: chartDataSeason
+      // chartShowLine
+      };
+
+      // get the charts data formated for plotly
+      const plotData = new SandboxGeneratePlotData(plotInfo);
+
+      // if data is missing then zero out chart
+      if (dataMissing) {
+        plotData.zeroOutChartData();
+      }
+
+      // get configuration for defaults and invalid varriables/periods
+      const locationLimit = chartDataRegion === 'National' ? 'National' : chartDataLocation;
+      const configLimitData = { locationLimit };
+      const sandboxDataControl = new SandboxDataControl();
+
+      // get default period for the location
+      const defaultPeriod = sandboxDataControl.getDefaultPeriod(configLimitData);
+      // get invalid climate variables for the location
+      const inValidClimateVariables =
+      sandboxDataControl.getInValidClimateVariables(configLimitData);
+      // get invalid periods for the location
+      const inValidPeriods = sandboxDataControl.getInValidPeriods(configLimitData);
+
+      // TODO will fill this in later
+      if (defaultPeriod) {
+      // do nothing for now
+      }
+
+      if (inValidClimateVariables) {
+      // do nothing for now
+      }
+
+      if (inValidPeriods) {
+      // do nothing for now
+      }
+
+      // check if region or location has data if not display
+      // no data available for location and clear the chart
+      // if data missing for combo field level errors will handle messaging
+      if (!plotData.hasData() && !dataMissing) {
+        setOpenError(true);
+        setErrorType('Error');
+        setChartErrorTitle('Error data not available');
+        setChartErrorMessage(`Unfortunately, there is no data available for ${humandReadablechartDataClimatevariable}
+        for ${titleLocation}. To resolve this issue, try one or all of these three actions.
+        1) Change the location.
+        2) Change the climate variable.
+        3) Change the time period`);
+      } else if (plotData.isAllZeros() && !dataMissing) {
+        setOpenError(true);
+        setErrorType('Warning');
+        setChartErrorTitle('Warning data is all zeros');
+        setChartErrorMessage(`Warning the chart data for ${chartTitle} contains all zeros (0).`);
+      } else {
+        setOpenError(false);
+      }
+
+      const xRange = {
+        xmin: humandReadablPeriodRange[0],
+        xmax: humandReadablPeriodRange[1]
+      };
+
+      // set the charts min and max based on the data in the data file
+      plotData.setXRange(xRange);
+
+      // change reacts state so it refreshes
+      setChartData(plotData.getData());
+      setChartLayout(plotData.getLayout());
+      return plotData;
+    }) // handle errors
+    .catch((error) => {
+      console.error(`SanboxControls.updatePlotData() error=${error}`); // eslint-disable-line no-console
+    });
+
+    return null;
+  };
+
+  const getResponse = async (chartDataPeriod, path, dataFile) => {
+    let response;
+    if (chartDataPeriod === 'current-2099') {
+      // Get data and parse it into xvals and yvals
+      response = await handleClimatePost();
+    } else {
+      response = await axios.get(`${path}sandboxdata/TSU_Sandbox_Datafiles/${dataFile}`);  
     }
+    return response;
   };
 
   // function loads the index.json file to find the correct data.txt file based on the varriables
@@ -1300,7 +1301,7 @@ export default function SandboxControls() {
   };
 
   // handle post request
-  const handleClimatePost = () => {
+  const handleClimatePost = async () => {
 
     let reduce;
     let units;
@@ -1320,7 +1321,7 @@ export default function SandboxControls() {
     let locationKey = (URLLocation === "" ? "bbox" : "state");
     let locationValue = (URLLocation === "" ? "-124.848974,24.396308,-66.885444,49.384358" : URLLocation);
 
-    axios.post('https://grid2.rcc-acis.org/GridData', {
+    await axios.post('https://grid2.rcc-acis.org/GridData', {
         "grid": "loca:allMax:rcp85",
         "sdate": "2006-01-01",
         "edate": "2099-12-31",

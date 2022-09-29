@@ -15,8 +15,7 @@ import Fade from '@material-ui/core/Fade';
 
 import SandboxCustomSizeExport from './SandboxCustomSizeExport';
 import SandboxSumbitFigure from './SandboxSumbitFigure';
-
-import HandleClimatePostTest from './SandboxHandleClimateData';
+import HandleClimatePost from './SandboxControls';
 
 const useStyles = makeStyles((theme) => ({
   sandboxExportsButtonBox: {
