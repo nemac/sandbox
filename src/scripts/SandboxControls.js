@@ -15,6 +15,7 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 // sandbox conmponents
+import { data } from 'autoprefixer';
 import SandboxPlotRegion from './SandboxPlotRegion';
 import SandboxGeneratePlotData from './SandboxGeneratePlotData';
 import SandboxHumanReadable from './SandboxHumanReadable';
@@ -33,7 +34,6 @@ import SandboxLocationStateItems from '../configs/SandboxLocationStateItems';
 
 // css
 import '../css/Sandbox.scss';
-import { data } from 'autoprefixer';
 
 const RegionItems = SandboxRegionItems();
 const PeriodsFull = SandboxPeriods();
@@ -436,14 +436,24 @@ export default function SandboxControls() {
         !chartDataPeriod ||
         !chartDataSeason) return null;
 
-    getResponse(chartDataPeriod, path, dataFile).then(response => {// get the chart type which is the climate variable
+    const getResponse = async (chartDataPeriod, path, dataFile) => {
+      let response;
+      if (chartDataPeriod === 'current-2099') {
+        // Get data and parse it into xvals and yvals
+        response = await handleClimatePost();
+      } else {
+        response = await axios.get(`${path}sandboxdata/TSU_Sandbox_Datafiles/${dataFile}`);
+      }
+      return response;
+    };
 
+    getResponse(chartDataPeriod, path, dataFile).then((response) => {
       // Logic to get xvals and yvals
       let xvals = [];
       let yvals = [];
 
       if (chartDataPeriod === 'current-2099') {
-        response.forEach(elem => {
+        response.forEach((elem) => {
           xvals.push(parseInt(elem[0]));
           yvals.push(elem[1]);
         });
@@ -495,8 +505,8 @@ export default function SandboxControls() {
 
       // create the plotly input so the chart is created based on users seletion
       const plotInfo = {
-        xvals: xvals,
-        yvals: yvals,
+        xvals,
+        yvals,
         xmin: humandReadablPeriodRange[0],
         xmax: humandReadablPeriodRange[1],
         chartTitle,
@@ -577,22 +587,11 @@ export default function SandboxControls() {
       setChartLayout(plotData.getLayout());
       return plotData;
     }) // handle errors
-    .catch((error) => {
-      console.error(`SanboxControls.updatePlotData() error=${error}`); // eslint-disable-line no-console
-    });
+      .catch((error) => {
+        console.error(`SanboxControls.updatePlotData() error=${error}`); // eslint-disable-line no-console
+      });
 
     return null;
-  };
-
-  const getResponse = async (chartDataPeriod, path, dataFile) => {
-    let response;
-    if (chartDataPeriod === 'current-2099') {
-      // Get data and parse it into xvals and yvals
-      response = await handleClimatePost();
-    } else {
-      response = await axios.get(`${path}sandboxdata/TSU_Sandbox_Datafiles/${dataFile}`);  
-    }
-    return response;
   };
 
   // function loads the index.json file to find the correct data.txt file based on the varriables
@@ -1302,87 +1301,84 @@ export default function SandboxControls() {
 
   // handle post request
   const handleClimatePost = async () => {
-
     let reduce;
     let units;
     let data;
-    
-    if (URLClimatevariable === "cddc" || URLClimatevariable === "hddc" || URLClimatevariable === "pcpn") {
-        reduce = "sum";
-        units = "inch";
-    } else if (URLClimatevariable === "tmax" || URLClimatevariable === "tmin" || URLClimatevariable === "tmpc") {
-        reduce = "mean";
-        units = "degreeF";
+
+    if (URLClimatevariable === 'cddc' || URLClimatevariable === 'hddc' || URLClimatevariable === 'pcpn') {
+      reduce = 'sum';
+      units = 'inch';
+    } else if (URLClimatevariable === 'tmax' || URLClimatevariable === 'tmin' || URLClimatevariable === 'tmpc') {
+      reduce = 'mean';
+      units = 'degreeF';
     } else {
-        console.log("An error has occurred.");
-        return;
+      console.log('An error has occurred.');
+      return;
     }
 
-    let locationKey = (URLLocation === "" ? "bbox" : "state");
-    let locationValue = (URLLocation === "" ? "-124.848974,24.396308,-66.885444,49.384358" : URLLocation);
+    const locationKey = (URLLocation === '' ? 'bbox' : 'state');
+    const locationValue = (URLLocation === '' ? '-124.848974,24.396308,-66.885444,49.384358' : URLLocation);
 
     await axios.post('https://grid2.rcc-acis.org/GridData', {
-        "grid": "loca:allMax:rcp85",
-        "sdate": "2006-01-01",
-        "edate": "2099-12-31",
-        "elems": [
-            {
-                "name": formatClimateVariable(URLClimatevariable),
-                "interval": "yly",
-                "duration": "yly",
-                "reduce": reduce,
-                "units": units, 
-                "area_reduce": "state_mean"
-            }
-        ],
-        [locationKey] : locationValue
-    })    
-    .then(function (response) {
-        if (URLLocation === "") {
-            data = response.data.data;
+      grid: 'loca:allMax:rcp85',
+      sdate: '2006-01-01',
+      edate: '2099-12-31',
+      elems: [
+        {
+          name: formatClimateVariable(URLClimatevariable),
+          interval: 'yly',
+          duration: 'yly',
+          reduce,
+          units,
+          area_reduce: 'state_mean'
+        }
+      ],
+      [locationKey]: locationValue
+    })
+      .then((response) => {
+        if (URLLocation === '') {
+          data = response.data.data;
 
-            for (let i = 0; i < data.length; i++) {
-                const dataArray = Object.values(data[i][1]);
-                data[i][1] = dataArray.reduce((a, b) => a + b, 0) / dataArray.length;
-            }
+          for (let i = 0; i < data.length; i++) {
+            const dataArray = Object.values(data[i][1]);
+            data[i][1] = dataArray.reduce((a, b) => a + b, 0) / dataArray.length;
+          }
         }
         console.log(response);
-    })
-    .catch(function (error) {
-    console.log(error);
-    });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 
     return data;
-  }
+  };
 
   // helper function for post requests
   const formatClimateVariable = (URLClimatevariable) => {
-
     // Format climate variable
     switch (URLClimatevariable) {
-        case 'cddc':
-            return 'cdd';
+      case 'cddc':
+        return 'cdd';
 
-        case 'hddc':
-            return 'hdd';
+      case 'hddc':
+        return 'hdd';
 
-        case 'pcpn':
-            return 'pcpn';
+      case 'pcpn':
+        return 'pcpn';
 
-        case 'tmax':
-            return 'maxt';
+      case 'tmax':
+        return 'maxt';
 
-        case 'tmin':
-            return 'mint';
+      case 'tmin':
+        return 'mint';
 
-        case 'tmpc':
-            return 'avgt';
+      case 'tmpc':
+        return 'avgt';
 
-        default:
-            console.log("Something went wrong!");
-            break;
+      default:
+        throw new Error('Something went wrong!');
     }
-} 
+  };
 
   return (
     <div>

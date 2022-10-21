@@ -5,7 +5,7 @@ const thisYear = (theDate.getFullYear() - 1);
 const SandoxPeriodsHumanReadable = () => ([
   {
     value: 'current-2099',
-    pullDownText: `2006—2099`,
+    pullDownText: '2006—2099',
     range: [2006, 2099],
     season: 'yearly'
   },
@@ -23,7 +23,7 @@ const SandoxPeriodsHumanReadable = () => ([
   },
   {
     value: 'current-2099',
-    pullDownText: `2006—2099`,
+    pullDownText: '2006—2099',
     range: [2006, 2099],
     season: 'ann'
   },
@@ -50,6 +50,6 @@ const SandoxPeriodsHumanReadable = () => ([
     pullDownText: `1895—${thisYear}`,
     range: [1895, thisYear],
     season: 'son'
-  },
+  }
 ]);
 export default SandoxPeriodsHumanReadable;

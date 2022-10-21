@@ -4,6 +4,6 @@ const SandboxSeasons = () => ([
   'djf',
   'mam',
   'jja',
-  'son',
+  'son'
 ]);
 export default SandboxSeasons;

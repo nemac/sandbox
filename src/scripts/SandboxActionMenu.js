@@ -15,7 +15,6 @@ import Fade from '@material-ui/core/Fade';
 
 import SandboxCustomSizeExport from './SandboxCustomSizeExport';
 import SandboxSumbitFigure from './SandboxSumbitFigure';
-import HandleClimatePost from './SandboxControls';
 
 const useStyles = makeStyles((theme) => ({
   sandboxExportsButtonBox: {
@@ -201,7 +200,7 @@ export default function Selector(props) {
 
   const handleClimatePost = () => {
     handleClimatePosta();
-  }
+  };
 
   // handles open of sumbit figure
   const handleOpenSubmitFigure = () => {
@@ -355,7 +354,7 @@ export default function Selector(props) {
                   interactive
                   classes={{ tooltip: classes.toolTip }}>
                   <Button onClick={handleClimatePost} className={classes.fabsvg} variant='contained' color='default' startIcon={<SaveAltIcon />}>
-                    post 
+                    post
                   </Button>
                 </Tooltip>
                 <SandboxSumbitFigure
