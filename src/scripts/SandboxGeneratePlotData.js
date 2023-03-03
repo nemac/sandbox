@@ -154,16 +154,28 @@ class SandboxGeneratePlotData {
   }
 
   // hover text for the yearly line
+
+  // yearLineText is the hover text for the yearly line text
+  // under data display. It's formated "In 1952, the average
+  // temperate was 52.28 F annually"
+
+  // what we oughta do higher emissions, horizontal line, lower emissions,
+  // horizontal line, and observed average. my handleClimatePost already
+  // gets 4.5, so it's just working it into these.
+
+  // beginning week 10ish - module to handle projects
+
   yearLineText(x, y) {
     const seasonTextPrefix = this.hoverTemplateSeasonTextPrefix();
     const seasonText = this.hoverTemplateSeasonText();
     const climateVariableText = this.hoverTemplateClimateVariableText().replace('°f', '°F');
     const unitText = this.averageTextUnits;
     // season sentence
-    if (this.season !== 'yearly') return ` In %{x} the ${climateVariableText}${this.SmallScreenBreak} was %{y:0.2f} ${unitText} ${seasonTextPrefix} ${seasonText} <extra></extra>`.replace(/ {2}/g, ' ');
+    if (this.season !== 'yearly') return `In %{x} the ${climateVariableText}${this.SmallScreenBreak} was %{y:0.2f} ${unitText} ${seasonTextPrefix} ${seasonText} <extra></extra>`.replace(/ {2}/g, ' ');
     // threshold and default sentence
     return ` In %{x} there was an average of %{y:0.2f}${this.SmallScreenBreak} ${climateVariableText} <extra></extra>`.replace(/ {2}/g, ' ');
   }
+
 
   // hover text for year bar
   yearBarText(x, y) {

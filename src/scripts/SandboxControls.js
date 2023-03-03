@@ -452,10 +452,14 @@ export default function SandboxControls() {
       let xvals = [];
       let yvals = [];
 
+      console.log('AAAAAAAAAAAAAAAAAAAAHHHHHHHHH');
+      console.log(response);
+
       if (chartDataPeriod === 'current-2099') {
         response.forEach((elem) => {
           xvals.push(parseInt(elem[0]));
-          yvals.push(elem[1]);
+          // console.log(Object.values(elem[1]));
+          yvals.push(Object.values(elem[1])[0]);
         });
       } else {
         // parse the csv text file
@@ -1300,6 +1304,7 @@ export default function SandboxControls() {
   };
 
   // handle post request
+  // modify this so it's only doing one post request. That'll decrease loading times, I think.
   const handleClimatePost = async () => {
     let reduce;
     let units;
@@ -1319,8 +1324,12 @@ export default function SandboxControls() {
     const locationKey = (URLLocation === '' ? 'bbox' : 'state');
     const locationValue = (URLLocation === '' ? '-124.848974,24.396308,-66.885444,49.384358' : URLLocation);
 
+    let lowerEmissions;
+    let higherEmissions;
+
+    // lower emissions
     await axios.post('https://grid2.rcc-acis.org/GridData', {
-      grid: 'loca:allMax:rcp85',
+      grid: 'loca:allMax:rcp45',
       sdate: '2006-01-01',
       edate: '2099-12-31',
       elems: [
@@ -1335,22 +1344,68 @@ export default function SandboxControls() {
       ],
       [locationKey]: locationValue
     })
-      .then((response) => {
-        if (URLLocation === '') {
-          data = response.data.data;
-
-          for (let i = 0; i < data.length; i++) {
-            const dataArray = Object.values(data[i][1]);
-            data[i][1] = dataArray.reduce((a, b) => a + b, 0) / dataArray.length;
-          }
+    .then((response) => {
+      lowerEmissions = response.data.data;
+      if (URLLocation === '') {
+        for (let i = 0; i < data.length; i++) {
+          const dataArray = Object.values(data[i][1]);
+          data[i][1] = dataArray.reduce((a, b) => a + b, 0) / dataArray.length;
         }
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      }
+      console.log("Logging lower emissions!");
+      console.log(response);
+      console.log("Logging a version of higher emissions that's formatted!");
+      console.log(response.data.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 
-    return data;
+    // higher emissions
+    await axios.post('https://grid2.rcc-acis.org/GridData', {
+    grid: 'loca:allMax:rcp85',
+    sdate: '2006-01-01',
+    edate: '2099-12-31',
+    elems: [
+      {
+        name: formatClimateVariable(URLClimatevariable),
+        interval: 'yly',
+        duration: 'yly',
+        reduce,
+        units,
+        area_reduce: 'state_mean'
+      }
+    ],
+    [locationKey]: locationValue
+  })
+    .then((response) => {
+      higherEmissions = response.data.data; //response.data.data;
+      if (URLLocation === '') {
+        for (let i = 0; i < data.length; i++) {
+          const dataArray = Object.values(data[i][1]);
+          data[i][1] = dataArray.reduce((a, b) => a + b, 0) / dataArray.length;
+        }
+      }
+      console.log("Logging higher emissions!");
+      console.log(response);
+      console.log("Logging a version of higher emissions that's formatted!");
+      console.log(response.data.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+
+    // export emissionsData for use in getResponse
+    let emissionsData = [lowerEmissions, higherEmissions];
+    console.log(emissionsData); 
+
+    // we create the lower emissions and higher emissions data.
+    // we create the united states bbox.
+    // add these all to state.
+    // 8.5 is the original.
+    // 2006-2099 is broken
+
+    return higherEmissions;
   };
 
   // helper function for post requests
