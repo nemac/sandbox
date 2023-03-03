@@ -452,9 +452,13 @@ export default function SandboxControls() {
       let xvals = [];
       let yvals = [];
 
+      console.log('AAAAAAAAAAAAAAAAAAAAHHHHHHHHH');
+      console.log(response);
+
       if (chartDataPeriod === 'current-2099') {
         response.forEach((elem) => {
           xvals.push(parseInt(elem[0]));
+          // console.log(Object.values(elem[1]));
           yvals.push(Object.values(elem[1])[0]);
         });
       } else {
@@ -1298,97 +1302,111 @@ export default function SandboxControls() {
     const fileType = 'text/csv;charset=utf-8';
     saveFile(fileContent, fileName, fileType);
   };
- 
-  // THROWS THE FOLLOWING ERRORS RANDOMLY
 
-  // [Warning] Material-UI: You have provided an out-of-range value `tmpc` for the select component.
-  // Consider providing a value that matches one of the available options or ''.
-  // The available values are "".
-
-  // [Error] Failed to load resource: the server responded with a status of 400 (Bad Request) (GridData, line 0)
-
-  // [Error] SanboxControls.updatePlotData() error=TypeError: null is not an object (evaluating 'data[i]')
-
+  // handle post request
+  // modify this so it's only doing one post request. That'll decrease loading times, I think.
   const handleClimatePost = async () => {
-    const getEmissionsData = async (emissionsType) => {
-      const { reduce, units } = {
-        cddc: { reduce: 'sum', units: 'inch' },
-        hddc: { reduce: 'sum', units: 'inch' },
-        pcpn: { reduce: 'sum', units: 'inch' },
-        tmax: { reduce: 'mean', units: 'degreeF' },
-        tmin: { reduce: 'mean', units: 'degreeF' },
-        tmpc: { reduce: 'mean', units: 'degreeF' },
-      }[URLClimatevariable] || { reduce: '', units: '' };
-  
-      if (!reduce || !units) {
-        console.log('An error has occurred fetching the reduce and unit variables.');
-        console.log(URLClimatevariable);
-        return;
-      }
-  
-      const locationKey = URLLocation ? 'state' : 'bbox';
-      const locationValue = URLLocation || '-124.848974,24.396308,-66.885444,49.384358';
-  
-      try {
-        const response = await axios.post('https://grid2.rcc-acis.org/GridData', {
-          grid: `loca:allMax:rcp${emissionsType}`,
-          sdate: '2006-01-01',
-          edate: '2099-12-31',
-          elems: [
-            {
-              name: formatClimateVariable(URLClimatevariable),
-              interval: 'yly',
-              duration: 'yly',
-              reduce,
-              units,
-              area_reduce: 'state_mean',
-            },
-          ],
-          [locationKey]: locationValue,
-        });
-        return response.data.data;
-      } catch (error) {
-        console.log(error);
-        return null;
-      }
-    };
-  
-    // some sort of error was occurring. I think it was too many requests too soon. This'll fix it!
+    let reduce;
+    let units;
+    let data;
+
+    if (URLClimatevariable === 'cddc' || URLClimatevariable === 'hddc' || URLClimatevariable === 'pcpn') {
+      reduce = 'sum';
+      units = 'inch';
+    } else if (URLClimatevariable === 'tmax' || URLClimatevariable === 'tmin' || URLClimatevariable === 'tmpc') {
+      reduce = 'mean';
+      units = 'degreeF';
+    } else {
+      console.log('An error has occurred.');
+      return;
+    }
+
+    const locationKey = (URLLocation === '' ? 'bbox' : 'state');
+    const locationValue = (URLLocation === '' ? '-124.848974,24.396308,-66.885444,49.384358' : URLLocation);
+
     let lowerEmissions;
     let higherEmissions;
 
-    let count = 1;
-    while (true && count < 11) {
-      console.log("Fetching lower emissions: attempt " + count);
-      lowerEmissions = await getEmissionsData("45");
-      if (validateEmissionsData(lowerEmissions)) {
-        break;
+    // lower emissions
+    await axios.post('https://grid2.rcc-acis.org/GridData', {
+      grid: 'loca:allMax:rcp45',
+      sdate: '2006-01-01',
+      edate: '2099-12-31',
+      elems: [
+        {
+          name: formatClimateVariable(URLClimatevariable),
+          interval: 'yly',
+          duration: 'yly',
+          reduce,
+          units,
+          area_reduce: 'state_mean'
+        }
+      ],
+      [locationKey]: locationValue
+    })
+    .then((response) => {
+      lowerEmissions = response.data.data;
+      if (URLLocation === '') {
+        for (let i = 0; i < data.length; i++) {
+          const dataArray = Object.values(data[i][1]);
+          data[i][1] = dataArray.reduce((a, b) => a + b, 0) / dataArray.length;
+        }
       }
-      count++;
-    }
+      console.log("Logging lower emissions!");
+      console.log(response);
+      console.log("Logging a version of higher emissions that's formatted!");
+      console.log(response.data.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 
-    count = 1;
-    while (true && count < 11) {
-      console.log("Fetching higher emissions: attempt " + count);
-      higherEmissions = await getEmissionsData("85");
-      if (validateEmissionsData(higherEmissions)) {
-        break;
+    // higher emissions
+    await axios.post('https://grid2.rcc-acis.org/GridData', {
+    grid: 'loca:allMax:rcp85',
+    sdate: '2006-01-01',
+    edate: '2099-12-31',
+    elems: [
+      {
+        name: formatClimateVariable(URLClimatevariable),
+        interval: 'yly',
+        duration: 'yly',
+        reduce,
+        units,
+        area_reduce: 'state_mean'
       }
-      count++;
-    }
+    ],
+    [locationKey]: locationValue
+  })
+    .then((response) => {
+      higherEmissions = response.data.data; //response.data.data;
+      if (URLLocation === '') {
+        for (let i = 0; i < data.length; i++) {
+          const dataArray = Object.values(data[i][1]);
+          data[i][1] = dataArray.reduce((a, b) => a + b, 0) / dataArray.length;
+        }
+      }
+      console.log("Logging higher emissions!");
+      console.log(response);
+      console.log("Logging a version of higher emissions that's formatted!");
+      console.log(response.data.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 
-    if (!lowerEmissions || !higherEmissions) {
-      return null;
-    }
+    // export emissionsData for use in getResponse
+    let emissionsData = [lowerEmissions, higherEmissions];
+    console.log(emissionsData); 
 
-    console.log("Now consoling logging... LOWER EMISSIONS");
-    console.log(lowerEmissions);
-    console.log("Now consoling logging... HIGHER EMISSIONS");
-    console.log(higherEmissions);
-    let emissionsData = [lowerEmissions, higherEmissions];  
+    // we create the lower emissions and higher emissions data.
+    // we create the united states bbox.
+    // add these all to state.
+    // 8.5 is the original.
+    // 2006-2099 is broken
+
     return higherEmissions;
   };
-  
 
   // helper function for post requests
   const formatClimateVariable = (URLClimatevariable) => {
@@ -1400,7 +1418,6 @@ export default function SandboxControls() {
       case 'hddc':
         return 'hdd';
 
-      case '1inch':
       case 'pcpn':
         return 'pcpn';
 
@@ -1416,17 +1433,6 @@ export default function SandboxControls() {
       default:
         throw new Error('Something went wrong!');
     }
-  };
-
-  // helper function to validate fetched emissions data
-  const validateEmissionsData = (data) => {
-    for (let i = 0; i < 10; i++) {
-      const yearData = data[i][1];
-      if (Object.keys(yearData).length === 0) {
-        return false;
-      }
-    }
-    return true;
   };
 
   return (
