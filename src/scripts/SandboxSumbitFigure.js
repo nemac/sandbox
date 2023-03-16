@@ -249,7 +249,7 @@ export default function SandboxSumbitFigure(props) {
             <MailOutlineIcon className={classes.exportHeaderIcon}/> {heading}
           </h2>
           <div className={classes.exportDescriptionText}>
-            To submit the current figure, please include your email, name, and any details about the figure..
+            To submit the current figure, please include your email, name, and any details about the figure.
           </div>
 
           <Collapse in={messageSent}>
