@@ -249,13 +249,7 @@ export default function SandboxSumbitFigure(props) {
             <MailOutlineIcon className={classes.exportHeaderIcon}/> {heading}
           </h2>
           <div className={classes.exportDescriptionText}>
-            You must have an Author Key to sumbit the figure. Author keys
-            cannot be requested and are only provied to selected
-            NCA authors, by TSU.
-          </div>
-          <div className={classes.exportDescriptionText}>
-            Once a valid Author key is entered, you can submit the current figure to TSU.
-            Please note that you must include your email, name and any details about figure.
+            To submit the current figure, please include your email, name, and any details about the figure..
           </div>
 
           <Collapse in={messageSent}>
