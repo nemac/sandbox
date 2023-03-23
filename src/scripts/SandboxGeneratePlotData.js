@@ -163,7 +163,7 @@ class SandboxGeneratePlotData {
   // horizontal line, and observed average. my handleClimatePost already
   // gets 4.5, so it's just working it into these.
 
-  // beginning week 10ish - module to handle projects
+  // beginning week 10ish - module to handle projects hello world
 
   yearLineText(x, y) {
     const seasonTextPrefix = this.hoverTemplateSeasonTextPrefix();
