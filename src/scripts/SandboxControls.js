@@ -448,24 +448,6 @@ export default function SandboxControls() {
     };
 
     getResponse(chartDataPeriod, path, dataFile).then((response) => {
-      // Logic to get xvals and yvals
-      let xvals = [];
-      let yvals = [];
-
-      if (chartDataPeriod === 'current-2099') {
-        response.forEach((elem) => {
-          xvals.push(parseInt(elem[0]));
-          yvals.push(Object.values(elem[1])[0]);
-        });
-      } else {
-        // parse the csv text file
-        const sandboxParseDataFiles = new SandboxParseDataFiles();
-        const chartDataFromFile = sandboxParseDataFiles
-          .parseFile(response.data, chartDataRegion.toLowerCase(), chartDataLocation);
-        xvals = chartDataFromFile[0];
-        yvals = chartDataFromFile[1];
-      }
-
       const chartType = getClimatevariableType(chartDataClimatevariable);
 
       // create a new instance of the sandbox human readable class this transforms
@@ -503,89 +485,124 @@ export default function SandboxControls() {
       if (!chartDataPeriod) dataMissing = true;
       if (!chartDataSeason) dataMissing = true;
 
-      // create the plotly input so the chart is created based on users seletion
-      const plotInfo = {
-        xvals,
-        yvals,
-        xmin: humandReadablPeriodRange[0],
-        xmax: humandReadablPeriodRange[1],
-        chartTitle,
-        legnedText: chartType,
-        chartType,
-        climatevariable: humandReadablechartDataClimatevariable,
-        chartLineChart,
-        dataMissing,
-        season: chartDataSeason
-      // chartShowLine
-      };
+       // get configuration for defaults and invalid varriables/periods
+       const locationLimit = chartDataRegion === 'National' ? 'National' : chartDataLocation;
+       const configLimitData = { locationLimit };
+       const sandboxDataControl = new SandboxDataControl();
 
-      // get the charts data formated for plotly
-      const plotData = new SandboxGeneratePlotData(plotInfo);
+       // get default period for the location
+       const defaultPeriod = sandboxDataControl.getDefaultPeriod(configLimitData);
+       // get invalid climate variables for the location
+       const inValidClimateVariables =
+       sandboxDataControl.getInValidClimateVariables(configLimitData);
+       // get invalid periods for the location
+       const inValidPeriods = sandboxDataControl.getInValidPeriods(configLimitData);
 
-      // if data is missing then zero out chart
-      if (dataMissing) {
-        plotData.zeroOutChartData();
-      }
+       // TODO will fill this in later
+       if (defaultPeriod) {
+       // do nothing for now
+       }
 
-      // get configuration for defaults and invalid varriables/periods
-      const locationLimit = chartDataRegion === 'National' ? 'National' : chartDataLocation;
-      const configLimitData = { locationLimit };
-      const sandboxDataControl = new SandboxDataControl();
+       if (inValidClimateVariables) {
+       // do nothing for now
+       }
 
-      // get default period for the location
-      const defaultPeriod = sandboxDataControl.getDefaultPeriod(configLimitData);
-      // get invalid climate variables for the location
-      const inValidClimateVariables =
-      sandboxDataControl.getInValidClimateVariables(configLimitData);
-      // get invalid periods for the location
-      const inValidPeriods = sandboxDataControl.getInValidPeriods(configLimitData);
+       if (inValidPeriods) {
+       // do nothing for now
+       }
 
-      // TODO will fill this in later
-      if (defaultPeriod) {
-      // do nothing for now
-      }
-
-      if (inValidClimateVariables) {
-      // do nothing for now
-      }
-
-      if (inValidPeriods) {
-      // do nothing for now
-      }
-
-      // check if region or location has data if not display
-      // no data available for location and clear the chart
-      // if data missing for combo field level errors will handle messaging
-      if (!plotData.hasData() && !dataMissing) {
-        setOpenError(true);
-        setErrorType('Error');
-        setChartErrorTitle('Error data not available');
-        setChartErrorMessage(`Unfortunately, there is no data available for ${humandReadablechartDataClimatevariable}
-        for ${titleLocation}. To resolve this issue, try one or all of these three actions.
-        1) Change the location.
-        2) Change the climate variable.
-        3) Change the time period`);
-      } else if (plotData.isAllZeros() && !dataMissing) {
-        setOpenError(true);
-        setErrorType('Warning');
-        setChartErrorTitle('Warning data is all zeros');
-        setChartErrorMessage(`Warning the chart data for ${chartTitle} contains all zeros (0).`);
-      } else {
-        setOpenError(false);
-      }
-
-      const xRange = {
+       const xRange = {
         xmin: humandReadablPeriodRange[0],
         xmax: humandReadablPeriodRange[1]
       };
 
-      // set the charts min and max based on the data in the data file
-      plotData.setXRange(xRange);
+      let plotLayout;
+      let combinedPlotData = [];
 
-      // change reacts state so it refreshes
-      setChartData(plotData.getData());
-      setChartLayout(plotData.getLayout());
-      return plotData;
+      for (const data of response) {
+        // Logic to get xvals and yvals
+        let xvals = [];
+        let yvals = [];
+
+        if (chartDataPeriod === 'current-2099') {
+          data.forEach((elem) => {
+            xvals.push(parseInt(elem[0]));
+            yvals.push(Object.values(elem[1])[0]);
+          });
+        } else {
+          // parse the csv text file
+          const sandboxParseDataFiles = new SandboxParseDataFiles();
+          const chartDataFromFile = sandboxParseDataFiles
+            .parseFile(response.data, chartDataRegion.toLowerCase(), chartDataLocation);
+          xvals = chartDataFromFile[0];
+          yvals = chartDataFromFile[1];
+        }
+
+        // create the plotly input so the chart is created based on users seletion
+        const plotInfo = {
+          xvals,
+          yvals,
+          xmin: humandReadablPeriodRange[0],
+          xmax: humandReadablPeriodRange[1],
+          chartTitle,
+          legnedText: chartType,
+          chartType,
+          climatevariable: humandReadablechartDataClimatevariable,
+          chartLineChart,
+          dataMissing,
+          season: chartDataSeason
+        // chartShowLine
+        };
+
+        // get the charts data formated for plotly
+        const plotData = new SandboxGeneratePlotData(plotInfo);
+
+        // if data is missing then zero out chart
+        if (dataMissing) {
+          plotData.zeroOutChartData();
+        }
+
+        // check if region or location has data if not display
+        // no data available for location and clear the chart
+        // if data missing for combo field level errors will handle messaging
+        if (!plotData.hasData() && !dataMissing) {
+          setOpenError(true);
+          setErrorType('Error');
+          setChartErrorTitle('Error data not available');
+          setChartErrorMessage(`Unfortunately, there is no data available for ${humandReadablechartDataClimatevariable}
+          for ${titleLocation}. To resolve this issue, try one or all of these three actions.
+          1) Change the location.
+          2) Change the climate variable.
+          3) Change the time period`);
+        } else if (plotData.isAllZeros() && !dataMissing) {
+          setOpenError(true);
+          setErrorType('Warning');
+          setChartErrorTitle('Warning data is all zeros');
+          setChartErrorMessage(`Warning the chart data for ${chartTitle} contains all zeros (0).`);
+        } else {
+          setOpenError(false);
+        }
+
+        // set the charts min and max based on the data in the data file
+        plotData.setXRange(xRange);
+
+        // set the layout
+        if (!plotLayout) {
+          plotLayout = plotData.getLayout();
+        }
+
+        // Add the data to the array
+        combinedPlotData = [...combinedPlotData, ...plotData.getData()];
+      }
+
+      console.log("COMBINED PLOT DATA:");
+      console.log(combinedPlotData);
+
+       // change reacts state so it refreshes
+       setChartData(combinedPlotData);
+       setChartLayout(plotLayout);
+
+      return combinedPlotData;
     }) // handle errors
       .catch((error) => {
         console.error(`SanboxControls.updatePlotData() error=${error}`); // eslint-disable-line no-console
@@ -1386,7 +1403,7 @@ export default function SandboxControls() {
     console.log("Now consoling logging... HIGHER EMISSIONS");
     console.log(higherEmissions);
     let emissionsData = [lowerEmissions, higherEmissions];  
-    return higherEmissions;
+    return emissionsData;
   };
   
 
