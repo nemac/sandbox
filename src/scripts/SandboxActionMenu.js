@@ -135,43 +135,32 @@ export default function Selector(props) {
   const { handleSwtichYearlyToLinea } = props;
   const { handleSwtichAverageAndYearlya } = props;
   const { handleSwtichMovingAverageAndYearlya } = props;
+  const { handleRCPModesChangea } = props;
+  const { handleObservedTogglea } = props;
   const { handleDownloadChartAsCSVa } = props;
   const { handleDownloadChartAsPNGa } = props;
   const { handleDownloadChartAsSVGa } = props;
   const { handleClimatePosta } = props;
   const { lineChart } = props;
+  const { rcpModes } = props;
+  const { observed } = props;
+  const { period } = props;
 
   const [openCustomSizeSVG, setOpenCustomSizeSVG] = React.useState(false);
   const [openCustomSizePNG, setOpenCustomSizePNG] = React.useState(false);
   const [openSubmitFigure, setOpenSubmitFigure] = React.useState(false);
 
+
+  /**
+   * Comment this
+   */
   const setSelected = (whichchart, me) => {
-    switch (lineChart) {
-      case 'year':
-        // yearly the line chart average is the bar chart
-        if (me === lineChart) {
-          return 'sandbox-start-icon-selected';
-        }
-        return 'sandbox-start-icon-not-selected';
-      case 'avg':
-        // average the line chart yearly is the bar chart
-        if (me === lineChart) {
-          return 'sandbox-start-icon-selected';
-        }
-        return 'sandbox-start-icon-not-selected';
-      case 'mavg':
-        // moving average the line chart yearly is the bar chart
-        if (me === lineChart) {
-          return 'sandbox-start-icon-selected';
-        }
-        return 'sandbox-start-icon-not-selected';
-      default:
-        // yearly the line chart average is the bar chart
-        if (me === lineChart) {
-          return 'sandbox-start-icon-selected';
-        }
-        return 'sandbox-start-icon-not-selected';
+    // Handle RCP selector buttons and observed toggle button
+    if ((me === whichchart) || ((me === '45' || me === '85') && whichchart.includes(me))) {
+      return 'sandbox-start-icon-selected';
     }
+
+    return 'sandbox-start-icon-not-selected';
   };
 
   const handleSwtichAverageAndYearly = (event) => {
@@ -234,55 +223,104 @@ export default function Selector(props) {
     setOpenCustomSizePNG(false);
   };
 
+
+
+  /**
+   * Comment this
+   * depends on this setSelected
+   */
   return (
       <Grid container spacing={0} justify='flex-end' direction={'row'} >
         <Grid item xs={12} sm={12} md={6} width='100%' >
-          <Box className={classes.sandboxExportsButtonBox} fontWeight='fontWeightBold' mt={1} display='flex' flexDirection='row' flexWrap='wrap' >
+          <Box className={classes.sandboxExportsButtonBox} fontWeight='fontWeightBold' mt={1} width='135%' display='flex' flexDirection='row' flexWrap='wrap' >
             <FormControl component='fieldset' variant='outlined' className={classes.sandboxExportsButtonBoxForm}>
               <FormLabel component='legend' className={classes.sandboxExportsButtonBoxFormLabel}>Data Display</FormLabel>
                 <Tooltip
-                  title={'Yearly: Displays data as five-year averages with trendlines showing annual averages and the average for the entire dataset.'} aria-label={'Yearly: Displays data as five-year averages with trendlines showing annual averages and the average for the entire dataset.'}
-                  placement='bottom'
-                  TransitionComponent={Fade}
-                  enterNextDelay={750}
-                  arrow
-                  interactive
-                  classes={{ tooltip: classes.toolTip }}>
-                  <Button onClick={handleSwtichYearlyToLine} classes={{ root: `${setSelected(lineChart, 'year')}` }} className={classes.fabsvgLeft} variant='contained' color='default' startIcon={<TimelineIcon />}>
+                    title={'Yearly: Displays data as five-year averages with trendlines showing annual averages and the average for the entire dataset.'} aria-label={'Yearly: Displays data as five-year averages with trendlines showing annual averages and the average for the entire dataset.'}
+                    placement='bottom'
+                    TransitionComponent={Fade}
+                    enterNextDelay={750}
+                    arrow
+                    interactive
+                    classes={{ tooltip: classes.toolTip }}>
+                  <Button onClick={handleSwtichYearlyToLine} classes={{ root: `${setSelected(lineChart, 'year')}` }}
+                          className={classes.fabsvgLeft} variant='contained' color='default'
+                          startIcon={<TimelineIcon />}>
                     Yearly
                   </Button>
-                </Tooltip>
-                <Tooltip
-                  title={'Average: Displays data as annual averages with trendlines showing five-year averages and the average for the entire dataset.'}
-                  aria-label={'Average: Displays data as annual averages with trendlines showing five-year averages and the average for the entire dataset.'}
-                  placement='bottom'
-                  TransitionComponent={Fade}
-                  enterNextDelay={750}
-                  arrow
-                  interactive
-                  classes={{ tooltip: classes.toolTip }}>
-                  <Button onClick={handleSwtichAverageAndYearly} classes={{ root: `${setSelected(lineChart, 'avg')}` }} className={classes.fabsvgCenter} variant='contained' color='default' startIcon={<TimelineIcon />}>
-                    Average
-                  </Button>
-                </Tooltip>
-                <Tooltip
-                  title={'Moving Average: Displays data as annual averages with trendlines showing five-year moving averages and the average for the entire dataset.'}
-                  aria-label={'Moving Average: Displays data as annual averages with trendlines showing five-year moving averages and the average for the entire dataset.'}
-                  placement='bottom'
-                  TransitionComponent={Fade}
-                  enterNextDelay={750}
-                  arrow
-                  interactive
-                  classes={{ tooltip: classes.toolTip }}>
-                  <Button onClick={handleSwtichMovingAverageAndYearly} classes={{ root: `${setSelected(lineChart, 'mavg')}` }} className={classes.fabsvgRight} variant='contained' color='default' startIcon={<TimelineIcon />}>
-                    Moving Average
-                  </Button>
-                </Tooltip>
+                 </Tooltip>
+                  <Tooltip
+                      title={'Average: Displays data as annual averages with trendlines showing five-year averages and the average for the entire dataset.'}
+                      aria-label={'Average: Displays data as annual averages with trendlines showing five-year averages and the average for the entire dataset.'}
+                      placement='bottom'
+                      TransitionComponent={Fade}
+                      enterNextDelay={750}
+                      arrow
+                      interactive
+                      classes={{ tooltip: classes.toolTip }}>
+                    <Button
+                        onClick={handleSwtichAverageAndYearly}
+                        classes={{ root: `${setSelected(lineChart, 'avg')}` }}
+                        className={classes.fabsvgCenter}
+                        variant='contained'
+                        color='default'
+                        startIcon={<TimelineIcon />}>
+                      Average
+                    </Button>
+                  </Tooltip>
+                  <Tooltip
+                      title={'Moving Average: Displays data as annual averages with trendlines showing five-year moving averages and the average for the entire dataset.'}
+                      aria-label={'Moving Average: Displays data as annual averages with trendlines showing five-year moving averages and the average for the entire dataset.'}
+                      placement='bottom'
+                      TransitionComponent={Fade}
+                      enterNextDelay={750}
+                      arrow
+                      interactive
+                      classes={{ tooltip: classes.toolTip }}>
+                    <Button onClick={handleSwtichMovingAverageAndYearly}
+                            classes={{ root: `${setSelected(lineChart, 'mavg')}` }}
+                            className={classes.fabsvgRight}
+                            variant='contained'
+                            color='default'
+                            startIcon={<TimelineIcon />}>
+                      Moving Average
+                    </Button>
+                  </Tooltip>
+                <Button
+                  onClick={() => handleObservedTogglea()}
+                  classes={{ root: `${setSelected(observed, 'yes')}` }}
+                  className={classes.fabsvgLeft}
+                  variant='contained'
+                  color='default'
+                  startIcon={<TimelineIcon />}
+                >
+                  Observed History
+                </Button>
+                <Button
+                  onClick={() => handleRCPModesChangea('45')}
+                  classes={{ root: `${setSelected(rcpModes, '45')}` }}
+                  className={classes.fabsvgCenter}
+                  variant='contained'
+                  color='default'
+                  startIcon={<TimelineIcon />}
+                >
+                  RCP 4.5
+                </Button>
+                <Button
+                  onClick={() => handleRCPModesChangea('85')}
+                  classes={{ root: `${setSelected(rcpModes, '85')}` }}
+                  className={classes.fabsvgRight}
+                  variant='contained'
+                  color='default'
+                  startIcon={<TimelineIcon />}
+                >
+                  RCP 8.5
+                </Button>
             </FormControl>
           </Box>
         </Grid>
         <Grid item xs={12} sm={12} md={6} width='100%' >
-          <Box className={classes.sandboxExportsButtonBox} fontWeight='fontWeightBold' mt={1} display='flex' flexDirection='row' flexWrap='wrap' >
+          <Box className={classes.sandboxExportsButtonBox} fontWeight='fontWeightBold' mt={1} width='100%' display='flex' flexDirection='row' flexWrap='wrap' >
             <FormControl component='fieldset' variant='outlined' className={classes.sandboxExportsButtonBoxForm}>
               <FormLabel component='legend' className={classes.sandboxExportsButtonBoxFormLabel}>Export</FormLabel>
                 <Tooltip title={'Export data in the current chart to Excel or CSV file.'} aria-label={'Export data in the current chart to Excel or CSV file.'}
@@ -345,18 +383,6 @@ export default function Selector(props) {
                       To TSU
                     </Button>
                   </Tooltip>
-                  <Tooltip
-                  title={'Console logs data from API post call.'}
-                  aria-label={'Console logs data from API post call.'}
-                  placement='bottom' TransitionComponent={Fade}
-                  enterNextDelay={750}
-                  arrow
-                  interactive
-                  classes={{ tooltip: classes.toolTip }}>
-                  <Button onClick={handleClimatePost} className={classes.fabsvg} variant='contained' color='default' startIcon={<SaveAltIcon />}>
-                    post
-                  </Button>
-                </Tooltip>
                 <SandboxSumbitFigure
                   open={openSubmitFigure}
                   handleCloseFigure={handleCloseSubmitFigure} />

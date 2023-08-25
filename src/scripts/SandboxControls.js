@@ -48,6 +48,10 @@ const darkGrey = '#E6E6E6';
 const pullDownBackground = '#FBFCFE';
 const fontColor = '#5C5C5C';
 
+// periods
+const observedPeriod = '1895-current';
+const modeledPeriod = 'current-2099';
+
 // heights for buttons
 const exportButtons = 7;
 const exportButtonHeight = 50;
@@ -225,6 +229,16 @@ export default function SandboxControls() {
   // check url parameters for showing chart only
   const URLChartOnly = urlParams.get('chartonly') ? urlParams.get('chartonly') : 'no';
 
+  /**
+   * Comment this
+   */
+  const URLRcpModes = urlParams.get('rcpmodes') ? urlParams.get('rcpmodes') : '45-85';
+
+  /**
+   * Comment this
+   */
+  const URLObserved = urlParams.get('observed') ? urlParams.get('observed') : 'yes';
+
   // set defaults for intial states of ui compnents
   let URLClimatevariableDisabled = true;
   let URLLocationDisabled = true;
@@ -296,6 +310,17 @@ export default function SandboxControls() {
   // so the the same interactive chart can be imbeded in a website
   const [chartOnly, setChartOnly] = useState(URLChartOnly);
 
+  /**
+   * Comment this
+   */
+  // Which rcp projections to use (4.5, 8.5, or both)
+  const [rcpModes, setRcpModes] = useState(URLRcpModes);
+
+  /**
+   * Comment this
+   */
+  const [observed, setObserved] = useState(URLObserved)
+
   // chart data from files in ../sandboxdata
   const [chartData, setChartData] = useState([{}]);
   // plotly chart layout defaults
@@ -363,6 +388,12 @@ export default function SandboxControls() {
     const { chartDataSeason } = props;
     const { chartLineChart } = props;
     const { chartOnlyProp } = props;
+
+    /**
+     * Comment this
+     */
+    const { rcpModesProp } = props;
+    const { observedProp } = props;
     // const { chartShowLine } = props
     // create new URL parameter object
     const searchParams = new URLSearchParams();
@@ -375,6 +406,12 @@ export default function SandboxControls() {
     searchParams.set('season', chartDataSeason);
     searchParams.set('line', chartLineChart);
     searchParams.set('chartonly', chartOnlyProp);
+
+    /**
+     * Comment this
+     */
+    searchParams.set('rcpmodes', rcpModesProp);
+    searchParams.set('observed', observedProp)
     // searchParams.set('chartShowLine', chartShowLine);
 
     // convert url parameters to a string and add the leading ? so it we can add it
@@ -386,6 +423,9 @@ export default function SandboxControls() {
     return urlParameters;
   };
 
+  /**
+   * Comment this and modularize it
+   */
   // get chart data from current state = which should include
   const getChartData = (props) => {
     // get argument keys
@@ -397,6 +437,12 @@ export default function SandboxControls() {
     const { climateDataFilesJSONFile } = props;
     const { chartLineChart } = props;
     const { chartOnlyProp } = props;
+
+        /**
+         * Comment this
+         */
+    const { rcpModesProp } = props;
+    const { observedProp } = props;
     // const chartShowLine = false;
 
     // update url history this is the point at which we will need to make sure
@@ -408,7 +454,13 @@ export default function SandboxControls() {
       chartDataPeriod,
       chartDataSeason,
       chartLineChart,
-      chartOnlyProp
+      chartOnlyProp,
+
+      /**
+       * Comment this
+       */
+      rcpModesProp,
+      observedProp
       // chartShowLine,
     });
 
@@ -418,7 +470,7 @@ export default function SandboxControls() {
     // (years aka 1900 - current 1950 - current) and the climate variable (should be one)
 
     const data = climateDataFilesJSONFile.filter((json) => {
-      const returnValue = json.period === chartDataPeriod &&
+      const returnValue = json.period === observedPeriod &&
         json.type === chartDataClimatevariable && json.season === chartDataSeason;
       return returnValue;
     });
@@ -436,18 +488,30 @@ export default function SandboxControls() {
         !chartDataPeriod ||
         !chartDataSeason) return null;
 
-    const getResponse = async (chartDataPeriod, path, dataFile) => {
-      let response;
-      if (chartDataPeriod === 'current-2099') {
-        // Get data and parse it into xvals and yvals
-        response = await handleClimatePost();
-      } else {
-        response = await axios.get(`${path}sandboxdata/TSU_Sandbox_Datafiles/${dataFile}`);
+        /**
+         * Comment this
+         */
+    // what types of the RCP data we'll be fetching
+    const emissionTypes = rcpModesToArray(rcpModesProp);
+
+    const getResponse = async (path, dataFile) => {
+      let response = [];
+      // Get data and parse it into xvals and yvals
+      console.log('Entering response')
+      response.push(handleClimatePost(emissionTypes, chartDataClimatevariable));
+      console.log("Emissons data: ");
+      console.log(response);
+
+      if (observedProp === 'yes') {
+        response.push(axios.get(`${path}sandboxdata/TSU_Sandbox_Datafiles/${dataFile}`));
       }
-      return response;
+
+      console.log("Array of both promises: ");
+      console.log(response);
+      return await Promise.all(response);
     };
 
-    getResponse(chartDataPeriod, path, dataFile).then((response) => {
+    getResponse(path, dataFile).then((response) => {
       const chartType = getClimatevariableType(chartDataClimatevariable);
 
       // create a new instance of the sandbox human readable class this transforms
@@ -464,7 +528,7 @@ export default function SandboxControls() {
         climatevariable: chartDataClimatevariable,
         region: chartDataRegion,
         titleLocation,
-        chartDataSeason
+        chartDataSeason 
       });
 
       // get climate varriable human readable format
@@ -511,39 +575,81 @@ export default function SandboxControls() {
        // do nothing for now
        }
 
-       const xRange = {
-        xmin: humandReadablPeriodRange[0],
-        xmax: humandReadablPeriodRange[1]
+      //  const xRange = {
+      //   xmin: humandReadablPeriodRange[0],
+      //   xmax: humandReadablPeriodRange[1]
+      // };
+
+      // TODO: FIX. These probably shouldn't be hardcoded here
+      const xRange = {
+        xmin: 1895,
+        xmax: 2099
       };
 
       let plotLayout;
       let combinedPlotData = [];
 
-      for (const data of response) {
-        // Logic to get xvals and yvals
-        let xvals = [];
-        let yvals = [];
+      const emissionsData = [];
 
-        if (chartDataPeriod === 'current-2099') {
-          data.forEach((elem) => {
+      let allYs = [];
+
+      /**
+       * Comment this
+       */
+        for (const data of response[0]) {
+          const xvals = [];
+          const yvals = [];
+          data.data.forEach((elem) => {
             xvals.push(parseInt(elem[0]));
-            yvals.push(Object.values(elem[1])[0]);
+            const statesArr = Object.values(elem[1]);
+            const yval = statesArr.reduce((a, b) => a + b) / statesArr.length;
+            yvals.push(yval);
+            allYs.push(yval)
           });
-        } else {
+          emissionsData.push({xvals, 
+            yvals, 
+            fill: data.fill, 
+            fillcolor: data.fillcolor, 
+            linecolor: data.linecolor, 
+            includeBar: data.includeBar,
+            includeLine: data.includeLine});
+        }
+
+        if (observedProp === 'yes') {
           // parse the csv text file
           const sandboxParseDataFiles = new SandboxParseDataFiles();
           const chartDataFromFile = sandboxParseDataFiles
-            .parseFile(response.data, chartDataRegion.toLowerCase(), chartDataLocation);
-          xvals = chartDataFromFile[0];
-          yvals = chartDataFromFile[1];
+              .parseFile(response[1].data, chartDataRegion.toLowerCase(), chartDataLocation);
+          const xvals = chartDataFromFile[0];
+          let yvals = chartDataFromFile[1];
+
+          /**
+           * Comment this
+           */
+          allYs = [...allYs, ...yvals];
+          emissionsData.push({xvals, yvals, includeBar: true, includeLine: false});
         }
 
+      /**
+       * Comment this
+       */
+      const ymin = Math.min(...allYs);
+      const ymax = Math.max(...allYs);
+
+      for (const { xvals, yvals, fill, fillcolor, linecolor, includeBar, includeLine } of emissionsData) {
         // create the plotly input so the chart is created based on users seletion
         const plotInfo = {
           xvals,
           yvals,
-          xmin: humandReadablPeriodRange[0],
-          xmax: humandReadablPeriodRange[1],
+          fill,
+          fillcolor,
+          linecolor,
+          includeBar,
+          includeLine,
+          xmin: xRange.xmin,
+          xmax: xRange.xmax,
+          ymin,
+          ymax,
           chartTitle,
           legnedText: chartType,
           chartType,
@@ -553,6 +659,9 @@ export default function SandboxControls() {
           season: chartDataSeason
         // chartShowLine
         };
+
+        console.log('PLOT INFO');
+        console.log(plotInfo);
 
         // get the charts data formated for plotly
         const plotData = new SandboxGeneratePlotData(plotInfo);
@@ -600,7 +709,15 @@ export default function SandboxControls() {
 
        // change reacts state so it refreshes
        setChartData(combinedPlotData);
-       setChartLayout(plotLayout);
+
+
+      /**
+       * Comment this
+       */
+       // If plotlayout is undefined, keep the old layout
+       if (plotLayout) {
+        setChartLayout(plotLayout);
+       }
 
       return combinedPlotData;
     }) // handle errors
@@ -637,6 +754,9 @@ export default function SandboxControls() {
             break;
         }
 
+        console.log('RESPONSE DATA INSIDE LOADDATA:');
+        console.log(responseData);
+
         // set climate data json data file
         setClimateDataFilesJSON(responseData);
         // filter data for period and season
@@ -646,10 +766,16 @@ export default function SandboxControls() {
           return returnValue;
         });
 
+        console.log('DATA INSIDE LOADDATA: ');
+        console.log(data);
+
         // return climate variables available for all data
         //  this would limit by both period and season since they
         //  have different climate varriables
         const types = data.map((json) => (json.type));
+
+        console.log('Climate variable items: ');
+        console.log(types);
 
         // set climate variable items
         setClimatevariableItems(types);
@@ -665,7 +791,13 @@ export default function SandboxControls() {
             chartDataSeason: season,
             climateDataFilesJSONFile: responseData,
             chartLineChart: lineChart,
-            chartOnlyProp: chartOnly
+            chartOnlyProp: chartOnly,
+
+            /**
+             * Comment this
+             */
+            rcpModesProp: rcpModes,
+            observedProp: observed
             // chartShowLine: false
           });
         }
@@ -690,6 +822,15 @@ export default function SandboxControls() {
     // call loadData when region changes
     loadData(region, period, season, atStart);
   }, [region]);
+
+  // use the react effect to control when period changes from URL
+  // and repopulate the climate variable pulldown
+  useEffect(() => {
+    // call loadData when region changes
+    if (period !== modeledPeriod) {
+      loadData(region, period, season, atStart);
+    }
+  }, [period]);
 
   // use the react effect to control when loading state from URL
   // this should only happen once during startup.
@@ -779,7 +920,9 @@ export default function SandboxControls() {
       chartDataSeason: season,
       climateDataFilesJSONFile: climateDataFilesJSON,
       chartLineChart: lineChart,
-      chartOnlyProp: 'no'
+      chartOnlyProp: 'no',
+      rcpModesProp: rcpModes,
+      observedProp: observed
       // chartShowLine: false
     });
   };
@@ -796,7 +939,9 @@ export default function SandboxControls() {
       chartDataSeason: season,
       climateDataFilesJSONFile: climateDataFilesJSON,
       chartLineChart: lineChart,
-      chartOnlyProp: 'no'
+      chartOnlyProp: 'no',
+      rcpModesProp: rcpModes,
+      observedProp: observed
       // chartShowLine: false
     });
   };
@@ -813,7 +958,9 @@ export default function SandboxControls() {
       chartDataSeason: season,
       climateDataFilesJSONFile: climateDataFilesJSON,
       chartLineChart: lineChart,
-      chartOnlyProp: 'no'
+      chartOnlyProp: 'no',
+      rcpModesProp: rcpModes,
+      observedProp: observed
       // chartShowLine: false
     });
     return null;
@@ -831,7 +978,9 @@ export default function SandboxControls() {
       chartDataSeason: season,
       climateDataFilesJSONFile: climateDataFilesJSON,
       chartLineChart: lineChart,
-      chartOnlyProp: 'no'
+      chartOnlyProp: 'no',
+      rcpModesProp: rcpModes,
+      observedProp: observed
       // chartShowLine: false
     });
     return null;
@@ -877,7 +1026,9 @@ export default function SandboxControls() {
       chartDataSeason: newValue,
       climateDataFilesJSONFile: climateDataFilesJSON,
       chartLineChart: lineChart,
-      chartOnlyProp: 'no'
+      chartOnlyProp: 'no',
+      rcpModesProp: rcpModes,
+      observedProp: observed
       // chartShowLine: false
     });
     return null;
@@ -897,7 +1048,9 @@ export default function SandboxControls() {
       chartDataSeason: season,
       climateDataFilesJSONFile: climateDataFilesJSON,
       chartLineChart: 'avg',
-      chartOnlyProp: 'no'
+      chartOnlyProp: 'no',
+      rcpModesProp: rcpModes,
+      observedProp: observed
       // chartShowLine: false
     });
     return null;
@@ -917,7 +1070,9 @@ export default function SandboxControls() {
       chartDataSeason: season,
       climateDataFilesJSONFile: climateDataFilesJSON,
       chartLineChart: 'mavg',
-      chartOnlyProp: 'no'
+      chartOnlyProp: 'no',
+      rcpModesProp: rcpModes,
+      observedProp: observed
       // chartShowLine: false
     });
     return null;
@@ -938,11 +1093,80 @@ export default function SandboxControls() {
       chartDataSeason: season,
       climateDataFilesJSONFile: climateDataFilesJSON,
       chartLineChart: 'year',
-      chartOnlyProp: 'no'
+      chartOnlyProp: 'no',
+      rcpModesProp: rcpModes,
+      observedProp: observed
       // chartShowLine: false
     });
     return null;
   };
+
+  /**
+   * Comment this
+   */
+  const handleRCPModesChange = (newValue) => {
+    let newRcpModes;
+    setRcpModes(oldRcpModes => {
+      const oldRcpArr = rcpModesToArray(oldRcpModes);
+
+      if (oldRcpArr.includes(newValue)) {
+        newRcpModes = arrayToRcpModes(oldRcpArr.filter(mode => mode !== newValue))
+      } else {
+        newRcpModes = arrayToRcpModes([...oldRcpArr, newValue].sort())
+      }
+      
+      return newRcpModes;
+    });
+    getChartData({
+      chartDataRegion: region,
+      chartDataLocation: location,
+      chartDataClimatevariable: climatevariable,
+      chartDataPeriod: period,
+      chartDataSeason: season,
+      climateDataFilesJSONFile: climateDataFilesJSON,
+      chartLineChart: lineChart,
+      chartOnlyProp: chartOnly,
+      rcpModesProp: newRcpModes,
+      observedProp: observed
+      // chartShowLine: false
+    });
+  };
+
+  /**
+   * Comment this
+   */
+  const handleObservedToggle = () => {
+    let newObserved;
+
+    setObserved(oldObserved => {
+      newObserved = oldObserved === 'no' ? 'yes' : 'no'
+      return newObserved;
+    });
+
+    getChartData({
+      chartDataRegion: region,
+      chartDataLocation: location,
+      chartDataClimatevariable: climatevariable,
+      chartDataPeriod: period,
+      chartDataSeason: season,
+      climateDataFilesJSONFile: climateDataFilesJSON,
+      chartLineChart: lineChart,
+      chartOnlyProp: chartOnly,
+      rcpModesProp: rcpModes,
+      observedProp: newObserved
+      // chartShowLine: false
+    });
+  };
+
+  // Helper function to convert from URL-friendly string to array representation of the RCP Modes
+  const rcpModesToArray = (modes) => {
+    return modes ? modes.split('-') : [];
+  }
+
+  // Helper function to convert from array to URL-friendly string representation of RCP Modes
+  const arrayToRcpModes = (arr) => {
+    return arr.join('-');
+  }
 
   // repalce the climate variable with human readable climate variable
   // tmax100F beceomes Days with Maximum Temperature Above 100°F
@@ -1326,84 +1550,111 @@ export default function SandboxControls() {
 
   // [Error] SanboxControls.updatePlotData() error=TypeError: null is not an object (evaluating 'data[i]')
 
-  const handleClimatePost = async () => {
-    const getEmissionsData = async (emissionsType) => {
-      const { reduce, units } = {
-        cddc: { reduce: 'sum', units: 'inch' },
-        hddc: { reduce: 'sum', units: 'inch' },
-        pcpn: { reduce: 'sum', units: 'inch' },
-        tmax: { reduce: 'mean', units: 'degreeF' },
-        tmin: { reduce: 'mean', units: 'degreeF' },
-        tmpc: { reduce: 'mean', units: 'degreeF' },
-      }[URLClimatevariable] || { reduce: '', units: '' };
-  
-      if (!reduce || !units) {
-        console.log('An error has occurred fetching the reduce and unit variables.');
-        console.log(URLClimatevariable);
-        return;
-      }
-  
-      const locationKey = URLLocation ? 'state' : 'bbox';
-      const locationValue = URLLocation || '-124.848974,24.396308,-66.885444,49.384358';
-  
-      try {
-        const response = await axios.post('https://grid2.rcc-acis.org/GridData', {
-          grid: `loca:allMax:rcp${emissionsType}`,
-          sdate: '2006-01-01',
-          edate: '2099-12-31',
-          elems: [
-            {
-              name: formatClimateVariable(URLClimatevariable),
-              interval: 'yly',
-              duration: 'yly',
-              reduce,
-              units,
-              area_reduce: 'state_mean',
-            },
-          ],
-          [locationKey]: locationValue,
-        });
-        return response.data.data;
-      } catch (error) {
-        console.log(error);
-        return null;
-      }
-    };
-  
-    // some sort of error was occurring. I think it was too many requests too soon. This'll fix it!
-    let lowerEmissions;
-    let higherEmissions;
+  const getEmissionsData = async (gridType, emissionsType, chartDataClimatevariable) => {
+    const { reduce, units } = {
+      cddc: { reduce: 'sum', units: 'inch' },
+      hddc: { reduce: 'sum', units: 'inch' },
+      pcpn: { reduce: 'sum', units: 'inch' },
+      tmax: { reduce: 'mean', units: 'degreeF' },
+      tmin: { reduce: 'mean', units: 'degreeF' },
+      tmpc: { reduce: 'mean', units: 'degreeF' },
+    }[chartDataClimatevariable] || { reduce: '', units: '' };
 
-    let count = 1;
-    while (true && count < 11) {
-      console.log("Fetching lower emissions: attempt " + count);
-      lowerEmissions = await getEmissionsData("45");
-      if (validateEmissionsData(lowerEmissions)) {
-        break;
-      }
-      count++;
+    if (!reduce || !units) {
+      console.log('An error has occurred fetching the reduce and unit variables.');
+      console.log(chartDataClimatevariable);
+      return;
     }
 
-    count = 1;
-    while (true && count < 11) {
-      console.log("Fetching higher emissions: attempt " + count);
-      higherEmissions = await getEmissionsData("85");
-      if (validateEmissionsData(higherEmissions)) {
-        break;
-      }
-      count++;
-    }
+    const locationKey = URLLocation ? 'state' : 'bbox';
+    const locationValue = URLLocation || '-124.848974,24.396308,-66.885444,49.384358';
 
-    if (!lowerEmissions || !higherEmissions) {
+    try {
+      const response = await axios.post('https://grid2.rcc-acis.org/GridData', {
+        grid: `loca:${gridType}:rcp${emissionsType}`,
+        sdate: '2003-01-01',
+        edate: '2099-12-31',
+        elems: [
+          {
+            name: formatClimateVariable(chartDataClimatevariable),
+            interval: 'yly',
+            duration: 'yly',
+            reduce,
+            units,
+            area_reduce: 'state_mean',
+          },
+        ],
+        [locationKey]: locationValue,
+      });
+
+      let fill;
+      let fillcolor;
+      let linecolor = 'rgba(0, 0, 0, 0)';
+
+      if (gridType === 'allMax') {
+        fill = 'tonexty';
+        fillcolor = emissionsType === '45' ? 'rgba(0, 0, 255, 0.25)' : 'rgba(255, 0, 0, 0.25)';
+      } else if (gridType === 'wMean') {
+        linecolor = emissionsType === '45' ? 'blue' : 'red'; 
+      }
+
+      console.log('RESOCEEE:');
+      console.log(response);
+
+      return {
+        data: response.data.data, 
+        fill,
+        fillcolor,
+        linecolor,
+        includeBar: false,
+        includeLine: true
+      };
+
+    } catch (error) {
+      console.log(error);
       return null;
     }
+  };
 
-    console.log("Now consoling logging... LOWER EMISSIONS");
-    console.log(lowerEmissions);
-    console.log("Now consoling logging... HIGHER EMISSIONS");
-    console.log(higherEmissions);
-    let emissionsData = [lowerEmissions, higherEmissions];  
-    return emissionsData;
+
+  /**
+   * Comment this and refactor it
+   */
+  const handleClimatePost = async (emissionTypes, chartDataClimatevariable) => {
+    const gridTypes = ['wMean', 'allMin', 'allMax'];
+    const promises = [];
+    let data = [];
+  
+    let count = 1;
+
+    while (true && count < 11) {
+      console.log("Fetching emissons data: attempt " + count);
+      
+      for (const emissionType of emissionTypes) {
+        for (const gridType of gridTypes) {
+          promises.push(getEmissionsData(gridType, emissionType, chartDataClimatevariable))
+        }
+      }
+
+      data = await Promise.all(promises);
+
+      let dataValid = true;
+
+      for (const { data } of data) {
+        if (!validateEmissionsData(data)) {
+          dataValid = false;
+          break;
+        }
+      }
+
+      if (dataValid) {
+        break;
+      }
+
+      count++;
+    }
+
+    return data;
   };
   
 
@@ -1590,12 +1841,17 @@ export default function SandboxControls() {
                 handleDownloadChartAsCSVa={handleDownloadChartAsCSV}
                 handleDownloadChartAsPNGa={handleDownloadChartAsPNG}
                 handleDownloadChartAsSVGa={handleDownloadChartAsSVG}
+                handleRCPModesChangea={handleRCPModesChange}
+                handleObservedTogglea={handleObservedToggle}
                 handleClimatePosta={handleClimatePost}
                 handleSwtichAverageAndYearlya={handleSwtichAverageAndYearly}
                 handleSwtichMovingAverageAndYearlya={handleSwtichMovingAverageAndYearly}
                 handleSwtichYearlyToLinea={handleSwtichYearlyToLine}
                 handleMailToTSUa={handleMailToTSU}
                 lineChart={lineChart}
+                rcpModes={rcpModes}
+                observed={observed}
+                period={period}
                 />
             </Grid>
           </Grid>
