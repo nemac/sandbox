@@ -1,0 +1,38 @@
+name: update_rcp_data
+
+on:
+    push:
+        branches: [ "**" ]
+    schedule:
+      - cron: ‘0 0 1 * *’ # Run once a month on the first
+
+jobs:
+    runs-on: ubuntu-latest
+
+    setup_environment:
+        name: Setup Environment
+        uses: action/setup-python@v2
+        with: 
+            python-version: ‘3.11.3’
+            
+    get_repository:
+        name: Get Repository
+        steps:
+            run: |
+                git clone https://github.com/nemac/sandbox.git
+                cd sandbox/sandboxData/RCP_Sandbox_Datafiles/
+
+    update_rcp:
+        name: Get RCP Data
+        steps:
+            run: |
+                python3 ../../src/scripts/update_rcp_data.py
+
+    commit_changes:
+        name: Commit Updated Data
+        steps:
+            run: |
+                timestamp=$(date+%c)
+                git add sandbox/sandboxData/RCP_Sandbox_Datafiles/
+                git commit -m “Updated RCP Datafiles:  $timestamp”
+                git push —force
