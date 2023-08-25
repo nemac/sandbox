@@ -17,20 +17,17 @@ jobs:
               with:
                   python-version: '3.11.3'
 
-            - name: Get Repository
+            - name: Get Repository from GitHub
               uses: actions/checkout@v2
               with:
                 ref: exploring-climate-projections
 
-            - name: Clone and Update Repository
+
+            - name: Change Directories into RCP_Sandbox_Datafiles
               run: |
-                  pwd
-                  cd sandbox
-                  git checkout exploring-climate-projections
-                  git pull origin exploring-climate-projections
                   cd sandboxData/RCP_Sandbox_Datafiles/
 
-            - name: Get RCP Data
+            - name: Download RCP Data using update_rcp_data.py
               run: |
                   python3 ../../src/scripts/update_rcp_data.py
 
