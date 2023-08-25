@@ -2,37 +2,41 @@ name: update_rcp_data
 
 on:
     push:
-        branches: [ "**" ]
+        branches: ["**"]
     schedule:
-      - cron: ‘0 0 1 * *’ # Run once a month on the first
+        - cron: '0 12 1 * *' # Run once a month on the first
 
 jobs:
-    runs-on: ubuntu-latest
+    update_rcp_data_job:
+        name: RCP Data Pipeline
+        runs-on: ubuntu-latest
 
-    setup_environment:
-        name: Setup Environment
-        uses: action/setup-python@v2
-        with: 
-            python-version: ‘3.11.3’
-            
-    get_repository:
-        name: Get Repository
         steps:
-            run: |
-                git clone https://github.com/nemac/sandbox.git
-                cd sandbox/sandboxData/RCP_Sandbox_Datafiles/
+            - name: Setup Environment
+              uses: actions/setup-python@v2
+              with:
+                  python-version: '3.11.3'
 
-    update_rcp:
-        name: Get RCP Data
-        steps:
-            run: |
-                python3 ../../src/scripts/update_rcp_data.py
+            - name: Get Repository
+              uses: actions/checkout@v2
+              with:
+                ref: exploring-climate-projections
 
-    commit_changes:
-        name: Commit Updated Data
-        steps:
-            run: |
-                timestamp=$(date+%c)
-                git add sandbox/sandboxData/RCP_Sandbox_Datafiles/
-                git commit -m “Updated RCP Datafiles:  $timestamp”
-                git push —force
+            - name: Clone and Update Repository
+              run: |
+                  pwd
+                  cd sandbox
+                  git checkout exploring-climate-projections
+                  git pull origin exploring-climate-projections
+                  cd sandboxData/RCP_Sandbox_Datafiles/
+
+            - name: Get RCP Data
+              run: |
+                  python3 ../../src/scripts/update_rcp_data.py
+
+            - name: Commit and Push Updated Data
+              run: |
+                  timestamp=$(date +'%c')
+                  git add sandbox/sandboxData/RCP_Sandbox_Datafiles/
+                  git commit -m "Updated RCP Datafiles: $timestamp"
+                  git push --force
