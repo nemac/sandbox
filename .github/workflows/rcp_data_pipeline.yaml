@@ -17,6 +17,10 @@ jobs:
               with:
                   python-version: '3.11.3'
 
+            - name: Install Python Dependencies
+              run: |
+                  pip install requests
+
             - name: Get Repository from GitHub
               uses: actions/checkout@v2
               with:
@@ -25,15 +29,20 @@ jobs:
 
             - name: Change Directories into RCP_Sandbox_Datafiles
               run: |
-                  cd sandboxData/RCP_Sandbox_Datafiles/
+                  cd ./sandboxdata/RCP_Sandbox_Datafiles/
 
             - name: Download RCP Data using update_rcp_data.py
               run: |
-                  python3 ../../src/scripts/update_rcp_data.py
+                  python3 /home/runner/work/sandbox/sandbox/src/scripts/update_rcp_data.py
+
+            - name: Setup git config as "GitHub Actions Bot"
+              run: |
+                git config user.name "GitHub Actions Bot"
+                git config user.email "<>"
 
             - name: Commit and Push Updated Data
               run: |
                   timestamp=$(date +'%c')
-                  git add sandbox/sandboxData/RCP_Sandbox_Datafiles/
+                  git add /home/runner/work/sandbox/sandbox/sandboxdata/RCP_Sandbox_Datafiles/
                   git commit -m "Updated RCP Datafiles: $timestamp"
                   git push --force
