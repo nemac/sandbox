@@ -65,7 +65,7 @@ for gridType in range(6):
         data = response.json()  # Parse the response JSON
 
         # Define the path to save the response JSON file
-        desktop_path = os.path.expanduser("/home/runner/work/sandbox/sandbox/sandboxdata/RCP_Sandbox_Datafiles/")
+        desktop_path = os.path.expanduser("~/Desktop/sandbox/sandboxData/RCP_Sandbox_Datafiles/")
         response_filename = f"rcp85_state_{climate_variable}_sandbox_{datetime.now().year}_{datetime.now().month}.json"
         response_filepath = os.path.join(desktop_path, response_filename)
 

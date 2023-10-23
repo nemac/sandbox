@@ -535,7 +535,7 @@ class SandboxGeneratePlotData {
     return ret;
   }
 
-  getYvalues() {
+  getYvalues(isBar = false) {
     const ret = [];
     let xIndex = Math.min(...this.xvals);
     const maxVal = Math.max(...this.xvals);
@@ -545,6 +545,8 @@ class SandboxGeneratePlotData {
       let newVal = val;
       if (val < 0) {
         newVal = undefined;
+      } else if (isBar) {
+        newVal -= this.yValsAvgAll;
       }
       return newVal;
     });
@@ -590,16 +592,16 @@ class SandboxGeneratePlotData {
     switch (this.lineChart) {
       case 'year':
         // yearly the line chart average is the bar chart
-        return [... this.includeBar ? [this.traceAverageBar()] : [], ... this.includeLine ? [this.traceYearlyLine()] : []];
+        return [... this.includeBar ? this.traceAverageBar() : [], ... this.includeLine ? [this.traceYearlyLine()] : []];
       case 'avg':
         // average the line chart yearly is the bar chart
-        return [... this.includeBar ? [this.traceAverageBar()] : [], this.traceAverageLine()];
+        return [... this.includeBar ? this.traceAverageBar() : [], this.traceAverageLine()];
       case 'mavg':
         // moving average the line chart yearly is the bar chart
-        return [... this.includeBar ? [this.traceAverageBar()] : [], this.traceMovingAverageLine()];
+        return [... this.includeBar ? this.traceAverageBar() : [], this.traceMovingAverageLine()];
       default:
         // yearly the line chart average is the bar chart
-        return [... this.includeBar ? [this.traceAverageBar()] : [], ... this.includeLine ? [this.traceYearlyLine()] : []];
+        return [... this.includeBar ? this.traceAverageBar() : [], ... this.includeLine ? [this.traceYearlyLine()] : []];
     }
   }
 
@@ -634,21 +636,40 @@ class SandboxGeneratePlotData {
 
   // trace for averages when average is a bar
   traceAverageBar() {
-    return {
+    const xbins = {
+      start: this.xmin,
+      end: this.xmax,
+      size: 1
+    };
+
+    const bargroupgap = 5;
+
+    // Create dummy histogram to make visible bars start where I want
+    // (got idea from: https://stackoverflow.com/q/43751220/7233512)
+    const dummyTrace = {
+      type: 'histogram',
+      histfunc: 'avg',
+      xbins: xbins,
+      x: this.getXvalues(),
+      y: Array(this.getXvalues().length).fill(this.yValsAvgAll),
+      bargroupgap: bargroupgap,
+      marker: {
+        opacity: 0
+      },
+      hoverinfo: 'skip' // ensures that no hover tooltip will be displayed
+    };
+
+    const barTrace = {
       uid: SandboxGeneratePlotData.uuidv(),
       mode: 'lines',
       name: `5—Year Average (${this.legendEllapsedText})`,
       type: 'histogram',
       histfunc: 'avg',
-      xbins: {
-        start: this.xmin,
-        end: this.xmax,
-        size: 1
-      },
+      xbins: xbins,
       nbinsx: 0,
       x: this.getXvalues(),
-      y: this.getYvalues(),
-      bargroupgap: 5,
+      y: this.getYvalues(true),
+      bargroupgap: bargroupgap,
       marker: {
         line: {
           color: this.barColor,
@@ -662,6 +683,8 @@ class SandboxGeneratePlotData {
       legendgroup: 1,
       orientation: 'v'
     };
+
+    return [dummyTrace, barTrace];
   }
 
   // trace for year when average is a bar
@@ -779,6 +802,7 @@ class SandboxGeneratePlotData {
       autosize: true,
       height: 1,
       bargap: this.bargap,
+      barmode: 'stack',
       plot_bgcolor: this.chartBackgroundColor,
       paper_bgcolor: this.chartBackgroundColor,
       legend: {
@@ -871,7 +895,18 @@ class SandboxGeneratePlotData {
           paper_bgcolor: this.chartBackgroundColor
         }
       },
-      shapes: [
+      shapes: [{
+        type: 'line',
+        layer: 'below',
+        x0: this.xmin - 5,
+        y0: this.yValsAvgAll.toFixed(1),
+        x1: this.xmax + 5,
+        y1: this.yValsAvgAll.toFixed(1),
+        line: {
+          color: this.AverageAllColor,
+          width: this.AverageAllWidth
+        }
+      },
       {
         type: 'line',
         layer: 'above',
@@ -919,6 +954,7 @@ class SandboxGeneratePlotData {
       autosize: true,
       height: 1,
       bargap: this.bargap,
+      barmode: 'stack',
       plot_bgcolor: this.chartBackgroundColor,
       paper_bgcolor: this.chartBackgroundColor,
       legend: {
