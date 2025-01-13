@@ -1,3 +1,4 @@
+import { Opacity } from '@material-ui/icons';
 import SandboxHumanReadable from './SandboxHumanReadable';
 
 class SandboxGeneratePlotData {
@@ -16,7 +17,7 @@ class SandboxGeneratePlotData {
     this.temperatureColor = '#FEB24C';
     this.heatingDegreeColor = '#DB1E1C';
     this.coolingDegreeColor = '#2276B4';
-    this.bargap = 0.15;
+    this.bargap = 0.02; // 0.15;
     this.showLegend = true;
     this.legendBarLineX = window.innerWidth <= this.smallScreen ? 0 : 0.65;
     this.legendBarLineY = window.innerWidth <= this.smallScreen ? -0.15 : 1.125;
@@ -28,7 +29,7 @@ class SandboxGeneratePlotData {
     this.AverageAllFontColor = '#858585';
     this.AverageAllColor = '#858585';
     this.AverageMovingColor = '#858585';
-    this.AverageAllWidth = '6';
+    this.AverageAllWidth = '2'; //'6';
     this.AverageAllFontSize = '14pt';
     this.AverageWidth = '3';
     this.AverageColor = '#000000';
@@ -56,7 +57,7 @@ class SandboxGeneratePlotData {
     this.periodGroups = props.periodGroups ? props.periodGroups : 5;
     this.AverageMovingPeriod = 5;
     this.textAngle = window.innerWidth <= 1000 ? 90 : 0;
-    this.dtick = window.innerWidth <= this.smallScreen ? 10 : 5;
+    this.dtick = window.innerWidth <= this.smallScreen ? 10 : 10;
     this.yValsSumByPeriod = this.yValsSumByPeriod();
     this.yValsAvgByPeriod = this.yValsAvgByPeriod();
     this.yValsMovingAverage = this.computeMovingAverage();
@@ -67,12 +68,104 @@ class SandboxGeneratePlotData {
     const avgAll = this.yValsAvgAll();
     this.yValsAvgAll = avgAll <= -50 ? 0 : avgAll;
     const min = this.minVal < 0 ? 0 : this.minVal;
-    this.prettyRange = SandboxGeneratePlotData.pretty([min, this.maxVal]);
+    this.prettyRange = SandboxGeneratePlotData.pretty([min-2.1, this.maxVal+10]);
     this.yRange = [this.prettyRange[0], this.prettyRange[this.prettyRange.length - 1]];
     this.yAxisText = this.createYAxisText();
     this.legendPerText = this.createlegendPerText();
     this.legendEllapsedText = this.legendEllapsedText();
     this.averageTextUnits = this.averageTextUnits();
+    // Years from 2021 to 2090
+    // 2021, 2022, 2023, 2024, 
+    this.xValuesProjections = [ 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035, 2036, 2037, 2038, 2039, 2040, 2041, 2042, 2043, 2044, 2045, 2046, 2047, 2048, 2049, 2050, 2051, 2052, 2053, 2054, 2055, 2056, 2057, 2058, 2059, 2060, 2061, 2062, 2063, 2064, 2065, 2066, 2067, 2068, 2069, 2070, 2071, 2072, 2073, 2074, 2075, 2076, 2077, 2078, 2079, 2080, 2081, 2082, 2083, 2084, 2085, 2086, 2087, 2088, 2089, 2090 ];
+    // Lower boundary y-values ranging from 48 to 52.3
+    // 48.00, 48.00, 48.00, 48.00, 48.00,
+    this.yLowerProjections = [ 47.10, 47.94, 47.50, 47.32, 48.87, 48.34, 49.21, 48.25, 49.07, 49.02, 48.76, 49.28, 49.38, 48.69, 49.50, 48.56, 50.29, 48.46, 49.83, 49.63, 49.01, 49.92, 48.72, 49.68, 48.99, 50.07, 49.60, 50.45, 49.68, 49.83, 49.64, 50.92, 49.19, 49.83, 50.25, 50.04, 49.90, 50.27, 50.76, 50.85, 50.56, 50.28, 50.82, 50.68, 50.60, 50.90, 51.56, 51.50, 51.01, 50.74, 52.24, 51.65, 51.07, 51.79, 52.02, 51.22, 52.47, 52.09, 51.57, 52.30, 51.80, 52.08, 52.48, 52.11, 52.22, 52.09 ];
+    this.yLowerProjections2 = [48.93, 48.81, 47.87, 48.94, 49.46, 49.85, 50.89, 49.73, 50.80, 50.17, 50.44, 49.99, 50.45, 49.71, 50.44, 50.84, 51.83, 50.89, 50.72, 50.85, 50.65, 50.92, 50.86, 50.99, 50.98, 50.80, 51.50, 50.87, 51.09, 50.39, 50.95, 51.68, 51.11, 51.90, 51.64, 51.21, 51.35, 51.27, 51.40, 51.63, 51.25, 51.19, 51.78, 51.09, 51.09, 51.65, 51.59, 51.45, 51.55, 53.22, 51.84, 51.23, 51.92, 52.26, 52.88, 51.74, 51.92, 51.87, 52.11, 52.27, 52.34, 52.41, 52.11, 52.47, 52.31, 52.29 ];
+
+    // Upper boundary y-values ranging from 52.3 to 60
+    // 54.44, 54.60, 54.70, 54.75,  
+    this.yUpperProjections = [ 58.24, 58.20, 57.79, 57.07, 57.60, 57.01, 57.31, 57.91, 58.16, 57.39, 57.24, 57.83, 58.60, 58.21, 58.81, 58.24, 57.91, 58.27, 59.48, 58.83, 59.01, 59.55, 59.03, 59.17, 58.72, 60.05, 59.10, 59.58, 59.96, 60.06, 59.26, 59.60, 60.09, 60.12, 60.92, 60.17, 60.44, 60.23, 61.43, 60.46, 61.90, 60.69, 61.20, 62.10, 61.07, 61.49, 61.51, 61.33, 63.14, 62.71, 62.21, 62.44, 62.43, 62.26, 61.56, 62.50, 62.36, 62.87, 63.90, 63.22, 63.32, 63.01, 63.87, 64.55, 63.74, 63.60 ];
+    this.yUpperProjections2 = [ 59.96, 59.87, 59.99, 58.90, 59.76, 58.91, 59.51, 59.86, 59.90, 59.80, 59.06, 62.47, 62.65, 59.35, 59.77, 59.81, 59.63, 59.77, 61.57, 61.83, 64.49, 60.77, 61.67, 61.93, 61.22, 61.77, 60.92, 61.46, 62.44, 62.71, 61.51, 62.34, 62.28, 63.63, 62.90, 62.86, 61.56, 63.74, 63.35, 63.14, 63.87, 63.99, 62.39, 63.55, 62.77, 63.75, 64.91, 63.88, 63.75, 64.14, 63.45, 63.82, 63.28, 63.72, 64.18, 65.19, 65.24, 64.77, 64.58, 64.99, 64.71, 65.60, 65.07, 65.20, 65.50, 65.06 ];
+
+    this.middleProjections = [54.17, 54.17, 54.17, 54.17, 54.17, 54.28, 54.28, 54.28, 54.28, 54.28, 54.50, 54.50, 54.50, 54.50, 54.50, 54.90, 54.90, 54.90, 54.90, 54.90, 55.51, 55.51, 55.51, 55.51, 55.51, 55.95, 55.95, 55.95, 55.95, 55.95, 56.61, 56.61, 56.61, 56.61, 56.61, 57.34, 57.34, 57.34, 57.34, 57.34, 58.01, 58.01, 58.01, 58.01, 58.01, 58.42, 58.42, 58.42, 58.42, 58.42, 59.77, 59.77, 59.77, 59.77, 59.77, 60.35, 60.35, 60.35, 60.35, 60.35]
+    // [ 54.17, 54.57, 54.15, 53.70, 54.73, 54.18, 54.76, 54.58, 55.12, 54.71, 54.50, 55.06, 55.49, 54.95, 55.66, 54.90, 55.60, 54.87, 56.16, 55.73, 55.51, 56.24, 55.38, 55.93, 55.36, 56.56, 55.85, 56.52, 56.32, 56.45, 55.95, 56.76, 56.14, 56.48, 57.09, 56.61, 56.67, 56.75, 57.60, 57.15, 57.73, 56.99, 57.51, 57.89, 57.34, 57.70, 58.04, 57.92, 58.58, 58.23, 58.72, 58.55, 58.25, 58.01, 57.89, 58.36, 58.42, 59.98, 60.24, 59.77, 59.81, 60.04, 60.68, 60.83, 60.48, 60.35 ];
+  }
+
+    addOneToArrays(arrays) {
+      return arrays.map(array => array.map(num => num + 1));
+    }
+
+    makeProjectedShapes() {
+      const shapes = this.middleProjections.map((value, index) => ({
+        type: 'rect',
+        layer: 'above',
+        x0: this.xValuesProjections[index] - .5,  // Left edge of the bar
+        x1: this.xValuesProjections[index] + .5,  // Right edge of the bar
+        y0: 0,                   // Bottom edge of the bar
+        y1: value,               // Height of the bar
+        fillcolor: 'rgba(255, 209, 107, 0.5)',
+        line: {
+          width: 0
+        }
+      }));
+      return shapes;
+    }
+
+    // temp to create path for projections example
+    makePath2() {
+      // Combine x and y coordinates for the polygon path
+      const pathCoordinates = [];
+
+      // Add lower boundary coordinates
+      this.xValuesProjections.forEach((x, i) => {
+        pathCoordinates.push(`${x},${this.yLowerProjections2[i]}`);
+      });
+
+      // Add upper boundary coordinates in reverse order to close the polygon
+      for (let i = this.xValuesProjections.length - 1; i >= 0; i--) {
+        pathCoordinates.push(`${this.xValuesProjections[i]},${this.yUpperProjections2[i]}`);
+      }
+
+      // Create the SVG path string
+      const pathString = 'M' + pathCoordinates.join('L') + 'Z';
+      return pathString;
+  }
+
+  // temp to create path for projections example
+  makePath() {
+      // Combine x and y coordinates for the polygon path
+      const pathCoordinates = [];
+
+      // const xValues = Array.from({ length: 70 }, (_, i) => 2025 + i);
+
+      // // const getRandomInRange = (min, max) => Math.random() * (max - min) + min;
+      // // const yLower = xValues.map((n, index) => {
+      // //   if(index === 0) return 54.44
+      // //   console.log(n, index) 
+      // //   return getRandomInRange(51.5, 56.51) + (index/10);
+      // //   }
+      // // );
+
+      // // const yUpper = xValues.map((n, index) => {
+      // //   if(index === 0) return 54.44
+      // //   console.log(n, index) 
+      // //   return getRandomInRange(52.53, 50) - (index/10000);
+      // //   }
+      // // );
+
+      // Add lower boundary coordinates
+      this.xValuesProjections.forEach((x, i) => {
+        pathCoordinates.push(`${x},${this.yLowerProjections[i]}`);
+      });
+
+      // Add upper boundary coordinates in reverse order to close the polygon
+      for (let i = this.xValuesProjections.length - 1; i >= 0; i--) {
+        pathCoordinates.push(`${this.xValuesProjections[i]},${this.yUpperProjections[i]}`);
+      }
+
+      // Create the SVG path string
+      const pathString = 'M' + pathCoordinates.join('L') + 'Z';
+      return pathString;
   }
 
   // set color for chart based on climate variable or chartType
@@ -616,7 +709,7 @@ class SandboxGeneratePlotData {
   traceAverageBar() {
     return {
       uid: SandboxGeneratePlotData.uuidv(),
-      mode: 'lines',
+      mode: 'lines+markers',
       name: `5—Year Average (${this.legendEllapsedText})`,
       type: 'histogram',
       histfunc: 'avg',
@@ -648,7 +741,7 @@ class SandboxGeneratePlotData {
   traceYearlyLine() {
     return {
       uid: SandboxGeneratePlotData.uuidv(),
-      mode: 'lines',
+      mode: 'lines+markers',
       name: `Average ${this.textUnitsWords()} ${this.legendPerText}`,
       type: 'scatter',
       // visible: this.chartShowLine,
@@ -674,7 +767,7 @@ class SandboxGeneratePlotData {
   traceYearlyBar() {
     return {
       uid: SandboxGeneratePlotData.uuidv(),
-      mode: 'lines',
+      mode: 'lines+markers',
       name: `Average ${this.textUnitsWords()} ${this.legendPerText}`,
       type: 'bar',
       x: this.xvals,
@@ -703,7 +796,7 @@ class SandboxGeneratePlotData {
   traceMovingAverageLine() {
     return {
       uid: SandboxGeneratePlotData.uuidv(),
-      mode: 'lines',
+      mode: 'lines+markers',
       name: `5—Year moving average (${this.legendEllapsedText})`,
       type: 'scatter',
       x: this.xValsMovingAverage,
@@ -726,7 +819,7 @@ class SandboxGeneratePlotData {
   traceAverageLine() {
     return {
       uid: SandboxGeneratePlotData.uuidv(),
-      mode: 'lines',
+      mode: 'lines+markers',
       name: `5—Year average (${this.legendEllapsedText})`,
       type: 'scatter',
       x: this.xValsPeriod,
@@ -776,7 +869,10 @@ class SandboxGeneratePlotData {
       },
       xaxis: {
         type: 'linear',
-        range: [this.xmin - 5, this.xmax + 5],
+        // for data
+        // range: [this.xmin - 5, this.xmax + 5],
+        // for projection example
+        range: [this.xmin - 5, 2095],
         autorange: false,
         automargin: false,
         showspikes: false,
@@ -787,7 +883,7 @@ class SandboxGeneratePlotData {
         rangemode: 'tozero',
         zerolinecolor: this.zeroLineColor,
         zerolinewidth: this.zerolinewidth,
-        dtick: this.dtick,
+        dtick: this.dtick, // 10
         tick0: 0,
         tickangle: this.textAngle,
         tickformat: '',
@@ -864,13 +960,16 @@ class SandboxGeneratePlotData {
         {
           xref: 'x',
           yref: 'y',
-          x: this.xmax + 2.5,
+          // for data
+          // x: this.xmax + 2.5,
+          // for projection example
+          x: 2090,
           y: this.yValsAvgAll.toFixed(1),
           text: `Average ${this.yValsAvgAll.toFixed(1)} ${this.averageTextUnits}`,
           showarrow: true,
-          arrowhead: 7,
-          arrowsize: 2,
-          arrowwidth: 2,
+          arrowhead: 0, //7,
+          arrowsize: 0, //2,
+          arrowwidth: 0, //2,
           arrowcolor: this.AverageAllColor,
           ay: -100,
           ax: 10,
@@ -880,13 +979,33 @@ class SandboxGeneratePlotData {
             size: this.AverageAllFontSize,
             color: this.AverageAllFontColor
           }
-        }],
-      shapes: [{
+        }
+      ],
+      shapes: [
+      {
+        type: 'path',
+        layer: 'above',
+        path: this.makePath2(),
+        fillcolor: 'rgba(0, 0, 255, 0.5)', // Semi-transparent blue fill
+        line: { color: 'blue' }
+      },
+      {
+        type: 'path',
+        layer: 'above',
+        path: this.makePath(),
+        fillcolor: 'rgba(255, 0, 0, 0.5)', // Semi-transparent red fill
+        line: { color: 'red' }
+      },
+      ...this.makeProjectedShapes(),
+      {
         type: 'line',
-        layer: 'below',
+        layer: 'above',
         x0: this.xmin - 5,
         y0: this.yValsAvgAll.toFixed(1),
-        x1: this.xmax + 5,
+        // for data
+        // x1: this.xmax + 5,
+        // for projection example
+        x1: 2095,
         y1: this.yValsAvgAll.toFixed(1),
         line: {
           color: this.AverageAllColor,
@@ -922,13 +1041,15 @@ class SandboxGeneratePlotData {
         layer: 'above',
         x0: this.xmin - 5,
         y0: this.yRange[0],
-        x1: this.xmax + 5,
+        // x1: this.xmax + 5,
+        x1: 2095,
         y1: this.yRange[0],
         line: {
           color: this.zeroLineColor,
           width: this.zerolinewidth
         }
-      }]
+      }
+    ]
     };
   }
 

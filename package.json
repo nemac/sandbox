@@ -52,8 +52,8 @@
     "html-webpack-plugin": "^5.5.0",
     "mini-css-extract-plugin": "^1.2.1",
     "node-sass": "^7.0.1",
-    "plotly.js-basic-dist": "^1.58.4",
-    "plotly.js-cartesian-dist": "^1.58.4",
+    "plotly.js-basic-dist": "^2.35.3",
+    "plotly.js-cartesian-dist": "^2.35.3",
     "postcss": "^8.4.5",
     "postcss-loader": "^6.2.1",
     "sass-loader": "^12.4.0",
@@ -73,10 +73,12 @@
     "@material-ui/styles": "^4.10.0",
     "axios": "^0.21.1",
     "file-saver": "^2.0.5",
-    "plotly.js-cartesian-dist-min": "^1.58.4",
+    "plotly.js": "^2.35.3",
+    "plotly.js-basic-dist-min": "^2.35.3",
+    "plotly.js-cartesian-dist-min": "^2.35.3",
     "prop-types": "^15.7.2",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0",
     "react-plotly.js": "^2.5.1"
   }
 }

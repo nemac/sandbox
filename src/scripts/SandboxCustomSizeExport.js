@@ -99,7 +99,20 @@ export default function SandboxCustomSizeExport(props) {
   const svgSelector = '.js-plotly-plot .main-svg';
 
   //  get default dimensions from config
-  const sandboxDefaultExportSizes = new SandboxDefaultExportSizes();
+  const sandboxDefaultExportSizes = [
+    {
+      name: 'NCA',
+      label: 'NCA Standard (4:3)',
+      dimensions: { width: 1280, height: 960 }
+    },
+    {
+      name: 'Presentation',
+      label: 'Presentation (12:9)',
+      dimensions: { width: 1920, height: 1080 }
+    }
+  ];
+
+  // new SandboxDefaultExportSizes();
   const defaultSizes = {
     name: 'Default',
     dimensions: { width: 1250, height: 625 }

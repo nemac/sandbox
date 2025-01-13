@@ -10,7 +10,7 @@ export default function SandboxPlotRegion(props) {
   const config = { ...{ responsive: true, displayModeBar: false } };
   const responsiveChartRef = React.useRef();
   const [layout, _setLayout] = React.useState({ ...props.plotlyLayout });
-
+  
   // create ref to use in listener
   const layoutRef = React.useRef(layout);
   const setLayout = (data) => {
@@ -54,7 +54,7 @@ export default function SandboxPlotRegion(props) {
     // only change xaxis if the object exists
     if (copiedLayout.xaxis) {
       copiedLayout.xaxis.tickangle = angle;
-      copiedLayout.xaxis.dtick = dtick;
+      // copiedLayout.xaxis.dtick = dtick;
     }
 
     // only change legend if the object exists
